@@ -1,8 +1,7 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
 **Stand:** 2026-07-10  
-**Autor:** TaxonomieManager / Alexander Seymer  
-**Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt und aus dem bestehenden Code in `R/onedev_api.R` extrahiert wird.
+**Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt.
 
 ---
 
@@ -10,17 +9,17 @@
 
 1. [Executive Summary](#1-executive-summary)
 2. [Motivation & Referenzmodell (gitlabr)](#2-motivation--referenzmodell-gitlabr)
-3. [Ist-Zustand im TaxonomieManager](#3-ist-zustand-im-taxonomiemananger)
-4. [Datei-Inventar & Abhängigkeiten](#4-datei-inventar--abhängigkeiten)
-5. [Architektur-Vorschlag](#5-architektur-vorschlag)
-6. [API-Design & Funktions-Mapping](#6-api-design--funktions-mapping)
-7. [Vorhandene Code-Snippets (Extraktionsbasis)](#7-vorhandene-code-snippets-extraktionsbasis)
+3. [Funktionsumfang MVP](#3-funktionsumfang-mvp)
+4. [Abhängigkeiten & öffentliche API](#4-abhängigkeiten--öffentliche-api)
+5. [Architektur](#5-architektur)
+6. [API-Design](#6-api-design)
+7. [Referenz-Implementierung (Code-Snippets)](#7-referenz-implementierung-code-snippets)
 8. [Umgebungsvariablen & Konfiguration](#8-umgebungsvariablen--konfiguration)
 9. [UI-Nummern vs. interne API-IDs](#9-ui-nummern-vs-interne-api-ids)
-10. [Bekannte API-Quirks & Probedaten](#10-bekannte-api-quirks--probedaten)
+10. [Bekannte API-Quirks](#10-bekannte-api-quirks)
 11. [Phasen, Meilensteine & Akzeptanzkriterien](#11-phasen-meilensteine--akzeptanzkriterien)
-12. [Migration TaxonomieManager → onedevr](#12-migration-taxonomiemananger--onedevr)
-13. [Paket-Skeleton (Zielstruktur)](#13-paket-skeleton-zielstruktur)
+12. [Consumer-Integration](#12-consumer-integration)
+13. [Paket-Skeleton](#13-paket-skeleton)
 14. [Test-Strategie](#14-test-strategie)
 15. [Zukünftige API-Abdeckung](#15-zukünftige-api-abdeckung)
 16. [Referenzen & Links](#16-referenzen--links)
@@ -35,17 +34,17 @@
 |--------|--------------|
 | **Paketname (CRAN)** | `onedevr` (lowercase, R-Konvention) |
 | **Display-Name** | onedevR |
-| **Funktionspräfix** | `od_*` (neu) oder `onedev_*` (Kompatibilität) |
+| **Funktionspräfix** | `od_*` |
 | **HTTP-Stack** | `httr2` + `jsonlite` |
-| **Auth** | Bearer Token (bewährt in TaxonomieManager); optional Basic Auth ergänzen |
+| **Auth** | Bearer Token (primär); Basic Auth optional ergänzen |
 | **Lizenz** | MIT oder GPL-3 (Abstimmung; gitlabr nutzt GPL-3) |
-| **Erstes Ziel** | Issue-CRUD + Projekt-Auflösung + Query (MVP aus `R/onedev_api.R`) |
-| **Nicht im Paket** | Shiny-UI-Links, TaxonomieManager-spezifische Issue-Titel |
+| **Erstes Ziel** | Issue-CRUD + Projekt-Auflösung + Query |
+| **Nicht im Paket** | App-spezifische Web-URL-Builder, Shiny-UI, domänenspezifische Issue-Titel |
 
 **Kernidee:** Zwei Ebenen wie bei gitlabr:
 
 - **Low-level:** `od_request()` — beliebiger REST-Aufruf gegen `https://<host>/~api/...`
-- **High-level:** `od_get_issue()`, `od_create_issue()`, `od_list_issues()`, …
+- **High-level:** `od_get_issue()`, `od_create_issue()`, `od_query_issues()`, …
 
 ---
 
@@ -57,17 +56,17 @@
 |-------|---------|------------------------------|
 | Connection | `gl_connection()`, `set_gitlab_connection()` | `od_connection()`, `od_set_connection()` |
 | Low-level | `gitlab(req, verb, ...)` | `od_request(method, endpoint, ...)` |
-| Issues | `gl_list_issues()`, `gl_create_issue()`, … | `od_list_issues()`, `od_create_issue()`, … |
+| Issues | `gl_list_issues()`, `gl_create_issue()`, … | `od_query_issues()`, `od_create_issue()`, … |
 | Projekte | `gl_list_projects()`, … | `od_resolve_project_id()`, `od_list_projects()` |
 | CI/Builds | `use_gitlab_ci()`, Pipeline-Wrapper | Phase 3: `od_query_builds()`, … |
 | Vignetten | `vignette("a-gitlabr")` | `vignette("getting-started")`, `vignette("custom-endpoints")` |
 
 ### Warum ein separates Paket?
 
-1. **Wiederverwendung** — andere R-Projekte / CI-Skripte / Agents nutzen dieselbe API-Logik
+1. **Wiederverwendung** — R-Projekte, CI-Skripte und Agents nutzen dieselbe API-Logik
 2. **Zentrale Pflege** — Payload-Varianten, UI-Nummern-Auflösung, Versionstoleranz an einem Ort
-3. **Kein CLI** — Projektregel verbietet alte `tod`-Wrapper; REST-only ist der Standardweg (`.cursor/rules/onedev-issue-ids.mdc`)
-4. **Bereits vorhanden** — ~760 Zeilen produktionsreifer Code + Tests + Doku
+3. **REST-first** — programmatischer Zugriff ohne CLI-Wrapper
+4. **Lücke im Ökosystem** — es gibt kein etabliertes R-Paket für OneDev (Stand 2026)
 
 ### OneDev vs. GitLab (designrelevant)
 
@@ -77,100 +76,115 @@
 | Interne ID | oft identisch mit IID | separates Feld `id` (z. B. `#145` → `id=283`) |
 | Query-Syntax | GitLab-spezifisch | `"Number" is "ProjectPath#145"` |
 | API-Doku | docs.gitlab.com | **pro Installation:** `https://<host>/~help/api` |
-| Auth (Doku) | Private Token | Basic Auth **oder** Bearer (TaxonomieManager: Bearer) |
+| Auth (Doku) | Private Token | Basic Auth **oder** Bearer Token |
 | Self-hosted | üblich | **Standard-Use-Case** |
 
 ---
 
-## 3. Ist-Zustand im TaxonomieManager
+## 3. Funktionsumfang MVP
 
-### Kernmodul
+### Phase 1 — Issue-Core (MVP)
 
-| Datei | Zeilen | Rolle |
-|-------|--------|-------|
-| `R/onedev_api.R` | ~762 | REST-Client, Config, Issue-CRUD, URL-Builder |
-| `tests/testthat/test_onedev_api.R` | 155 | Unit-Tests (mockery) |
-| `docs/entwickler/technical/integrationen/onedev-rest-api.md` | 84 | Technische Doku |
-| `NAMESPACE` | 16 Exports | `onedev_*` öffentliche API |
-| `DESCRIPTION` Collate | Zeile 280 | `'onedev_api.R'` |
+| Modul | Funktionen |
+|-------|------------|
+| Config | `od_get_config()`, später `od_connection()` |
+| HTTP | `od_request()` |
+| Projekte | `od_resolve_project_id()`, `od_resolve_project_path()` |
+| Issues | `od_query_issues()`, `od_resolve_issue_id()`, `od_get_issue()` |
+| Issues (write) | `od_create_issue()`, `od_issue_set_title()`, `od_issue_set_description()`, `od_issue_set_fields()`, `od_issue_transition_state()` |
 
-### App-Integration (bleibt in TaxonomieManager)
+### Phase 2 — Issues+
 
-| Datei | Nutzung |
-|-------|---------|
-| `R/app_ui.R` | Meta-Tags `dbm-onedev-new-*` mit `onedev_new_issue_url()` |
-| `www/metadaten-improvement-link.js` | Client-seitige URL für „Verbesserung melden“ |
-| `R/metadata_hint_text.R` | Badge `metadaten_improvement_report_link()` (kein direkter API-Call) |
-| `tests/testthat/test_metadata_hint_text_consistency.R` | UI-Konsistenz-Test |
+| Modul | Funktionen |
+|-------|------------|
+| Fields | `od_get_issue_fields()` |
+| Iterations | `od_list_iterations()`, `od_add_issue_iterations()` |
+| Create erweitert | `od_create_issue(..., iteration_ids =)` |
 
-### Dev-/Migrations-Skripte (Referenz für künftige onedevr-Features)
+### Phase 3 — Builds & Pull Requests
 
-| Skript | Zweck | Relevante Endpunkte |
-|--------|-------|---------------------|
-| `scripts/dev/migrate_todo_to_onedev.R` | todo.md → Issues | `POST /issues`, `POST /issues/{id}/iterations`, `POST .../fields` |
-| `scripts/dev/_tmp_onedev_introspect.R` | Feld-Introspection | `GET /issues/{id}/fields` |
-| `scripts/dev/_tmp_onedev_create_test.R` | Create + Fields + Iterations | `POST /issues`, `GET .../fields`, `GET /projects/{id}/iterations` |
-| `scripts/dev/_tmp_onedev_iterations.R` | Iterations-Liste | `GET /projects/{id}/iterations` |
-| `scripts/dev/_tmp_onedev_iteration_probe.R` | Payload-Varianten Iterations | `POST /issues/{id}/iterations` |
-| `scripts/dev/_tmp_close_test_issue.R` | State transition | `POST /issues/{id}/state-transitions` |
+| Modul | Funktionen |
+|-------|------------|
+| Builds | `od_query_builds()`, `od_get_build()`, `od_resolve_build_id()` |
+| PRs | `od_list_pull_requests()`, … (je nach `~help/api`) |
 
-### Changelog-Eintrag (Herkunft)
+### Bewusst außerhalb des Pakets
 
-Aus `docs/entwickler/changelog.md` (Release 2.8.1):
-
-> **OneDev REST-Issue-API** (2026-07-08): Programmatische Issue-Verwaltung über OneDev-REST (`ONEDEV_HOST`, Token, Projekt-ID/Pfad); Doku unter `docs/entwickler/technical/integrationen/onedev-rest-api.md`.
+| Thema | Begründung |
+|-------|------------|
+| Web-URLs für „Neues Issue“-Formulare | Consumer-spezifisch (Shiny, HTML, JS) |
+| Domänen-Titel/Beschreibungen | Gehört in die Anwendung, nicht in den API-Client |
+| Issue-Schließen per Commit-Message | OneDev/Git-Workflow der jeweiligen Installation |
 
 ---
 
-## 4. Datei-Inventar & Abhängigkeiten
+## 4. Abhängigkeiten & öffentliche API
 
-### R-Paket-Abhängigkeiten (TaxonomieManager, relevant für Extrakt)
+### DESCRIPTION (Entwurf)
 
 ```r
-# DESCRIPTION (Auszug)
+Package: onedevr
+Title: Access to the OneDev REST API
+Version: 0.1.0
+Description: R client for the OneDev project management REST API. Provides
+    low-level request helpers and high-level convenience functions for
+    issues, projects, and (future) builds. Designed for self-hosted OneDev
+    instances.
+Depends: R (>= 4.2.0)
 Imports:
     httr2 (>= 1.0.0),
-    jsonlite (>= 1.8.0)
+    jsonlite (>= 1.8.0),
+    rlang (>= 1.0.0)
 Suggests:
     testthat (>= 3.1.0),
-    mockery   # in Tests verwendet, nicht in DESCRIPTION — für onedevr explizit aufnehmen
+    mockery,
+    withr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+Encoding: UTF-8
 ```
 
-Intern genutzt, nicht direkt importiert in `onedev_api.R`:
-
-- `%||%` — aus `rlang` (TaxonomieManager); in onedevr: `rlang::%||%` oder kleiner Inline-Fallback
-
-### Exportierte Funktionen (NAMESPACE, Stand TaxonomieManager)
+### Interne Helfer (nicht exportiert)
 
 ```
-onedev_api_request
-onedev_create_issue
-onedev_get_config
-onedev_get_issue
-onedev_improvement_issue_description
-onedev_improvement_issue_title
-onedev_improvement_issue_url
-onedev_issue_set_description
-onedev_issue_set_fields
-onedev_issue_set_title
-onedev_issue_transition_state
-onedev_new_issue_url
-onedev_query_issues
-onedev_resolve_issue_id
-onedev_resolve_project_id
-onedev_resolve_project_path
+.od_trim_env
+.od_first_non_empty
+.od_parse_flag
+.od_derive_project_path
+.od_normalize_collection
+.od_parse_response_body
+.od_http_error
+.od_prepare_request
+.od_resolve_api_url
+.od_request_with_variants
 ```
 
-**Intern (nicht exportiert, aber extrahierbar):**
+### Öffentliche Exports (Ziel v0.1.0)
 
-- `.onedev_*` — HTTP-Helfer, Normalisierung, Varianten-Requests
-- `onedev_project_web_base_url()`, `onedev_new_issue_base_url()` — URL-Builder
+```
+export(od_get_config)
+export(od_request)
+export(od_resolve_project_id)
+export(od_resolve_project_path)
+export(od_query_issues)
+export(od_resolve_issue_id)
+export(od_get_issue)
+export(od_create_issue)
+export(od_issue_set_title)
+export(od_issue_set_description)
+export(od_issue_set_fields)
+export(od_issue_transition_state)
+```
+
+Phase 2 ergänzt: `od_get_issue_fields`, `od_list_iterations`, `od_add_issue_iterations`, `od_connection`.
 
 ---
 
-## 5. Architektur-Vorschlag
+## 5. Architektur
 
-### Ziel-Dateistruktur (neues Repo `onedevr`)
+### Ziel-Dateistruktur
 
 ```
 onedevr/
@@ -200,13 +214,12 @@ onedevr/
 │   ├── getting-started.Rmd
 │   └── custom-endpoints.Rmd
 └── inst/
-    └── WORDLIST                 # für spell check
+    └── WORDLIST
 ```
 
 ### Connection-Modell (gitlabr-ähnlich)
 
 ```r
-# Empfohlenes Ziel-API (neu in onedevr)
 conn <- od_connection(
   host = "https://git.example.test",
   token = Sys.getenv("ONEDEV_API_TOKEN"),
@@ -220,15 +233,15 @@ od_set_connection(conn)  # optional: globale Default-Connection
 issue <- od_get_issue(145, conn = conn)
 ```
 
-**Rückwärtskompatibilität:** `od_get_config()` liest weiterhin `ONEDEV_*` aus der Umgebung, wenn keine explizite `conn` übergeben wird.
+**Env-Fallback:** `od_get_config()` liest `ONEDEV_*` aus der Umgebung, wenn keine explizite `conn` übergeben wird.
 
 ### Schichten-Diagramm
 
 ```mermaid
 flowchart TB
-  subgraph apps [Consumer Apps]
-    TM[TaxonomieManager Shiny]
-    Scripts[Dev/Migration Scripts]
+  subgraph consumers [Consumer Applications]
+    Apps[R / Shiny Apps]
+    Scripts[Automation Scripts]
     CI[CI / Agents]
   end
 
@@ -244,7 +257,7 @@ flowchart TB
   WEB["Web UI /~issues"]
   end
 
-  TM --> HL
+  Apps --> HL
   Scripts --> HL
   CI --> HL
   HL --> RES
@@ -252,65 +265,57 @@ flowchart TB
   RES --> LL
   CFG --> LL
   LL --> API
-  TM -.->|URL only| WEB
+  consumers -.->|browser links only| WEB
 ```
 
 ---
 
-## 6. API-Design & Funktions-Mapping
+## 6. API-Design
 
-### Mapping: TaxonomieManager → onedevr (MVP)
+### Namenskonvention
 
-| TaxonomieManager (heute) | onedevr (Ziel) | Paket? |
-|--------------------------|----------------|--------|
-| `onedev_get_config()` | `od_get_config()` | ✅ |
-| `onedev_api_request()` | `od_request()` | ✅ |
-| `onedev_resolve_project_id()` | `od_resolve_project_id()` | ✅ |
-| `onedev_resolve_project_path()` | `od_resolve_project_path()` | ✅ |
-| `onedev_query_issues()` | `od_query_issues()` | ✅ |
-| `onedev_resolve_issue_id()` | `od_resolve_issue_id()` | ✅ |
-| `onedev_get_issue()` | `od_get_issue()` | ✅ |
-| `onedev_create_issue()` | `od_create_issue()` | ✅ |
-| `onedev_issue_set_title()` | `od_issue_set_title()` | ✅ |
-| `onedev_issue_set_description()` | `od_issue_set_description()` | ✅ |
-| `onedev_issue_set_fields()` | `od_issue_set_fields()` | ✅ |
-| `onedev_issue_transition_state()` | `od_issue_transition_state()` | ✅ |
-| `onedev_new_issue_url()` | — | ❌ TM only |
-| `onedev_improvement_issue_url()` | — | ❌ TM only |
-| `onedev_improvement_issue_title/description()` | — | ❌ TM only |
-| `.onedev_request_with_variants()` | `.od_request_with_variants()` | ✅ internal |
+| Präfix | Bedeutung |
+|--------|-----------|
+| `od_*` | Öffentliche API |
+| `.od_*` | Interne Helfer |
+| `od_connection` | Explizites Verbindungsobjekt (Phase 2) |
 
-### Phase-2-Funktionen (aus Migrations-Skripten)
+### Parameter-Konvention
 
-| Geplant | Endpunkt | Quelle |
-|---------|----------|--------|
-| `od_get_issue_fields(issue_number)` | `GET /issues/{id}/fields` | `_tmp_onedev_introspect.R` |
-| `od_list_iterations(project)` | `GET /projects/{id}/iterations` | `_tmp_onedev_iterations.R` |
-| `od_add_issue_iterations(issue_number, ids)` | `POST /issues/{id}/iterations` | `migrate_todo_to_onedev.R` |
-| `od_create_issue(..., iteration_ids=)` | `iterationIds` im Create-Body | `migrate_todo_to_onedev.R` |
+- `conn` — optionales Connection-Objekt; Default aus Env via `od_get_config()`
+- `issue_number` — **immer** UI-Nummer (`145` oder `"#145"`), nie interne `id`
+- `project` — Pfad (`"group/project"`) oder numerische ID, je nach Funktion
 
-### Alias-Strategie (optional, Übergangsphase)
-
-In TaxonomieManager nach Migration:
+### High-level vs. Low-level
 
 ```r
-# R/onedev_compat.R (dünn, deprecate nach 1 Release)
-#' @export
-onedev_get_issue <- function(...) onedevr::od_get_issue(...)
+# High-level (empfohlen)
+issue <- od_get_issue(145)
+
+# Low-level (Escape Hatch)
+issue_id <- od_resolve_issue_id(145)
+raw <- od_request("GET", paste0("/issues/", issue_id))
 ```
 
-Oder direkt `Imports: onedevr` und alle Aufrufer umbenennen.
+### Phase-2-Erweiterungen
+
+| Funktion | Endpunkt |
+|----------|----------|
+| `od_get_issue_fields(issue_number)` | `GET /issues/{id}/fields` |
+| `od_list_iterations(project)` | `GET /projects/{id}/iterations` |
+| `od_add_issue_iterations(issue_number, ids)` | `POST /issues/{id}/iterations` |
+| `od_create_issue(..., iteration_ids =)` | `iterationIds` im Create-Body |
 
 ---
 
-## 7. Vorhandene Code-Snippets (Extraktionsbasis)
+## 7. Referenz-Implementierung (Code-Snippets)
 
-> **Quelle:** `R/onedev_api.R` (Stand 2026-07-10). Snippets sind die Extraktionskandidaten für onedevr — App-spezifische Defaults (`git.sandboxing.at`) werden im Paket entfernt.
+> Ziel-API mit `od_*`-Präfix. Snippets sind Implementierungsvorlagen für das neue Paket.
 
 ### 7.1 HTTP-Request-Vorbereitung
 
 ```r
-.onedev_prepare_request <- function(method, url, token, insecure_ssl = FALSE) {
+.od_prepare_request <- function(method, url, token, insecure_ssl = FALSE) {
   req <- httr2::request(url)
   req <- httr2::req_method(req, method)
   req <- httr2::req_headers(
@@ -332,11 +337,11 @@ Oder direkt `Imports: onedevr` und alle Aufrufer umbenennen.
 ### 7.2 Low-level Request (Kern)
 
 ```r
-onedev_api_request <- function(method = "GET", endpoint, query = NULL, body = NULL, config = NULL) {
-  config <- config %||% onedev_get_config()
+od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
+  conn <- conn %||% od_get_config()
   method <- toupper(trimws(as.character(method)[1]))
-  url <- .onedev_resolve_api_url(endpoint, config)
-  req <- .onedev_prepare_request(method, url, config$token, config$insecure_ssl)
+  url <- .od_resolve_api_url(endpoint, conn)
+  req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl)
 
   if (length(query) > 0) {
     query <- query[!vapply(query, is.null, logical(1))]
@@ -352,9 +357,9 @@ onedev_api_request <- function(method = "GET", endpoint, query = NULL, body = NU
   }
 
   response <- httr2::req_perform(req)
-  payload <- .onedev_parse_response_body(response)
+  payload <- .od_parse_response_body(response)
   if (httr2::resp_status(response) >= 400L) {
-    .onedev_http_error(response, payload)
+    .od_http_error(response, payload)
   }
 
   payload
@@ -364,71 +369,102 @@ onedev_api_request <- function(method = "GET", endpoint, query = NULL, body = NU
 ### 7.3 Config aus Umgebungsvariablen
 
 ```r
-onedev_get_config <- function(validate = TRUE) {
-  host <- .onedev_trim_env("ONEDEV_HOST")
-  token <- .onedev_first_non_empty(
-    .onedev_trim_env("ONEDEV_API_TOKEN"),
-    .onedev_trim_env("ONEDEV_TOKEN"),
-    .onedev_trim_env("ONEDEV_ISSUE_REPORTER_API_KEY")
+od_get_config <- function(validate = TRUE) {
+  host <- .od_trim_env("ONEDEV_HOST")
+  token <- .od_first_non_empty(
+    .od_trim_env("ONEDEV_API_TOKEN"),
+    .od_trim_env("ONEDEV_TOKEN"),
+    .od_trim_env("ONEDEV_ISSUE_REPORTER_API_KEY")
   )
-  issues_repo_url <- .onedev_trim_env("ONEDEV_ISSUES_REPO_URL")
-  project_path <- .onedev_first_non_empty(
-    .onedev_trim_env("ONEDEV_PROJECT_PATH"),
-    .onedev_derive_project_path(issues_repo_url)
+  repo_url <- .od_trim_env("ONEDEV_REPO_URL")
+  project_path <- .od_first_non_empty(
+    .od_trim_env("ONEDEV_PROJECT_PATH"),
+    .od_derive_project_path(repo_url)
   )
-  project_id <- .onedev_trim_env("ONEDEV_PROJECT_ID")
-  issue_state <- .onedev_trim_env("ONEDEV_ISSUE_STATE")
-  insecure_ssl <- .onedev_parse_flag(.onedev_trim_env("ONEDEV_CURL_INSECURE"))
+  project_id <- .od_trim_env("ONEDEV_PROJECT_ID")
+  issue_state <- .od_trim_env("ONEDEV_ISSUE_STATE")
+  insecure_ssl <- .od_parse_flag(.od_trim_env("ONEDEV_CURL_INSECURE"))
 
   host <- sub("/+$", "", host)
-  config <- list(
+  conn <- list(
     host = host,
     api_base_url = if (nzchar(host)) paste0(host, "/~api") else "",
     token = token,
-    issues_repo_url = issues_repo_url,
+    repo_url = repo_url,
     project_id = project_id,
     project_path = project_path,
     default_issue_state = issue_state,
     insecure_ssl = insecure_ssl
   )
-  # validate=TRUE → stop wenn host/token fehlen
-  config
+
+  if (isTRUE(validate)) {
+    if (!nzchar(conn$host)) {
+      stop("ONEDEV_HOST is missing or empty.", call. = FALSE)
+    }
+    if (!nzchar(conn$token)) {
+      stop(
+        "No OneDev token found. Expected: ONEDEV_API_TOKEN, ONEDEV_TOKEN, or ONEDEV_ISSUE_REPORTER_API_KEY.",
+        call. = FALSE
+      )
+    }
+  }
+
+  conn
 }
 ```
 
-### 7.4 UI-Nummer → interne ID (kritisch)
+### 7.4 Response-Normalisierung
 
 ```r
-onedev_resolve_issue_id <- function(issue_number, config = NULL) {
-  config <- config %||% onedev_get_config()
-  project_path <- onedev_resolve_project_path(config = config)
+.od_normalize_collection <- function(response) {
+  if (is.null(response)) return(list())
+  if (is.list(response) && !is.null(response$items) && is.list(response$items)) {
+    return(response$items)
+  }
+  if (is.list(response) && !is.null(response$data) && is.list(response$data)) {
+    return(response$data)
+  }
+  if (is.list(response) && !is.null(names(response)) && "id" %in% names(response)) {
+    return(list(response))
+  }
+  if (is.list(response)) return(response)
+  list(response)
+}
+```
+
+### 7.5 UI-Nummer → interne ID (kritisch)
+
+```r
+od_resolve_issue_id <- function(issue_number, conn = NULL) {
+  conn <- conn %||% od_get_config()
+  project_path <- od_resolve_project_path(conn = conn)
   numeric_part <- gsub("^#", "", trimws(as.character(issue_number)[1]), perl = TRUE)
   ref <- paste0(project_path, "#", numeric_part)
-  issues <- .onedev_normalize_collection(
-    onedev_query_issues(
+  issues <- .od_normalize_collection(
+    od_query_issues(
       query = paste0('"Number" is "', ref, '"'),
       count = 1L,
       offset = 0L,
-      config = config
+      conn = conn
     )
   )
 
   if (length(issues) < 1L || is.null(issues[[1]]$id)) {
-    stop(paste0("OneDev-Issue #", numeric_part, " wurde nicht gefunden."), call. = FALSE)
+    stop(paste0("OneDev issue #", numeric_part, " was not found."), call. = FALSE)
   }
 
   as.character(issues[[1]]$id)
 }
 ```
 
-### 7.5 Payload-Varianten (API-Inkonsistenz)
+### 7.6 Payload-Varianten (API-Inkonsistenz)
 
 ```r
-.onedev_request_with_variants <- function(method, endpoint, body_variants, config = NULL) {
+.od_request_with_variants <- function(method, endpoint, body_variants, conn = NULL) {
   last_error <- NULL
   for (body in body_variants) {
     outcome <- tryCatch(
-      list(ok = TRUE, value = onedev_api_request(method, endpoint, body = body, config = config)),
+      list(ok = TRUE, value = od_request(method, endpoint, body = body, conn = conn)),
       error = function(e) { last_error <<- e; list(ok = FALSE, value = NULL) }
     )
     if (isTRUE(outcome$ok)) return(outcome$value)
@@ -436,19 +472,19 @@ onedev_resolve_issue_id <- function(issue_number, config = NULL) {
   stop(conditionMessage(last_error), call. = FALSE)
 }
 
-# Verwendung bei Create Issue:
-.onedev_request_with_variants(
+# Create Issue — zwei gängige Body-Formen:
+.od_request_with_variants(
   method = "POST",
   endpoint = "/issues",
   body_variants = list(
-    list(projectId = project_id, title = title, description = description, ...),
-    list(project = list(id = project_id), title = title, description = description, ...)
+    list(projectId = project_id, title = title, description = description),
+    list(project = list(id = project_id), title = title, description = description)
   ),
-  config = config
+  conn = conn
 )
 
-# Verwendung bei State Transition:
-.onedev_request_with_variants(
+# State Transition — drei gängige Body-Formen:
+.od_request_with_variants(
   method = "POST",
   endpoint = paste0("/issues/", issue_id, "/state-transitions"),
   body_variants = list(
@@ -456,215 +492,226 @@ onedev_resolve_issue_id <- function(issue_number, config = NULL) {
     list(transition = state),
     state
   ),
-  config = config
+  conn = conn
 )
 ```
 
-### 7.6 Issue Create mit Custom Fields (Migration-Skript)
-
-Aus `scripts/dev/migrate_todo_to_onedev.R` — erweitertes Create-Pattern für Phase 2:
+### 7.7 Issue Create mit Custom Fields und Iterations
 
 ```r
-onedev_api_request(
+od_create_issue(
+  title = "API integration test",
+  description = "Created programmatically from R",
+  fields = list(
+    Assignee = "developer",
+    Type = "Task",
+    Priority = "Normal"
+  ),
+  iteration_ids = c(17L),  # Phase 2: internal iteration id from od_list_iterations()
+  conn = conn
+)
+
+# Equivalent low-level body:
+od_request(
   method = "POST",
   endpoint = "/issues",
   body = list(
-    projectId = as.integer(config$project_id),
-    title = title,
-    description = description,
-    fields = list(
-      Assignee = "alexander",
-      Type = "Task",
-      Priority = "Normal"
-    ),
-    iterationIds = list(as.integer(iteration_id))  # 17 = "Version 2.X.X"
+    projectId = as.integer(conn$project_id),
+    title = "API integration test",
+    description = "Created programmatically from R",
+    fields = list(Assignee = "developer", Type = "Task", Priority = "Normal"),
+    iterationIds = list(17L)
   ),
-  config = config
+  conn = conn
 )
 ```
 
-### 7.7 Iterations nachträglich setzen (Raw-HTTP, noch nicht gekapselt)
+### 7.8 Iterations nachträglich setzen (Phase 2)
 
 ```r
-.onedev_add_iterations_raw <- function(issue_id, iteration_ids, config) {
-  url <- paste0(config$api_base_url, "/issues/", issue_id, "/iterations")
-  json_body <- jsonlite::toJSON(as.list(iteration_ids), auto_unbox = TRUE)
-  req <- httr2::request(url)
-  req <- httr2::req_method(req, "POST")
-  req <- httr2::req_headers(
-    req,
-    Authorization = paste("Bearer", config$token),
-    Accept = "application/json",
-    `Content-Type` = "application/json"
+od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
+  conn <- conn %||% od_get_config()
+  issue_id <- od_resolve_issue_id(issue_number, conn = conn)
+
+  .od_request_with_variants(
+    method = "POST",
+    endpoint = paste0("/issues/", issue_id, "/iterations"),
+    body_variants = list(
+      as.list(as.integer(iteration_ids)),
+      list(iterationIds = as.list(as.integer(iteration_ids)))
+    ),
+    conn = conn
   )
-  req <- httr2::req_body_raw(req, json_body)
-  resp <- httr2::req_perform(req)
-  if (httr2::resp_status(resp) >= 400L) {
-    stop(httr2::resp_body_string(resp), call. = FALSE)
+}
+```
+
+### 7.9 Issue Query mit State-Filter
+
+```r
+od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0L, conn = NULL) {
+  conn <- conn %||% od_get_config()
+  query <- trimws(as.character(query %||% "")[1])
+  state <- trimws(as.character(state %||% "")[1])
+
+  if (!nzchar(query) && !nzchar(state)) {
+    state <- conn$default_issue_state %||% ""
   }
-  httr2::resp_status(resp)
+  if (nzchar(state)) {
+    state_clause <- paste0('State is "', state, '"')
+    query <- if (nzchar(query)) {
+      paste0("(", query, ") and ", state_clause)
+    } else {
+      state_clause
+    }
+  }
+
+  od_request(
+    method = "GET",
+    endpoint = "/issues",
+    query = list(
+      query = if (nzchar(query)) query else NULL,
+      count = as.integer(count),
+      offset = as.integer(offset)
+    ),
+    conn = conn
+  )
 }
 ```
 
-### 7.8 App-Integration: Meta-Tags (bleibt in TaxonomieManager)
-
-Aus `R/app_ui.R`:
+### 7.10 Beispiel-Workflow (End-to-End)
 
 ```r
-tags$meta(
-  name = "dbm-onedev-new-bug-url",
-  content = onedev_new_issue_url("bug")
-),
-tags$meta(
-  name = "dbm-onedev-new-improvement-url",
-  content = onedev_new_issue_url("improvement")
-),
-tags$meta(
-  name = "dbm-onedev-new-improvement-base",
-  content = tryCatch(
-    onedev_new_issue_base_url(),
-    error = function(e) "https://git.sandboxing.at/TaxonomieManager/~issues/new"
+library(onedevr)
+
+# Configure via environment
+Sys.setenv(
+  ONEDEV_HOST = "https://git.example.test",
+  ONEDEV_API_TOKEN = Sys.getenv("ONEDEV_API_TOKEN"),
+  ONEDEV_PROJECT_PATH = "group/my-project"
+)
+
+issue <- od_get_issue(145)
+
+created <- od_create_issue(
+  title = "REST client test",
+  description = "Created from onedevr",
+  fields = list(Priority = "High")
+)
+
+od_issue_set_title(created$number, "REST client verified")
+od_issue_transition_state(created$number, "Closed")
+```
+
+### 7.11 Web-URL für „Neues Issue“ (Consumer-Hinweis, nicht Paket-API)
+
+Anwendungen, die Nutzer im Browser zu einem vorausgefüllten Issue-Formular leiten, bauen URLs selbst:
+
+```r
+# Consumer code (outside onedevr)
+new_issue_url <- function(host, project_path, params = list()) {
+  base <- paste0(sub("/+$", "", host), "/", project_path, "/~issues/new")
+  if (length(params) == 0) return(base)
+  query <- paste(
+    vapply(names(params), function(n) {
+      paste0(URLencode(n, reserved = TRUE), "=", URLencode(params[[n]], reserved = FALSE))
+    }, character(1)),
+    collapse = "&"
+  )
+  paste0(base, "?", query)
+}
+
+new_issue_url(
+  host = "https://git.example.test",
+  project_path = "group/my-project",
+  params = list(
+    `request.type` = "Bug",
+    `request.title` = "Something broke",
+    `request.description` = "Steps to reproduce…"
   )
 )
-```
-
-### 7.9 Client-JS: Improvement-Link (bleibt in TaxonomieManager)
-
-Aus `www/metadaten-improvement-link.js` (Auszug):
-
-```javascript
-function buildImprovementIssueUrl(base, code, name) {
-  var params = new URLSearchParams();
-  params.set("request.type", "Improvement");
-  params.set("request.title", buildImprovementIssueTitle(code, name));
-  params.set("request.description", buildImprovementIssueDescription(code, name));
-  return stripUrlQuery(base) + "?" + params.toString();
-}
-
-$(document).on("click", "a.dbm-meta-improvement-link", function(event) {
-  event.preventDefault();
-  var base = stripUrlQuery(readMetaContent(
-    "dbm-onedev-new-improvement-base",
-    DEFAULT_IMPROVEMENT_BASE
-  ));
-  openOneDevIssue(buildImprovementIssueUrl(base, context.code, context.name));
-});
-```
-
-### 7.10 Beispiel-Nutzung (Doku)
-
-Aus `docs/entwickler/technical/integrationen/onedev-rest-api.md`:
-
-```r
-devtools::load_all()
-
-issue <- onedev_get_issue(145)
-
-created <- onedev_create_issue(
-  title = "REST-Schnittstelle testen",
-  description = "Automatisch aus dem Repo erstellt",
-  fields = list(Prioritaet = "Hoch")
-)
-
-onedev_issue_set_title(created$number, "REST-Schnittstelle verifiziert")
-onedev_issue_transition_state(created$number, "Closed")
 ```
 
 ---
 
 ## 8. Umgebungsvariablen & Konfiguration
 
-### `.env.example` (TaxonomieManager, Auszug)
+### `.env.example` (Vorlage für Consumer und Tests)
 
 ```bash
-# --- OneDev (optional — Git remote / API integrations) ---
-# ONEDEV_HOST=https://git.sandboxing.at
-# ONEDEV_TOKEN=your-personal-access-token
-# ONEDEV_ISSUES_REPO_URL=https://git.sandboxing.at/TaxonomieManager.git
-# ONEDEV_PROJECT_ID=20
-# ONEDEV_PROJECT_PATH=TaxonomieManager
-# ONEDEV_NEW_BUG_ISSUE_URL=https://git.sandboxing.at/TaxonomieManager/~issues/new
-# ONEDEV_NEW_IMPROVEMENT_ISSUE_URL=https://git.sandboxing.at/TaxonomieManager/~issues/new?request.type=Improvement
+# --- OneDev REST API ---
+ONEDEV_HOST=https://git.example.test
+ONEDEV_API_TOKEN=your-personal-access-token
+ONEDEV_PROJECT_PATH=group/my-project
+ONEDEV_PROJECT_ID=42
+ONEDEV_REPO_URL=https://git.example.test/group/my-project.git
+ONEDEV_ISSUE_STATE=Open
+# ONEDEV_CURL_INSECURE=1   # only for controlled internal setups with self-signed TLS
 ```
 
 ### Variablen-Matrix
 
-| Variable | onedevr MVP | TaxonomieManager UI | Beschreibung |
-|----------|-------------|---------------------|--------------|
-| `ONEDEV_HOST` | ✅ | indirekt | Basis-URL |
-| `ONEDEV_API_TOKEN` | ✅ | — | Bevorzugtes Token |
-| `ONEDEV_TOKEN` | ✅ | — | Fallback |
-| `ONEDEV_ISSUE_REPORTER_API_KEY` | ✅ | — | Legacy-Fallback |
-| `ONEDEV_PROJECT_ID` | ✅ | — | Projekt-ID |
-| `ONEDEV_PROJECT_PATH` | ✅ | — | Pfad für UI-Nummern-Query |
-| `ONEDEV_ISSUES_REPO_URL` | ✅ | — | Ableitung `project_path` |
-| `ONEDEV_ISSUE_STATE` | ✅ | — | Default-Filter |
-| `ONEDEV_CURL_INSECURE` | ✅ | — | TLS bypass (nur intern) |
-| `ONEDEV_NEW_*_URL` | ❌ | ✅ | Shiny-Link-Overrides |
+| Variable | MVP | Beschreibung |
+|----------|-----|--------------|
+| `ONEDEV_HOST` | ✅ | Basis-URL des OneDev-Servers |
+| `ONEDEV_API_TOKEN` | ✅ | Bevorzugtes API-Token |
+| `ONEDEV_TOKEN` | ✅ | Fallback-Token |
+| `ONEDEV_ISSUE_REPORTER_API_KEY` | ✅ | Legacy-Fallback |
+| `ONEDEV_PROJECT_ID` | ✅ | Numerische Projekt-ID |
+| `ONEDEV_PROJECT_PATH` | ✅ | Projektpfad für UI-Nummern-Queries |
+| `ONEDEV_REPO_URL` | ✅ | Optional: Ableitung von `project_path` |
+| `ONEDEV_ISSUE_STATE` | ✅ | Default-State für `od_query_issues()` |
+| `ONEDEV_CURL_INSECURE` | ✅ | TLS-Verifikation deaktivieren (`1`/`true`) |
+| `ONEDEV_RUN_LIVE_TESTS` | — | `1` aktiviert Integrationstests in CI |
 
-### Ziel-`DESCRIPTION` für onedevr (Entwurf)
+### Projekt-Pfad aus Repo-URL ableiten
 
 ```r
-Package: onedevr
-Title: Access to the OneDev REST API
-Version: 0.1.0
-Authors@R: person("Alexander", "Seymer", email = "alexander.seymer@stadt-salzburg.at", role = c("aut", "cre"))
-Description: R client for the OneDev project management REST API. Provides
-    low-level request helpers and high-level convenience functions for
-    issues, projects, and (future) builds. Designed for self-hosted OneDev
-    instances.
-License: MIT + file LICENSE
-URL: https://github.com/sandboxing-at/onedevr
-BugReports: https://github.com/sandboxing-at/onedevr/issues
-Depends: R (>= 4.2.0)
-Imports:
-    httr2 (>= 1.0.0),
-    jsonlite (>= 1.8.0),
-    rlang (>= 1.0.0)
-Suggests:
-    testthat (>= 3.1.0),
-    mockery,
-    withr,
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
-Roxygen: list(markdown = TRUE)
-Encoding: UTF-8
+.od_derive_project_path <- function(repo_url) {
+  repo_url <- trimws(as.character(repo_url)[1])
+  if (!nzchar(repo_url)) return("")
+  path <- sub("^https?://[^/]+/", "", repo_url, perl = TRUE)
+  path <- sub("\\.git/?$", "", path, perl = TRUE)
+  path <- sub("^/+", "", path, perl = TRUE)
+  trimws(path)
+}
 ```
 
 ---
 
 ## 9. UI-Nummern vs. interne API-IDs
 
-**Pflicht-Designprinzip für onedevr** (aus `.cursor/rules/onedev-issue-ids.mdc`):
+### Golden Rule
+
+Wenn Nutzer oder Workflows eine Issue-Nummer nennen (z. B. „Issue 129“, `#129`), ist damit die **sichtbare UI-Nummer** gemeint — JSON-Feld `number`, formatiert als `#129`.
+
+Das ist **nicht** das interne REST-Feld `id` (z. B. `283` für UI `#129`). Diese Werte unterscheiden sich und dürfen nicht vertauscht werden.
+
+### API-Design-Regeln für onedevr
 
 | Kontext | Verwenden |
 |---------|-----------|
 | High-level API (`od_get_issue(145)`) | UI-Nummer `#145` / `145` |
 | User-Kommunikation, Commits, Branches | `#145` |
-| Low-level (`od_request("GET", "/issues/283")`) | interne `id` — nur mit Dokumentation |
+| Low-level (`od_request("GET", "/issues/283")`) | interne `id` — nur dokumentiert |
 | Fehlermeldungen | UI-Nummer bevorzugen |
 
-**Verboten im Paket-Design:**
+**Empfehlung:** `od_get_issue()` akzeptiert standardmäßig keine interne ID. Optionaler Parameter `use_internal_id = TRUE` nur für Debugging.
 
-- `od_get_issue()` akzeptiert **keine** interne ID ohne expliziten Parameter `use_internal_id = TRUE`
-- Keine Empfehlung/Wiederbelebung von `tod` CLI
-
-**Query-Muster für Auflösung:**
+### Query-Muster für Auflösung
 
 ```text
-"Number" is "TaxonomieManager#145"
+"Number" is "group/my-project#145"
 ```
 
 Analog für Builds (Phase 3):
 
 ```text
-"Number" is "TaxonomieManager#100"
+"Number" is "group/my-project#100"
 ```
 
 ---
 
-## 10. Bekannte API-Quirks & Probedaten
+## 10. Bekannte API-Quirks
 
 ### Create Issue: zwei Body-Formen
 
@@ -673,7 +720,7 @@ Analog für Builds (Phase 3):
 | A | `projectId` (scalar) |
 | B | `project = list(id = ...)` |
 
-→ `.onedev_request_with_variants()` probiert beide.
+→ `.od_request_with_variants()` probiert beide.
 
 ### State Transition: drei Body-Formen
 
@@ -683,50 +730,45 @@ Analog für Builds (Phase 3):
 | 2 | `list(transition = "Closed")` |
 | 3 | `"Closed"` (raw string) |
 
-### Iterations POST: Probe-Ergebnisse offen
-
-`scripts/dev/_tmp_onedev_iteration_probe.R` testet:
+### Iterations POST: mehrere Body-Formen (zu verifizieren)
 
 ```r
+# Probe verschiedener Payloads gegen die Ziel-Installation:
 for (body in list(c(17L), list(17L), list(iterationIds = list(17L)))) {
-  onedev_api_request("POST", "/issues/542/iterations", body = body, config = config)
+  od_request("POST", "/issues/{issue_id}/iterations", body = body, conn = conn)
 }
 ```
 
-→ In onedevr Phase 2: Varianten-Helper analog zu Issues; Integrationstest gegen echte Instanz.
+→ In Phase 2: Varianten-Helper + Integrationstest gegen echte Instanz.
 
-### Bekannte Iteration-IDs (TaxonomieManager, 2026-07-10)
+### Custom Fields sind installationsabhängig
 
-| ID | Name (vermutet) |
-|----|-----------------|
-| `17` | Version 2.X.X |
-| `16` | Version 3.x |
-
-### Feld-Introspection (Beispiel `logs/onedev_introspect_result.json`)
+Beispiel-Response `GET /issues/{id}/fields`:
 
 ```json
 {
-  "number": 99,
-  "fields": {
-    "Assignee": "alexander",
-    "Type": "Support Request",
-    "Priority": "Normal"
-  }
+  "Assignee": "developer",
+  "Type": "Task",
+  "Priority": "Normal"
 }
 ```
 
-Custom-Feldnamen sind **installationsabhängig** — onedevr dokumentiert `fields` als named list ohne festes Schema.
+Feldnamen und erlaubte Werte variieren pro OneDev-Installation und Issue-Schema. onedevr dokumentiert `fields` als named list ohne festes Schema.
+
+### Iteration-IDs
+
+Iterationen haben interne numerische IDs. Namen (z. B. „Version 2.x“) werden über `GET /projects/{id}/iterations` aufgelöst. IDs sind installations- und projektspezifisch.
 
 ---
 
 ## 11. Phasen, Meilensteine & Akzeptanzkriterien
 
-### Phase 0 — Planung ✅
+### Phase 0 — Planung
 
-- [x] Ist-Analyse `R/onedev_api.R`
 - [x] Plan-Dokument (`onedevr-plan.md`)
-- [ ] Repo `sandboxing-at/onedevr` anlegen
-- [ ] Lizenz-Entscheid MIT vs GPL-3
+- [ ] GitHub-Repo anlegen
+- [ ] Lizenz-Entscheid (MIT vs GPL-3)
+- [ ] Maintainer & Org festlegen
 
 ### Phase 1 — MVP (Issue-Core)
 
@@ -734,11 +776,11 @@ Custom-Feldnamen sind **installationsabhängig** — onedevr dokumentiert `field
 
 | Task | Akzeptanzkriterium |
 |------|-------------------|
-| Code-Extrakt aus `onedev_api.R` (ohne URL-Builder) | `R CMD check` ohne ERROR |
-| Tests migrieren | `testthat` failed=0 |
-| `od_request()`, `od_get_config()` | Vignette-Beispiel läuft gegen `git.sandboxing.at` |
-| UI-Nummern-Auflösung | Test mit Mock: `#145` → Query `"Number" is "..."` |
-| README mit Quick Start | 5-Minuten-Einstieg dokumentiert |
+| Paket-Skeleton mit usethis | `R CMD check` ohne ERROR |
+| `od_request()`, `od_get_config()` | Vignette-Beispiel dokumentiert |
+| Issue-CRUD + Auflösung | `testthat` failed=0 |
+| UI-Nummern-Auflösung | Mock-Test: `#145` → Query `"Number" is "..."` |
+| README Quick Start | 5-Minuten-Einstieg |
 
 **Zeitschätzung:** 1–2 Arbeitstage
 
@@ -750,7 +792,7 @@ Custom-Feldnamen sind **installationsabhängig** — onedevr dokumentiert `field
 | `od_list_iterations()` | Liste für Projekt |
 | `od_add_issue_iterations()` | Varianten-Helper + Integrationstest |
 | `od_create_issue(iteration_ids=)` | Create mit `iterationIds` |
-| `od_connection()` Objekt | Explizite Connection statt nur Env |
+| `od_connection()` | Explizite Connection statt nur Env |
 
 **Zeitschätzung:** 2–3 Arbeitstage
 
@@ -760,161 +802,188 @@ Custom-Feldnamen sind **installationsabhängig** — onedevr dokumentiert `field
 |------|----------|
 | `od_query_builds()` | `GET /builds` |
 | `od_get_build()` | `GET /builds/{id}` |
-| `od_resolve_build_number()` | Query `"Number" is "path#N"` |
-| PR-Liste / Review-Kommentare | je nach API auf `~help/api` |
+| `od_resolve_build_id()` | Query `"Number" is "path#N"` |
+| PR-Liste / Review-Kommentare | je nach `~help/api` |
 
 **Zeitschätzung:** 1 Woche+
 
-### Phase 4 — TaxonomieManager-Integration
-
-| Task | Akzeptanzkriterium |
-|------|-------------------|
-| `Imports: onedevr` in DESCRIPTION | Paket-Build erfolgreich |
-| `R/onedev_api.R` → dünn oder entfernt | URL-Builder bleiben in TM |
-| Dev-Skripte auf `onedevr::` | Migration-Skripte laufen |
-| Doku-Update | `onedev-rest-api.md` verweist auf onedevr |
-| Changelog-Eintrag | TM + onedevr |
-
-### Phase 5 — Veröffentlichung (optional)
+### Phase 4 — Veröffentlichung
 
 - [ ] GitHub Release v0.1.0
-- [ ] CRAN-Submission (oder R-universe)
 - [ ] pkgdown-Site
+- [ ] CRAN-Submission oder R-universe (optional)
 
 ---
 
-## 12. Migration TaxonomieManager → onedevr
+## 12. Consumer-Integration
 
-### Schritt-für-Schritt
-
-```mermaid
-flowchart LR
-  A[R/onedev_api.R in TM] --> B[Extrakt generischer Teil]
-  B --> C[onedevr Repo v0.1.0]
-  C --> D[TM: Imports onedevr]
-  D --> E[TM: R/onedev_links.R nur UI-URLs]
-  E --> F[Tests + Skripte anpassen]
-  F --> G[TM Binary neu bauen]
-```
-
-### Was in TaxonomieManager bleibt
-
-Neue Datei `R/onedev_links.R` (Vorschlag):
+### Installation
 
 ```r
-# App-specific OneDev web URLs — NOT part of onedevr package
+# GitHub (bis CRAN)
+remotes::install_github("your-org/onedevr")
 
-onedev_new_issue_base_url <- function(config = NULL) { ... }
-onedev_new_issue_url <- function(kind = c("default", "bug", "improvement"), config = NULL) { ... }
-onedev_improvement_issue_url <- function(statistikcode = "", statistik = "", config = NULL) { ... }
-onedev_improvement_issue_title <- function(...) { ... }
-onedev_improvement_issue_description <- function(...) { ... }
+# Später
+install.packages("onedevr")
 ```
 
-Config-Lesen kann delegiert werden:
-
-```r
-onedev_get_config <- function(...) onedevr::od_get_config(...)
-```
-
-### Dev-Skript-Anpassung (Beispiel)
-
-Vorher:
-
-```r
-suppressPackageStartupMessages(devtools::load_all(repo_root, quiet = TRUE))
-config <- onedev_get_config()
-issue <- onedev_get_issue(145)
-```
-
-Nachher:
+### Minimales Setup
 
 ```r
 library(onedevr)
-config <- od_get_config()
-issue <- od_get_issue(145, conn = config)
+
+Sys.setenv(
+  ONEDEV_HOST = "https://git.example.test",
+  ONEDEV_API_TOKEN = Sys.getenv("ONEDEV_API_TOKEN"),
+  ONEDEV_PROJECT_PATH = "group/my-project"
+)
+
+od_query_issues(state = "Open")
 ```
+
+### Explizite Connection (empfohlen für Skripte)
+
+```r
+conn <- od_connection(
+  host = "https://git.example.test",
+  token = Sys.getenv("ONEDEV_API_TOKEN"),
+  project_path = "group/my-project"
+)
+
+od_get_issue(42, conn = conn)
+```
+
+### Roxygen-Re-Export (optional, für Shiny-Pakete)
+
+```r
+#' @importFrom onedevr od_get_issue od_create_issue
+NULL
+```
+
+### Was Consumer selbst implementieren
+
+| Bedarf | Empfehlung |
+|--------|------------|
+| Browser-Links zu Issue-Formularen | Eigene URL-Builder (siehe §7.11) |
+| App-spezifische Issue-Titel | Domänenlogik im Consumer |
+| Webhook-Handling | Separates Paket oder App-Code |
 
 ---
 
-## 13. Paket-Skeleton (Zielstruktur)
+## 13. Paket-Skeleton
+
+### Repo anlegen (usethis)
+
+```r
+usethis::create_package("path/to/onedevr")
+usethis::use_mit_license()   # oder use_gpl3_license()
+usethis::use_testthat()
+usethis::use_package("httr2", "Imports")
+usethis::use_package("jsonlite", "Imports")
+usethis::use_package("rlang", "Imports")
+usethis::use_package("mockery", "Suggests")
+usethis::use_package("withr", "Suggests")
+usethis::use_vignette("getting-started")
+usethis::use_git()
+usethis::use_github()
+```
 
 ### Quick Start (Ziel-README)
 
 ```r
-install.packages("onedevr")  # oder remotes::install_github("sandboxing-at/onedevr")
+install.packages("onedevr")  # oder remotes::install_github("your-org/onedevr")
 
 Sys.setenv(
   ONEDEV_HOST = "https://git.example.test",
   ONEDEV_API_TOKEN = "your-token",
-  ONEDEV_PROJECT_PATH = "MyProject"
+  ONEDEV_PROJECT_PATH = "group/my-project"
 )
 
 library(onedevr)
 
-# List open issues
 od_query_issues(state = "Open")
-
-# Get by UI number
 issue <- od_get_issue(145)
 
-# Create
 created <- od_create_issue(
   title = "API test",
   description = "Created from R",
   fields = list(Priority = "Normal")
 )
 
-# Close
 od_issue_transition_state(created$number, "Closed")
-```
-
-### Repo anlegen (usethis)
-
-```r
-usethis::create_package("path/to/onedevr")
-usethis::use_testthat()
-usethis::use_package("httr2", "Imports")
-usethis::use_package("jsonlite", "Imports")
-usethis::use_package("rlang", "Imports")
-usethis::use_package("mockery", "Suggests")
-usethis::use_vignette("getting-started")
 ```
 
 ---
 
 ## 14. Test-Strategie
 
-### Vorhandene Tests (migrieren)
-
-Datei: `tests/testthat/test_onedev_api.R`
+### Unit-Tests (ohne Netzwerk)
 
 | Test | Was geprüft wird |
 |------|------------------|
-| `onedev_get_config reads ONEDEV env vars` | Env-Parsing, `project_path`-Ableitung |
-| `onedev_resolve_issue_id uses UI number query` | Query-String mit Projekt-Pfad |
-| `onedev_get_issue resolves internal id` | GET `/issues/{id}` |
-| `onedev_create_issue uses project id` | POST Body-Struktur |
-| `onedev_issue_transition_state tries variants` | Drei Payload-Formen |
-| URL-Tests | **bleiben in TaxonomieManager** (nicht onedevr) |
+| `od_get_config reads env vars` | Env-Parsing, `project_path`-Ableitung |
+| `od_resolve_issue_id uses UI number query` | Query-String mit Projekt-Pfad |
+| `od_get_issue resolves internal id` | GET `/issues/{id}` |
+| `od_create_issue uses project id` | POST Body-Struktur |
+| `od_issue_transition_state tries variants` | Drei Payload-Formen |
+| `od_request handles HTTP errors` | Klare Fehlermeldungen bei 4xx/5xx |
 
-### Zusätzliche Tests für onedevr
+### Beispiel: Config-Test
 
 ```r
-# htttr2 mocking (ohne Netzwerk)
-test_that("od_request handles 404 with clear error", {
-  # httr2::with_mocked_responses() oder mockery::stub()
-})
+test_that("od_get_config reads ONEDEV env vars and derives project path", {
+  withr::local_envvar(
+    ONEDEV_HOST = "https://git.example.test/",
+    ONEDEV_API_TOKEN = "api-token",
+    ONEDEV_REPO_URL = "https://git.example.test/group/subgroup/project.git",
+    ONEDEV_PROJECT_ID = "20",
+    ONEDEV_PROJECT_PATH = "",
+    ONEDEV_ISSUE_STATE = "Open",
+    ONEDEV_CURL_INSECURE = "1"
+  )
 
-# Integration (optional, skip ohne Env)
+  cfg <- od_get_config()
+
+  expect_equal(cfg$host, "https://git.example.test")
+  expect_equal(cfg$api_base_url, "https://git.example.test/~api")
+  expect_equal(cfg$token, "api-token")
+  expect_equal(cfg$project_id, "20")
+  expect_equal(cfg$project_path, "group/subgroup/project")
+  expect_equal(cfg$default_issue_state, "Open")
+  expect_true(isTRUE(cfg$insecure_ssl))
+})
+```
+
+### Beispiel: UI-Nummer-Auflösung (mockery)
+
+```r
+test_that("od_resolve_issue_id uses UI number query with project path", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_resolve_issue_id, "od_resolve_project_path", function(conn = NULL) {
+    "my-project"
+  })
+  mockery::stub(od_resolve_issue_id, "od_query_issues", function(query, count, offset, conn = NULL) {
+    expect_equal(query, '"Number" is "my-project#145"')
+    list(list(id = 283, number = 145))
+  })
+
+  issue_id <- od_resolve_issue_id("#145", conn = list(host = "https://git.example.test"))
+  expect_equal(issue_id, "283")
+})
+```
+
+### Integrationstests (gated)
+
+```r
 test_that("od_get_issue live", {
   skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
-  issue <- od_get_issue(99)
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  issue <- od_get_issue(1)
   expect_true(!is.null(issue$title))
 })
 ```
 
-### CI für onedevr (GitHub Actions Entwurf)
+### CI (GitHub Actions Entwurf)
 
 ```yaml
 # .github/workflows/R-CMD-check.yaml
@@ -928,6 +997,8 @@ jobs:
       - run: R CMD check .
 ```
 
+Optional: separater Job `live-tests` mit Repository-Secrets (`ONEDEV_HOST`, `ONEDEV_API_TOKEN`, `ONEDEV_PROJECT_PATH`).
+
 ---
 
 ## 15. Zukünftige API-Abdeckung
@@ -936,8 +1007,8 @@ Priorisiert nach OneDev `~help/api` Ressourcen:
 
 | Ressource | Priorität | geplante Funktionen |
 |-----------|-----------|---------------------|
-| **Issues** | P0 ✅ | MVP |
-| **Projects** | P0 ✅ | resolve id/path |
+| **Issues** | P0 | MVP |
+| **Projects** | P0 | resolve id/path, list |
 | **Iterations** | P1 | list, add to issue |
 | **Issue Fields** | P1 | get, set |
 | **Issue Comments** | P2 | list, create |
@@ -948,15 +1019,35 @@ Priorisiert nach OneDev `~help/api` Ressourcen:
 
 ### Low-level Escape Hatch
 
-Wie gitlabr's `gitlab()`:
-
 ```r
 od_request(
   method = "GET",
-  endpoint = "/projects/20/iterations",
+  endpoint = "/projects/42/iterations",
   conn = conn
 )
 ```
+
+### OneDev API-Ressourcen (Referenz)
+
+Typische Endpunkte laut Installations-Doku:
+
+| Operation | Methode | Endpunkt |
+|-----------|---------|----------|
+| Query Issues | GET | `/issues` |
+| Get Issue | GET | `/issues/{issueId}` |
+| Create Issue | POST | `/issues` |
+| Set Title | POST | `/issues/{issueId}/title` |
+| Set Description | POST | `/issues/{issueId}/description` |
+| Set Fields | POST | `/issues/{issueId}/fields` |
+| State Transition | POST | `/issues/{issueId}/state-transitions` |
+| Get Project | GET | `/projects/{projectId}` |
+| Get Project Id | GET | `/projects/ids/{path}` |
+| Query Projects | GET | `/projects` |
+| Query Iterations | GET | `/projects/{projectId}/iterations` |
+| Query Builds | GET | `/builds` |
+| Get Build | GET | `/builds/{buildId}` |
+
+Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 
 ---
 
@@ -967,32 +1058,23 @@ od_request(
 | Ressource | URL |
 |-----------|-----|
 | OneDev REST API (allgemein) | https://docs.onedev.io/restful-api |
+| OneDev Concepts | https://docs.onedev.io/concepts |
 | API-Hilfe (pro Instanz) | `https://<ONEDEV_HOST>/~help/api` |
-| gitlabr (Referenz) | https://thinkr-open.github.io/gitlabr/ |
+| gitlabr (Referenzarchitektur) | https://thinkr-open.github.io/gitlabr/ |
 | gitlabr GitHub | https://github.com/ThinkR-open/gitlabr |
 | httr2 | https://httr2.r-lib.org/ |
+| usethis | https://usethis.r-lib.org/ |
+| testthat | https://testthat.r-lib.org/ |
 
-### Intern (TaxonomieManager)
+### Projekt-Artefakte (dieses Repo)
 
-| Ressource | Pfad |
-|-----------|------|
-| REST-Client Quellcode | `R/onedev_api.R` |
-| Unit-Tests | `tests/testthat/test_onedev_api.R` |
-| Technische Doku | `docs/entwickler/technical/integrationen/onedev-rest-api.md` |
-| Issue-ID-Regel | `.cursor/rules/onedev-issue-ids.mdc` |
-| Env-Beispiel | `.env.example` (Zeilen 54–61) |
-| Issue-Close-Verifikation | `docs/entwickler/technical/integrationen/onedev-issue-close-150-145.md` |
-| Changelog | `docs/entwickler/changelog.md` |
-| Migration todo→OneDev | `scripts/dev/migrate_todo_to_onedev.R` |
-| Introspect-Log | `logs/onedev_introspect_result.json` |
-
-### OneDev-Instanz (TaxonomieManager)
-
-| Ressource | URL |
-|-----------|-----|
-| Projekt | https://git.sandboxing.at/TaxonomieManager |
-| Neues Issue | https://git.sandboxing.at/TaxonomieManager/~issues/new |
-| API-Hilfe | https://git.sandboxing.at/~help/api |
+| Artefakt | Pfad |
+|----------|------|
+| Dieser Plan | `onedevr-plan.md` |
+| Paket-Quellcode | `R/*.R` (nach Anlage) |
+| Tests | `tests/testthat/*.R` |
+| Vignetten | `vignettes/*.Rmd` |
+| Env-Vorlage | `.env.example` |
 
 ---
 
@@ -1000,111 +1082,56 @@ od_request(
 
 | Risiko | Mitigation |
 |--------|------------|
-| OneDev API ändert Payload-Formate zwischen Versionen | `.od_request_with_variants()` beibehalten; Versionshinweis in README |
-| Custom Fields sind installationsabhängig | Kein festes Schema; `fields` als named list dokumentieren |
-| Bearer vs Basic Auth | Beide unterstützen; Bearer als Default (bewährt), Basic als Option |
+| OneDev API ändert Payload-Formate zwischen Versionen | `.od_request_with_variants()`; Versionshinweis in README |
+| Custom Fields installationsabhängig | Kein festes Schema; `fields` als named list |
+| Bearer vs Basic Auth | Beide unterstützen; Bearer als Default, Basic als Option |
 | Paketname `onedevr` auf CRAN verfügbar? | Vor Submission prüfen; Alternative: `onedevapi` |
-| Wartungsaufwand | Kleines Kernteam; Issues auf GitHub |
-| TaxonomieManager binary-first | onedevr als Dependency versionieren; `Remotes:` bis CRAN |
+| Kleine Community | Gute Doku, pkgdown, klare Vignetten |
+| Self-signed TLS in internen Setups | `ONEDEV_CURL_INSECURE` dokumentieren, nicht empfehlen |
 
 ### Offene Entscheidungen
 
-1. **GitHub-Org:** `sandboxing-at/onedevr` vs. persönliches Repo?
-2. **Funktionspräfix:** `od_*` (kurz) vs. `onedev_*` (explizit, Kompatibilität)?
-3. **CRAN ja/nein** oder nur GitHub + `remotes::install_github()`?
-4. **Deprecation:** Sofortiger Break in TM oder Compat-Layer für 1 Release?
-5. **Basic Auth:** In Phase 1 oder später?
+1. **GitHub-Org:** `your-org/onedevr` — welche Organisation?
+2. **Funktionspräfix:** `od_*` (kurz) vs. `onedev_*` (explizit)?
+3. **CRAN ja/nein** oder nur GitHub + R-universe?
+4. **Lizenz:** MIT (breite Nutzung) vs GPL-3 (wie gitlabr)?
+5. **Basic Auth:** Phase 1 oder Phase 2?
+6. **Rückgabeformat:** native `list` vs. `tibble` (gitlabr-Stil)?
 
 ---
 
 ## 18. Umsetzungs-Checkliste
 
-### Sofort (Planung abgeschlossen)
+### Sofort
 
-- [x] Plan-Dokument erstellen (`onedevr-plan.md`)
-- [ ] Stakeholder-Freigabe (Scope Phase 1)
+- [x] Plan-Dokument erstellen
 - [ ] GitHub-Repo anlegen
+- [ ] Lizenz wählen
+- [ ] README-Skeleton
 
 ### Phase 1 MVP
 
 - [ ] `usethis::create_package("onedevr")`
-- [ ] Core aus `R/onedev_api.R` extrahieren (Zeilen 1–141, 382–761; ohne URL-Builder 202–380)
-- [ ] `%||%` → `rlang::%||%`
-- [ ] Tests migrieren (`test_onedev_api.R` ohne URL-Tests)
-- [ ] README + `getting-started` Vignette
+- [ ] `R/request.R`, `R/config.R`, `R/issues.R`, `R/projects.R`, `R/variants.R`
+- [ ] `%||%` via `rlang::%||%`
+- [ ] Unit-Tests (config, resolve, issues, variants)
+- [ ] Vignette `getting-started`
 - [ ] `R CMD check` grün
 - [ ] Tag `v0.1.0`
 
-### Phase 1 TaxonomieManager
+### Phase 2
 
-- [ ] `onedevr` als Dependency
-- [ ] `R/onedev_links.R` für UI-URLs
-- [ ] `R/onedev_api.R` entfernen oder Compat-Layer
-- [ ] NAMESPACE/DESCRIPTION/Collate anpassen
-- [ ] `docs/entwickler/technical/integrationen/onedev-rest-api.md` aktualisieren
-- [ ] `docs/entwickler/changelog.md` Eintrag
-- [ ] `cmd /c test.bat tests\testthat\test_onedev_api.R`
-- [ ] Binary neu bauen
-
-### Phase 2+
-
+- [ ] `od_connection()` implementieren
 - [ ] Iterations-API kapseln
-- [ ] `od_connection()` R6 oder list-S3
+- [ ] `od_get_issue_fields()`
 - [ ] Live-Integrationstests (gated)
+
+### Phase 3+
+
 - [ ] Builds-Modul
-- [ ] pkgdown / CRAN
-
----
-
-## Anhang A — Vollständige interne Helfer (Extraktionsliste)
-
-Diese Funktionen in `R/onedev_api.R` sind **intern** (`.`-Präfix) und wandern 1:1 nach onedevr (umbenannt):
-
-```
-.onedev_trim_env              → .od_trim_env
-.onedev_first_non_empty       → .od_first_non_empty
-.onedev_parse_flag             → .od_parse_flag
-.onedev_derive_project_path    → .od_derive_project_path
-.onedev_normalize_collection   → .od_normalize_collection
-.onedev_parse_response_body     → .od_parse_response_body
-.onedev_http_error              → .od_http_error
-.onedev_prepare_request         → .od_prepare_request
-.onedev_resolve_api_url          → .od_resolve_api_url
-.onedev_request_with_variants    → .od_request_with_variants
-```
-
-**Nicht extrahieren (TM-spezifisch):**
-
-```
-.onedev_default_issue_project_urls
-.onedev_issue_links_config
-onedev_project_web_base_url
-onedev_new_issue_base_url
-onedev_improvement_issue_*
-onedev_new_issue_url
-.onedev_url_with_query_params
-```
-
----
-
-## Anhang B — NAMESPACE-Exports (Ziel onedevr v0.1.0)
-
-```
-export(od_get_config)
-export(od_request)
-export(od_resolve_project_id)
-export(od_resolve_project_path)
-export(od_query_issues)
-export(od_resolve_issue_id)
-export(od_get_issue)
-export(od_create_issue)
-export(od_issue_set_title)
-export(od_issue_set_description)
-export(od_issue_set_fields)
-export(od_issue_transition_state)
-```
-
-Phase 2 ergänzt: `od_get_issue_fields`, `od_list_iterations`, `od_add_issue_iterations`, `od_connection`.
+- [ ] Pull-Request-Wrapper
+- [ ] pkgdown-Site
+- [ ] CRAN / R-universe
 
 ---
 
