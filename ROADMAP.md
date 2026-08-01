@@ -5,20 +5,20 @@ Mirrors §11 and §18 of [`project_plan.md`](project_plan.md). Public, and will 
 ## Phase 0 — Planning
 - [x] Plan document (`project_plan.md`)
 - [x] GitHub repo created
-- [ ] License decision (MIT vs GPL-3 — see plan §17)
-- [ ] README skeleton
-- [ ] Maintainer & org decided (currently: personal repo under `alexseymer`)
+- [x] License decision (MIT)
+- [x] README skeleton
+- [x] Maintainer & org decided (currently: personal repo under `alexseymer`)
 
 ## Phase 1 — MVP (issue core)
 Goal: package installable, tests green, issue CRUD functional.
 
-- [ ] Package skeleton via `usethis::create_package()`
-- [ ] `od_request()`, `od_get_config()` — low-level HTTP + env-based config
-- [ ] `od_resolve_project_id()`, `od_resolve_project_path()`
-- [ ] `od_query_issues()`, `od_resolve_issue_id()`, `od_get_issue()`
-- [ ] `od_create_issue()`, `od_issue_set_title()`, `od_issue_set_description()`, `od_issue_set_fields()`, `od_issue_transition_state()`
-- [ ] UI-number → internal-ID resolution tested against mock queries
-- [ ] README quick start (5-minute onboarding)
+- [x] Package skeleton via `usethis::create_package()`
+- [x] `od_request()`, `od_get_config()` — low-level HTTP + env-based config
+- [x] `od_resolve_project_id()`, `od_resolve_project_path()`
+- [x] `od_query_issues()`, `od_resolve_issue_id()`, `od_get_issue()`
+- [x] `od_create_issue()`, `od_issue_set_title()`, `od_issue_set_description()`, `od_issue_set_fields()`, `od_issue_transition_state()`
+- [x] UI-number → internal-ID resolution tested against mock queries
+- [x] README quick start (5-minute onboarding)
 
 Estimate per plan: 1–2 working days.
 

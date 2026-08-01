@@ -1,0 +1,29 @@
+Package: onedevr
+Title: Access to the OneDev REST API
+Version: 0.1.0
+Authors@R: c(
+    person("Alex", "Seymer", email = "alex@seymer.at", role = c("aut", "cre"))
+  )
+Description: R client for the OneDev project management REST API. Provides
+    low-level request helpers and high-level convenience functions for
+    issues, projects, and (future) builds. Designed for self-hosted OneDev
+    instances. Modeled on gitlabr for the R API shape; OneDev conventions
+    follow the tod CLI (https://github.com/theonedev/tod).
+License: MIT + file LICENSE
+URL: https://github.com/alexseymer/onedevR
+BugReports: https://github.com/alexseymer/onedevR/issues
+Depends: R (>= 4.2.0)
+Imports:
+    httr2 (>= 1.0.0),
+    jsonlite (>= 1.8.0),
+    rlang (>= 1.0.0)
+Suggests:
+    testthat (>= 3.1.0),
+    mockery,
+    withr,
+    knitr,
+    rmarkdown
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
