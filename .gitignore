@@ -1,0 +1,29 @@
+# R / package
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+*.tar.gz
+*.Rcheck/
+src/*.o
+src/*.so
+src/*.dll
+inst/doc
+
+# Renviron / secrets — never commit real tokens
+.Renviron
+.env
+.env.local
+*.pem
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*~
+
+# Docs build
+docs/
+pkgdown/
+_pkgdown.yml

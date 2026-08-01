@@ -4,26 +4,38 @@
 
 ### What this repo is
 
-`onedevr` is a planned **R package** — a client for the OneDev REST API (issues,
-projects, later builds/PRs), modeled on `gitlabr`. As of now the repo is
-**planning-stage only**: it contains docs (`README.md`, `ROADMAP.md`,
-`project_plan.md`) and `LICENSE`. There is **no package code yet** — no
-`DESCRIPTION`, `NAMESPACE`, `R/`, `tests/`, or CI. The full intended design
-(architecture, API, reference code snippets, test strategy) lives in
-[`project_plan.md`](project_plan.md); build Phase 1 from §5–§14 there.
+`onedevr` (display name **onedevR**) is a planned **R package** — a client for
+the OneDev REST API (issues, projects, later builds/PRs), modeled on `gitlabr`.
+**Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is the
+*API target*, not the VCS). As of now the repo is still largely planning-stage
+(docs + license + env templates); there is no package `DESCRIPTION` / `R/` /
+`tests/` yet. Build Phase 1 from [`project_plan.md`](project_plan.md) §5–§14.
 
-### Toolchain (already installed in the VM snapshot)
+### Environment (repo-managed via GitHub)
 
-- R **4.6.1** from the CRAN apt repo (`cloud.r-project.org/.../noble-cran40`).
-- Runtime deps: `httr2`, `jsonlite`, `rlang`.
-- Test/dev deps: `testthat`, `mockery`, `withr`, `devtools`, `roxygen2`,
-  `knitr`, `rmarkdown`.
+Environment config lives in the repo and travels with the code you push:
 
-Gotcha: the r2u binary CRAN repo (`r2u.stat.illinois.edu`) is configured and is
-the fast way to add more CRAN packages: `sudo apt-get install -y r-cran-<name>`
-(binary `.deb`, no compilation). Its packages require **R ≥ 4.5/4.6**, which is
-why R comes from the CRAN apt repo — Ubuntu 24.04's own `r-base-core` (4.3.3) is
-too old for the current r2u binaries. Do not "downgrade" to the distro R.
+- [`.cursor/environment.json`](.cursor/environment.json) — Dockerfile build +
+  install (dependency refresh) script
+- [`.cursor/Dockerfile`](.cursor/Dockerfile) — R 4.6 from the CRAN apt repo,
+  r2u binary CRAN packages, and the baseline runtime/dev toolchain
+
+Do **not** rely on a personal/team dashboard snapshot for this repo; the
+committed `.cursor/environment.json` takes precedence. Change the image by
+editing the Dockerfile and pushing; change dependency refresh by editing the
+`install` field (keep it idempotent and free of service-startup commands).
+
+### Toolchain baked into the image
+
+- R **≥ 4.6** from `cloud.r-project.org/.../noble-cran40`
+- Runtime: `httr2`, `jsonlite`, `rlang`
+- Dev/test: `testthat`, `mockery`, `withr`, `devtools`, `roxygen2`, `knitr`,
+  `rmarkdown`
+
+Gotcha: r2u (`r2u.stat.illinois.edu`) is the fast way to add more CRAN packages
+(`sudo apt-get install -y r-cran-<name>`). Those binaries need **R ≥ 4.5/4.6** —
+Ubuntu 24.04's own `r-base-core` (4.3.3) is too old. The Dockerfile already
+pulls R from the CRAN apt repo; do not "downgrade" to the distro R.
 
 ### Running / testing (once package code exists under `R/` and `tests/`)
 
@@ -39,12 +51,14 @@ There is no long-running service or GUI — this is a library exercised from R.
 
 ### Config / live integration tests
 
-The client reads connection settings from env vars (`project_plan.md` §8):
-`ONEDEV_HOST`, `ONEDEV_API_TOKEN` (or `ONEDEV_TOKEN` /
+Copy [`.env.example`](.env.example) into `.Renviron` / `.env` (both are
+gitignored) or set Cursor Cloud secrets. Vars are documented in
+`project_plan.md` §8: `ONEDEV_HOST`, `ONEDEV_API_TOKEN` (or `ONEDEV_TOKEN` /
 `ONEDEV_ISSUE_REPORTER_API_KEY`), `ONEDEV_PROJECT_PATH`, `ONEDEV_PROJECT_ID`,
 `ONEDEV_REPO_URL`, `ONEDEV_ISSUE_STATE`, `ONEDEV_CURL_INSECURE`.
 
 Unit tests are designed to run **offline** (env parsing via `withr`, HTTP paths
-stubbed via `mockery`) — no network or real server needed. Live integration
-tests are gated behind `ONEDEV_RUN_LIVE_TESTS=1` and additionally require a
-reachable OneDev instance plus a valid API token; without those, they skip.
+stubbed via `mockery`) — no network or real OneDev server needed. Live
+integration tests are gated behind `ONEDEV_RUN_LIVE_TESTS=1` and additionally
+require a reachable OneDev instance plus a valid API token; without those,
+they skip.

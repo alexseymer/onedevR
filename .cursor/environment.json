@@ -1,0 +1,8 @@
+{
+  "name": "onedevr",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "install": "Rscript -e 'baseline <- c(\"httr2\",\"jsonlite\",\"rlang\",\"testthat\",\"mockery\",\"withr\",\"devtools\",\"roxygen2\",\"knitr\",\"rmarkdown\"); miss <- baseline[!vapply(baseline, requireNamespace, logical(1), quietly = TRUE)]; if (length(miss)) install.packages(miss, repos = \"https://cloud.r-project.org\")'\nRscript -e 'if (file.exists(\"DESCRIPTION\")) tryCatch(devtools::install_deps(\".\", upgrade = \"never\"), error = function(e) message(\"install_deps skipped: \", conditionMessage(e)))'"
+}
