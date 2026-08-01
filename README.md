@@ -1,6 +1,11 @@
 # onedevR
 
-`onedevr` is an R client for the [OneDev](https://onedev.io) REST API — issues, projects, and (planned) builds and pull requests, for self-hosted OneDev instances. Modeled on [`gitlabr`](https://thinkr-open.github.io/gitlabr/): a low-level `od_request()` for anything the API supports, and high-level `od_*` wrappers for the common cases.
+`onedevr` is an R client for the [OneDev](https://onedev.io) REST API — issues, projects, and (planned) builds and pull requests, for self-hosted OneDev instances.
+
+**References:**
+
+- R package shape (GitLab → R): [`gitlabr`](https://thinkr-open.github.io/gitlabr/) — low-level `od_request()` escape hatch + high-level `od_*` wrappers, same idea as `gitlab` / `gl_*`.
+- Working with OneDev itself: [`tod`](https://github.com/theonedev/tod) (TheOneDev CLI) — issue/PR/build refs, query DSL, and API conventions to mirror when implementing `onedevr`.
 
 ## Status
 

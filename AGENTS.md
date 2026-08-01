@@ -5,11 +5,27 @@
 ### What this repo is
 
 `onedevr` (display name **onedevR**) is a planned **R package** — a client for
-the OneDev REST API (issues, projects, later builds/PRs), modeled on `gitlabr`.
-**Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is the
-*API target*, not the VCS). As of now the repo is still largely planning-stage
-(docs + license + env templates); there is no package `DESCRIPTION` / `R/` /
-`tests/` yet. Build Phase 1 from [`project_plan.md`](project_plan.md) §5–§14.
+the OneDev REST API (issues, projects, later builds/PRs).
+
+**Two distinct references (do not mix them up):**
+
+| Role | Reference | URL |
+|------|-----------|-----|
+| R package architecture (GitLab → R) | [`gitlabr`](https://thinkr-open.github.io/gitlabr/) | https://github.com/ThinkR-open/gitlabr |
+| Working with OneDev (CLI / API shapes, issue/PR/build refs, query DSL) | [`tod`](https://github.com/theonedev/tod) (TheOneDev CLI) | https://github.com/theonedev/tod |
+
+`gitlabr` is the model for how an R client should feel (`od_*` ↔ `gl_*`,
+connection object, low-level escape hatch). `tod` is the authoritative
+reference for how OneDev itself is driven — ref formats (`#n`,
+`project#n`), issue/PR/build commands, and payload/query conventions. Prefer
+`tod`'s [`cli.md`](https://github.com/theonedev/tod/blob/main/cli.md) and
+source over inventing OneDev API shapes.
+
+**Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is
+the *API target*, not the VCS). As of now the repo is still largely
+planning-stage (docs + license + env templates); there is no package
+`DESCRIPTION` / `R/` / `tests/` yet. Build Phase 1 from
+[`project_plan.md`](project_plan.md) §5–§14.
 
 ### Environment (repo-managed via GitHub)
 
