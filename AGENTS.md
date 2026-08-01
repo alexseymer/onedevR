@@ -4,12 +4,28 @@
 
 ### What this repo is
 
-`onedevr` (display name **onedevR**) is a planned **R package** — a client for
-the OneDev REST API (issues, projects, later builds/PRs), modeled on `gitlabr`.
-**Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is the
-*API target*, not the VCS). As of now the repo is still largely planning-stage
-(docs + license + env templates); there is no package `DESCRIPTION` / `R/` /
-`tests/` yet. Build Phase 1 from [`project_plan.md`](project_plan.md) §5–§14.
+`onedevr` (display name **onedevR**) is an **R package** — a client for the
+OneDev REST API (issues, projects, later builds/PRs).
+
+**Two distinct references (do not mix them up):**
+
+| Role | Reference | URL |
+|------|-----------|-----|
+| R package architecture (GitLab → R) | [`gitlabr`](https://thinkr-open.github.io/gitlabr/) | https://github.com/ThinkR-open/gitlabr |
+| Working with OneDev (CLI / API shapes, issue/PR/build refs, query DSL) | [`tod`](https://github.com/theonedev/tod) (TheOneDev CLI) | https://github.com/theonedev/tod |
+
+`gitlabr` is the model for how an R client should feel (`od_*` ↔ `gl_*`,
+connection object, low-level escape hatch). `tod` is the authoritative
+reference for how OneDev itself is driven — ref formats (`#n`,
+`project#n`), issue/PR/build commands, and payload/query conventions. Prefer
+`tod`'s [`cli.md`](https://github.com/theonedev/tod/blob/main/cli.md) and
+source over inventing OneDev API shapes.
+
+**Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is
+the *API target*, not the VCS). **Phase 1 (MVP issue core) is implemented** —
+`DESCRIPTION`, `R/`, `tests/testthat/`. Later phases are in
+[`ROADMAP.md`](ROADMAP.md); design detail remains in
+[`project_plan.md`](project_plan.md).
 
 ### Environment (repo-managed via GitHub)
 
@@ -37,7 +53,7 @@ Gotcha: r2u (`r2u.stat.illinois.edu`) is the fast way to add more CRAN packages
 Ubuntu 24.04's own `r-base-core` (4.3.3) is too old. The Dockerfile already
 pulls R from the CRAN apt repo; do not "downgrade" to the distro R.
 
-### Running / testing (once package code exists under `R/` and `tests/`)
+### Running / testing
 
 Standard R-package commands — see `project_plan.md` §13–§14; no repo-specific
 wrappers exist:
@@ -45,7 +61,7 @@ wrappers exist:
 - Load for interactive dev: `Rscript -e 'pkgload::load_all(".")'`
 - Run tests: `Rscript -e 'devtools::test()'`
 - Regenerate docs/NAMESPACE from roxygen: `Rscript -e 'devtools::document()'`
-- Full check: `R CMD build . && R CMD check <tarball>` (or `Rscript -e 'devtools::check()'`)
+- Full check: `Rscript -e 'devtools::check(args = "--no-manual")'`
 
 There is no long-running service or GUI — this is a library exercised from R.
 

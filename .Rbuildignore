@@ -1,0 +1,12 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$
+^\.cursor$
+^\.env
+^\.env\.example$
+^AGENTS\.md$
+^project_plan\.md$
+^ROADMAP\.md$
+^LICENSE\.md$
+^\.Renviron$
+^.*\.tar\.gz$
