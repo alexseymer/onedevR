@@ -15,7 +15,7 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 
 \item{body}{Request body; JSON-encoded with \code{jsonlite::toJSON()}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Parsed JSON payload (list), or \code{NULL} for empty bodies.

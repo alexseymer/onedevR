@@ -6,9 +6,9 @@ Authors@R: c(
   )
 Description: R client for the OneDev project management REST API. Provides
     low-level request helpers and high-level convenience functions for
-    issues, projects, and (future) builds. Designed for self-hosted OneDev
-    instances. Modeled on gitlabr for the R API shape; OneDev conventions
-    follow the tod CLI (https://github.com/theonedev/tod).
+    issues, projects, builds, and pull requests. Designed for self-hosted
+    OneDev instances. Modeled on gitlabr for the R API shape; OneDev
+    conventions follow the tod CLI (https://github.com/theonedev/tod).
 License: MIT + file LICENSE
 URL: https://github.com/alexseymer/onedevR
 BugReports: https://github.com/alexseymer/onedevR/issues

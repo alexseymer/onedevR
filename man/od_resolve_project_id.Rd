@@ -9,7 +9,7 @@ od_resolve_project_id(project = NULL, conn = NULL)
 \arguments{
 \item{project}{Optional project path; defaults to \code{\link[=od_resolve_project_path]{od_resolve_project_path()}}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Character project id.

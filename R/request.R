@@ -70,12 +70,12 @@
 #' @param endpoint API path (e.g. `"/issues"`) or absolute URL.
 #' @param query Named list of query parameters (NULLs dropped).
 #' @param body Request body; JSON-encoded with `jsonlite::toJSON()`.
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return Parsed JSON payload (list), or `NULL` for empty bodies.
 #' @export
 od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   method <- toupper(trimws(as.character(method)[1]))
   url <- .od_resolve_api_url(endpoint, conn)
   req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl)

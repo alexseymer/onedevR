@@ -15,9 +15,10 @@ A named list with fields \code{host}, \code{api_base_url}, \code{token}, \code{r
 }
 \description{
 Reads \verb{ONEDEV_*} variables (see \code{.env.example} / \code{project_plan.md} §8) and
-returns a connection list used by high-level \verb{od_*} helpers. Explicit
-connection objects (\code{od_connection()}, Phase 2) are not required in the
-MVP — pass \code{conn} overrides as a plain list with the same fields if needed.
+returns a connection list used by high-level \verb{od_*} helpers. Prefer an
+explicit \code{\link[=od_connection]{od_connection()}} (optionally registered with
+\code{\link[=od_set_connection]{od_set_connection()}}) for scripts; env remains the fallback when no
+connection is passed or registered.
 }
 \examples{
 \dontrun{

@@ -7,13 +7,13 @@
 #'   (`ONEDEV_ISSUE_STATE`).
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return Parsed API response (list). Use the internal normalizer when you
 #'   need a flat item list (handles `items` / `data` wrappers).
 #' @export
 od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0L, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
   state <- trimws(as.character(state %||% "")[1])
 
@@ -44,19 +44,40 @@ od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0
 #' Get a single issue by UI number
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only).
 #' @return Parsed issue object (list).
 #' @export
 od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   issue_id <- if (isTRUE(use_internal_id)) {
     .od_strip_hash(issue_number)
   } else {
     od_resolve_issue_id(issue_number, conn = conn)
   }
   od_request("GET", paste0("/issues/", issue_id), conn = conn)
+}
+
+#' Get custom fields for an issue
+#'
+#' Calls `GET /issues/{id}/fields`. Field names and allowed values are
+#' installation-specific (see `project_plan.md` §10).
+#'
+#' @param issue_number UI number (`145` or `"#145"`).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
+#'   id (debugging only).
+#' @return Named list (or map) of field name → value.
+#' @export
+od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
+  conn <- .od_conn(conn)
+  issue_id <- if (isTRUE(use_internal_id)) {
+    .od_strip_hash(issue_number)
+  } else {
+    od_resolve_issue_id(issue_number, conn = conn)
+  }
+  od_request("GET", paste0("/issues/", issue_id, "/fields"), conn = conn)
 }
 
 #' Create a OneDev issue
@@ -67,11 +88,19 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' @param title Issue title.
 #' @param description Issue description (Markdown).
 #' @param fields Named list of custom fields (installation-specific).
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param iteration_ids Optional numeric iteration ids from
+#'   [od_list_iterations()]; sent as `iterationIds` in the create body.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed created issue (list).
 #' @export
-od_create_issue <- function(title, description = "", fields = list(), conn = NULL) {
-  conn <- conn %||% od_get_config()
+od_create_issue <- function(
+  title,
+  description = "",
+  fields = list(),
+  iteration_ids = NULL,
+  conn = NULL
+) {
+  conn <- .od_conn(conn)
   project_id <- as.integer(od_resolve_project_id(conn = conn))
   title <- as.character(title)[1]
   description <- as.character(description %||% "")[1]
@@ -90,6 +119,11 @@ od_create_issue <- function(title, description = "", fields = list(), conn = NUL
     base_a$fields <- fields
     base_b$fields <- fields
   }
+  if (!is.null(iteration_ids) && length(iteration_ids) > 0) {
+    ids <- as.list(as.integer(iteration_ids))
+    base_a$iterationIds <- ids
+    base_b$iterationIds <- ids
+  }
 
   .od_request_with_variants(
     method = "POST",
@@ -107,7 +141,7 @@ od_create_issue <- function(title, description = "", fields = list(), conn = NUL
 #' @return Parsed API response.
 #' @export
 od_issue_set_title <- function(issue_number, title, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   issue_id <- od_resolve_issue_id(issue_number, conn = conn)
   .od_request_with_variants(
     method = "POST",
@@ -128,7 +162,7 @@ od_issue_set_title <- function(issue_number, title, conn = NULL) {
 #' @return Parsed API response.
 #' @export
 od_issue_set_description <- function(issue_number, description, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   issue_id <- od_resolve_issue_id(issue_number, conn = conn)
   .od_request_with_variants(
     method = "POST",
@@ -149,7 +183,7 @@ od_issue_set_description <- function(issue_number, description, conn = NULL) {
 #' @return Parsed API response.
 #' @export
 od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   if (!is.list(fields) || is.null(names(fields)) || any(!nzchar(names(fields)))) {
     stop("`fields` must be a named list.", call. = FALSE)
   }
@@ -173,7 +207,7 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #' @return Parsed API response.
 #' @export
 od_issue_transition_state <- function(issue_number, state, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   issue_id <- od_resolve_issue_id(issue_number, conn = conn)
   state <- as.character(state)[1]
   .od_request_with_variants(
