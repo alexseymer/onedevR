@@ -131,3 +131,23 @@ test_that("od_issue_transition_state tries three body variants", {
 test_that("od_issue_set_fields requires named list", {
   expect_error(od_issue_set_fields(1, list(1), conn = list()), "named list")
 })
+
+test_that("od_get_issue_comments and od_add_issue_comment", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_get_issue_comments, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_get_issue_comments, "od_request", function(method, endpoint, ...) {
+    expect_equal(endpoint, "/issues/283/comments")
+    list(list(id = 1, content = "hi"))
+  })
+  expect_equal(od_get_issue_comments(145, conn = list())[[1]]$content, "hi")
+
+  mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
+    expect_equal(method, "POST")
+    expect_equal(endpoint, "/issue-comments")
+    expect_equal(body$issueId, 283L)
+    expect_equal(body$content, "note")
+    list(id = 9)
+  })
+  expect_equal(od_add_issue_comment(145, "note", conn = list())$id, 9)
+})

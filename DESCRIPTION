@@ -1,6 +1,6 @@
 Package: onedevr
 Title: Access to the OneDev REST API
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: c(
     person("Alex", "Seymer", email = "alex@seymer.at", role = c("aut", "cre"))
   )

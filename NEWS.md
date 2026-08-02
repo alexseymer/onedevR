@@ -1,3 +1,15 @@
+# onedevr 0.2.0
+
+## API depth
+
+* Issue comments: `od_get_issue_comments()`, `od_add_issue_comment()`.
+* Pull request writes: `od_create_pull_request()`, `od_add_pull_request_comment()`,
+  `od_approve_pull_request()`, `od_request_pull_request_changes()`,
+  `od_merge_pull_request()`, `od_discard_pull_request()`.
+* Builds: `od_get_build_params()`, `od_get_build_log()` (parses OneDev streaming
+  binary logs to plain text).
+* Quote build status criteria as `"Status" is "..."`.
+
 # onedevr 0.1.1
 
 ## Fixes (live OneDev hardening)
