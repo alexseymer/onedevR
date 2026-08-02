@@ -16,7 +16,7 @@ od_get_file(revision, path, project = NULL, conn = NULL)
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
-Parsed file payload (list; typically includes base64 content).
+Parsed file payload (list; includes \code{base64Content}).
 }
 \description{
 Calls \code{GET /repositories/{projectId}/files/{revision}/{path...}}.

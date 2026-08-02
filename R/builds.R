@@ -1,9 +1,55 @@
+#' Map a build status filter to OneDev query DSL
+#'
+#' OneDev build queries use keyword criteria (`successful`, `failed`, …), not
+#' a `"Status" is "..."` field. Accepts those keywords or common enum spellings
+#' (`SUCCESSFUL`, `FAILED`, `TIMED_OUT`, …).
+#' @keywords internal
+.od_build_status_clause <- function(status) {
+  status <- trimws(as.character(status %||% "")[1])
+  if (!nzchar(status)) {
+    return("")
+  }
+  key <- tolower(gsub("[_-]+", " ", status))
+  key <- gsub("\\s+", " ", key)
+  aliases <- c(
+    "successful" = "successful",
+    "success" = "successful",
+    "succeeded" = "successful",
+    "failed" = "failed",
+    "failure" = "failed",
+    "cancelled" = "cancelled",
+    "canceled" = "cancelled",
+    "timed out" = "timed out",
+    "timeout" = "timed out",
+    "finished" = "finished",
+    "running" = "running",
+    "waiting" = "waiting",
+    "pending" = "pending"
+  )
+  clause <- unname(aliases[key])
+  if (is.na(clause) || !nzchar(clause)) {
+    stop(
+      paste0(
+        "Unknown build status '", status, "'. ",
+        "Use a OneDev keyword: successful, failed, cancelled, timed out, ",
+        "finished, running, waiting, pending ",
+        "(or enum-like SUCCESSFUL / FAILED / …)."
+      ),
+      call. = FALSE
+    )
+  }
+  clause
+}
+
 #' Query OneDev builds
 #'
-#' @param query Raw OneDev build query string (see `tod build get-query-description`
-#'   / OneDev query DSL). Example: `'"Number" is "group/project#100"'`.
-#' @param status Optional status filter (e.g. `"SUCCESSFUL"`, `"FAILED"`).
-#'   Combined with `query` via `and`.
+#' @param query Raw OneDev build query string (see [od_get_query_description()]
+#'   with `kind = "build"`, or `tod build get-query-description`). Example:
+#'   `'"Number" is "group/project#100"'`.
+#' @param status Optional status filter. OneDev uses keyword criteria — pass
+#'   `"successful"`, `"failed"`, `"cancelled"`, `"timed out"`, `"finished"`,
+#'   `"running"`, `"waiting"`, or `"pending"` (enum spellings like
+#'   `"SUCCESSFUL"` are accepted and mapped). Combined with `query` via `and`.
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
 #' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
@@ -22,10 +68,9 @@ od_query_builds <- function(
 ) {
   conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
-  status <- trimws(as.character(status %||% "")[1])
+  status_clause <- .od_build_status_clause(status)
 
-  if (nzchar(status)) {
-    status_clause <- paste0('"Status" is "', status, '"')
+  if (nzchar(status_clause)) {
     query <- if (nzchar(query)) {
       paste0("(", query, ") and ", status_clause)
     } else {

@@ -1,7 +1,9 @@
 #' Query OneDev pull requests
 #'
 #' @param query Raw OneDev pull-request query string (see
-#'   `tod pr get-query-description` / OneDev query DSL).
+#'   [od_get_query_description()] with `kind = "pull_request"`).
+#' @param status Optional status keyword: `"open"`, `"merged"`, or `"discarded"`
+#'   (case-insensitive). Combined with `query` via `and`.
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
 #' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
@@ -12,6 +14,7 @@
 #' @export
 od_query_pull_requests <- function(
   query = NULL,
+  status = NULL,
   count = 100L,
   offset = 0L,
   as_tibble = NULL,
@@ -19,6 +22,21 @@ od_query_pull_requests <- function(
 ) {
   conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
+  status <- tolower(trimws(as.character(status %||% "")[1]))
+
+  if (nzchar(status)) {
+    if (!status %in% c("open", "merged", "discarded")) {
+      stop(
+        '`status` must be one of "open", "merged", or "discarded".',
+        call. = FALSE
+      )
+    }
+    query <- if (nzchar(query)) {
+      paste0("(", query, ") and ", status)
+    } else {
+      status
+    }
+  }
 
   payload <- od_request(
     method = "GET",

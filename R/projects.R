@@ -133,7 +133,7 @@ od_get_project <- function(project = NULL, conn = NULL) {
 #'
 #' @param project Project path or numeric id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed clone-url payload (list; typically `httpUrl` / `sshUrl`).
+#' @return Parsed clone-url payload (list; typically `http` and `ssh`).
 #' @export
 od_get_project_clone_url <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)

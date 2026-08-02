@@ -202,7 +202,7 @@ od_get_commit <- function(
 #' @param path File path within the repository.
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed file payload (list; typically includes base64 content).
+#' @return Parsed file payload (list; includes `base64Content`).
 #' @export
 od_get_file <- function(revision, path, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -221,4 +221,31 @@ od_get_file <- function(revision, path, project = NULL, conn = NULL) {
     paste0("/repositories/", project_id, "/files/", encoded),
     conn = conn
   )
+}
+
+#' Read a repository file as text
+#'
+#' Convenience wrapper around [od_get_file()] that base64-decodes `base64Content`.
+#'
+#' @inheritParams od_get_file
+#' @param encoding Text encoding passed to [base::rawToChar()] context via
+#'   `iconv` (default `"UTF-8"`).
+#' @return Character scalar.
+#' @export
+od_get_file_text <- function(
+  revision,
+  path,
+  project = NULL,
+  encoding = "UTF-8",
+  conn = NULL
+) {
+  file <- od_get_file(revision = revision, path = path, project = project, conn = conn)
+  b64 <- file$base64Content %||% file$base64_content %||% ""
+  if (!nzchar(as.character(b64)[1])) {
+    return("")
+  }
+  raw <- jsonlite::base64_dec(as.character(b64)[1])
+  txt <- rawToChar(raw)
+  Encoding(txt) <- encoding
+  txt
 }

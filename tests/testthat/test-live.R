@@ -143,3 +143,23 @@ test_that("repository branches and commits live", {
   commits <- od_query_commits(count = 3L)
   expect_s3_class(commits, "tbl_df")
 })
+
+test_that("build status keyword and file text live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  builds <- od_query_builds(status = "successful", count = 3L)
+  expect_s3_class(builds, "tbl_df")
+
+  pulls <- od_query_pull_requests(status = "open", count = 5L)
+  expect_s3_class(pulls, "tbl_df")
+
+  desc <- tryCatch(od_get_query_description("build"), error = function(e) NULL)
+  skip_if(is.null(desc), "query description endpoint unavailable")
+  expect_true(grepl("successful|buildQuery", desc))
+
+  txt <- tryCatch(od_get_file_text("main", "README.md"), error = function(e) NULL)
+  skip_if(is.null(txt), "README.md missing on default branch")
+  expect_true(nzchar(txt))
+})

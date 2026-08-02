@@ -12,7 +12,7 @@ od_get_project_clone_url(project = NULL, conn = NULL)
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
-Parsed clone-url payload (list; typically \code{httpUrl} / \code{sshUrl}).
+Parsed clone-url payload (list; typically \code{http} and \code{ssh}).
 }
 \description{
 Get clone URLs for a project

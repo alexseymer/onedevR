@@ -14,11 +14,14 @@ od_query_builds(
 )
 }
 \arguments{
-\item{query}{Raw OneDev build query string (see \verb{tod build get-query-description}
-/ OneDev query DSL). Example: \code{'"Number" is "group/project#100"'}.}
+\item{query}{Raw OneDev build query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
+with \code{kind = "build"}, or \verb{tod build get-query-description}). Example:
+\code{'"Number" is "group/project#100"'}.}
 
-\item{status}{Optional status filter (e.g. \code{"SUCCESSFUL"}, \code{"FAILED"}).
-Combined with \code{query} via \code{and}.}
+\item{status}{Optional status filter. OneDev uses keyword criteria — pass
+\code{"successful"}, \code{"failed"}, \code{"cancelled"}, \code{"timed out"}, \code{"finished"},
+\code{"running"}, \code{"waiting"}, or \code{"pending"} (enum spellings like
+\code{"SUCCESSFUL"} are accepted and mapped). Combined with \code{query} via \code{and}.}
 
 \item{count}{Maximum number of results (default \code{100}).}
 
