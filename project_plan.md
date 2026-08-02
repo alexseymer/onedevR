@@ -71,7 +71,7 @@ OneDev-REST-API kapselt.
 | Connection | `gl_connection()`, `set_gitlab_connection()` | [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md), [`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md) |
 | Low-level | `gitlab(req, verb, ...)` | `od_request(method, endpoint, ...)` |
 | Issues | `gl_list_issues()`, `gl_create_issue()`, … | [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md), [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md), … |
-| Projekte | `gl_list_projects()`, … | [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md), `od_list_projects()` |
+| Projekte | `gl_list_projects()`, … | [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md), [`od_list_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md) |
 | CI/Builds | `use_gitlab_ci()`, Pipeline-Wrapper | Phase 3: [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md), … |
 | Vignetten | `vignette("a-gitlabr")` | [`vignette("getting-started")`](https://alexseymer.github.io/onedevR/articles/getting-started.md), `vignette("custom-endpoints")` |
 

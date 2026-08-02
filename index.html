@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
 <div class="section level2">
 <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a>
 </h2>
-<p><strong>v0.3.0</strong> returns tibbles from list queries and supports Basic Auth. See <a href="NEWS.html"><code>NEWS.md</code></a>, <a href="ROADMAP.html"><code>ROADMAP.md</code></a>, and <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a>.</p>
+<p><strong>v0.4.0</strong> adds projects, users, build artifacts, and authenticated downloads. See <a href="NEWS.html"><code>NEWS.md</code></a>, <a href="ROADMAP.html"><code>ROADMAP.md</code></a>, and <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
@@ -124,7 +124,11 @@
 <span><span class="co"># Builds &amp; pull requests</span></span>
 <span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"SUCCESSFUL"</span>, count <span class="op">=</span> <span class="fl">10L</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_pull_request.html">od_get_pull_request</a></span><span class="op">(</span><span class="fl">1</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
-<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_pull_request_comments.html">od_get_pull_request_comments</a></span><span class="op">(</span><span class="fl">1</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_pull_request_comments.html">od_get_pull_request_comments</a></span><span class="op">(</span><span class="fl">1</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Projects &amp; users</span></span>
+<span><span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_query_projects.html">od_query_projects</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">20L</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
+<span><span class="va">me</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_me.html">od_get_me</a></span><span class="op">(</span>conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
 <p>Copy <a href=".Renviron.example"><code>.Renviron.example</code></a> to <code>.Renviron</code> (gitignored) and fill in your host/token/project. <a href=".env.example"><code>.env.example</code></a> is the same variable list for non-R tooling. Live integration tests are gated behind <code>ONEDEV_RUN_LIVE_TESTS=1</code>.</p>
 </div>
 <div class="section level2">

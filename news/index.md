@@ -1,5 +1,28 @@
 # Changelog
 
+## onedevr 0.4.0
+
+### API surface
+
+- Projects:
+  [`od_query_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md)
+  /
+  [`od_list_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md),
+  [`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md),
+  [`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md).
+- Users:
+  [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md),
+  [`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md),
+  [`od_get_me()`](https://alexseymer.github.io/onedevR/reference/od_get_me.md),
+  [`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md),
+  [`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md).
+- Build artifacts:
+  [`od_list_build_artifacts()`](https://alexseymer.github.io/onedevR/reference/od_list_build_artifacts.md),
+  [`od_download_build_artifact()`](https://alexseymer.github.io/onedevR/reference/od_download_build_artifact.md).
+- Markdown/resource download with auth:
+  [`od_download()`](https://alexseymer.github.io/onedevR/reference/od_download.md)
+  (tod-style; OneDev has no separate issue-attachment list API).
+
 ## onedevr 0.3.0
 
 ### Ergonomics
