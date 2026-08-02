@@ -105,8 +105,8 @@ Ergonomics (v0.3.0): tibbles + Basic Auth
 
 Projects / users / build artifacts / download (v0.4.0)
 
-Job run / rebuild / cancel wrappers
+Job run / rebuild / cancel (v0.5.0)
 
-Packages (`PackResource`) and repository commit helpers
+Packages + repository commit helpers (v0.5.0)
 
 R-universe / CRAN when demand warrants it

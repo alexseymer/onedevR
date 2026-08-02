@@ -97,6 +97,42 @@ Configure how onedevr talks to your OneDev instance.
   : Download a build artifact to a local file
 - [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md)
   : Resolve a UI build number to the internal REST id
+- [`od_run_job()`](https://alexseymer.github.io/onedevR/reference/od_run_job.md)
+  : Run a CI/CD job
+- [`od_rebuild_job()`](https://alexseymer.github.io/onedevR/reference/od_rebuild_job.md)
+  : Rebuild (resubmit) a finished or existing build
+- [`od_cancel_job()`](https://alexseymer.github.io/onedevR/reference/od_cancel_job.md)
+  : Cancel a running build
+
+## Packages
+
+- [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md)
+  : Query OneDev packages
+- [`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md)
+  : Get a package by id
+- [`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md)
+  : Get blobs for a package
+- [`od_get_pack_labels()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_labels.md)
+  : Get labels for a package
+
+## Repository
+
+- [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md)
+  : List branches in a project
+- [`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md)
+  : Get branch tip metadata
+- [`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md)
+  : Get the default branch name
+- [`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md)
+  : List tags in a project
+- [`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md)
+  : Get tag tip metadata
+- [`od_query_commits()`](https://alexseymer.github.io/onedevR/reference/od_query_commits.md)
+  : Query repository commits
+- [`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md)
+  : Get a single commit
+- [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md)
+  : Get a file at a revision
 
 ## Pull requests
 

@@ -17,9 +17,8 @@ instances.
 
 ## Status
 
-**v0.4.0** adds projects, users, build artifacts, and authenticated
-downloads. See
-[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md),
+**v0.5.0** adds job run/rebuild/cancel, packages, and repository commit
+helpers. See [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md),
 [`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md), and
 <https://alexseymer.github.io/onedevR/>.
 

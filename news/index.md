@@ -1,5 +1,28 @@
 # Changelog
 
+## onedevr 0.5.0
+
+### Jobs, packages, and git
+
+- Job control:
+  [`od_run_job()`](https://alexseymer.github.io/onedevR/reference/od_run_job.md),
+  [`od_rebuild_job()`](https://alexseymer.github.io/onedevR/reference/od_rebuild_job.md),
+  [`od_cancel_job()`](https://alexseymer.github.io/onedevR/reference/od_cancel_job.md).
+- Packages:
+  [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md),
+  [`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md),
+  [`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md),
+  [`od_get_pack_labels()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_labels.md).
+- Repository:
+  [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md),
+  [`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md),
+  [`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md),
+  [`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md),
+  [`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md),
+  [`od_query_commits()`](https://alexseymer.github.io/onedevR/reference/od_query_commits.md),
+  [`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md),
+  [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md).
+
 ## onedevr 0.4.0
 
 ### API surface
