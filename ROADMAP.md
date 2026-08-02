@@ -64,4 +64,5 @@ Estimate per plan: 1 week+.
 - [x] Projects / users / build artifacts / download (v0.4.0)
 - [x] Job run / rebuild / cancel (v0.5.0)
 - [x] Packages + repository commit helpers (v0.5.0)
+- [x] Dogfood hardening (v0.5.1): build/PR status keywords, pagination, query DSL
 - [ ] R-universe / CRAN when demand warrants it

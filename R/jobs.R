@@ -2,7 +2,7 @@
 #'
 #' Accepts a named list/vector where each element is a character scalar or
 #' vector of values.
-#' @keywords internal
+#' @noRd
 .od_job_params <- function(params = NULL) {
   if (is.null(params) || length(params) == 0L) {
     return(stats::setNames(list(), character()))
@@ -18,7 +18,7 @@
 }
 
 #' Build a git refs/heads or refs/tags name
-#' @keywords internal
+#' @noRd
 .od_git_ref <- function(branch = NULL, tag = NULL) {
   branch <- trimws(as.character(branch %||% "")[1])
   tag <- trimws(as.character(tag %||% "")[1])
@@ -45,9 +45,9 @@
 #'
 #' @param job_name Job name from the project build spec.
 #' @param project Project path or id; defaults to the connection project.
-#' @param branch Branch name (e.g. `"main"`) — mutually exclusive with `tag`,
+#' @param branch Branch name (e.g. `"main"`) - mutually exclusive with `tag`,
 #'   `commit_hash`, and `pull_request_id`.
-#' @param tag Tag name — mutually exclusive with `branch` / commit / PR modes.
+#' @param tag Tag name - mutually exclusive with `branch` / commit / PR modes.
 #' @param commit_hash Commit SHA to build (requires `ref_name`).
 #' @param ref_name Full git ref (e.g. `"refs/heads/main"`) when using
 #'   `commit_hash`.
@@ -57,6 +57,11 @@
 #' @param reason Reason string recorded on the build (required by OneDev).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Internal build id (numeric/character as returned by the API).
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_run_job("CI", branch = "main")
+#' }
 #' @export
 od_run_job <- function(
   job_name,
@@ -154,6 +159,11 @@ od_run_job <- function(
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return `NULL` invisibly on success (empty API body).
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_rebuild_job(100)
+#' }
 #' @export
 od_rebuild_job <- function(
   build_number,
@@ -191,6 +201,11 @@ od_rebuild_job <- function(
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return `NULL` invisibly on success.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_cancel_job(100)
+#' }
 #' @export
 od_cancel_job <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)

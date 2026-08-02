@@ -5,6 +5,11 @@
 #'
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character project path (e.g. `"group/my-project"`).
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_resolve_project_path()
+#' }
 #' @export
 od_resolve_project_path <- function(conn = NULL) {
   conn <- .od_conn(conn)
@@ -29,6 +34,11 @@ od_resolve_project_path <- function(conn = NULL) {
 #' @param project Optional project path; defaults to [od_resolve_project_path()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character project id.
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_resolve_project_id()
+#' }
 #' @export
 od_resolve_project_id <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -76,6 +86,11 @@ od_resolve_project_id <- function(project = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of projects (default), or a list when `as_tibble = FALSE`.
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_query_projects(count = 20L)
+#' }
 #' @export
 od_query_projects <- function(
   query = NULL,
@@ -100,6 +115,11 @@ od_query_projects <- function(
 }
 
 #' @rdname od_query_projects
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_list_projects(count = 20L)
+#' }
 #' @export
 od_list_projects <- function(
   query = NULL,
@@ -122,6 +142,11 @@ od_list_projects <- function(
 #'   Defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed project object (list).
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_get_project()
+#' }
 #' @export
 od_get_project <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -133,7 +158,12 @@ od_get_project <- function(project = NULL, conn = NULL) {
 #'
 #' @param project Project path or numeric id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed clone-url payload (list; typically `httpUrl` / `sshUrl`).
+#' @return Parsed clone-url payload (list; typically `http` and `ssh`).
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_get_project_clone_url()
+#' }
 #' @export
 od_get_project_clone_url <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)

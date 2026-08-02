@@ -5,6 +5,11 @@
 #' @param user Login name or numeric user id.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character user id.
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_resolve_user_id("alice")
+#' }
 #' @export
 od_resolve_user_id <- function(user, conn = NULL) {
   conn <- .od_conn(conn)
@@ -40,6 +45,11 @@ od_resolve_user_id <- function(user, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of users (default), or a list when `as_tibble = FALSE`.
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_query_users(count = 20L)
+#' }
 #' @export
 od_query_users <- function(
   query = NULL,
@@ -69,6 +79,11 @@ od_query_users <- function(
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `user` as the internal REST id.
 #' @return Parsed user object (list).
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_get_user("alice")
+#' }
 #' @export
 od_get_user <- function(user, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
@@ -84,6 +99,11 @@ od_get_user <- function(user, conn = NULL, use_internal_id = FALSE) {
 #'
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed user object (list).
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_get_me()
+#' }
 #' @export
 od_get_me <- function(conn = NULL) {
   conn <- .od_conn(conn)
@@ -99,6 +119,11 @@ od_get_me <- function(conn = NULL) {
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of email addresses (default), or a list when
 #'   `as_tibble = FALSE`.
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_get_user_emails()
+#' }
 #' @export
 od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)

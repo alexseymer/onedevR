@@ -6,7 +6,7 @@
 #' @param host OneDev base URL (no `/~api` suffix).
 #' @param resource_url Absolute or relative resource URL from markdown.
 #' @return Absolute URL string.
-#' @keywords internal
+#' @noRd
 .od_resolve_markdown_url <- function(host, resource_url) {
   resource_url <- trimws(as.character(resource_url %||% "")[1])
   if (!nzchar(resource_url)) {
@@ -38,6 +38,11 @@
 #' @param path Local destination file path.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Normalized destination path, invisibly.
+#' @family utilities
+#' @examples
+#' \dontrun{
+#' od_download("/~downloads/file.png", tempfile())
+#' }
 #' @export
 od_download <- function(resource_url, path, conn = NULL) {
   conn <- .od_conn(conn)

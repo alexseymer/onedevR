@@ -1,9 +1,55 @@
+#' Map a build status filter to OneDev query DSL
+#'
+#' OneDev build queries use keyword criteria (`successful`, `failed`, ...), not
+#' a `"Status" is "..."` field. Accepts those keywords or common enum spellings
+#' (`SUCCESSFUL`, `FAILED`, `TIMED_OUT`, ...).
+#' @noRd
+.od_build_status_clause <- function(status) {
+  status <- trimws(as.character(status %||% "")[1])
+  if (!nzchar(status)) {
+    return("")
+  }
+  key <- tolower(gsub("[_-]+", " ", status))
+  key <- gsub("\\s+", " ", key)
+  aliases <- c(
+    "successful" = "successful",
+    "success" = "successful",
+    "succeeded" = "successful",
+    "failed" = "failed",
+    "failure" = "failed",
+    "cancelled" = "cancelled",
+    "canceled" = "cancelled",
+    "timed out" = "timed out",
+    "timeout" = "timed out",
+    "finished" = "finished",
+    "running" = "running",
+    "waiting" = "waiting",
+    "pending" = "pending"
+  )
+  clause <- unname(aliases[key])
+  if (is.na(clause) || !nzchar(clause)) {
+    stop(
+      paste0(
+        "Unknown build status '", status, "'. ",
+        "Use a OneDev keyword: successful, failed, cancelled, timed out, ",
+        "finished, running, waiting, pending ",
+        "(or enum-like SUCCESSFUL / FAILED / ...)."
+      ),
+      call. = FALSE
+    )
+  }
+  clause
+}
+
 #' Query OneDev builds
 #'
-#' @param query Raw OneDev build query string (see `tod build get-query-description`
-#'   / OneDev query DSL). Example: `'"Number" is "group/project#100"'`.
-#' @param status Optional status filter (e.g. `"SUCCESSFUL"`, `"FAILED"`).
-#'   Combined with `query` via `and`.
+#' @param query Raw OneDev build query string (see [od_get_query_description()]
+#'   with `kind = "build"`, or `tod build get-query-description`). Example:
+#'   `'"Number" is "group/project#100"'`.
+#' @param status Optional status filter. OneDev uses keyword criteria - pass
+#'   `"successful"`, `"failed"`, `"cancelled"`, `"timed out"`, `"finished"`,
+#'   `"running"`, `"waiting"`, or `"pending"` (enum spellings like
+#'   `"SUCCESSFUL"` are accepted and mapped). Combined with `query` via `and`.
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
 #' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
@@ -11,6 +57,11 @@
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return A tibble of builds (default), or a list when `as_tibble = FALSE`.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_query_builds(status = "successful", count = 10L)
+#' }
 #' @export
 od_query_builds <- function(
   query = NULL,
@@ -22,10 +73,9 @@ od_query_builds <- function(
 ) {
   conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
-  status <- trimws(as.character(status %||% "")[1])
+  status_clause <- .od_build_status_clause(status)
 
-  if (nzchar(status)) {
-    status_clause <- paste0('"Status" is "', status, '"')
+  if (nzchar(status_clause)) {
     query <- if (nzchar(query)) {
       paste0("(", query, ") and ", status_clause)
     } else {
@@ -53,6 +103,11 @@ od_query_builds <- function(
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST
 #'   id (debugging only).
 #' @return Parsed build object (list).
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_get_build(100)
+#' }
 #' @export
 od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
@@ -70,6 +125,11 @@ od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return Parsed params payload (list).
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_get_build_params(100)
+#' }
 #' @export
 od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
@@ -82,7 +142,7 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 }
 
 #' Read a signed big-endian 32-bit integer from raw bytes
-#' @keywords internal
+#' @noRd
 .od_read_i32be <- function(bytes, pos) {
   b <- as.integer(bytes[pos:(pos + 3L)])
   u <- b[[1]] * 16777216 + b[[2]] * 65536 + b[[3]] * 256 + b[[4]]
@@ -98,7 +158,7 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 #' @param raw Raw response body.
 #' @return Character vector of log lines (status markers included as
 #'   `[status] ...` when present).
-#' @keywords internal
+#' @noRd
 .od_parse_build_log_raw <- function(raw) {
   if (!length(raw)) {
     return(character())
@@ -158,6 +218,11 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @param timeout Seconds to wait for the full log stream (default `60`).
 #' @return Character vector of log lines.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_get_build_log(100)
+#' }
 #' @export
 od_get_build_log <- function(
   build_number,

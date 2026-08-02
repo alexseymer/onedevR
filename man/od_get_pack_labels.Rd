@@ -20,3 +20,15 @@ A tibble of labels (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Get labels for a package
 }
+\examples{
+\dontrun{
+od_get_pack_labels(1)
+}
+}
+\seealso{
+Other packages:
+\code{\link[=od_get_pack]{od_get_pack()}},
+\code{\link[=od_get_pack_blobs]{od_get_pack_blobs()}},
+\code{\link[=od_query_packages]{od_query_packages()}}
+}
+\concept{packages}

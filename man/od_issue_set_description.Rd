@@ -19,3 +19,24 @@ Parsed API response.
 \description{
 Set an issue description
 }
+\examples{
+\dontrun{
+od_issue_set_description(145, "Updated body")
+}
+}
+\seealso{
+Other issues:
+\code{\link[=od_add_issue_comment]{od_add_issue_comment()}},
+\code{\link[=od_add_issue_iterations]{od_add_issue_iterations()}},
+\code{\link[=od_create_issue]{od_create_issue()}},
+\code{\link[=od_get_issue]{od_get_issue()}},
+\code{\link[=od_get_issue_comments]{od_get_issue_comments()}},
+\code{\link[=od_get_issue_fields]{od_get_issue_fields()}},
+\code{\link[=od_issue_set_fields]{od_issue_set_fields()}},
+\code{\link[=od_issue_set_title]{od_issue_set_title()}},
+\code{\link[=od_issue_transition_state]{od_issue_transition_state()}},
+\code{\link[=od_list_iterations]{od_list_iterations()}},
+\code{\link[=od_query_issues]{od_query_issues()}},
+\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}
+}
+\concept{issues}

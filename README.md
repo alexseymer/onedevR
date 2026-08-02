@@ -14,20 +14,18 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**v0.5.0** adds job run/rebuild/cancel, packages, and repository commit helpers.
-See [`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
-https://alexseymer.github.io/onedevR/.
+**v0.5.1** hardens live query helpers (build/PR status keywords, pagination,
+query descriptions, file text). See [`NEWS.md`](NEWS.md).
 
 ## Install
 
 ```r
 # GitHub
 remotes::install_github("alexseymer/onedevR")
-
-# After the GitHub Pages site is live:
-# browseVignettes("onedevr")
-# or https://alexseymer.github.io/onedevR/
 ```
+
+Docs: [pkgdown site](https://alexseymer.github.io/onedevR/) · vignette
+`vignette("getting-started", package = "onedevr")`.
 
 ## Quick start
 
@@ -65,7 +63,7 @@ od_issue_set_title(created$number, "API test (renamed)", conn = conn)
 od_issue_transition_state(created$number, "Closed", conn = conn)
 
 # Builds & pull requests
-builds <- od_query_builds(status = "SUCCESSFUL", count = 10L, conn = conn)
+builds <- od_query_builds(status = "successful", count = 10L, conn = conn)
 pr <- od_get_pull_request(1, conn = conn)
 comments <- od_get_pull_request_comments(1, conn = conn)
 

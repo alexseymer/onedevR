@@ -31,3 +31,15 @@ A tibble of packages (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Calls \code{GET /packages}.
 }
+\examples{
+\dontrun{
+od_query_packages(count = 20L)
+}
+}
+\seealso{
+Other packages:
+\code{\link[=od_get_pack]{od_get_pack()}},
+\code{\link[=od_get_pack_blobs]{od_get_pack_blobs()}},
+\code{\link[=od_get_pack_labels]{od_get_pack_labels()}}
+}
+\concept{packages}

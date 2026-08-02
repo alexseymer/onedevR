@@ -17,3 +17,22 @@ Parsed API response (may be \code{NULL}).
 \description{
 Request changes on a pull request
 }
+\examples{
+\dontrun{
+od_request_pull_request_changes(1)
+}
+}
+\seealso{
+Other pull requests:
+\code{\link[=od_add_pull_request_comment]{od_add_pull_request_comment()}},
+\code{\link[=od_approve_pull_request]{od_approve_pull_request()}},
+\code{\link[=od_create_pull_request]{od_create_pull_request()}},
+\code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
+\code{\link[=od_get_pull_request]{od_get_pull_request()}},
+\code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
+\code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
+\code{\link[=od_query_pull_requests]{od_query_pull_requests()}},
+\code{\link[=od_resolve_pull_request_id]{od_resolve_pull_request_id()}}
+}
+\concept{pull requests}

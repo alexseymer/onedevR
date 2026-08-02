@@ -6,6 +6,7 @@
 \usage{
 od_query_pull_requests(
   query = NULL,
+  status = NULL,
   count = 100L,
   offset = 0L,
   as_tibble = NULL,
@@ -14,7 +15,10 @@ od_query_pull_requests(
 }
 \arguments{
 \item{query}{Raw OneDev pull-request query string (see
-\verb{tod pr get-query-description} / OneDev query DSL).}
+\code{\link[=od_get_query_description]{od_get_query_description()}} with \code{kind = "pull_request"}).}
+
+\item{status}{Optional status keyword: \code{"open"}, \code{"merged"}, or \code{"discarded"}
+(case-insensitive). Combined with \code{query} via \code{and}.}
 
 \item{count}{Maximum number of results (default \code{100}).}
 
@@ -31,3 +35,22 @@ A tibble of pull requests (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Query OneDev pull requests
 }
+\examples{
+\dontrun{
+od_query_pull_requests(status = "open", count = 10L)
+}
+}
+\seealso{
+Other pull requests:
+\code{\link[=od_add_pull_request_comment]{od_add_pull_request_comment()}},
+\code{\link[=od_approve_pull_request]{od_approve_pull_request()}},
+\code{\link[=od_create_pull_request]{od_create_pull_request()}},
+\code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
+\code{\link[=od_get_pull_request]{od_get_pull_request()}},
+\code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
+\code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
+\code{\link[=od_request_pull_request_changes]{od_request_pull_request_changes()}},
+\code{\link[=od_resolve_pull_request_id]{od_resolve_pull_request_id()}}
+}
+\concept{pull requests}

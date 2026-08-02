@@ -12,11 +12,13 @@ test_that("od_query_builds builds status clause", {
   od_query_builds(status = "SUCCESSFUL", count = 10L, conn = list())
   expect_equal(captured$method, "GET")
   expect_equal(captured$endpoint, "/builds")
-  expect_equal(captured$query$query, '"Status" is "SUCCESSFUL"')
+  expect_equal(captured$query$query, "successful")
   expect_equal(captured$query$count, 10L)
 
   od_query_builds(query = '"Job" is "CI"', status = "FAILED", conn = list())
-  expect_equal(captured$query$query, '("Job" is "CI") and "Status" is "FAILED"')
+  expect_equal(captured$query$query, '("Job" is "CI") and failed')
+
+  expect_error(od_query_builds(status = "nope", conn = list()), "Unknown build status")
 })
 
 test_that("od_get_build resolves UI number then GETs internal id", {

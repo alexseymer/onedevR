@@ -12,3 +12,15 @@ The connection registered with \code{\link[=od_set_connection]{od_set_connection
 \description{
 Get the package-default OneDev connection
 }
+\examples{
+\dontrun{
+od_get_connection()
+}
+}
+\seealso{
+Other connection:
+\code{\link[=od_connection]{od_connection()}},
+\code{\link[=od_get_config]{od_get_config()}},
+\code{\link[=od_set_connection]{od_set_connection()}}
+}
+\concept{connection}

@@ -40,3 +40,19 @@ A tibble of projects (default), or a list when \code{as_tibble = FALSE}.
 Calls \code{GET /projects} with OneDev's project query DSL (see
 \verb{tod project get-query-description} on a live server).
 }
+\examples{
+\dontrun{
+od_query_projects(count = 20L)
+}
+\dontrun{
+od_list_projects(count = 20L)
+}
+}
+\seealso{
+Other projects:
+\code{\link[=od_get_project]{od_get_project()}},
+\code{\link[=od_get_project_clone_url]{od_get_project_clone_url()}},
+\code{\link[=od_resolve_project_id]{od_resolve_project_id()}},
+\code{\link[=od_resolve_project_path]{od_resolve_project_path()}}
+}
+\concept{projects}

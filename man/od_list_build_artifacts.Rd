@@ -31,3 +31,21 @@ A tibble of artifact info (default), or a list when \code{as_tibble = FALSE}.
 Calls \verb{GET /artifacts/\{buildId\}/infos[/\{path\}]}. Omit \code{artifact_path} for the
 artifact root; pass a relative path to list a subdirectory.
 }
+\examples{
+\dontrun{
+od_list_build_artifacts(100)
+}
+}
+\seealso{
+Other builds:
+\code{\link[=od_cancel_job]{od_cancel_job()}},
+\code{\link[=od_download_build_artifact]{od_download_build_artifact()}},
+\code{\link[=od_get_build]{od_get_build()}},
+\code{\link[=od_get_build_log]{od_get_build_log()}},
+\code{\link[=od_get_build_params]{od_get_build_params()}},
+\code{\link[=od_query_builds]{od_query_builds()}},
+\code{\link[=od_rebuild_job]{od_rebuild_job()}},
+\code{\link[=od_resolve_build_id]{od_resolve_build_id()}},
+\code{\link[=od_run_job]{od_run_job()}}
+}
+\concept{builds}

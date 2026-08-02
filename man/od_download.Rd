@@ -22,3 +22,16 @@ connection credentials and write the body to \code{path}. Useful for images and
 files linked from issue/PR descriptions and comments (OneDev has no separate
 attachment list API).
 }
+\examples{
+\dontrun{
+od_download("/~downloads/file.png", tempfile())
+}
+}
+\seealso{
+Other utilities:
+\code{\link[=od_as_tibble]{od_as_tibble()}},
+\code{\link[=od_get_query_description]{od_get_query_description()}},
+\code{\link[=od_paginate]{od_paginate()}},
+\code{\link[=od_request]{od_request()}}
+}
+\concept{utilities}

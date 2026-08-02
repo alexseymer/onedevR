@@ -19,3 +19,21 @@ od_cancel_job(build_number, conn = NULL, use_internal_id = FALSE)
 \description{
 Calls \code{DELETE /job-runs/{buildId}}.
 }
+\examples{
+\dontrun{
+od_cancel_job(100)
+}
+}
+\seealso{
+Other builds:
+\code{\link[=od_download_build_artifact]{od_download_build_artifact()}},
+\code{\link[=od_get_build]{od_get_build()}},
+\code{\link[=od_get_build_log]{od_get_build_log()}},
+\code{\link[=od_get_build_params]{od_get_build_params()}},
+\code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_query_builds]{od_query_builds()}},
+\code{\link[=od_rebuild_job]{od_rebuild_job()}},
+\code{\link[=od_resolve_build_id]{od_resolve_build_id()}},
+\code{\link[=od_run_job]{od_run_job()}}
+}
+\concept{builds}

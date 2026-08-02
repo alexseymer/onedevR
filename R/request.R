@@ -81,6 +81,11 @@
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return Parsed JSON payload (list), or `NULL` for empty bodies.
+#' @family utilities
+#' @examples
+#' \dontrun{
+#' od_request("GET", "/projects")
+#' }
 #' @export
 od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -119,7 +124,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
 #' @param accept HTTP Accept header (default `"*/*"`).
 #' @param timeout Request timeout in seconds (default `60`).
 #' @return Raw vector of the response body.
-#' @keywords internal
+#' @noRd
 .od_request_raw <- function(
   method = "GET",
   endpoint,

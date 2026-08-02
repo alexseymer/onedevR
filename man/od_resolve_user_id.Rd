@@ -17,3 +17,16 @@ Character user id.
 \description{
 Calls \code{GET /users/ids/{name}}. Numeric \code{user} values are returned as-is.
 }
+\examples{
+\dontrun{
+od_resolve_user_id("alice")
+}
+}
+\seealso{
+Other users:
+\code{\link[=od_get_me]{od_get_me()}},
+\code{\link[=od_get_user]{od_get_user()}},
+\code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_query_users]{od_query_users()}}
+}
+\concept{users}

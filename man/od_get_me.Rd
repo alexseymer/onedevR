@@ -15,3 +15,16 @@ Parsed user object (list).
 \description{
 Get the authenticated user (\verb{/users/me})
 }
+\examples{
+\dontrun{
+od_get_me()
+}
+}
+\seealso{
+Other users:
+\code{\link[=od_get_user]{od_get_user()}},
+\code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_query_users]{od_query_users()}},
+\code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
+}
+\concept{users}

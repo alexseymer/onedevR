@@ -55,7 +55,7 @@ package default with \code{\link[=od_set_connection]{od_set_connection()}}.
 }
 \details{
 Authentication is \strong{Bearer} by default (\code{token}). For \strong{Basic Auth}, set
-\code{username} (and \code{password}, or reuse \code{token} as the password) — \code{auth} is
+\code{username} (and \code{password}, or reuse \code{token} as the password) - \code{auth} is
 inferred as \code{"basic"} when \code{username} is non-empty, or set \code{auth = "basic"}
 explicitly.
 }
@@ -76,3 +76,10 @@ basic <- od_connection(
 )
 }
 }
+\seealso{
+Other connection:
+\code{\link[=od_get_config]{od_get_config()}},
+\code{\link[=od_get_connection]{od_get_connection()}},
+\code{\link[=od_set_connection]{od_set_connection()}}
+}
+\concept{connection}

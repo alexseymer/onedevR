@@ -17,3 +17,15 @@ Parsed package object (list).
 \description{
 Get a package by id
 }
+\examples{
+\dontrun{
+od_get_pack(1)
+}
+}
+\seealso{
+Other packages:
+\code{\link[=od_get_pack_blobs]{od_get_pack_blobs()}},
+\code{\link[=od_get_pack_labels]{od_get_pack_labels()}},
+\code{\link[=od_query_packages]{od_query_packages()}}
+}
+\concept{packages}

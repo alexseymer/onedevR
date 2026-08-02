@@ -1,5 +1,5 @@
 #' Normalize an artifact path for OneDev artifact endpoints
-#' @keywords internal
+#' @noRd
 .od_artifact_path <- function(artifact_path = NULL, leading_slash = FALSE) {
   path <- trimws(as.character(artifact_path %||% "")[1])
   path <- sub("^/+", "", path)
@@ -19,7 +19,7 @@
 }
 
 #' Resolve a build UI number to internal id for artifact calls
-#' @keywords internal
+#' @noRd
 .od_artifact_build_id <- function(build_number, conn, use_internal_id = FALSE) {
   if (isTRUE(use_internal_id)) {
     .od_strip_hash(build_number)
@@ -40,6 +40,11 @@
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return A tibble of artifact info (default), or a list when `as_tibble = FALSE`.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_list_build_artifacts(100)
+#' }
 #' @export
 od_list_build_artifacts <- function(
   build_number,
@@ -70,6 +75,11 @@ od_list_build_artifacts <- function(
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return Normalized destination path, invisibly.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_download_build_artifact(100, "report.txt", tempfile())
+#' }
 #' @export
 od_download_build_artifact <- function(
   build_number,

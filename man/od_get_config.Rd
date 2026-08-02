@@ -36,3 +36,10 @@ Sys.setenv(
 od_get_config()
 }
 }
+\seealso{
+Other connection:
+\code{\link[=od_connection]{od_connection()}},
+\code{\link[=od_get_connection]{od_get_connection()}},
+\code{\link[=od_set_connection]{od_set_connection()}}
+}
+\concept{connection}

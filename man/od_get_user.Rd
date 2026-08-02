@@ -19,3 +19,16 @@ Parsed user object (list).
 \description{
 Get a single user
 }
+\examples{
+\dontrun{
+od_get_user("alice")
+}
+}
+\seealso{
+Other users:
+\code{\link[=od_get_me]{od_get_me()}},
+\code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_query_users]{od_query_users()}},
+\code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
+}
+\concept{users}

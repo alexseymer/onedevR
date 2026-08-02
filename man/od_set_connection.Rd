@@ -17,3 +17,15 @@ After calling this, high-level \verb{od_*} helpers that omit \code{conn} use the
 registered connection instead of reading \verb{ONEDEV_*} environment variables.
 Pass \code{NULL} to clear the default.
 }
+\examples{
+\dontrun{
+od_set_connection(od_connection(host = "https://git.example.test", token = "t", project_path = "p"))
+}
+}
+\seealso{
+Other connection:
+\code{\link[=od_connection]{od_connection()}},
+\code{\link[=od_get_config]{od_get_config()}},
+\code{\link[=od_get_connection]{od_get_connection()}}
+}
+\concept{connection}

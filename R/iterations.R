@@ -12,6 +12,11 @@
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of iterations (default), or a list when `as_tibble = FALSE`.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_list_iterations()
+#' }
 #' @export
 od_list_iterations <- function(
   project = NULL,
@@ -37,13 +42,18 @@ od_list_iterations <- function(
 #' Set iterations on an existing issue
 #'
 #' Calls `POST /issues/{id}/iterations`. Tries known body shapes (raw id list
-#' and `{iterationIds: [...]}`) via the variants helper — see
-#' `project_plan.md` §10.
+#' and `{iterationIds: [...]}`) via the variants helper - see
+#' `project_plan.md` sec 10.
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
 #' @param iteration_ids Numeric iteration ids from [od_list_iterations()].
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_add_issue_iterations(145, iteration_ids = 17L)
+#' }
 #' @export
 od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
   conn <- .od_conn(conn)

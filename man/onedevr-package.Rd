@@ -11,11 +11,11 @@ R client for the OneDev project management REST API. Provides low-level request 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://alexseymer.github.io/onedevR/}
-  \item \url{https://github.com/alexseymer/onedevR}
-  \item Report bugs at \url{https://github.com/alexseymer/onedevR/issues}
+\item Vignette: \code{vignette("getting-started", package = "onedevr")}
+\item \url{https://alexseymer.github.io/onedevR/}
+\item \url{https://github.com/alexseymer/onedevR}
+\item Report bugs at \url{https://github.com/alexseymer/onedevR/issues}
 }
-
 }
 \author{
 \strong{Maintainer}: Alex Seymer \email{alex@seymer.at}

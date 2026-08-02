@@ -4,7 +4,7 @@
 #' (path-prefixed values return HTTP 406 "Invalid number"). Try path form
 #' first, then bare forms.
 #'
-#' @keywords internal
+#' @noRd
 .od_number_query_variants <- function(project_path, number) {
   numeric_part <- .od_strip_hash(number)
   project_path <- trimws(as.character(project_path %||% "")[1])
@@ -25,9 +25,9 @@
 #' @param kind One of `"issue"`, `"build"`, `"pull"`.
 #' @param number UI number.
 #' @param conn Connection list.
-#' @param label Human label for errors (`"issue"`, `"build"`, …).
+#' @param label Human label for errors (`"issue"`, `"build"`, ...).
 #' @return Character internal id.
-#' @keywords internal
+#' @noRd
 .od_resolve_number_id <- function(kind, number, conn, label) {
   project_path <- od_resolve_project_path(conn = conn)
   numeric_part <- .od_strip_hash(number)
@@ -82,6 +82,11 @@
 #' @param issue_number UI number (`145` or `"#145"`).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character internal issue id.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_resolve_issue_id(145)
+#' }
 #' @export
 od_resolve_issue_id <- function(issue_number, conn = NULL) {
   conn <- .od_conn(conn)
@@ -95,6 +100,11 @@ od_resolve_issue_id <- function(issue_number, conn = NULL) {
 #' @param build_number UI number (`100` or `"#100"`).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character internal build id.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_resolve_build_id(100)
+#' }
 #' @export
 od_resolve_build_id <- function(build_number, conn = NULL) {
   conn <- .od_conn(conn)
@@ -108,6 +118,11 @@ od_resolve_build_id <- function(build_number, conn = NULL) {
 #' @param pull_request_number UI number (`42` or `"#42"`).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character internal pull request id.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_resolve_pull_request_id(1)
+#' }
 #' @export
 od_resolve_pull_request_id <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)

@@ -10,6 +10,11 @@
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of packages (default), or a list when `as_tibble = FALSE`.
+#' @family packages
+#' @examples
+#' \dontrun{
+#' od_query_packages(count = 20L)
+#' }
 #' @export
 od_query_packages <- function(
   query = NULL,
@@ -38,6 +43,11 @@ od_query_packages <- function(
 #' @param pack_id Package id.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed package object (list).
+#' @family packages
+#' @examples
+#' \dontrun{
+#' od_get_pack(1)
+#' }
 #' @export
 od_get_pack <- function(pack_id, conn = NULL) {
   conn <- .od_conn(conn)
@@ -55,6 +65,11 @@ od_get_pack <- function(pack_id, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of blobs (default), or a list when `as_tibble = FALSE`.
+#' @family packages
+#' @examples
+#' \dontrun{
+#' od_get_pack_blobs(1)
+#' }
 #' @export
 od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -73,6 +88,11 @@ od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of labels (default), or a list when `as_tibble = FALSE`.
+#' @family packages
+#' @examples
+#' \dontrun{
+#' od_get_pack_labels(1)
+#' }
 #' @export
 od_get_pack_labels <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
