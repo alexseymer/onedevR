@@ -1,0 +1,59 @@
+url: https://alexseymer.github.io/onedevR/
+template:
+  bootstrap: 5
+  light-switch: true
+
+home:
+  title: onedevR — R client for the OneDev REST API
+  links:
+    - text: Browse source code
+      href: https://github.com/alexseymer/onedevR
+    - text: Report a bug
+      href: https://github.com/alexseymer/onedevR/issues
+
+reference:
+  - title: Connection
+    desc: Configure how onedevr talks to your OneDev instance.
+    contents:
+      - od_connection
+      - od_set_connection
+      - od_get_connection
+      - od_get_config
+  - title: Issues
+    contents:
+      - starts_with("od_query_issues")
+      - starts_with("od_get_issue")
+      - starts_with("od_create_issue")
+      - starts_with("od_issue_")
+      - od_resolve_issue_id
+      - od_list_iterations
+      - od_add_issue_iterations
+  - title: Builds
+    contents:
+      - od_query_builds
+      - od_get_build
+      - od_resolve_build_id
+  - title: Pull requests
+    contents:
+      - starts_with("od_query_pull")
+      - starts_with("od_get_pull")
+      - od_resolve_pull_request_id
+  - title: Projects & low-level
+    contents:
+      - od_resolve_project_path
+      - od_resolve_project_id
+      - od_request
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github, lightswitch]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/alexseymer/onedevR
+      aria-label: GitHub
+
+authors:
+  Alex Seymer:
+    href: https://github.com/alexseymer

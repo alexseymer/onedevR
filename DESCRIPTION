@@ -10,7 +10,8 @@ Description: R client for the OneDev project management REST API. Provides
     OneDev instances. Modeled on gitlabr for the R API shape; OneDev
     conventions follow the tod CLI (https://github.com/theonedev/tod).
 License: MIT + file LICENSE
-URL: https://github.com/alexseymer/onedevR
+URL: https://alexseymer.github.io/onedevR/,
+    https://github.com/alexseymer/onedevR
 BugReports: https://github.com/alexseymer/onedevR/issues
 Depends: R (>= 4.2.0)
 Imports:
@@ -22,8 +23,11 @@ Suggests:
     mockery,
     withr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    pkgdown
+VignetteBuilder: knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+Config/Needs/website: pkgdown
 Config/roxygen2/version: 8.0.0

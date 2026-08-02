@@ -14,15 +14,19 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**Phase 3 (Builds & Pull Requests) is implemented.** See
-[`ROADMAP.md`](ROADMAP.md) for progress and [`project_plan.md`](project_plan.md)
-for the full design.
+**Phase 4 (Publishing) is in progress** — pkgdown + release packaging for
+`v0.1.0`. API coverage through Phase 3 is on `main`. See
+[`ROADMAP.md`](ROADMAP.md) and [`NEWS.md`](NEWS.md).
 
 ## Install
 
 ```r
-# GitHub (until CRAN, if ever)
+# GitHub
 remotes::install_github("alexseymer/onedevR")
+
+# After the GitHub Pages site is live:
+# browseVignettes("onedevr")
+# or https://alexseymer.github.io/onedevR/
 ```
 
 ## Quick start

@@ -23,7 +23,6 @@ inst/doc
 .vscode/
 *~
 
-# Docs build
+# Docs build (site is deployed from the gh-pages branch)
 docs/
 pkgdown/
-_pkgdown.yml
