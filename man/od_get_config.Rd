@@ -7,18 +7,24 @@
 od_get_config(validate = TRUE)
 }
 \arguments{
-\item{validate}{If \code{TRUE} (default), error when host or token are missing.}
+\item{validate}{If \code{TRUE} (default), error when host or credentials are missing.}
 }
 \value{
-A named list with fields \code{host}, \code{api_base_url}, \code{token}, \code{repo_url},
-\code{project_id}, \code{project_path}, \code{default_issue_state}, and \code{insecure_ssl}.
+A named list with fields \code{host}, \code{api_base_url}, \code{token}, \code{username},
+\code{password}, \code{auth}, \code{repo_url}, \code{project_id}, \code{project_path},
+\code{default_issue_state}, and \code{insecure_ssl}.
 }
 \description{
-Reads \verb{ONEDEV_*} variables (see \code{.env.example} / \code{project_plan.md} §8) and
+Reads \verb{ONEDEV_*} variables (see \code{.Renviron.example} / \code{.env.example}) and
 returns a connection list used by high-level \verb{od_*} helpers. Prefer an
 explicit \code{\link[=od_connection]{od_connection()}} (optionally registered with
 \code{\link[=od_set_connection]{od_set_connection()}}) for scripts; env remains the fallback when no
 connection is passed or registered.
+}
+\details{
+Auth: Bearer via \code{ONEDEV_API_TOKEN} (or aliases). Basic Auth when
+\code{ONEDEV_USERNAME} is set (password from \code{ONEDEV_PASSWORD}, or the token as
+password). Override with \code{ONEDEV_AUTH=bearer|basic}.
 }
 \examples{
 \dontrun{

@@ -36,7 +36,7 @@ RUN wget -qO- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.as
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       r-base-core r-base-dev \
-      r-cran-httr2 r-cran-jsonlite r-cran-rlang \
+      r-cran-httr2 r-cran-jsonlite r-cran-rlang r-cran-tibble \
       r-cran-testthat r-cran-devtools r-cran-roxygen2 \
       r-cran-knitr r-cran-rmarkdown r-cran-mockery r-cran-withr \
  && rm -rf /var/lib/apt/lists/*

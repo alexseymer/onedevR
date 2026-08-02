@@ -139,8 +139,11 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
     expect_equal(endpoint, "/issues/283/comments")
     list(list(id = 1, content = "hi"))
   })
-  expect_equal(od_get_issue_comments(145, conn = list())[[1]]$content, "hi")
-
+  expect_equal(od_get_issue_comments(145, conn = list())$content, "hi")
+  expect_equal(
+    od_get_issue_comments(145, as_tibble = FALSE, conn = list())[[1]]$content,
+    "hi"
+  )
   mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
   mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
     expect_equal(method, "POST")

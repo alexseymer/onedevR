@@ -6,6 +6,7 @@
 \usage{
 od_get_pull_request_comments(
   pull_request_number,
+  as_tibble = NULL,
   conn = NULL,
   use_internal_id = FALSE
 )
@@ -13,13 +14,16 @@ od_get_pull_request_comments(
 \arguments{
 \item{pull_request_number}{UI number (\code{42} or \code{"#42"}).}
 
+\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+
 \item{conn}{Connection list.}
 
 \item{use_internal_id}{If \code{TRUE}, treat \code{pull_request_number} as the
 internal REST id.}
 }
 \value{
-Parsed comments payload (list).
+A tibble of comments (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Get comments on a pull request

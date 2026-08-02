@@ -4,7 +4,13 @@
 \alias{od_query_pull_requests}
 \title{Query OneDev pull requests}
 \usage{
-od_query_pull_requests(query = NULL, count = 100L, offset = 0L, conn = NULL)
+od_query_pull_requests(
+  query = NULL,
+  count = 100L,
+  offset = 0L,
+  as_tibble = NULL,
+  conn = NULL
+)
 }
 \arguments{
 \item{query}{Raw OneDev pull-request query string (see
@@ -14,10 +20,13 @@ od_query_pull_requests(query = NULL, count = 100L, offset = 0L, conn = NULL)
 
 \item{offset}{Result offset (default \code{0}).}
 
+\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
-Parsed API response (list).
+A tibble of pull requests (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Query OneDev pull requests

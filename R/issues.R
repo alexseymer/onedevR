@@ -7,12 +7,20 @@
 #'   (`ONEDEV_ISSUE_STATE`).
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]; if `FALSE`, the raw list payload / items.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
-#' @return Parsed API response (list). Use the internal normalizer when you
-#'   need a flat item list (handles `items` / `data` wrappers).
+#' @return A tibble of issues (default), or a list when `as_tibble = FALSE`.
 #' @export
-od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0L, conn = NULL) {
+od_query_issues <- function(
+  query = NULL,
+  state = NULL,
+  count = 100L,
+  offset = 0L,
+  as_tibble = NULL,
+  conn = NULL
+) {
   conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
   state <- trimws(as.character(state %||% "")[1])
@@ -29,7 +37,7 @@ od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0
     }
   }
 
-  od_request(
+  payload <- od_request(
     method = "GET",
     endpoint = "/issues",
     query = list(
@@ -39,6 +47,7 @@ od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0
     ),
     conn = conn
   )
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Get a single issue by UI number
@@ -225,18 +234,26 @@ od_issue_transition_state <- function(issue_number, state, conn = NULL) {
 #' Get comments on an issue
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
-#' @return Parsed comments payload (list).
+#' @return A tibble of comments (default), or a list when `as_tibble = FALSE`.
 #' @export
-od_get_issue_comments <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
+od_get_issue_comments <- function(
+  issue_number,
+  as_tibble = NULL,
+  conn = NULL,
+  use_internal_id = FALSE
+) {
   conn <- .od_conn(conn)
   issue_id <- if (isTRUE(use_internal_id)) {
     .od_strip_hash(issue_number)
   } else {
     od_resolve_issue_id(issue_number, conn = conn)
   }
-  od_request("GET", paste0("/issues/", issue_id, "/comments"), conn = conn)
+  payload <- od_request("GET", paste0("/issues/", issue_id, "/comments"), conn = conn)
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Add a comment to an issue

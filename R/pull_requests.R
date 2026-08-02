@@ -4,20 +4,23 @@
 #'   `tod pr get-query-description` / OneDev query DSL).
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
-#' @return Parsed API response (list).
+#' @return A tibble of pull requests (default), or a list when `as_tibble = FALSE`.
 #' @export
 od_query_pull_requests <- function(
   query = NULL,
   count = 100L,
   offset = 0L,
+  as_tibble = NULL,
   conn = NULL
 ) {
   conn <- .od_conn(conn)
   query <- trimws(as.character(query %||% "")[1])
 
-  od_request(
+  payload <- od_request(
     method = "GET",
     endpoint = "/pulls",
     query = list(
@@ -27,6 +30,7 @@ od_query_pull_requests <- function(
     ),
     conn = conn
   )
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Get a single pull request by UI number
@@ -54,13 +58,16 @@ od_get_pull_request <- function(
 #' Get comments on a pull request
 #'
 #' @param pull_request_number UI number (`42` or `"#42"`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id.
-#' @return Parsed comments payload (list).
+#' @return A tibble of comments (default), or a list when `as_tibble = FALSE`.
 #' @export
 od_get_pull_request_comments <- function(
   pull_request_number,
+  as_tibble = NULL,
   conn = NULL,
   use_internal_id = FALSE
 ) {
@@ -70,19 +77,23 @@ od_get_pull_request_comments <- function(
   } else {
     od_resolve_pull_request_id(pull_request_number, conn = conn)
   }
-  od_request("GET", paste0("/pulls/", request_id, "/comments"), conn = conn)
+  payload <- od_request("GET", paste0("/pulls/", request_id, "/comments"), conn = conn)
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Get reviews on a pull request
 #'
 #' @param pull_request_number UI number (`42` or `"#42"`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id.
-#' @return Parsed reviews payload (list).
+#' @return A tibble of reviews (default), or a list when `as_tibble = FALSE`.
 #' @export
 od_get_pull_request_reviews <- function(
   pull_request_number,
+  as_tibble = NULL,
   conn = NULL,
   use_internal_id = FALSE
 ) {
@@ -92,7 +103,8 @@ od_get_pull_request_reviews <- function(
   } else {
     od_resolve_pull_request_id(pull_request_number, conn = conn)
   }
-  od_request("GET", paste0("/pulls/", request_id, "/reviews"), conn = conn)
+  payload <- od_request("GET", paste0("/pulls/", request_id, "/reviews"), conn = conn)
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Create a pull request

@@ -12,6 +12,7 @@ test_that("od_connection builds a validated connection list", {
   expect_equal(conn$host, "https://git.example.test")
   expect_equal(conn$api_base_url, "https://git.example.test/~api")
   expect_equal(conn$token, "tok")
+  expect_equal(conn$auth, "bearer")
   expect_equal(conn$project_path, "group/project")
   expect_equal(conn$project_id, "20")
   expect_equal(conn$default_issue_state, "Open")
@@ -27,9 +28,37 @@ test_that("od_connection derives project_path from repo_url", {
   expect_equal(conn$project_path, "a/b")
 })
 
-test_that("od_connection validates host and token", {
+test_that("od_connection supports Basic Auth", {
+  conn <- od_connection(
+    host = "https://git.example.test",
+    username = "alice",
+    password = "secret",
+    project_path = "p"
+  )
+  expect_equal(conn$auth, "basic")
+  expect_equal(conn$username, "alice")
+  expect_equal(conn$password, "secret")
+
+  with_token_as_password <- od_connection(
+    host = "https://git.example.test",
+    username = "alice",
+    token = "pat-as-password",
+    project_path = "p"
+  )
+  expect_equal(with_token_as_password$auth, "basic")
+  expect_equal(with_token_as_password$token, "pat-as-password")
+})
+
+test_that("od_connection validates host and credentials", {
   expect_error(od_connection(host = "", token = "t"), "`host` is missing")
-  expect_error(od_connection(host = "https://x", token = ""), "`token` is missing")
+  expect_error(
+    od_connection(host = "https://x", token = ""),
+    "Bearer auth requires `token`"
+  )
+  expect_error(
+    od_connection(host = "https://x", username = "alice", password = ""),
+    "Basic Auth requires `password`"
+  )
 })
 
 test_that("od_set_connection / od_get_connection manage package default", {

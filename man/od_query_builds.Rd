@@ -9,6 +9,7 @@ od_query_builds(
   status = NULL,
   count = 100L,
   offset = 0L,
+  as_tibble = NULL,
   conn = NULL
 )
 }
@@ -23,10 +24,13 @@ Combined with \code{query} via \code{and}.}
 
 \item{offset}{Result offset (default \code{0}).}
 
+\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
-Parsed API response (list).
+A tibble of builds (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Query OneDev builds

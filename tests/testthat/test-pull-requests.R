@@ -50,7 +50,7 @@ test_that("od_get_pull_request_comments and reviews hit nested endpoints", {
     list(list(id = 1, content = "lgtm"))
   })
   comments <- od_get_pull_request_comments(42, conn = list())
-  expect_equal(comments[[1]]$content, "lgtm")
+  expect_equal(comments$content, "lgtm")
 
   mockery::stub(od_get_pull_request_reviews, "od_resolve_pull_request_id", function(...) "900")
   mockery::stub(od_get_pull_request_reviews, "od_request", function(method, endpoint, ...) {
@@ -58,7 +58,7 @@ test_that("od_get_pull_request_comments and reviews hit nested endpoints", {
     list(list(status = "APPROVED"))
   })
   reviews <- od_get_pull_request_reviews(42, conn = list())
-  expect_equal(reviews[[1]]$status, "APPROVED")
+  expect_equal(reviews$status, "APPROVED")
 })
 
 test_that("od_create_pull_request posts expected body", {

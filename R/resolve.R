@@ -38,9 +38,15 @@
       {
         payload <- switch(
           kind,
-          issue = od_query_issues(query = q, count = 1L, offset = 0L, conn = conn),
-          build = od_query_builds(query = q, count = 1L, offset = 0L, conn = conn),
-          pull = od_query_pull_requests(query = q, count = 1L, offset = 0L, conn = conn),
+          issue = od_query_issues(
+            query = q, count = 1L, offset = 0L, as_tibble = FALSE, conn = conn
+          ),
+          build = od_query_builds(
+            query = q, count = 1L, offset = 0L, as_tibble = FALSE, conn = conn
+          ),
+          pull = od_query_pull_requests(
+            query = q, count = 1L, offset = 0L, as_tibble = FALSE, conn = conn
+          ),
           stop(paste0("Unknown resolve kind: ", kind), call. = FALSE)
         )
         items <- .od_normalize_collection(payload)

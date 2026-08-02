@@ -14,7 +14,8 @@ test_that("od_list_iterations GETs project iterations with paging", {
   })
 
   result <- od_list_iterations("group/project", conn = list())
-  expect_equal(result[[1]]$id, 17L)
+  expect_s3_class(result, "tbl_df")
+  expect_equal(result$id, 17L)
 })
 
 test_that("od_add_issue_iterations tries body variants", {

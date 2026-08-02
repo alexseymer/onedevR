@@ -10,18 +10,26 @@
   paste0(sub("/+$", "", base), "/", sub("^/+", "", endpoint))
 }
 
-.od_prepare_request <- function(method, url, token, insecure_ssl = FALSE, accept = "application/json") {
+.od_prepare_request <- function(method, url, conn, accept = "application/json") {
   req <- httr2::request(url)
   req <- httr2::req_method(req, method)
-  req <- httr2::req_headers(
-    req,
-    Authorization = paste("Bearer", token),
-    Accept = accept
-  )
+  req <- httr2::req_headers(req, Accept = accept)
   req <- httr2::req_timeout(req, 30)
   req <- httr2::req_error(req, is_error = function(resp) FALSE)
 
-  if (isTRUE(insecure_ssl)) {
+  auth <- tolower(conn$auth %||% "bearer")
+  if (identical(auth, "basic")) {
+    user <- conn$username %||% ""
+    pass <- .od_first_non_empty(conn$password %||% "", conn$token %||% "")
+    req <- httr2::req_auth_basic(req, user, pass)
+  } else {
+    req <- httr2::req_headers(
+      req,
+      Authorization = paste("Bearer", conn$token %||% "")
+    )
+  }
+
+  if (isTRUE(conn$insecure_ssl)) {
     req <- httr2::req_options(req, ssl_verifypeer = 0L, ssl_verifyhost = 0L)
   }
 
@@ -78,7 +86,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   conn <- .od_conn(conn)
   method <- toupper(trimws(as.character(method)[1]))
   url <- .od_resolve_api_url(endpoint, conn)
-  req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl)
+  req <- .od_prepare_request(method, url, conn)
 
   if (length(query) > 0) {
     query <- query[!vapply(query, is.null, logical(1))]
@@ -124,7 +132,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   conn <- .od_conn(conn)
   method <- toupper(trimws(as.character(method)[1]))
   url <- .od_resolve_api_url(endpoint, conn)
-  req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl, accept = accept)
+  req <- .od_prepare_request(method, url, conn, accept = accept)
   req <- httr2::req_timeout(req, as.numeric(timeout)[1])
 
   if (length(query) > 0) {
