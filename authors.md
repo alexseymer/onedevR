@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/alexseymer/onedevR/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/alexseymer/onedevR/blob/v0.5.0/DESCRIPTION)
 
 Seymer A (2026). *onedevr: Access to the OneDev REST API*. R package
 version 0.5.0, <https://alexseymer.github.io/onedevR/>.
