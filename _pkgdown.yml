@@ -51,6 +51,7 @@ reference:
     contents:
       - od_resolve_project_path
       - od_resolve_project_id
+      - od_as_tibble
       - od_request
 
 navbar:
