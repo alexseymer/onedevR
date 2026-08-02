@@ -17,3 +17,16 @@ Parsed clone-url payload (list; typically \code{http} and \code{ssh}).
 \description{
 Get clone URLs for a project
 }
+\examples{
+\dontrun{
+od_get_project_clone_url()
+}
+}
+\seealso{
+Other projects:
+\code{\link[=od_get_project]{od_get_project()}},
+\code{\link[=od_query_projects]{od_query_projects()}},
+\code{\link[=od_resolve_project_id]{od_resolve_project_id()}},
+\code{\link[=od_resolve_project_path]{od_resolve_project_path()}}
+}
+\concept{projects}

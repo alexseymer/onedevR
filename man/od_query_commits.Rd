@@ -35,3 +35,20 @@ A tibble of commits (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Calls \code{GET /repositories/{projectId}/commits}.
 }
+\examples{
+\dontrun{
+od_query_commits(count = 10L)
+}
+}
+\seealso{
+Other repository:
+\code{\link[=od_get_branch]{od_get_branch()}},
+\code{\link[=od_get_commit]{od_get_commit()}},
+\code{\link[=od_get_default_branch]{od_get_default_branch()}},
+\code{\link[=od_get_file]{od_get_file()}},
+\code{\link[=od_get_file_text]{od_get_file_text()}},
+\code{\link[=od_get_tag]{od_get_tag()}},
+\code{\link[=od_list_branches]{od_list_branches()}},
+\code{\link[=od_list_tags]{od_list_tags()}}
+}
+\concept{repository}

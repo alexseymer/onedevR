@@ -25,6 +25,7 @@
 #' )
 #' od_get_config()
 #' }
+#' @family connection
 #' @export
 od_get_config <- function(validate = TRUE) {
   host <- .od_trim_env("ONEDEV_HOST")

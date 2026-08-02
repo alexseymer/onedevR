@@ -19,7 +19,7 @@
 }
 
 #' Derive a OneDev project path from a git remote URL
-#' @keywords internal
+#' @noRd
 .od_derive_project_path <- function(repo_url) {
   repo_url <- trimws(as.character(repo_url)[1])
   if (!nzchar(repo_url)) {
@@ -32,7 +32,7 @@
 }
 
 #' Strip a leading `#` from a UI issue/build number
-#' @keywords internal
+#' @noRd
 .od_strip_hash <- function(x) {
   gsub("^#", "", trimws(as.character(x)[1]), perl = TRUE)
 }

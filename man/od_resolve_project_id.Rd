@@ -18,3 +18,16 @@ Character project id.
 Calls \code{GET /projects/ids/{path}}. If \code{conn$project_id} is already set, that
 value is returned without a network call.
 }
+\examples{
+\dontrun{
+od_resolve_project_id()
+}
+}
+\seealso{
+Other projects:
+\code{\link[=od_get_project]{od_get_project()}},
+\code{\link[=od_get_project_clone_url]{od_get_project_clone_url()}},
+\code{\link[=od_query_projects]{od_query_projects()}},
+\code{\link[=od_resolve_project_path]{od_resolve_project_path()}}
+}
+\concept{projects}

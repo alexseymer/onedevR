@@ -11,6 +11,13 @@
 * `od_get_file_text()` decodes repository file content.
 * Clone-url docs use actual field names `http` / `ssh`.
 
+## Documentation
+
+* Expanded getting-started vignette (tibbles, status keywords, jobs, git,
+  pagination).
+* `\dontrun` examples and `@family` tags on exported helpers; pkgdown reference
+  regrouped; internals use `@noRd`.
+
 # onedevr 0.5.0
 
 ## Jobs, packages, and git

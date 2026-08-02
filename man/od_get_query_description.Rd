@@ -21,3 +21,16 @@ Character scalar (HTML-ish grammar text from the server).
 Calls \verb{/~api/tod/get-\{kind\}-query-description} (same source \verb{tod … get-query-description}
 uses). Useful when crafting \verb{query =} strings for list helpers.
 }
+\examples{
+\dontrun{
+cat(od_get_query_description("build"))
+}
+}
+\seealso{
+Other utilities:
+\code{\link[=od_as_tibble]{od_as_tibble()}},
+\code{\link[=od_download]{od_download()}},
+\code{\link[=od_paginate]{od_paginate()}},
+\code{\link[=od_request]{od_request()}}
+}
+\concept{utilities}

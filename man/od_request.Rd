@@ -24,3 +24,16 @@ Parsed JSON payload (list), or \code{NULL} for empty bodies.
 Escape hatch for any \verb{/~api/...} endpoint. Prefer high-level \verb{od_*}
 helpers when they exist.
 }
+\examples{
+\dontrun{
+od_request("GET", "/projects")
+}
+}
+\seealso{
+Other utilities:
+\code{\link[=od_as_tibble]{od_as_tibble()}},
+\code{\link[=od_download]{od_download()}},
+\code{\link[=od_get_query_description]{od_get_query_description()}},
+\code{\link[=od_paginate]{od_paginate()}}
+}
+\concept{utilities}

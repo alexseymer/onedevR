@@ -76,3 +76,10 @@ basic <- od_connection(
 )
 }
 }
+\seealso{
+Other connection:
+\code{\link[=od_get_config]{od_get_config()}},
+\code{\link[=od_get_connection]{od_get_connection()}},
+\code{\link[=od_set_connection]{od_set_connection()}}
+}
+\concept{connection}

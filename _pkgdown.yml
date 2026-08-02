@@ -13,13 +13,14 @@ home:
 
 reference:
   - title: Connection
-    desc: Configure how onedevr talks to your OneDev instance.
+    desc: Configure how onedevr talks to your OneDev instance (env, explicit connection, Basic Auth or Bearer).
     contents:
       - od_connection
       - od_set_connection
       - od_get_connection
       - od_get_config
   - title: Issues
+    desc: Query and mutate issues, fields, comments, and iterations.
     contents:
       - starts_with("od_query_issues")
       - starts_with("od_get_issue")
@@ -29,27 +30,8 @@ reference:
       - od_resolve_issue_id
       - od_list_iterations
       - od_add_issue_iterations
-  - title: Projects & low-level
-    contents:
-      - od_query_projects
-      - od_list_projects
-      - od_get_project
-      - od_get_project_clone_url
-      - od_resolve_project_path
-      - od_resolve_project_id
-      - od_as_tibble
-      - od_request
-      - od_download
-      - od_get_query_description
-      - od_paginate
-  - title: Users
-    contents:
-      - od_query_users
-      - od_get_user
-      - od_get_me
-      - od_resolve_user_id
-      - od_get_user_emails
-  - title: Builds
+  - title: Builds and jobs
+    desc: Query builds, logs, artifacts, and run/rebuild/cancel jobs.
     contents:
       - od_query_builds
       - od_get_build
@@ -61,24 +43,8 @@ reference:
       - od_run_job
       - od_rebuild_job
       - od_cancel_job
-  - title: Packages
-    contents:
-      - od_query_packages
-      - od_get_pack
-      - od_get_pack_blobs
-      - od_get_pack_labels
-  - title: Repository
-    contents:
-      - od_list_branches
-      - od_get_branch
-      - od_get_default_branch
-      - od_list_tags
-      - od_get_tag
-      - od_query_commits
-      - od_get_commit
-      - od_get_file
-      - od_get_file_text
   - title: Pull requests
+    desc: List, review, and write pull requests.
     contents:
       - starts_with("od_query_pull")
       - starts_with("od_get_pull")
@@ -89,6 +55,47 @@ reference:
       - starts_with("od_merge_pull")
       - starts_with("od_discard_pull")
       - od_resolve_pull_request_id
+  - title: Projects
+    desc: Resolve and inspect OneDev projects.
+    contents:
+      - od_query_projects
+      - od_get_project
+      - od_get_project_clone_url
+      - od_resolve_project_path
+      - od_resolve_project_id
+  - title: Users
+    contents:
+      - od_query_users
+      - od_get_user
+      - od_get_me
+      - od_resolve_user_id
+      - od_get_user_emails
+  - title: Packages
+    contents:
+      - od_query_packages
+      - od_get_pack
+      - od_get_pack_blobs
+      - od_get_pack_labels
+  - title: Repository
+    desc: Branches, tags, commits, and file contents.
+    contents:
+      - od_list_branches
+      - od_get_branch
+      - od_get_default_branch
+      - od_list_tags
+      - od_get_tag
+      - od_query_commits
+      - od_get_commit
+      - od_get_file
+      - od_get_file_text
+  - title: Utilities
+    desc: Tibbles, pagination, query DSL help, downloads, and the low-level HTTP escape hatch.
+    contents:
+      - od_as_tibble
+      - od_paginate
+      - od_get_query_description
+      - od_download
+      - od_request
 
 navbar:
   structure:

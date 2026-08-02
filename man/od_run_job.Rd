@@ -53,3 +53,21 @@ previews, pass \code{pull_request_id} (internal REST id).
 Returns the internal build id (numeric). Use \code{\link[=od_get_build]{od_get_build()}} with
 \code{use_internal_id = TRUE} or query by number once known.
 }
+\examples{
+\dontrun{
+od_run_job("CI", branch = "main")
+}
+}
+\seealso{
+Other builds:
+\code{\link[=od_cancel_job]{od_cancel_job()}},
+\code{\link[=od_download_build_artifact]{od_download_build_artifact()}},
+\code{\link[=od_get_build]{od_get_build()}},
+\code{\link[=od_get_build_log]{od_get_build_log()}},
+\code{\link[=od_get_build_params]{od_get_build_params()}},
+\code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_query_builds]{od_query_builds()}},
+\code{\link[=od_rebuild_job]{od_rebuild_job()}},
+\code{\link[=od_resolve_build_id]{od_resolve_build_id()}}
+}
+\concept{builds}

@@ -27,3 +27,16 @@ Repeatedly calls \code{fetcher(offset, count)} (and optional \code{as_tibble}) u
 short page is returned or \code{max_pages} is hit. Designed for
 \code{\link[=od_query_issues]{od_query_issues()}}, \code{\link[=od_query_builds]{od_query_builds()}}, \code{\link[=od_query_projects]{od_query_projects()}}, etc.
 }
+\examples{
+\dontrun{
+od_paginate(od_query_issues, state = "Open", page_size = 50L)
+}
+}
+\seealso{
+Other utilities:
+\code{\link[=od_as_tibble]{od_as_tibble()}},
+\code{\link[=od_download]{od_download()}},
+\code{\link[=od_get_query_description]{od_get_query_description()}},
+\code{\link[=od_request]{od_request()}}
+}
+\concept{utilities}

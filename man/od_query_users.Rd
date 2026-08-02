@@ -30,3 +30,16 @@ A tibble of users (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Calls \code{GET /users}.
 }
+\examples{
+\dontrun{
+od_query_users(count = 20L)
+}
+}
+\seealso{
+Other users:
+\code{\link[=od_get_me]{od_get_me()}},
+\code{\link[=od_get_user]{od_get_user()}},
+\code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
+}
+\concept{users}

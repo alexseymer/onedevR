@@ -38,3 +38,21 @@ A tibble of builds (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Query OneDev builds
 }
+\examples{
+\dontrun{
+od_query_builds(status = "successful", count = 10L)
+}
+}
+\seealso{
+Other builds:
+\code{\link[=od_cancel_job]{od_cancel_job()}},
+\code{\link[=od_download_build_artifact]{od_download_build_artifact()}},
+\code{\link[=od_get_build]{od_get_build()}},
+\code{\link[=od_get_build_log]{od_get_build_log()}},
+\code{\link[=od_get_build_params]{od_get_build_params()}},
+\code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_rebuild_job]{od_rebuild_job()}},
+\code{\link[=od_resolve_build_id]{od_resolve_build_id()}},
+\code{\link[=od_run_job]{od_run_job()}}
+}
+\concept{builds}

@@ -23,3 +23,16 @@ Flattens list-of-objects responses (from \code{\link[=od_query_issues]{od_query_
 \details{
 The package default is controlled by \code{options(onedevr.as_tibble = TRUE)}.
 }
+\examples{
+\dontrun{
+od_as_tibble(list(list(id = 1, title = "x")))
+}
+}
+\seealso{
+Other utilities:
+\code{\link[=od_download]{od_download()}},
+\code{\link[=od_get_query_description]{od_get_query_description()}},
+\code{\link[=od_paginate]{od_paginate()}},
+\code{\link[=od_request]{od_request()}}
+}
+\concept{utilities}

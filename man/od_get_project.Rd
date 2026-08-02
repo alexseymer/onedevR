@@ -18,3 +18,16 @@ Parsed project object (list).
 \description{
 Get a single project
 }
+\examples{
+\dontrun{
+od_get_project()
+}
+}
+\seealso{
+Other projects:
+\code{\link[=od_get_project_clone_url]{od_get_project_clone_url()}},
+\code{\link[=od_query_projects]{od_query_projects()}},
+\code{\link[=od_resolve_project_id]{od_resolve_project_id()}},
+\code{\link[=od_resolve_project_path]{od_resolve_project_path()}}
+}
+\concept{projects}

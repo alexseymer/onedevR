@@ -11,6 +11,11 @@
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return A tibble of pull requests (default), or a list when `as_tibble = FALSE`.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_query_pull_requests(status = "open", count = 10L)
+#' }
 #' @export
 od_query_pull_requests <- function(
   query = NULL,
@@ -58,6 +63,11 @@ od_query_pull_requests <- function(
 #' @param use_internal_id If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id (debugging only).
 #' @return Parsed pull request object (list).
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_get_pull_request(1)
+#' }
 #' @export
 od_get_pull_request <- function(
   pull_request_number,
@@ -82,6 +92,11 @@ od_get_pull_request <- function(
 #' @param use_internal_id If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id.
 #' @return A tibble of comments (default), or a list when `as_tibble = FALSE`.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_get_pull_request_comments(1)
+#' }
 #' @export
 od_get_pull_request_comments <- function(
   pull_request_number,
@@ -108,6 +123,11 @@ od_get_pull_request_comments <- function(
 #' @param use_internal_id If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id.
 #' @return A tibble of reviews (default), or a list when `as_tibble = FALSE`.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_get_pull_request_reviews(1)
+#' }
 #' @export
 od_get_pull_request_reviews <- function(
   pull_request_number,
@@ -139,6 +159,11 @@ od_get_pull_request_reviews <- function(
 #' @param assignee_ids Optional numeric user ids.
 #' @param conn Connection list.
 #' @return Parsed created PR (list), or `NULL` if the server returns an empty body.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_create_pull_request("Title", source_branch = "feature", target_branch = "main")
+#' }
 #' @export
 od_create_pull_request <- function(
   title,
@@ -187,6 +212,11 @@ od_create_pull_request <- function(
 #' @param content Comment body (Markdown).
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_add_pull_request_comment(1, "LGTM")
+#' }
 #' @export
 od_add_pull_request_comment <- function(pull_request_number, content, conn = NULL) {
   conn <- .od_conn(conn)
@@ -207,6 +237,11 @@ od_add_pull_request_comment <- function(pull_request_number, content, conn = NUL
 #' @param pull_request_number UI number.
 #' @param conn Connection list.
 #' @return Parsed API response (may be `NULL`).
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_approve_pull_request(1)
+#' }
 #' @export
 od_approve_pull_request <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)
@@ -223,6 +258,11 @@ od_approve_pull_request <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number UI number.
 #' @param conn Connection list.
 #' @return Parsed API response (may be `NULL`).
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_request_pull_request_changes(1)
+#' }
 #' @export
 od_request_pull_request_changes <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)
@@ -239,6 +279,11 @@ od_request_pull_request_changes <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number UI number.
 #' @param conn Connection list.
 #' @return Parsed API response (may be `NULL`).
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_merge_pull_request(1)
+#' }
 #' @export
 od_merge_pull_request <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)
@@ -255,6 +300,11 @@ od_merge_pull_request <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number UI number.
 #' @param conn Connection list.
 #' @return Parsed API response (may be `NULL`).
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_discard_pull_request(1)
+#' }
 #' @export
 od_discard_pull_request <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)

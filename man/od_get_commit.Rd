@@ -26,3 +26,20 @@ Parsed commit object (list).
 \description{
 Get a single commit
 }
+\examples{
+\dontrun{
+od_get_commit("abcdef")
+}
+}
+\seealso{
+Other repository:
+\code{\link[=od_get_branch]{od_get_branch()}},
+\code{\link[=od_get_default_branch]{od_get_default_branch()}},
+\code{\link[=od_get_file]{od_get_file()}},
+\code{\link[=od_get_file_text]{od_get_file_text()}},
+\code{\link[=od_get_tag]{od_get_tag()}},
+\code{\link[=od_list_branches]{od_list_branches()}},
+\code{\link[=od_list_tags]{od_list_tags()}},
+\code{\link[=od_query_commits]{od_query_commits()}}
+}
+\concept{repository}

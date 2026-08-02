@@ -1,11 +1,11 @@
 #' Default commit fields requested from repository endpoints
-#' @keywords internal
+#' @noRd
 .od_default_commit_fields <- function() {
   c("PARENTS", "AUTHOR", "COMMITTER", "COMMIT_DATE", "SUBJECT", "BODY")
 }
 
 #' Encode path segments for repository file/directory URLs
-#' @keywords internal
+#' @noRd
 .od_repo_path_encode <- function(parts) {
   parts <- as.character(unlist(parts, use.names = FALSE))
   parts <- parts[nzchar(parts)]
@@ -16,7 +16,7 @@
 }
 
 #' Attach repeated `field` query params for commit endpoints
-#' @keywords internal
+#' @noRd
 .od_repo_commit_query <- function(query = NULL, count = NULL, fields = NULL) {
   q <- list()
   if (!is.null(query) && nzchar(as.character(query)[1])) {
@@ -39,6 +39,11 @@
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character vector of branch names.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_list_branches()
+#' }
 #' @export
 od_list_branches <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -56,6 +61,11 @@ od_list_branches <- function(project = NULL, conn = NULL) {
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character branch name, or `NULL` if unset (HTTP 204).
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_default_branch()
+#' }
 #' @export
 od_get_default_branch <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -77,6 +87,11 @@ od_get_default_branch <- function(project = NULL, conn = NULL) {
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return List with `refName` and `commitHash`.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_branch("main")
+#' }
 #' @export
 od_get_branch <- function(branch, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -98,6 +113,11 @@ od_get_branch <- function(branch, project = NULL, conn = NULL) {
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character vector of tag names.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_list_tags()
+#' }
 #' @export
 od_list_tags <- function(project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -116,6 +136,11 @@ od_list_tags <- function(project = NULL, conn = NULL) {
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return List with `refName` and `commitHash`.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_tag("v1.0.0")
+#' }
 #' @export
 od_get_tag <- function(tag, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -146,6 +171,11 @@ od_get_tag <- function(tag, project = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of commits (default), or a list when `as_tibble = FALSE`.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_query_commits(count = 10L)
+#' }
 #' @export
 od_query_commits <- function(
   query = NULL,
@@ -173,6 +203,11 @@ od_query_commits <- function(
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed commit object (list).
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_commit("abcdef")
+#' }
 #' @export
 od_get_commit <- function(
   commit_hash,
@@ -203,6 +238,11 @@ od_get_commit <- function(
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed file payload (list; includes `base64Content`).
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_file("main", "README.md")
+#' }
 #' @export
 od_get_file <- function(revision, path, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
@@ -231,6 +271,11 @@ od_get_file <- function(revision, path, project = NULL, conn = NULL) {
 #' @param encoding Text encoding passed to [base::rawToChar()] context via
 #'   `iconv` (default `"UTF-8"`).
 #' @return Character scalar.
+#' @family repository
+#' @examples
+#' \dontrun{
+#' od_get_file_text("main", "README.md")
+#' }
 #' @export
 od_get_file_text <- function(
   revision,

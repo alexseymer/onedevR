@@ -12,6 +12,11 @@
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of iterations (default), or a list when `as_tibble = FALSE`.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_list_iterations()
+#' }
 #' @export
 od_list_iterations <- function(
   project = NULL,
@@ -44,6 +49,11 @@ od_list_iterations <- function(
 #' @param iteration_ids Numeric iteration ids from [od_list_iterations()].
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_add_issue_iterations(145, iteration_ids = 17L)
+#' }
 #' @export
 od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
   conn <- .od_conn(conn)

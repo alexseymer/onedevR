@@ -6,6 +6,11 @@
 #' @param kind One of `"issue"`, `"build"`, `"pull_request"`, or `"project"`.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character scalar (HTML-ish grammar text from the server).
+#' @family utilities
+#' @examples
+#' \dontrun{
+#' cat(od_get_query_description("build"))
+#' }
 #' @export
 od_get_query_description <- function(
   kind = c("issue", "build", "pull_request", "project"),
@@ -38,6 +43,11 @@ od_get_query_description <- function(
 #' @param as_tibble Passed to `fetcher` when it has a formal `as_tibble`.
 #' @return A combined tibble when pages are tibbles; otherwise a concatenated
 #'   list of items.
+#' @family utilities
+#' @examples
+#' \dontrun{
+#' od_paginate(od_query_issues, state = "Open", page_size = 50L)
+#' }
 #' @export
 od_paginate <- function(
   fetcher,
@@ -84,7 +94,7 @@ od_paginate <- function(
 
   if (inherits(pages[[1]], "data.frame")) {
     # vctrs (pulled in by tibble) binds list-columns without rowname clashes
-    out <- do.call(vctrs::vec_rbind, pages)
+    out <- do.call(vec_rbind, pages)
     return(tibble::as_tibble(out))
   }
 

@@ -20,3 +20,24 @@ helpers always take the UI number. Tries \verb{"Number" is "<projectPath>#<n>"}
 then bare \code{"#n"} / \code{"n"} (same idea as \href{https://github.com/theonedev/tod}{tod};
 bare forms are required on some OneDev versions).
 }
+\examples{
+\dontrun{
+od_resolve_issue_id(145)
+}
+}
+\seealso{
+Other issues:
+\code{\link[=od_add_issue_comment]{od_add_issue_comment()}},
+\code{\link[=od_add_issue_iterations]{od_add_issue_iterations()}},
+\code{\link[=od_create_issue]{od_create_issue()}},
+\code{\link[=od_get_issue]{od_get_issue()}},
+\code{\link[=od_get_issue_comments]{od_get_issue_comments()}},
+\code{\link[=od_get_issue_fields]{od_get_issue_fields()}},
+\code{\link[=od_issue_set_description]{od_issue_set_description()}},
+\code{\link[=od_issue_set_fields]{od_issue_set_fields()}},
+\code{\link[=od_issue_set_title]{od_issue_set_title()}},
+\code{\link[=od_issue_transition_state]{od_issue_transition_state()}},
+\code{\link[=od_list_iterations]{od_list_iterations()}},
+\code{\link[=od_query_issues]{od_query_issues()}}
+}
+\concept{issues}

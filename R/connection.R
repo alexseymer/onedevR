@@ -8,13 +8,13 @@
 #' @param conn Optional connection list.
 #' @param validate Passed to [od_get_config()] when falling back to env.
 #' @return A connection list.
-#' @keywords internal
+#' @noRd
 .od_conn <- function(conn = NULL, validate = TRUE) {
   conn %||% .onedevr_env$connection %||% od_get_config(validate = validate)
 }
 
 #' Infer auth mode from connection fields
-#' @keywords internal
+#' @noRd
 .od_infer_auth <- function(auth = NULL, username = "", token = "", password = "") {
   auth <- trimws(as.character(auth %||% "")[1])
   if (nzchar(auth)) {
@@ -28,7 +28,7 @@
 }
 
 #' Validate connection credentials for the chosen auth mode
-#' @keywords internal
+#' @noRd
 .od_validate_auth <- function(conn, context = "connection") {
   auth <- tolower(conn$auth %||% "bearer")
   if (identical(auth, "basic")) {
@@ -92,6 +92,7 @@
 #'   project_path = "group/my-project"
 #' )
 #' }
+#' @family connection
 #' @export
 od_connection <- function(
   host,
@@ -156,6 +157,11 @@ od_connection <- function(
 #'
 #' @param conn An [od_connection()] (or compatible list), or `NULL` to unset.
 #' @return `conn`, invisibly.
+#' @family connection
+#' @examples
+#' \dontrun{
+#' od_set_connection(od_connection(host = "https://git.example.test", token = "t", project_path = "p"))
+#' }
 #' @export
 od_set_connection <- function(conn) {
   if (!is.null(conn) && !is.list(conn)) {
@@ -168,6 +174,11 @@ od_set_connection <- function(conn) {
 #' Get the package-default OneDev connection
 #'
 #' @return The connection registered with [od_set_connection()], or `NULL`.
+#' @family connection
+#' @examples
+#' \dontrun{
+#' od_get_connection()
+#' }
 #' @export
 od_get_connection <- function() {
   .onedevr_env$connection

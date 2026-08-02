@@ -25,6 +25,9 @@ from the [`tod`](https://github.com/theonedev/tod) CLI.
 **Important:** high-level helpers take **UI numbers** (`145` / `"#145"`), not
 internal REST ids.
 
+List/query helpers return **tibbles** by default. Opt out with
+`as_tibble = FALSE` or `options(onedevr.as_tibble = FALSE)`.
+
 # Configure a connection
 
 ## Environment variables
@@ -41,7 +44,9 @@ Sys.setenv(
 od_query_issues(state = "Open")
 ```
 
-See `.env.example` in the repository for the full variable list.
+See `.Renviron.example` / `.env.example` in the repository for the full
+variable list (including Basic Auth via `ONEDEV_USERNAME` /
+`ONEDEV_PASSWORD`).
 
 ## Explicit connection
 
@@ -59,8 +64,10 @@ od_get_issue(145, conn = conn)
 # Issues
 
 ```{r}
+issues <- od_query_issues(state = "Open", count = 20L)
 issue <- od_get_issue(145)
 fields <- od_get_issue_fields(145)
+comments <- od_get_issue_comments(145)
 
 created <- od_create_issue(
   title = "API test",
@@ -79,15 +86,64 @@ iterations <- od_list_iterations()
 od_add_issue_iterations(145, iteration_ids = iterations$id[1])
 ```
 
-# Builds and pull requests
+# Builds, jobs, and artifacts
+
+Build **status** filters use OneDev keyword criteria (`successful`, `failed`,
+…), not a `"Status"` field. Enum spellings like `"SUCCESSFUL"` are accepted
+and mapped.
 
 ```{r}
-builds <- od_query_builds(status = "SUCCESSFUL", count = 10L)
+builds <- od_query_builds(status = "successful", count = 10L)
 build <- od_get_build(100)
+params <- od_get_build_params(100)
+log_lines <- od_get_build_log(100)
+artifacts <- od_list_build_artifacts(100)
 
+# Run / rebuild / cancel (state-changing — use deliberately)
+# od_run_job("CI", branch = "main")
+# od_rebuild_job(100)
+# od_cancel_job(100)
+```
+
+Inspect the server’s build query grammar:
+
+```{r}
+cat(od_get_query_description("build"))
+```
+
+# Pull requests
+
+```{r}
+open_prs <- od_query_pull_requests(status = "open", count = 10L)
 pr <- od_get_pull_request(1)
 comments <- od_get_pull_request_comments(1)
 reviews <- od_get_pull_request_reviews(1)
+```
+
+# Projects, users, packages, and git
+
+```{r}
+projects <- od_query_projects(count = 20L)
+project <- od_get_project()
+clone <- od_get_project_clone_url() # fields: http, ssh
+
+branches <- od_list_branches()
+tip <- od_get_branch("main")
+commits <- od_query_commits(count = 10L)
+readme <- od_get_file_text("main", "README.md")
+
+packs <- od_query_packages(count = 10L)
+```
+
+# Pagination
+
+```{r}
+all_open <- od_paginate(
+  od_query_issues,
+  state = "Open",
+  page_size = 50L,
+  max_pages = 20L
+)
 ```
 
 # Low-level escape hatch

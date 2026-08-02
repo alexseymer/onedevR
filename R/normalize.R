@@ -2,7 +2,7 @@
 #'
 #' Accepts bare arrays, `{items: [...]}`, `{data: [...]}`, or a single object
 #' with an `id` field.
-#' @keywords internal
+#' @noRd
 .od_normalize_collection <- function(response) {
   if (is.null(response)) {
     return(list())
@@ -32,7 +32,7 @@
 }
 
 #' Default for tibble conversion of list endpoints
-#' @keywords internal
+#' @noRd
 .od_as_tibble_default <- function(as_tibble = NULL) {
   if (is.null(as_tibble)) {
     getOption("onedevr.as_tibble", TRUE)
@@ -53,6 +53,11 @@
 #' @param as_tibble If `TRUE`, return a tibble; if `FALSE`, a list of items.
 #'   Default: `getOption("onedevr.as_tibble", TRUE)`.
 #' @return A tibble, or a list when `as_tibble = FALSE`.
+#' @family utilities
+#' @examples
+#' \dontrun{
+#' od_as_tibble(list(list(id = 1, title = "x")))
+#' }
 #' @export
 od_as_tibble <- function(response, as_tibble = NULL) {
   items <- .od_normalize_collection(response)

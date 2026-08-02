@@ -22,11 +22,10 @@ query descriptions, file text). See [`NEWS.md`](NEWS.md).
 ```r
 # GitHub
 remotes::install_github("alexseymer/onedevR")
-
-# After the GitHub Pages site is live:
-# browseVignettes("onedevr")
-# or https://alexseymer.github.io/onedevR/
 ```
+
+Docs: [pkgdown site](https://alexseymer.github.io/onedevR/) · vignette
+`vignette("getting-started", package = "onedevr")`.
 
 ## Quick start
 

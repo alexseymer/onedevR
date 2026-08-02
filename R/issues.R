@@ -12,6 +12,11 @@
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
 #' @return A tibble of issues (default), or a list when `as_tibble = FALSE`.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_query_issues(state = "Open", count = 20L)
+#' }
 #' @export
 od_query_issues <- function(
   query = NULL,
@@ -57,6 +62,11 @@ od_query_issues <- function(
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only).
 #' @return Parsed issue object (list).
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_get_issue(145)
+#' }
 #' @export
 od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
@@ -78,6 +88,11 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only).
 #' @return Named list (or map) of field name → value.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_get_issue_fields(145)
+#' }
 #' @export
 od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
@@ -101,6 +116,11 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #'   [od_list_iterations()]; sent as `iterationIds` in the create body.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed created issue (list).
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_create_issue(title = "API test", description = "From R")
+#' }
 #' @export
 od_create_issue <- function(
   title,
@@ -148,6 +168,11 @@ od_create_issue <- function(
 #' @param title New title.
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_issue_set_title(145, "New title")
+#' }
 #' @export
 od_issue_set_title <- function(issue_number, title, conn = NULL) {
   conn <- .od_conn(conn)
@@ -169,6 +194,11 @@ od_issue_set_title <- function(issue_number, title, conn = NULL) {
 #' @param description New description (Markdown).
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_issue_set_description(145, "Updated body")
+#' }
 #' @export
 od_issue_set_description <- function(issue_number, description, conn = NULL) {
   conn <- .od_conn(conn)
@@ -190,6 +220,11 @@ od_issue_set_description <- function(issue_number, description, conn = NULL) {
 #' @param fields Named list of field values (installation-specific schema).
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_issue_set_fields(145, list(Priority = "Normal"))
+#' }
 #' @export
 od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
   conn <- .od_conn(conn)
@@ -214,6 +249,11 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #' @param state Target state name (e.g. `"Closed"`).
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_issue_transition_state(145, "Closed")
+#' }
 #' @export
 od_issue_transition_state <- function(issue_number, state, conn = NULL) {
   conn <- .od_conn(conn)
@@ -239,6 +279,11 @@ od_issue_transition_state <- function(issue_number, state, conn = NULL) {
 #' @param conn Connection list.
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
 #' @return A tibble of comments (default), or a list when `as_tibble = FALSE`.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_get_issue_comments(145)
+#' }
 #' @export
 od_get_issue_comments <- function(
   issue_number,
@@ -264,6 +309,11 @@ od_get_issue_comments <- function(
 #' @param content Comment body (Markdown).
 #' @param conn Connection list.
 #' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_add_issue_comment(145, "Looks good")
+#' }
 #' @export
 od_add_issue_comment <- function(issue_number, content, conn = NULL) {
   conn <- .od_conn(conn)
