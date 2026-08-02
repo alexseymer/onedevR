@@ -1,6 +1,6 @@
 # Read OneDev connection settings from environment variables
 
-Reads `ONEDEV_*` variables (see `.env.example` / `project_plan.md` §8)
+Reads `ONEDEV_*` variables (see `.Renviron.example` / `.env.example`)
 and returns a connection list used by high-level `od_*` helpers. Prefer
 an explicit
 [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
@@ -19,12 +19,19 @@ od_get_config(validate = TRUE)
 
 - validate:
 
-  If `TRUE` (default), error when host or token are missing.
+  If `TRUE` (default), error when host or credentials are missing.
 
 ## Value
 
-A named list with fields `host`, `api_base_url`, `token`, `repo_url`,
-`project_id`, `project_path`, `default_issue_state`, and `insecure_ssl`.
+A named list with fields `host`, `api_base_url`, `token`, `username`,
+`password`, `auth`, `repo_url`, `project_id`, `project_path`,
+`default_issue_state`, and `insecure_ssl`.
+
+## Details
+
+Auth: Bearer via `ONEDEV_API_TOKEN` (or aliases). Basic Auth when
+`ONEDEV_USERNAME` is set (password from `ONEDEV_PASSWORD`, or the token
+as password). Override with `ONEDEV_AUTH=bearer|basic`.
 
 ## Examples
 

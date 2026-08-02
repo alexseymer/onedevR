@@ -7,6 +7,7 @@ Get comments on a pull request
 ``` r
 od_get_pull_request_comments(
   pull_request_number,
+  as_tibble = NULL,
   conn = NULL,
   use_internal_id = FALSE
 )
@@ -18,6 +19,12 @@ od_get_pull_request_comments(
 
   UI number (`42` or `"#42"`).
 
+- as_tibble:
+
+  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
+  via
+  [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
+
 - conn:
 
   Connection list.
@@ -28,4 +35,4 @@ od_get_pull_request_comments(
 
 ## Value
 
-Parsed comments payload (list).
+A tibble of comments (default), or a list when `as_tibble = FALSE`.

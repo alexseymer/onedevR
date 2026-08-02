@@ -10,7 +10,10 @@ register it as the package default with
 ``` r
 od_connection(
   host,
-  token,
+  token = NULL,
+  username = NULL,
+  password = NULL,
+  auth = NULL,
   project_path = NULL,
   project_id = NULL,
   repo_url = NULL,
@@ -28,7 +31,21 @@ od_connection(
 
 - token:
 
-  API access token (Bearer).
+  API access token (Bearer), or Basic Auth password when
+  `auth = "basic"` and `password` is unset.
+
+- username:
+
+  Optional username for Basic Auth.
+
+- password:
+
+  Optional Basic Auth password (defaults to `token` when unset).
+
+- auth:
+
+  `"bearer"` or `"basic"`. Default: `"basic"` when `username` is set,
+  otherwise `"bearer"`.
 
 - project_path:
 
@@ -55,13 +72,18 @@ od_connection(
 
 - validate:
 
-  If `TRUE` (default), error when `host` or `token` are empty.
+  If `TRUE` (default), error when host/credentials are missing.
 
 ## Value
 
-A named list with the same fields as
-[`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md),
-classed as `od_connection`.
+A named list with connection fields, classed as `od_connection`.
+
+## Details
+
+Authentication is **Bearer** by default (`token`). For **Basic Auth**,
+set `username` (and `password`, or reuse `token` as the password) —
+`auth` is inferred as `"basic"` when `username` is non-empty, or set
+`auth = "basic"` explicitly.
 
 ## Examples
 
@@ -73,5 +95,12 @@ conn <- od_connection(
   project_path = "group/my-project"
 )
 od_get_issue(145, conn = conn)
+
+basic <- od_connection(
+  host = "https://git.example.test",
+  username = "alice",
+  password = "secret",
+  project_path = "group/my-project"
+)
 } # }
 ```

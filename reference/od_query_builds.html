@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Query OneDev builds</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.2.0/R/builds.R" class="external-link"><code>R/builds.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/R/builds.R" class="external-link"><code>R/builds.R</code></a></small>
       <div class="d-none name"><code>od_query_builds.Rd</code></div>
     </div>
 
@@ -54,6 +54,7 @@
 <span>  status <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  count <span class="op">=</span> <span class="fl">100L</span>,</span>
 <span>  offset <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  as_tibble <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,13 +81,18 @@ Combined with <code>query</code> via <code>and</code>.</p></dd>
 <dd><p>Result offset (default <code>0</code>).</p></dd>
 
 
+<dt id="arg-as-tibble">as_tibble<a class="anchor" aria-label="anchor" href="#arg-as-tibble"></a></dt>
+<dd><p>If <code>TRUE</code> (default via <code>options(onedevr.as_tibble)</code>), return
+a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>.</p></dd>
+
+
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
 <dd><p>Connection list from <code><a href="od_get_config.html">od_get_config()</a></code> / <code><a href="od_connection.html">od_connection()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Parsed API response (list).</p>
+    <p>A tibble of builds (default), or a list when <code>as_tibble = FALSE</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

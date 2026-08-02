@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <h1>Getting started with onedevr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.2.0/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
     </div>
 
@@ -135,7 +135,7 @@ list.</p>
 <p>Iterations (sprint/version-like objects in OneDev):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="fl">145</span>, iteration_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">iterations</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="fl">145</span>, iteration_ids <span class="op">=</span> <span class="va">iterations</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="builds-and-pull-requests">Builds and pull requests<a class="anchor" aria-label="anchor" href="#builds-and-pull-requests"></a>

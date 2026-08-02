@@ -86,5 +86,7 @@ Configure how onedevr talks to your OneDev instance.
   : Resolve the OneDev project path for a connection
 - [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md)
   : Resolve a OneDev project path to its numeric project id
+- [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md)
+  : Convert a OneDev collection payload to a tibble
 - [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
   : Low-level OneDev REST request

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +39,18 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.2.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="onedevr-030">onedevr 0.3.0<a class="anchor" aria-label="anchor" href="#onedevr-030"></a></h2>
+<div class="section level3">
+<h3 id="ergonomics-0-3-0">Ergonomics<a class="anchor" aria-label="anchor" href="#ergonomics-0-3-0"></a></h3>
+<ul><li>List/query getters return tibbles by default (<code><a href="../reference/od_query_issues.html">od_query_issues()</a></code>, <code><a href="../reference/od_query_builds.html">od_query_builds()</a></code>, <code><a href="../reference/od_query_pull_requests.html">od_query_pull_requests()</a></code>, <code><a href="../reference/od_list_iterations.html">od_list_iterations()</a></code>, comment/review getters). Opt out with <code>as_tibble = FALSE</code> or <code>options(onedevr.as_tibble = FALSE)</code>. Helper: <code><a href="../reference/od_as_tibble.html">od_as_tibble()</a></code>.</li>
+<li>Basic Auth: <code>od_connection(username =, password =)</code> and env vars <code>ONEDEV_USERNAME</code> / <code>ONEDEV_PASSWORD</code> / <code>ONEDEV_AUTH</code>. Bearer remains the default when only a token is set.</li>
+<li>Roadmap open questions settled (org, prefix, license, auth, return format).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="onedevr-020">onedevr 0.2.0<a class="anchor" aria-label="anchor" href="#onedevr-020"></a></h2>
 <div class="section level3">

@@ -5,7 +5,12 @@ Get comments on an issue
 ## Usage
 
 ``` r
-od_get_issue_comments(issue_number, conn = NULL, use_internal_id = FALSE)
+od_get_issue_comments(
+  issue_number,
+  as_tibble = NULL,
+  conn = NULL,
+  use_internal_id = FALSE
+)
 ```
 
 ## Arguments
@@ -13,6 +18,12 @@ od_get_issue_comments(issue_number, conn = NULL, use_internal_id = FALSE)
 - issue_number:
 
   UI number (`145` or `"#145"`).
+
+- as_tibble:
+
+  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
+  via
+  [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
 
 - conn:
 
@@ -24,4 +35,4 @@ od_get_issue_comments(issue_number, conn = NULL, use_internal_id = FALSE)
 
 ## Value
 
-Parsed comments payload (list).
+A tibble of comments (default), or a list when `as_tibble = FALSE`.

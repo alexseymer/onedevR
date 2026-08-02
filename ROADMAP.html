@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Roadmap</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.2.0/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
     </div>
 
 <div id="roadmap" class="section level1">
@@ -86,16 +86,13 @@
 <li><label><input type="checkbox" checked>CRAN name check: <code>onedevr</code> appears <strong>available</strong> (no CRAN page as of 2026-08-02). Actual CRAN submission deferred; GitHub (+ optional R-universe) is the distribution path for v0.1.0.</label></li>
 </ul></div>
 <div class="section level2">
-<h2 id="open-questions-plan-17">Open questions (plan §17)<a class="anchor" aria-label="anchor" href="#open-questions-plan-17"></a></h2>
-<ol style="list-style-type: decimal"><li>GitHub org — stay under <code>alexseymer</code> or move to a dedicated org?</li>
-<li>Function prefix: <code>od_*</code> (short) vs <code>onedev_*</code> (explicit)?</li>
-<li>CRAN, or GitHub + R-universe only? → <strong>v0.1.0: GitHub (+ pkgdown); CRAN later</strong>
-</li>
-<li>License: MIT vs GPL-3 (<code>gitlabr</code> itself uses GPL-3)? → <strong>MIT for now</strong>
-</li>
-<li>Basic Auth support in Phase 1 or deferred to Phase 2? → <strong>deferred (Bearer only)</strong>
-</li>
-<li>Return format: plain <code>list</code> vs. <code>tibble</code> (<code>gitlabr</code>-style)?</li>
+<h2 id="settled-questions-plan-17">Settled questions (plan §17)<a class="anchor" aria-label="anchor" href="#settled-questions-plan-17"></a></h2>
+<ol style="list-style-type: decimal"><li>GitHub org — stay under <code>alexseymer</code> (no dedicated org for now).</li>
+<li>Function prefix — keep <code>od_*</code> (mirrors <code>gitlabr</code>’s <code>gl_*</code>).</li>
+<li>Distribution — GitHub + pkgdown; CRAN later if demand warrants it.</li>
+<li>License — <strong>MIT</strong>.</li>
+<li>Auth — Bearer (token) and <strong>Basic Auth</strong> (<code>username</code> + <code>password</code>/<code>token</code>).</li>
+<li>Return format — list endpoints return <strong>tibbles</strong> by default (<code>options(onedevr.as_tibble = TRUE)</code> / <code>as_tibble = FALSE</code> to opt out); single-object getters and write helpers stay as lists.</li>
 </ol></div>
 </div>
 

@@ -10,7 +10,13 @@ or
 ## Usage
 
 ``` r
-od_list_iterations(project = NULL, count = 100L, offset = 0L, conn = NULL)
+od_list_iterations(
+  project = NULL,
+  count = 100L,
+  offset = 0L,
+  as_tibble = NULL,
+  conn = NULL
+)
 ```
 
 ## Arguments
@@ -29,6 +35,12 @@ od_list_iterations(project = NULL, count = 100L, offset = 0L, conn = NULL)
 
   Result offset (default `0`).
 
+- as_tibble:
+
+  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
+  via
+  [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
+
 - conn:
 
   Connection list from
@@ -38,4 +50,4 @@ od_list_iterations(project = NULL, count = 100L, offset = 0L, conn = NULL)
 
 ## Value
 
-Parsed API response (list).
+A tibble of iterations (default), or a list when `as_tibble = FALSE`.

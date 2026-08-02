@@ -10,6 +10,7 @@ od_query_issues(
   state = NULL,
   count = 100L,
   offset = 0L,
+  as_tibble = NULL,
   conn = NULL
 )
 ```
@@ -35,6 +36,13 @@ od_query_issues(
 
   Result offset (default `0`).
 
+- as_tibble:
+
+  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
+  via
+  [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md);
+  if `FALSE`, the raw list payload / items.
+
 - conn:
 
   Connection list from
@@ -44,5 +52,4 @@ od_query_issues(
 
 ## Value
 
-Parsed API response (list). Use the internal normalizer when you need a
-flat item list (handles `items` / `data` wrappers).
+A tibble of issues (default), or a list when `as_tibble = FALSE`.

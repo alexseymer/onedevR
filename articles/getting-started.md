@@ -67,7 +67,7 @@ Iterations (sprint/version-like objects in OneDev):
 ``` r
 
 iterations <- od_list_iterations()
-od_add_issue_iterations(145, iteration_ids = c(iterations[[1]]$id))
+od_add_issue_iterations(145, iteration_ids = iterations$id[1])
 ```
 
 ## Builds and pull requests

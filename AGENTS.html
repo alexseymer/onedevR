@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>AGENTS.md</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.2.0/AGENTS.md" class="external-link"><code>AGENTS.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/AGENTS.md" class="external-link"><code>AGENTS.md</code></a></small>
     </div>
 
 <div id="agentsmd" class="section level1">
@@ -76,7 +76,7 @@
 <h3 id="toolchain-baked-into-the-image">Toolchain baked into the image<a class="anchor" aria-label="anchor" href="#toolchain-baked-into-the-image"></a></h3>
 <ul><li>R <strong>≥ 4.6</strong> from <code>cloud.r-project.org/.../noble-cran40</code>
 </li>
-<li>Runtime: <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>
+<li>Runtime: <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>
 </li>
 <li>Dev/test: <code>testthat</code>, <code>mockery</code>, <code>withr</code>, <code>devtools</code>, <code>roxygen2</code>, <code>knitr</code>, <code>rmarkdown</code>
 </li>
@@ -97,7 +97,8 @@
 </div>
 <div class="section level3">
 <h3 id="config--live-integration-tests">Config / live integration tests<a class="anchor" aria-label="anchor" href="#config--live-integration-tests"></a></h3>
-<p>Copy <a href=".env.example"><code>.env.example</code></a> into <code>.Renviron</code> / <code>.env</code> (both are gitignored) or set Cursor Cloud secrets. Vars are documented in <code>project_plan.md</code> §8: <code>ONEDEV_HOST</code>, <code>ONEDEV_API_TOKEN</code> (or <code>ONEDEV_TOKEN</code> / <code>ONEDEV_ISSUE_REPORTER_API_KEY</code>), <code>ONEDEV_PROJECT_PATH</code>, <code>ONEDEV_PROJECT_ID</code>, <code>ONEDEV_REPO_URL</code>, <code>ONEDEV_ISSUE_STATE</code>, <code>ONEDEV_CURL_INSECURE</code>.</p>
+<p>Copy <a href=".env.example"><code>.env.example</code></a> into <code>.Renviron</code> / <code>.env</code> (both are gitignored) or set Cursor Cloud secrets. Vars are documented in <code>project_plan.md</code> §8: <code>ONEDEV_HOST</code>, <code>ONEDEV_API_TOKEN</code> (or <code>ONEDEV_TOKEN</code> / <code>ONEDEV_ISSUE_REPORTER_API_KEY</code>), <code>ONEDEV_USERNAME</code> / <code>ONEDEV_PASSWORD</code> / <code>ONEDEV_AUTH</code> (Basic Auth), <code>ONEDEV_PROJECT_PATH</code>, <code>ONEDEV_PROJECT_ID</code>, <code>ONEDEV_REPO_URL</code>, <code>ONEDEV_ISSUE_STATE</code>, <code>ONEDEV_CURL_INSECURE</code>.</p>
+<p>Runtime also includes <code>tibble</code> (list queries return tibbles by default).</p>
 <p>Unit tests are designed to run <strong>offline</strong> (env parsing via <code>withr</code>, HTTP paths stubbed via <code>mockery</code>) — no network or real OneDev server needed. Live integration tests are gated behind <code>ONEDEV_RUN_LIVE_TESTS=1</code> and additionally require a reachable OneDev instance plus a valid API token; without those, they skip.</p>
 </div>
 </div>
