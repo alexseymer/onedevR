@@ -4,11 +4,15 @@
 \alias{od_list_iterations}
 \title{List iterations for a OneDev project}
 \usage{
-od_list_iterations(project = NULL, conn = NULL)
+od_list_iterations(project = NULL, count = 100L, offset = 0L, conn = NULL)
 }
 \arguments{
 \item{project}{Optional project path or numeric id; defaults to the
 connection's project via \code{\link[=od_resolve_project_id]{od_resolve_project_id()}}.}
+
+\item{count}{Maximum number of results (default \code{100}).}
+
+\item{offset}{Result offset (default \code{0}).}
 
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }

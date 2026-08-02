@@ -1,0 +1,16 @@
+# Copy to .Renviron in this directory (gitignored) and fill in real values.
+# R loads .Renviron from the working directory / home automatically.
+#
+#   copy .Renviron.example .Renviron
+#
+# Then enable live tests with ONEDEV_RUN_LIVE_TESTS=1
+
+ONEDEV_HOST=https://git.example.test
+ONEDEV_API_TOKEN=your-personal-access-token
+ONEDEV_PROJECT_PATH=group/my-project
+ONEDEV_PROJECT_ID=42
+ONEDEV_REPO_URL=https://git.example.test/group/my-project.git
+ONEDEV_ISSUE_STATE=Open
+# ONEDEV_CURL_INSECURE=1
+
+# ONEDEV_RUN_LIVE_TESTS=1

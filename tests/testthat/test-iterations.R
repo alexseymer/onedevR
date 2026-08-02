@@ -1,13 +1,15 @@
-test_that("od_list_iterations GETs project iterations", {
+test_that("od_list_iterations GETs project iterations with paging", {
   skip_if_not_installed("mockery")
 
   mockery::stub(od_list_iterations, "od_resolve_project_id", function(project = NULL, conn = NULL) {
     expect_equal(project, "group/project")
     "20"
   })
-  mockery::stub(od_list_iterations, "od_request", function(method, endpoint, ...) {
+  mockery::stub(od_list_iterations, "od_request", function(method, endpoint, query = NULL, ...) {
     expect_equal(method, "GET")
     expect_equal(endpoint, "/projects/20/iterations")
+    expect_equal(query$count, 100L)
+    expect_equal(query$offset, 0L)
     list(list(id = 17L, name = "Version 2.x"))
   })
 

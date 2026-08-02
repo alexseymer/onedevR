@@ -6,15 +6,26 @@
 #'
 #' @param project Optional project path or numeric id; defaults to the
 #'   connection's project via [od_resolve_project_id()].
+#' @param count Maximum number of results (default `100`).
+#' @param offset Result offset (default `0`).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed API response (list).
 #' @export
-od_list_iterations <- function(project = NULL, conn = NULL) {
+od_list_iterations <- function(
+  project = NULL,
+  count = 100L,
+  offset = 0L,
+  conn = NULL
+) {
   conn <- .od_conn(conn)
   project_id <- od_resolve_project_id(project = project, conn = conn)
   od_request(
     method = "GET",
     endpoint = paste0("/projects/", project_id, "/iterations"),
+    query = list(
+      count = as.integer(count),
+      offset = as.integer(offset)
+    ),
     conn = conn
   )
 }

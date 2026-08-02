@@ -1,3 +1,15 @@
+# onedevr 0.1.1
+
+## Fixes (live OneDev hardening)
+
+* Quote state criteria as `"State" is "..."` (unquoted `State is` is rejected by
+  some OneDev query parsers).
+* Resolve issue/build/PR UI numbers with fallbacks: try `path#n`, then `#n` /
+  bare `n` (path-prefixed numbers return HTTP 406 on some instances).
+* Send required `offset` / `count` query params for
+  `GET /projects/{id}/iterations`.
+* Live tests discover real issue/build/PR numbers instead of assuming `#1`.
+
 # onedevr 0.1.0
 
 First public release covering Phases 1–3 of the roadmap.
