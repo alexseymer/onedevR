@@ -56,6 +56,25 @@ reference:
       - od_list_build_artifacts
       - od_download_build_artifact
       - od_resolve_build_id
+      - od_run_job
+      - od_rebuild_job
+      - od_cancel_job
+  - title: Packages
+    contents:
+      - od_query_packages
+      - od_get_pack
+      - od_get_pack_blobs
+      - od_get_pack_labels
+  - title: Repository
+    contents:
+      - od_list_branches
+      - od_get_branch
+      - od_get_default_branch
+      - od_list_tags
+      - od_get_tag
+      - od_query_commits
+      - od_get_commit
+      - od_get_file
   - title: Pull requests
     contents:
       - starts_with("od_query_pull")

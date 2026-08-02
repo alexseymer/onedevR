@@ -127,3 +127,19 @@ test_that("od_list_build_artifacts live", {
   skip_if(is.null(artifacts), "Artifact listing failed or unavailable")
   expect_true(inherits(artifacts, "tbl_df") || is.list(artifacts))
 })
+
+test_that("repository branches and commits live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  branches <- tryCatch(od_list_branches(), error = function(e) NULL)
+  skip_if(is.null(branches) || !length(branches), "No branches / no code read permission")
+  expect_true(is.character(branches))
+
+  tip <- od_get_branch(branches[[1]])
+  expect_true(nzchar(tip$commitHash %||% ""))
+
+  commits <- od_query_commits(count = 3L)
+  expect_s3_class(commits, "tbl_df")
+})

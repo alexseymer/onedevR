@@ -14,7 +14,7 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**v0.4.0** adds projects, users, build artifacts, and authenticated downloads.
+**v0.5.0** adds job run/rebuild/cancel, packages, and repository commit helpers.
 See [`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
 https://alexseymer.github.io/onedevR/.
 

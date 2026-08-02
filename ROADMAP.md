@@ -62,6 +62,6 @@ Estimate per plan: 1 week+.
 
 - [x] Ergonomics (v0.3.0): tibbles + Basic Auth
 - [x] Projects / users / build artifacts / download (v0.4.0)
-- [ ] Job run / rebuild / cancel wrappers
-- [ ] Packages (`PackResource`) and repository commit helpers
+- [x] Job run / rebuild / cancel (v0.5.0)
+- [x] Packages + repository commit helpers (v0.5.0)
 - [ ] R-universe / CRAN when demand warrants it

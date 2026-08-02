@@ -91,7 +91,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   if (length(query) > 0) {
     query <- query[!vapply(query, is.null, logical(1))]
     if (length(query) > 0) {
-      req <- do.call(httr2::req_url_query, c(list(req), query))
+      req <- rlang::exec(httr2::req_url_query, req, !!!query, .multi = "explode")
     }
   }
 
@@ -138,7 +138,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   if (length(query) > 0) {
     query <- query[!vapply(query, is.null, logical(1))]
     if (length(query) > 0) {
-      req <- do.call(httr2::req_url_query, c(list(req), query))
+      req <- rlang::exec(httr2::req_url_query, req, !!!query, .multi = "explode")
     }
   }
 

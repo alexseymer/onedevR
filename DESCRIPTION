@@ -1,14 +1,15 @@
 Package: onedevr
 Title: Access to the OneDev REST API
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person("Alex", "Seymer", email = "alex@seymer.at", role = c("aut", "cre"))
   )
 Description: R client for the OneDev project management REST API. Provides
     low-level request helpers and high-level convenience functions for
-    issues, projects, builds, and pull requests. Designed for self-hosted
-    OneDev instances. Modeled on gitlabr for the R API shape; OneDev
-    conventions follow the tod CLI (https://github.com/theonedev/tod).
+    issues, projects, builds, packages, repositories, and pull requests.
+    Designed for self-hosted OneDev instances. Modeled on gitlabr for the R
+    API shape; OneDev conventions follow the tod CLI
+    (https://github.com/theonedev/tod).
 License: MIT + file LICENSE
 URL: https://alexseymer.github.io/onedevR/,
     https://github.com/alexseymer/onedevR
