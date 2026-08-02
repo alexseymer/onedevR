@@ -17,10 +17,10 @@ instances.
 
 ## Status
 
-**Phase 4 (Publishing) is in progress** — pkgdown + release packaging
-for `v0.1.0`. API coverage through Phase 3 is on `main`. See
-[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md) and
-[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md).
+**v0.1.0 is released** (Phases 1–4). See
+[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md),
+[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md), and the
+docs site at <https://alexseymer.github.io/onedevR/>.
 
 ## Install
 

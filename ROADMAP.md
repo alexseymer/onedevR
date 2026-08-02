@@ -77,9 +77,8 @@ Estimate per plan: 1 week+.
 
 ## Phase 4 — Publishing
 
-GitHub Release v0.1.0 (checklist in
-[`RELEASE.md`](https://alexseymer.github.io/onedevR/RELEASE.md); cut
-after this branch lands on `main`)
+GitHub Release v0.1.0 —
+<https://github.com/alexseymer/onedevR/releases/tag/v0.1.0>
 
 pkgdown site (`_pkgdown.yml` + GitHub Pages workflow →
 <https://alexseymer.github.io/onedevR/>)
