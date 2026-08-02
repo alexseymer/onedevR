@@ -63,3 +63,80 @@ od_resolve_project_id <- function(project = NULL, conn = NULL) {
   }
   as.character(id)[1]
 }
+
+#' Query OneDev projects
+#'
+#' Calls `GET /projects` with OneDev's project query DSL (see
+#' `tod project get-query-description` on a live server).
+#'
+#' @param query Raw OneDev project query string.
+#' @param count Maximum number of results (default `100`).
+#' @param offset Result offset (default `0`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return A tibble of projects (default), or a list when `as_tibble = FALSE`.
+#' @export
+od_query_projects <- function(
+  query = NULL,
+  count = 100L,
+  offset = 0L,
+  as_tibble = NULL,
+  conn = NULL
+) {
+  conn <- .od_conn(conn)
+  query <- trimws(as.character(query %||% "")[1])
+  payload <- od_request(
+    method = "GET",
+    endpoint = "/projects",
+    query = list(
+      query = if (nzchar(query)) query else NULL,
+      count = as.integer(count),
+      offset = as.integer(offset)
+    ),
+    conn = conn
+  )
+  od_as_tibble(payload, as_tibble = as_tibble)
+}
+
+#' @rdname od_query_projects
+#' @export
+od_list_projects <- function(
+  query = NULL,
+  count = 100L,
+  offset = 0L,
+  as_tibble = NULL,
+  conn = NULL
+) {
+  od_query_projects(
+    query = query,
+    count = count,
+    offset = offset,
+    as_tibble = as_tibble,
+    conn = conn
+  )
+}
+#' Get a single project
+#'
+#' @param project Project path (e.g. `"group/my-project"`) or numeric id.
+#'   Defaults to the connection project.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed project object (list).
+#' @export
+od_get_project <- function(project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  od_request("GET", paste0("/projects/", project_id), conn = conn)
+}
+
+#' Get clone URLs for a project
+#'
+#' @param project Project path or numeric id; defaults to the connection project.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed clone-url payload (list; typically `httpUrl` / `sshUrl`).
+#' @export
+od_get_project_clone_url <- function(project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  od_request("GET", paste0("/projects/", project_id, "/clone-url"), conn = conn)
+}

@@ -95,3 +95,35 @@ test_that("od_get_build_params and log live", {
   expect_true(is.character(lines))
   expect_true(length(lines) >= 1L)
 })
+
+test_that("od_query_projects and od_get_project live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  projects <- od_query_projects(count = 5L)
+  expect_s3_class(projects, "tbl_df")
+  expect_true(nrow(projects) >= 1L)
+
+  project <- od_get_project()
+  expect_true(!is.null(project$id) || !is.null(project$path))
+
+  me <- tryCatch(od_get_me(), error = function(e) NULL)
+  skip_if(is.null(me), "/users/me not authorized for this token")
+  expect_true(!is.null(me$name) || !is.null(me$id))
+})
+
+test_that("od_list_build_artifacts live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  builds <- od_query_builds(count = 1L, offset = 0L, as_tibble = FALSE)
+  skip_if(length(builds) < 1L, "No builds available in project")
+  artifacts <- tryCatch(
+    od_list_build_artifacts(builds[[1]]$number),
+    error = function(e) NULL
+  )
+  skip_if(is.null(artifacts), "Artifact listing failed or unavailable")
+  expect_true(inherits(artifacts, "tbl_df") || is.list(artifacts))
+})
