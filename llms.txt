@@ -1,0 +1,190 @@
+# onedevR
+
+`onedevr` is an R client for the [OneDev](https://onedev.io) REST API —
+issues, projects, builds, and pull requests, for self-hosted OneDev
+instances.
+
+**References:**
+
+- R package shape (GitLab → R):
+  [`gitlabr`](https://thinkr-open.github.io/gitlabr/) — low-level
+  [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  escape hatch + high-level `od_*` wrappers, same idea as `gitlab` /
+  `gl_*`.
+- Working with OneDev itself: [`tod`](https://github.com/theonedev/tod)
+  (TheOneDev CLI) — issue/PR/build refs, query DSL, and API conventions
+  to mirror when implementing / extending `onedevr`.
+
+## Status
+
+**Phase 4 (Publishing) is in progress** — pkgdown + release packaging
+for `v0.1.0`. API coverage through Phase 3 is on `main`. See
+[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md) and
+[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md).
+
+## Install
+
+``` r
+
+# GitHub
+remotes::install_github("alexseymer/onedevR")
+
+# After the GitHub Pages site is live:
+# browseVignettes("onedevr")
+# or https://alexseymer.github.io/onedevR/
+```
+
+## Quick start
+
+``` r
+
+library(onedevr)
+
+# Env-based (fine for interactive use)
+Sys.setenv(
+  ONEDEV_HOST = "https://git.example.test",
+  ONEDEV_API_TOKEN = "your-token",
+  ONEDEV_PROJECT_PATH = "group/my-project"
+)
+
+od_query_issues(state = "Open")
+issue <- od_get_issue(145)
+fields <- od_get_issue_fields(145)
+
+# Or an explicit connection (preferred in scripts)
+conn <- od_connection(
+  host = "https://git.example.test",
+  token = Sys.getenv("ONEDEV_API_TOKEN"),
+  project_path = "group/my-project"
+)
+
+iterations <- od_list_iterations(conn = conn)
+created <- od_create_issue(
+  title = "API test",
+  description = "Created from R",
+  fields = list(Priority = "Normal"),
+  iteration_ids = c(iterations[[1]]$id),
+  conn = conn
+)
+
+od_issue_set_title(created$number, "API test (renamed)", conn = conn)
+od_issue_transition_state(created$number, "Closed", conn = conn)
+
+# Builds & pull requests
+builds <- od_query_builds(status = "SUCCESSFUL", count = 10L, conn = conn)
+pr <- od_get_pull_request(1, conn = conn)
+comments <- od_get_pull_request_comments(1, conn = conn)
+```
+
+Copy [`.env.example`](https://alexseymer.github.io/onedevR/.env.example)
+for the full variable list. Live integration tests are gated behind
+`ONEDEV_RUN_LIVE_TESTS=1`.
+
+## Design notes worth knowing up front
+
+- **Issue / build / PR numbers are UI numbers, not internal IDs.**
+  OneDev `#145` (what you see in the UI) is a different value from the
+  internal REST `id`. The high-level API always takes the UI number; see
+  §9 of the plan / `tod` ref formats.
+- **Some OneDev endpoints accept more than one payload shape** depending
+  on version/installation (e.g. issue creation, state transitions,
+  iterations). `onedevr` tries known variants rather than picking one
+  and failing silently on others — see §10 of the plan.
+- **Custom issue fields are installation-specific.** There’s no fixed
+  schema; `fields` is treated as a named list.
+- **Connections:** pass `conn = od_connection(...)` per call, or
+  `od_set_connection(conn)` for a package default. Env vars remain the
+  fallback.
+
+## Development
+
+``` r
+
+devtools::load_all()
+devtools::test()
+devtools::document()
+devtools::check()
+```
+
+## License
+
+MIT — see
+[`LICENSE.md`](https://alexseymer.github.io/onedevR/LICENSE.md).
+
+# Package index
+
+## Connection
+
+Configure how onedevr talks to your OneDev instance.
+
+- [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
+  : Build an explicit OneDev connection
+- [`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md)
+  : Set or clear the package-default OneDev connection
+- [`od_get_connection()`](https://alexseymer.github.io/onedevR/reference/od_get_connection.md)
+  : Get the package-default OneDev connection
+- [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
+  : Read OneDev connection settings from environment variables
+
+## Issues
+
+- [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md)
+  : Query OneDev issues
+- [`od_get_issue()`](https://alexseymer.github.io/onedevR/reference/od_get_issue.md)
+  : Get a single issue by UI number
+- [`od_get_issue_fields()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_fields.md)
+  : Get custom fields for an issue
+- [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
+  : Create a OneDev issue
+- [`od_issue_set_description()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_description.md)
+  : Set an issue description
+- [`od_issue_set_fields()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_fields.md)
+  : Set custom issue fields
+- [`od_issue_set_title()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_title.md)
+  : Set an issue title
+- [`od_issue_transition_state()`](https://alexseymer.github.io/onedevR/reference/od_issue_transition_state.md)
+  : Transition an issue to a new state
+- [`od_resolve_issue_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_issue_id.md)
+  : Resolve a UI issue number to the internal REST id
+- [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md)
+  : List iterations for a OneDev project
+- [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+  : Set iterations on an existing issue
+
+## Builds
+
+- [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md)
+  : Query OneDev builds
+- [`od_get_build()`](https://alexseymer.github.io/onedevR/reference/od_get_build.md)
+  : Get a single build by UI number
+- [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md)
+  : Resolve a UI build number to the internal REST id
+
+## Pull requests
+
+- [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md)
+  : Query OneDev pull requests
+- [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md)
+  : Get a single pull request by UI number
+- [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md)
+  : Get comments on a pull request
+- [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md)
+  : Get reviews on a pull request
+- [`od_resolve_pull_request_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_pull_request_id.md)
+  : Resolve a UI pull request number to the internal REST id
+
+## Projects & low-level
+
+- [`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
+  : Resolve the OneDev project path for a connection
+- [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md)
+  : Resolve a OneDev project path to its numeric project id
+- [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  : Low-level OneDev REST request
+
+# Articles
+
+### All vignettes
+
+- [Getting started with
+  onedevr](https://alexseymer.github.io/onedevR/articles/getting-started.md):
