@@ -40,15 +40,19 @@ Estimate per plan: 2–3 working days.
 Estimate per plan: 1 week+.
 
 ## Phase 4 — Publishing
-- [ ] GitHub Release v0.1.0
-- [ ] pkgdown site
-- [ ] CRAN submission or R-universe (optional — package name `onedevr` availability on CRAN not yet checked)
+- [ ] GitHub Release v0.1.0 (checklist in [`RELEASE.md`](RELEASE.md); cut after this
+  branch lands on `main`)
+- [x] pkgdown site (`_pkgdown.yml` + GitHub Pages workflow →
+  https://alexseymer.github.io/onedevR/)
+- [x] CRAN name check: `onedevr` appears **available** (no CRAN page as of
+  2026-08-02). Actual CRAN submission deferred; GitHub (+ optional R-universe)
+  is the distribution path for v0.1.0.
 
 ## Open questions (plan §17)
 
 1. GitHub org — stay under `alexseymer` or move to a dedicated org?
 2. Function prefix: `od_*` (short) vs `onedev_*` (explicit)?
-3. CRAN, or GitHub + R-universe only?
-4. License: MIT vs GPL-3 (`gitlabr` itself uses GPL-3)?
-5. Basic Auth support in Phase 1 or deferred to Phase 2?
+3. CRAN, or GitHub + R-universe only? → **v0.1.0: GitHub (+ pkgdown); CRAN later**
+4. License: MIT vs GPL-3 (`gitlabr` itself uses GPL-3)? → **MIT for now**
+5. Basic Auth support in Phase 1 or deferred to Phase 2? → **deferred (Bearer only)**
 6. Return format: plain `list` vs. `tibble` (`gitlabr`-style)?

@@ -7,6 +7,10 @@
 ^AGENTS\.md$
 ^project_plan\.md$
 ^ROADMAP\.md$
+^RELEASE\.md$
 ^LICENSE\.md$
 ^\.Renviron$
 ^.*\.tar\.gz$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
