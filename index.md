@@ -17,10 +17,10 @@ instances.
 
 ## Status
 
-**v0.1.0 is released** (Phases 1–4). See
+**v0.2.0** adds issue/PR comments, PR write actions, and build logs. See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md),
-[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md), and the
-docs site at <https://alexseymer.github.io/onedevR/>.
+[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md), and
+<https://alexseymer.github.io/onedevR/>.
 
 ## Install
 

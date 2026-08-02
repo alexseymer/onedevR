@@ -19,10 +19,16 @@ Configure how onedevr talks to your OneDev instance.
   : Query OneDev issues
 - [`od_get_issue()`](https://alexseymer.github.io/onedevR/reference/od_get_issue.md)
   : Get a single issue by UI number
+- [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
+  : Get comments on an issue
 - [`od_get_issue_fields()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_fields.md)
   : Get custom fields for an issue
 - [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
   : Create a OneDev issue
+- [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  : Add a comment to an issue
+- [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+  : Set iterations on an existing issue
 - [`od_issue_set_description()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_description.md)
   : Set an issue description
 - [`od_issue_set_fields()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_fields.md)
@@ -35,8 +41,6 @@ Configure how onedevr talks to your OneDev instance.
   : Resolve a UI issue number to the internal REST id
 - [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md)
   : List iterations for a OneDev project
-- [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
-  : Set iterations on an existing issue
 
 ## Builds
 
@@ -44,6 +48,10 @@ Configure how onedevr talks to your OneDev instance.
   : Query OneDev builds
 - [`od_get_build()`](https://alexseymer.github.io/onedevR/reference/od_get_build.md)
   : Get a single build by UI number
+- [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md)
+  : Get parameters for a build
+- [`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md)
+  : Get build log lines
 - [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md)
   : Resolve a UI build number to the internal REST id
 
@@ -57,6 +65,18 @@ Configure how onedevr talks to your OneDev instance.
   : Get comments on a pull request
 - [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md)
   : Get reviews on a pull request
+- [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md)
+  : Create a pull request
+- [`od_add_pull_request_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_pull_request_comment.md)
+  : Add a comment to a pull request
+- [`od_approve_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_approve_pull_request.md)
+  : Approve a pull request
+- [`od_request_pull_request_changes()`](https://alexseymer.github.io/onedevR/reference/od_request_pull_request_changes.md)
+  : Request changes on a pull request
+- [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md)
+  : Merge a pull request
+- [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md)
+  : Discard a pull request
 - [`od_resolve_pull_request_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_pull_request_id.md)
   : Resolve a UI pull request number to the internal REST id
 

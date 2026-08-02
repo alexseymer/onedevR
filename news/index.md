@@ -1,5 +1,25 @@
 # Changelog
 
+## onedevr 0.2.0
+
+### API depth
+
+- Issue comments:
+  [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md),
+  [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md).
+- Pull request writes:
+  [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md),
+  [`od_add_pull_request_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_pull_request_comment.md),
+  [`od_approve_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_approve_pull_request.md),
+  [`od_request_pull_request_changes()`](https://alexseymer.github.io/onedevR/reference/od_request_pull_request_changes.md),
+  [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
+  [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md).
+- Builds:
+  [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md),
+  [`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md)
+  (parses OneDev streaming binary logs to plain text).
+- Quote build status criteria as `"Status" is "..."`.
+
 ## onedevr 0.1.1
 
 ### Fixes (live OneDev hardening)
