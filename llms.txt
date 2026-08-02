@@ -76,16 +76,21 @@ pr <- od_get_pull_request(1, conn = conn)
 comments <- od_get_pull_request_comments(1, conn = conn)
 ```
 
-Copy [`.env.example`](https://alexseymer.github.io/onedevR/.env.example)
-for the full variable list. Live integration tests are gated behind
-`ONEDEV_RUN_LIVE_TESTS=1`.
+Copy
+[`.Renviron.example`](https://alexseymer.github.io/onedevR/.Renviron.example)
+to `.Renviron` (gitignored) and fill in your host/token/project.
+[`.env.example`](https://alexseymer.github.io/onedevR/.env.example) is
+the same variable list for non-R tooling. Live integration tests are
+gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
 
 ## Design notes worth knowing up front
 
 - **Issue / build / PR numbers are UI numbers, not internal IDs.**
   OneDev `#145` (what you see in the UI) is a different value from the
   internal REST `id`. The high-level API always takes the UI number; see
-  §9 of the plan / `tod` ref formats.
+  §9 of the plan / `tod` ref formats. Resolution tries `projectPath#n`,
+  then bare `#n` / `n` for OneDev versions that reject path-prefixed
+  numbers.
 - **Some OneDev endpoints accept more than one payload shape** depending
   on version/installation (e.g. issue creation, state transitions,
   iterations). `onedevr` tries known variants rather than picking one

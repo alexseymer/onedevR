@@ -1,9 +1,10 @@
 # Resolve a UI issue number to the internal REST id
 
 OneDev UI numbers (`#145`) differ from internal REST `id` values.
-High-level helpers always take the UI number; this function queries
-`"Number" is "<projectPath>#<n>"` (same convention as
-[tod](https://github.com/theonedev/tod)).
+High-level helpers always take the UI number. Tries
+`"Number" is "<projectPath>#<n>"` then bare `"#n"` / `"n"` (same idea as
+[tod](https://github.com/theonedev/tod); bare forms are required on some
+OneDev versions).
 
 ## Usage
 

@@ -10,6 +10,8 @@ follow the tod CLI (https://github.com/theonedev/tod).
 
 Useful links:
 
+- <https://alexseymer.github.io/onedevR/>
+
 - <https://github.com/alexseymer/onedevR>
 
 - Report bugs at <https://github.com/alexseymer/onedevR/issues>

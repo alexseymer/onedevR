@@ -10,7 +10,7 @@ or
 ## Usage
 
 ``` r
-od_list_iterations(project = NULL, conn = NULL)
+od_list_iterations(project = NULL, count = 100L, offset = 0L, conn = NULL)
 ```
 
 ## Arguments
@@ -20,6 +20,14 @@ od_list_iterations(project = NULL, conn = NULL)
   Optional project path or numeric id; defaults to the connection's
   project via
   [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md).
+
+- count:
+
+  Maximum number of results (default `100`).
+
+- offset:
+
+  Result offset (default `0`).
 
 - conn:
 

@@ -1,8 +1,7 @@
 # Resolve a UI build number to the internal REST id
 
-Same `"Number" is "<projectPath>#<n>"` convention as
-[`od_resolve_issue_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_issue_id.md)
-/ [tod](https://github.com/theonedev/tod).
+Same Number-query variants as
+[`od_resolve_issue_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_issue_id.md).
 
 ## Usage
 
