@@ -1,3 +1,15 @@
+# onedevr 0.4.0
+
+## API surface
+
+* Projects: `od_query_projects()` / `od_list_projects()`, `od_get_project()`,
+  `od_get_project_clone_url()`.
+* Users: `od_query_users()`, `od_get_user()`, `od_get_me()`,
+  `od_resolve_user_id()`, `od_get_user_emails()`.
+* Build artifacts: `od_list_build_artifacts()`, `od_download_build_artifact()`.
+* Markdown/resource download with auth: `od_download()` (tod-style; OneDev has
+  no separate issue-attachment list API).
+
 # onedevr 0.3.0
 
 ## Ergonomics

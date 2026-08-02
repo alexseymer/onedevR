@@ -57,3 +57,11 @@ Estimate per plan: 1 week+.
 6. Return format — list endpoints return **tibbles** by default
    (`options(onedevr.as_tibble = TRUE)` / `as_tibble = FALSE` to opt out);
    single-object getters and write helpers stay as lists.
+
+## Beyond Phase 4
+
+- [x] Ergonomics (v0.3.0): tibbles + Basic Auth
+- [x] Projects / users / build artifacts / download (v0.4.0)
+- [ ] Job run / rebuild / cancel wrappers
+- [ ] Packages (`PackResource`) and repository commit helpers
+- [ ] R-universe / CRAN when demand warrants it

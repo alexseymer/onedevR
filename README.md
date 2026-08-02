@@ -14,8 +14,8 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**v0.3.0** returns tibbles from list queries and supports Basic Auth. See
-[`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
+**v0.4.0** adds projects, users, build artifacts, and authenticated downloads.
+See [`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
 https://alexseymer.github.io/onedevR/.
 
 ## Install
@@ -68,6 +68,10 @@ od_issue_transition_state(created$number, "Closed", conn = conn)
 builds <- od_query_builds(status = "SUCCESSFUL", count = 10L, conn = conn)
 pr <- od_get_pull_request(1, conn = conn)
 comments <- od_get_pull_request_comments(1, conn = conn)
+
+# Projects & users
+projects <- od_query_projects(count = 20L, conn = conn)
+me <- od_get_me(conn = conn)
 ```
 
 Copy [`.Renviron.example`](.Renviron.example) to `.Renviron` (gitignored) and
