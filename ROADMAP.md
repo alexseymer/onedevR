@@ -23,16 +23,19 @@ Goal: package installable, tests green, issue CRUD functional.
 Estimate per plan: 1–2 working days.
 
 ## Phase 2 — Issues+
-- [ ] `od_get_issue_fields()`
-- [ ] `od_list_iterations()`, `od_add_issue_iterations()`
-- [ ] `od_create_issue(..., iteration_ids =)`
-- [ ] `od_connection()` — explicit connection object instead of env-only
+- [x] `od_get_issue_fields()`
+- [x] `od_list_iterations()`, `od_add_issue_iterations()`
+- [x] `od_create_issue(..., iteration_ids =)`
+- [x] `od_connection()` — explicit connection object instead of env-only
 
 Estimate per plan: 2–3 working days.
 
 ## Phase 3 — Builds & Pull Requests
-- [ ] `od_query_builds()`, `od_get_build()`, `od_resolve_build_id()`
-- [ ] Pull request listing / review comments (scope depends on what `~help/api` exposes per instance)
+- [x] `od_query_builds()`, `od_get_build()`, `od_resolve_build_id()`
+- [x] Pull request listing / review comments:
+  `od_query_pull_requests()`, `od_get_pull_request()`,
+  `od_resolve_pull_request_id()`, `od_get_pull_request_comments()`,
+  `od_get_pull_request_reviews()`
 
 Estimate per plan: 1 week+.
 

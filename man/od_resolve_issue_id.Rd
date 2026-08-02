@@ -9,7 +9,7 @@ od_resolve_issue_id(issue_number, conn = NULL)
 \arguments{
 \item{issue_number}{UI number (\code{145} or \code{"#145"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Character internal issue id.

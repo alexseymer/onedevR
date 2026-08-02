@@ -53,13 +53,13 @@ test_that("od_create_issue uses project id and tries variants", {
   skip_if_not_installed("mockery")
   mockery::stub(od_create_issue, "od_resolve_project_id", function(project = NULL, conn = NULL) "20")
 
-  seen <- list()
   mockery::stub(od_create_issue, ".od_request_with_variants", function(method, endpoint, body_variants, conn = NULL) {
     expect_equal(method, "POST")
     expect_equal(endpoint, "/issues")
     expect_equal(body_variants[[1]]$projectId, 20L)
     expect_equal(body_variants[[1]]$title, "API test")
     expect_equal(body_variants[[1]]$fields$Priority, "Normal")
+    expect_null(body_variants[[1]]$iterationIds)
     expect_equal(body_variants[[2]]$project$id, 20L)
     list(id = 1, number = 10, title = "API test")
   })
@@ -71,6 +71,40 @@ test_that("od_create_issue uses project id and tries variants", {
     conn = list()
   )
   expect_equal(created$number, 10)
+})
+
+test_that("od_create_issue includes iterationIds when given", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_create_issue, "od_resolve_project_id", function(...) "20")
+  mockery::stub(od_create_issue, ".od_request_with_variants", function(method, endpoint, body_variants, conn = NULL) {
+    expect_equal(body_variants[[1]]$iterationIds, list(17L, 18L))
+    expect_equal(body_variants[[2]]$iterationIds, list(17L, 18L))
+    list(id = 2, number = 11)
+  })
+
+  created <- od_create_issue(
+    title = "With iterations",
+    iteration_ids = c(17L, 18L),
+    conn = list()
+  )
+  expect_equal(created$number, 11)
+})
+
+test_that("od_get_issue_fields resolves UI number then GETs fields", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_get_issue_fields, "od_resolve_issue_id", function(issue_number, conn = NULL) {
+    expect_equal(issue_number, 145)
+    "283"
+  })
+  mockery::stub(od_get_issue_fields, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "GET")
+    expect_equal(endpoint, "/issues/283/fields")
+    list(Assignee = "developer", Type = "Task")
+  })
+
+  fields <- od_get_issue_fields(145, conn = list())
+  expect_equal(fields$Assignee, "developer")
+  expect_equal(fields$Type, "Task")
 })
 
 test_that("od_issue_transition_state tries three body variants", {

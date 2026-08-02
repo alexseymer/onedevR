@@ -3,11 +3,11 @@
 #' Uses `conn$project_path`, falling back to deriving a path from
 #' `conn$repo_url` (git remote URL).
 #'
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character project path (e.g. `"group/my-project"`).
 #' @export
 od_resolve_project_path <- function(conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
   path <- .od_first_non_empty(
     conn$project_path,
     .od_derive_project_path(conn$repo_url %||% "")
@@ -27,11 +27,11 @@ od_resolve_project_path <- function(conn = NULL) {
 #' value is returned without a network call.
 #'
 #' @param project Optional project path; defaults to [od_resolve_project_path()].
-#' @param conn Connection list from [od_get_config()] (or compatible).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Character project id.
 #' @export
 od_resolve_project_id <- function(project = NULL, conn = NULL) {
-  conn <- conn %||% od_get_config()
+  conn <- .od_conn(conn)
 
   if (is.null(project) || !nzchar(as.character(project)[1])) {
     if (nzchar(conn$project_id %||% "")) {

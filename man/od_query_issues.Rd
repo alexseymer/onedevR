@@ -24,7 +24,7 @@ via \code{and}. When both are empty, falls back to \code{conn$default_issue_stat
 
 \item{offset}{Result offset (default \code{0}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Parsed API response (list). Use the internal normalizer when you

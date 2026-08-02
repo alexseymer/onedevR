@@ -22,8 +22,8 @@ reference for how OneDev itself is driven — ref formats (`#n`,
 source over inventing OneDev API shapes.
 
 **Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is
-the *API target*, not the VCS). **Phase 1 (MVP issue core) is implemented** —
-`DESCRIPTION`, `R/`, `tests/testthat/`. Later phases are in
+the *API target*, not the VCS). **Phase 3 (Builds & PRs) is implemented** —
+builds, pull requests, comments, and reviews. Later phases are in
 [`ROADMAP.md`](ROADMAP.md); design detail remains in
 [`project_plan.md`](project_plan.md).
 

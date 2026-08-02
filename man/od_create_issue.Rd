@@ -4,7 +4,13 @@
 \alias{od_create_issue}
 \title{Create a OneDev issue}
 \usage{
-od_create_issue(title, description = "", fields = list(), conn = NULL)
+od_create_issue(
+  title,
+  description = "",
+  fields = list(),
+  iteration_ids = NULL,
+  conn = NULL
+)
 }
 \arguments{
 \item{title}{Issue title.}
@@ -13,7 +19,10 @@ od_create_issue(title, description = "", fields = list(), conn = NULL)
 
 \item{fields}{Named list of custom fields (installation-specific).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{iteration_ids}{Optional numeric iteration ids from
+\code{\link[=od_list_iterations]{od_list_iterations()}}; sent as \code{iterationIds} in the create body.}
+
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Parsed created issue (list).

@@ -7,7 +7,7 @@
 od_resolve_project_path(conn = NULL)
 }
 \arguments{
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} (or compatible).}
+\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
 Character project path (e.g. \code{"group/my-project"}).

@@ -1,9 +1,10 @@
 #' Read OneDev connection settings from environment variables
 #'
 #' Reads `ONEDEV_*` variables (see `.env.example` / `project_plan.md` §8) and
-#' returns a connection list used by high-level `od_*` helpers. Explicit
-#' connection objects (`od_connection()`, Phase 2) are not required in the
-#' MVP — pass `conn` overrides as a plain list with the same fields if needed.
+#' returns a connection list used by high-level `od_*` helpers. Prefer an
+#' explicit [od_connection()] (optionally registered with
+#' [od_set_connection()]) for scripts; env remains the fallback when no
+#' connection is passed or registered.
 #'
 #' @param validate If `TRUE` (default), error when host or token are missing.
 #'
