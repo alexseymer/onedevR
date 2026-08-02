@@ -81,9 +81,16 @@ A named list with connection fields, classed as `od_connection`.
 ## Details
 
 Authentication is **Bearer** by default (`token`). For **Basic Auth**,
-set `username` (and `password`, or reuse `token` as the password) —
+set `username` (and `password`, or reuse `token` as the password) -
 `auth` is inferred as `"basic"` when `username` is non-empty, or set
 `auth = "basic"` explicitly.
+
+## See also
+
+Other connection:
+[`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md),
+[`od_get_connection()`](https://alexseymer.github.io/onedevR/reference/od_get_connection.md),
+[`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md)
 
 ## Examples
 

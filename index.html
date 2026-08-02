@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,18 +72,15 @@
 <div class="section level2">
 <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a>
 </h2>
-<p><strong>v0.5.0</strong> adds job run/rebuild/cancel, packages, and repository commit helpers. See <a href="NEWS.html"><code>NEWS.md</code></a>, <a href="ROADMAP.html"><code>ROADMAP.md</code></a>, and <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a>.</p>
+<p><strong>v0.5.1</strong> hardens live query helpers (build/PR status keywords, pagination, query descriptions, file text). See <a href="NEWS.html"><code>NEWS.md</code></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># After the GitHub Pages site is live:</span></span>
-<span><span class="co"># browseVignettes("onedevr")</span></span>
-<span><span class="co"># or https://alexseymer.github.io/onedevR/</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span></code></pre></div>
+<p>Docs: <a href="https://alexseymer.github.io/onedevR/">pkgdown site</a> · vignette <code><a href="articles/getting-started.html">vignette("getting-started", package = "onedevr")</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -122,7 +119,7 @@
 <span><span class="fu"><a href="reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">created</span><span class="op">$</span><span class="va">number</span>, <span class="st">"Closed"</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Builds &amp; pull requests</span></span>
-<span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"SUCCESSFUL"</span>, count <span class="op">=</span> <span class="fl">10L</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
+<span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"successful"</span>, count <span class="op">=</span> <span class="fl">10L</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_pull_request.html">od_get_pull_request</a></span><span class="op">(</span><span class="fl">1</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_pull_request_comments.html">od_get_pull_request_comments</a></span><span class="op">(</span><span class="fl">1</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span></span>

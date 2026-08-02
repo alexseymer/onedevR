@@ -38,3 +38,19 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 ## Value
 
 Parsed JSON payload (list), or `NULL` for empty bodies.
+
+## See also
+
+Other utilities:
+[`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md),
+[`od_download()`](https://alexseymer.github.io/onedevR/reference/od_download.md),
+[`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md),
+[`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_request("GET", "/projects")
+} # }
+```

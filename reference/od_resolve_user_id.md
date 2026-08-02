@@ -24,3 +24,19 @@ od_resolve_user_id(user, conn = NULL)
 ## Value
 
 Character user id.
+
+## See also
+
+Other users:
+[`od_get_me()`](https://alexseymer.github.io/onedevR/reference/od_get_me.md),
+[`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md),
+[`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md),
+[`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_resolve_user_id("alice")
+} # }
+```

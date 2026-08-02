@@ -30,3 +30,18 @@ od_get_pack_labels(pack_id, as_tibble = NULL, conn = NULL)
 ## Value
 
 A tibble of labels (default), or a list when `as_tibble = FALSE`.
+
+## See also
+
+Other packages:
+[`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md),
+[`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md),
+[`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_get_pack_labels(1)
+} # }
+```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +39,31 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.1" id="onedevr-051">onedevr 0.5.1<a class="anchor" aria-label="anchor" href="#onedevr-051"></a></h2>
+<div class="section level3">
+<h3 id="dogfood-hardening-0-5-1">Dogfood hardening<a class="anchor" aria-label="anchor" href="#dogfood-hardening-0-5-1"></a></h3>
+<ul><li>Fix <code>od_query_builds(status =)</code>: OneDev uses keyword criteria (<code>successful</code>, <code>failed</code>, …), not <code>"Status" is "..."</code>. Enum spellings like <code>SUCCESSFUL</code> map automatically.</li>
+<li>
+<code>od_query_pull_requests(status = "open"|"merged"|"discarded")</code>.</li>
+<li>
+<code><a href="../reference/od_get_query_description.html">od_get_query_description()</a></code> for issue/build/PR/project DSL text.</li>
+<li>
+<code><a href="../reference/od_paginate.html">od_paginate()</a></code> to walk <code>offset</code>/<code>count</code> list endpoints.</li>
+<li>
+<code><a href="../reference/od_get_file_text.html">od_get_file_text()</a></code> decodes repository file content.</li>
+<li>Clone-url docs use actual field names <code>http</code> / <code>ssh</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-5-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-5-1"></a></h3>
+<ul><li>Expanded getting-started vignette (tibbles, status keywords, jobs, git, pagination).</li>
+<li>
+<code>\dontrun</code> examples and <code>@family</code> tags on exported helpers; pkgdown reference regrouped; internals use <code>@noRd</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="onedevr-050">onedevr 0.5.0<a class="anchor" aria-label="anchor" href="#onedevr-050"></a></h2>
 <div class="section level3">

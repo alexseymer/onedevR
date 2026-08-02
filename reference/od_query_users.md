@@ -44,3 +44,19 @@ od_query_users(
 ## Value
 
 A tibble of users (default), or a list when `as_tibble = FALSE`.
+
+## See also
+
+Other users:
+[`od_get_me()`](https://alexseymer.github.io/onedevR/reference/od_get_me.md),
+[`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md),
+[`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md),
+[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_query_users(count = 20L)
+} # }
+```

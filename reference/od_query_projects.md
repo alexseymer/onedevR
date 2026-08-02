@@ -53,3 +53,22 @@ od_list_projects(
 ## Value
 
 A tibble of projects (default), or a list when `as_tibble = FALSE`.
+
+## See also
+
+Other projects:
+[`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md),
+[`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md),
+[`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md),
+[`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_query_projects(count = 20L)
+} # }
+if (FALSE) { # \dontrun{
+od_list_projects(count = 20L)
+} # }
+```

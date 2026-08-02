@@ -21,3 +21,18 @@ od_set_connection(conn)
 ## Value
 
 `conn`, invisibly.
+
+## See also
+
+Other connection:
+[`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md),
+[`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md),
+[`od_get_connection()`](https://alexseymer.github.io/onedevR/reference/od_get_connection.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_set_connection(od_connection(host = "https://git.example.test", token = "t", project_path = "p"))
+} # }
+```

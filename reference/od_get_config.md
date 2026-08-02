@@ -33,6 +33,13 @@ Auth: Bearer via `ONEDEV_API_TOKEN` (or aliases). Basic Auth when
 `ONEDEV_USERNAME` is set (password from `ONEDEV_PASSWORD`, or the token
 as password). Override with `ONEDEV_AUTH=bearer|basic`.
 
+## See also
+
+Other connection:
+[`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md),
+[`od_get_connection()`](https://alexseymer.github.io/onedevR/reference/od_get_connection.md),
+[`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md)
+
 ## Examples
 
 ``` r

@@ -761,9 +761,7 @@ Analog für Builds (Phase 3):
 | A        | `projectId` (scalar)       |
 | B        | `project = list(id = ...)` |
 
-→
-[`.od_request_with_variants()`](https://alexseymer.github.io/onedevR/reference/dot-od_request_with_variants.md)
-probiert beide.
+→ `.od_request_with_variants()` probiert beide.
 
 ### State Transition: drei Body-Formen
 
@@ -1146,7 +1144,7 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 
 | Risiko | Mitigation |
 |----|----|
-| OneDev API ändert Payload-Formate zwischen Versionen | [`.od_request_with_variants()`](https://alexseymer.github.io/onedevR/reference/dot-od_request_with_variants.md); Versionshinweis in README |
+| OneDev API ändert Payload-Formate zwischen Versionen | `.od_request_with_variants()`; Versionshinweis in README |
 | Custom Fields installationsabhängig | Kein festes Schema; `fields` als named list |
 | Bearer vs Basic Auth | Beide unterstützen; Bearer als Default, Basic als Option |
 | Paketname `onedevr` auf CRAN verfügbar? | Vor Submission prüfen; Alternative: `onedevapi` |

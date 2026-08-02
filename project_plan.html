@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>onedevr — Plan für ein R-Paket (OneDev REST API Client)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.5.0/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
     </div>
 
 <div id="onedevr--plan-für-ein-r-paket-onedev-rest-api-client" class="section level1">
@@ -492,7 +492,7 @@
 <span>  <span class="va">repo_url</span> <span class="op">&lt;-</span> <span class="fu">.od_trim_env</span><span class="op">(</span><span class="st">"ONEDEV_REPO_URL"</span><span class="op">)</span></span>
 <span>  <span class="va">project_path</span> <span class="op">&lt;-</span> <span class="fu">.od_first_non_empty</span><span class="op">(</span></span>
 <span>    <span class="fu">.od_trim_env</span><span class="op">(</span><span class="st">"ONEDEV_PROJECT_PATH"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="reference/dot-od_derive_project_path.html">.od_derive_project_path</a></span><span class="op">(</span><span class="va">repo_url</span><span class="op">)</span></span>
+<span>    <span class="fu">.od_derive_project_path</span><span class="op">(</span><span class="va">repo_url</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="va">project_id</span> <span class="op">&lt;-</span> <span class="fu">.od_trim_env</span><span class="op">(</span><span class="st">"ONEDEV_PROJECT_ID"</span><span class="op">)</span></span>
 <span>  <span class="va">issue_state</span> <span class="op">&lt;-</span> <span class="fu">.od_trim_env</span><span class="op">(</span><span class="st">"ONEDEV_ISSUE_STATE"</span><span class="op">)</span></span>
@@ -551,7 +551,7 @@
 <span>  <span class="va">project_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_resolve_project_path.html">od_resolve_project_path</a></span><span class="op">(</span>conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span>  <span class="va">numeric_part</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"^#"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/trimws.html" class="external-link">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">issue_number</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, perl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">project_path</span>, <span class="st">"#"</span>, <span class="va">numeric_part</span><span class="op">)</span></span>
-<span>  <span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-od_normalize_collection.html">.od_normalize_collection</a></span><span class="op">(</span></span>
+<span>  <span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu">.od_normalize_collection</span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span></span>
 <span>      query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'"Number" is "'</span>, <span class="va">ref</span>, <span class="st">'"'</span><span class="op">)</span>,</span>
 <span>      count <span class="op">=</span> <span class="fl">1L</span>,</span>
@@ -583,7 +583,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Create Issue — zwei gängige Body-Formen:</span></span>
-<span><span class="fu"><a href="reference/dot-od_request_with_variants.html">.od_request_with_variants</a></span><span class="op">(</span></span>
+<span><span class="fu">.od_request_with_variants</span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"POST"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="st">"/issues"</span>,</span>
 <span>  body_variants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -594,7 +594,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># State Transition — drei gängige Body-Formen:</span></span>
-<span><span class="fu"><a href="reference/dot-od_request_with_variants.html">.od_request_with_variants</a></span><span class="op">(</span></span>
+<span><span class="fu">.od_request_with_variants</span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"POST"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span>, <span class="st">"/state-transitions"</span><span class="op">)</span>,</span>
 <span>  body_variants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -641,7 +641,7 @@
 <span>  <span class="va">conn</span> <span class="op">&lt;-</span> <span class="va">conn</span> <span class="op"><a href="https://rdrr.io/r/base/Control.html" class="external-link">%||%</a></span> <span class="fu"><a href="reference/od_get_config.html">od_get_config</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="va">issue_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_resolve_issue_id.html">od_resolve_issue_id</a></span><span class="op">(</span><span class="va">issue_number</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu"><a href="reference/dot-od_request_with_variants.html">.od_request_with_variants</a></span><span class="op">(</span></span>
+<span>  <span class="fu">.od_request_with_variants</span><span class="op">(</span></span>
 <span>    method <span class="op">=</span> <span class="st">"POST"</span>,</span>
 <span>    endpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span>, <span class="st">"/iterations"</span><span class="op">)</span>,</span>
 <span>    body_variants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -841,7 +841,7 @@
 <code>projectId</code> (scalar)</td>
 </tr><tr><td>B</td>
 <td><code>project = list(id = ...)</code></td>
-</tr></tbody></table><p>→ <code><a href="reference/dot-od_request_with_variants.html">.od_request_with_variants()</a></code> probiert beide.</p>
+</tr></tbody></table><p>→ <code>.od_request_with_variants()</code> probiert beide.</p>
 </div>
 <div class="section level3">
 <h3 id="state-transition-drei-body-formen">State Transition: drei Body-Formen<a class="anchor" aria-label="anchor" href="#state-transition-drei-body-formen"></a></h3>
@@ -1267,7 +1267,7 @@
 <th>Mitigation</th>
 </tr></thead><tbody><tr><td>OneDev API ändert Payload-Formate zwischen Versionen</td>
 <td>
-<code><a href="reference/dot-od_request_with_variants.html">.od_request_with_variants()</a></code>; Versionshinweis in README</td>
+<code>.od_request_with_variants()</code>; Versionshinweis in README</td>
 </tr><tr><td>Custom Fields installationsabhängig</td>
 <td>Kein festes Schema; <code>fields</code> als named list</td>
 </tr><tr><td>Bearer vs Basic Auth</td>

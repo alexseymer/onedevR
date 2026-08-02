@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Set custom issue fields</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.5.0/R/issues.R" class="external-link"><code>R/issues.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/R/issues.R" class="external-link"><code>R/issues.R</code></a></small>
       <div class="d-none name"><code>od_issue_set_fields.Rd</code></div>
     </div>
 
@@ -72,7 +72,30 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Parsed API response.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other issues:
+<code><a href="od_add_issue_comment.html">od_add_issue_comment()</a></code>,
+<code><a href="od_add_issue_iterations.html">od_add_issue_iterations()</a></code>,
+<code><a href="od_create_issue.html">od_create_issue()</a></code>,
+<code><a href="od_get_issue.html">od_get_issue()</a></code>,
+<code><a href="od_get_issue_comments.html">od_get_issue_comments()</a></code>,
+<code><a href="od_get_issue_fields.html">od_get_issue_fields()</a></code>,
+<code><a href="od_issue_set_description.html">od_issue_set_description()</a></code>,
+<code><a href="od_issue_set_title.html">od_issue_set_title()</a></code>,
+<code><a href="od_issue_transition_state.html">od_issue_transition_state()</a></code>,
+<code><a href="od_list_iterations.html">od_list_iterations()</a></code>,
+<code><a href="od_query_issues.html">od_query_issues()</a></code>,
+<code><a href="od_resolve_issue_id.html">od_resolve_issue_id()</a></code></p></div>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">od_issue_set_fields</span><span class="op">(</span><span class="fl">145</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Priority <span class="op">=</span> <span class="st">"Normal"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

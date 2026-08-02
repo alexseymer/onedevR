@@ -44,3 +44,18 @@ od_query_packages(
 ## Value
 
 A tibble of packages (default), or a list when `as_tibble = FALSE`.
+
+## See also
+
+Other packages:
+[`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md),
+[`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md),
+[`od_get_pack_labels()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_labels.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_query_packages(count = 20L)
+} # }
+```

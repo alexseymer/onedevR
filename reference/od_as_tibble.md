@@ -32,3 +32,19 @@ A tibble, or a list when `as_tibble = FALSE`.
 
 The package default is controlled by
 `options(onedevr.as_tibble = TRUE)`.
+
+## See also
+
+Other utilities:
+[`od_download()`](https://alexseymer.github.io/onedevR/reference/od_download.md),
+[`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md),
+[`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md),
+[`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_as_tibble(list(list(id = 1, title = "x")))
+} # }
+```

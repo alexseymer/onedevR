@@ -11,6 +11,9 @@ shape; OneDev conventions follow the tod CLI
 
 Useful links:
 
+- Vignette:
+  [`vignette("getting-started", package = "onedevr")`](https://alexseymer.github.io/onedevR/articles/getting-started.md)
+
 - <https://alexseymer.github.io/onedevR/>
 
 - <https://github.com/alexseymer/onedevR>

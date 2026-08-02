@@ -2,7 +2,8 @@
 
 ## Connection
 
-Configure how onedevr talks to your OneDev instance.
+Configure how onedevr talks to your OneDev instance (env, explicit
+connection, Basic Auth or Bearer).
 
 - [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
   : Build an explicit OneDev connection
@@ -14,6 +15,8 @@ Configure how onedevr talks to your OneDev instance.
   : Read OneDev connection settings from environment variables
 
 ## Issues
+
+Query and mutate issues, fields, comments, and iterations.
 
 - [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md)
   : Query OneDev issues
@@ -42,46 +45,9 @@ Configure how onedevr talks to your OneDev instance.
 - [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md)
   : List iterations for a OneDev project
 
-## Projects & low-level
+## Builds and jobs
 
-- [`od_query_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md)
-  [`od_list_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md)
-  : Query OneDev projects
-- [`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md)
-  : Get a single project
-- [`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md)
-  : Get clone URLs for a project
-- [`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
-  : Resolve the OneDev project path for a connection
-- [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md)
-  : Resolve a OneDev project path to its numeric project id
-- [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md)
-  : Convert a OneDev collection payload to a tibble
-- [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
-  : Low-level OneDev REST request
-- [`od_download()`](https://alexseymer.github.io/onedevR/reference/od_download.md)
-  : Download a markdown-referenced resource with OneDev auth
-
-## Users
-
-- [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md)
-  : Query OneDev users
-
-- [`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md)
-  : Get a single user
-
-- [`od_get_me()`](https://alexseymer.github.io/onedevR/reference/od_get_me.md)
-  :
-
-  Get the authenticated user (`/users/me`)
-
-- [`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
-  : Resolve a OneDev login name to its numeric user id
-
-- [`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md)
-  : Get email addresses for a user
-
-## Builds
+Query builds, logs, artifacts, and run/rebuild/cancel jobs.
 
 - [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md)
   : Query OneDev builds
@@ -104,37 +70,9 @@ Configure how onedevr talks to your OneDev instance.
 - [`od_cancel_job()`](https://alexseymer.github.io/onedevR/reference/od_cancel_job.md)
   : Cancel a running build
 
-## Packages
-
-- [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md)
-  : Query OneDev packages
-- [`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md)
-  : Get a package by id
-- [`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md)
-  : Get blobs for a package
-- [`od_get_pack_labels()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_labels.md)
-  : Get labels for a package
-
-## Repository
-
-- [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md)
-  : List branches in a project
-- [`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md)
-  : Get branch tip metadata
-- [`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md)
-  : Get the default branch name
-- [`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md)
-  : List tags in a project
-- [`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md)
-  : Get tag tip metadata
-- [`od_query_commits()`](https://alexseymer.github.io/onedevR/reference/od_query_commits.md)
-  : Query repository commits
-- [`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md)
-  : Get a single commit
-- [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md)
-  : Get a file at a revision
-
 ## Pull requests
+
+List, review, and write pull requests.
 
 - [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md)
   : Query OneDev pull requests
@@ -158,3 +96,88 @@ Configure how onedevr talks to your OneDev instance.
   : Discard a pull request
 - [`od_resolve_pull_request_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_pull_request_id.md)
   : Resolve a UI pull request number to the internal REST id
+
+## Projects
+
+Resolve and inspect OneDev projects.
+
+- [`od_query_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md)
+  [`od_list_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md)
+  : Query OneDev projects
+- [`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md)
+  : Get a single project
+- [`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md)
+  : Get clone URLs for a project
+- [`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
+  : Resolve the OneDev project path for a connection
+- [`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md)
+  : Resolve a OneDev project path to its numeric project id
+
+## Users
+
+- [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md)
+  : Query OneDev users
+
+- [`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md)
+  : Get a single user
+
+- [`od_get_me()`](https://alexseymer.github.io/onedevR/reference/od_get_me.md)
+  :
+
+  Get the authenticated user (`/users/me`)
+
+- [`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
+  : Resolve a OneDev login name to its numeric user id
+
+- [`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md)
+  : Get email addresses for a user
+
+## Packages
+
+- [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md)
+  : Query OneDev packages
+- [`od_get_pack()`](https://alexseymer.github.io/onedevR/reference/od_get_pack.md)
+  : Get a package by id
+- [`od_get_pack_blobs()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_blobs.md)
+  : Get blobs for a package
+- [`od_get_pack_labels()`](https://alexseymer.github.io/onedevR/reference/od_get_pack_labels.md)
+  : Get labels for a package
+
+## Repository
+
+Branches, tags, commits, and file contents.
+
+- [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md)
+  : List branches in a project
+- [`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md)
+  : Get branch tip metadata
+- [`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md)
+  : Get the default branch name
+- [`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md)
+  : List tags in a project
+- [`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md)
+  : Get tag tip metadata
+- [`od_query_commits()`](https://alexseymer.github.io/onedevR/reference/od_query_commits.md)
+  : Query repository commits
+- [`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md)
+  : Get a single commit
+- [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md)
+  : Get a file at a revision
+- [`od_get_file_text()`](https://alexseymer.github.io/onedevR/reference/od_get_file_text.md)
+  : Read a repository file as text
+
+## Utilities
+
+Tibbles, pagination, query DSL help, downloads, and the low-level HTTP
+escape hatch.
+
+- [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md)
+  : Convert a OneDev collection payload to a tibble
+- [`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md)
+  : Paginate a list/query helper until exhausted
+- [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+  : Fetch OneDev query DSL description text
+- [`od_download()`](https://alexseymer.github.io/onedevR/reference/od_download.md)
+  : Download a markdown-referenced resource with OneDev auth
+- [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  : Low-level OneDev REST request

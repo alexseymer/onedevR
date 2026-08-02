@@ -31,3 +31,19 @@ od_download(resource_url, path, conn = NULL)
 ## Value
 
 Normalized destination path, invisibly.
+
+## See also
+
+Other utilities:
+[`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md),
+[`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md),
+[`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md),
+[`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_download("/~downloads/file.png", tempfile())
+} # }
+```

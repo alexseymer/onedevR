@@ -25,3 +25,19 @@ od_get_project(project = NULL, conn = NULL)
 ## Value
 
 Parsed project object (list).
+
+## See also
+
+Other projects:
+[`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md),
+[`od_query_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md),
+[`od_resolve_project_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_id.md),
+[`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_get_project()
+} # }
+```

@@ -109,4 +109,7 @@ Job run / rebuild / cancel (v0.5.0)
 
 Packages + repository commit helpers (v0.5.0)
 
+Dogfood hardening (v0.5.1): build/PR status keywords, pagination, query
+DSL
+
 R-universe / CRAN when demand warrants it

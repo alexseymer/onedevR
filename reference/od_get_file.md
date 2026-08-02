@@ -31,4 +31,24 @@ od_get_file(revision, path, project = NULL, conn = NULL)
 
 ## Value
 
-Parsed file payload (list; typically includes base64 content).
+Parsed file payload (list; includes `base64Content`).
+
+## See also
+
+Other repository:
+[`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md),
+[`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md),
+[`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md),
+[`od_get_file_text()`](https://alexseymer.github.io/onedevR/reference/od_get_file_text.md),
+[`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md),
+[`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md),
+[`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md),
+[`od_query_commits()`](https://alexseymer.github.io/onedevR/reference/od_query_commits.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_get_file("main", "README.md")
+} # }
+```

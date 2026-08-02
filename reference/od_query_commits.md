@@ -51,3 +51,23 @@ od_query_commits(
 ## Value
 
 A tibble of commits (default), or a list when `as_tibble = FALSE`.
+
+## See also
+
+Other repository:
+[`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md),
+[`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md),
+[`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md),
+[`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md),
+[`od_get_file_text()`](https://alexseymer.github.io/onedevR/reference/od_get_file_text.md),
+[`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md),
+[`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md),
+[`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+od_query_commits(count = 10L)
+} # }
+```
