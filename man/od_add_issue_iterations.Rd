@@ -18,8 +18,8 @@ Parsed API response.
 }
 \description{
 Calls \code{POST /issues/{id}/iterations}. Tries known body shapes (raw id list
-and \verb{\{iterationIds: [...]\}}) via the variants helper — see
-\code{project_plan.md} §10.
+and \verb{\{iterationIds: [...]\}}) via the variants helper - see
+\code{project_plan.md} sec 10.
 }
 \examples{
 \dontrun{

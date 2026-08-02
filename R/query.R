@@ -1,6 +1,6 @@
 #' Fetch OneDev query DSL description text
 #'
-#' Calls `/~api/tod/get-{kind}-query-description` (same source `tod … get-query-description`
+#' Calls `/~api/tod/get-{kind}-query-description` (same source `tod ... get-query-description`
 #' uses). Useful when crafting `query =` strings for list helpers.
 #'
 #' @param kind One of `"issue"`, `"build"`, `"pull_request"`, or `"project"`.

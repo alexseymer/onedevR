@@ -15,11 +15,11 @@ od_get_issue_fields(issue_number, conn = NULL, use_internal_id = FALSE)
 id (debugging only).}
 }
 \value{
-Named list (or map) of field name → value.
+Named list (or map) of field name -> value.
 }
 \description{
 Calls \code{GET /issues/{id}/fields}. Field names and allowed values are
-installation-specific (see \code{project_plan.md} §10).
+installation-specific (see \code{project_plan.md} sec 10).
 }
 \examples{
 \dontrun{

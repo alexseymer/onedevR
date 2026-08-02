@@ -18,7 +18,7 @@ Parsed API response.
 }
 \description{
 Tries the known body shapes (\code{list(state=)}, \code{list(transition=)}, raw
-string) — see \code{project_plan.md} §10 and \verb{tod issue change-state}.
+string) - see \code{project_plan.md} sec 10 and \verb{tod issue change-state}.
 }
 \examples{
 \dontrun{

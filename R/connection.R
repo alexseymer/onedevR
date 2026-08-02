@@ -54,7 +54,7 @@
 #' package default with [od_set_connection()].
 #'
 #' Authentication is **Bearer** by default (`token`). For **Basic Auth**, set
-#' `username` (and `password`, or reuse `token` as the password) — `auth` is
+#' `username` (and `password`, or reuse `token` as the password) - `auth` is
 #' inferred as `"basic"` when `username` is non-empty, or set `auth = "basic"`
 #' explicitly.
 #'

@@ -42,8 +42,8 @@ od_list_iterations <- function(
 #' Set iterations on an existing issue
 #'
 #' Calls `POST /issues/{id}/iterations`. Tries known body shapes (raw id list
-#' and `{iterationIds: [...]}`) via the variants helper — see
-#' `project_plan.md` §10.
+#' and `{iterationIds: [...]}`) via the variants helper - see
+#' `project_plan.md` sec 10.
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
 #' @param iteration_ids Numeric iteration ids from [od_list_iterations()].

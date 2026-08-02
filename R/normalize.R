@@ -7,7 +7,7 @@
   if (is.null(response)) {
     return(list())
   }
-  # Already a tibble/data.frame from od_as_tibble() — treat as rows.
+  # Already a tibble/data.frame from od_as_tibble() - treat as rows.
   if (inherits(response, "data.frame")) {
     if (!nrow(response)) {
       return(list())

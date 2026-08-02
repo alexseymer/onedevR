@@ -18,7 +18,7 @@ od_get_query_description(
 Character scalar (HTML-ish grammar text from the server).
 }
 \description{
-Calls \verb{/~api/tod/get-\{kind\}-query-description} (same source \verb{tod … get-query-description}
+Calls \verb{/~api/tod/get-\{kind\}-query-description} (same source \verb{tod ... get-query-description}
 uses). Useful when crafting \verb{query =} strings for list helpers.
 }
 \examples{

@@ -81,13 +81,13 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' Get custom fields for an issue
 #'
 #' Calls `GET /issues/{id}/fields`. Field names and allowed values are
-#' installation-specific (see `project_plan.md` §10).
+#' installation-specific (see `project_plan.md` sec 10).
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only).
-#' @return Named list (or map) of field name → value.
+#' @return Named list (or map) of field name -> value.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -243,7 +243,7 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #' Transition an issue to a new state
 #'
 #' Tries the known body shapes (`list(state=)`, `list(transition=)`, raw
-#' string) — see `project_plan.md` §10 and `tod issue change-state`.
+#' string) - see `project_plan.md` sec 10 and `tod issue change-state`.
 #'
 #' @param issue_number UI number.
 #' @param state Target state name (e.g. `"Closed"`).

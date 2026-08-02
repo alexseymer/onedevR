@@ -25,7 +25,7 @@
 #' @param kind One of `"issue"`, `"build"`, `"pull"`.
 #' @param number UI number.
 #' @param conn Connection list.
-#' @param label Human label for errors (`"issue"`, `"build"`, …).
+#' @param label Human label for errors (`"issue"`, `"build"`, ...).
 #' @return Character internal id.
 #' @noRd
 .od_resolve_number_id <- function(kind, number, conn, label) {

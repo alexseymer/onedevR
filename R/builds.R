@@ -1,8 +1,8 @@
 #' Map a build status filter to OneDev query DSL
 #'
-#' OneDev build queries use keyword criteria (`successful`, `failed`, …), not
+#' OneDev build queries use keyword criteria (`successful`, `failed`, ...), not
 #' a `"Status" is "..."` field. Accepts those keywords or common enum spellings
-#' (`SUCCESSFUL`, `FAILED`, `TIMED_OUT`, …).
+#' (`SUCCESSFUL`, `FAILED`, `TIMED_OUT`, ...).
 #' @noRd
 .od_build_status_clause <- function(status) {
   status <- trimws(as.character(status %||% "")[1])
@@ -33,7 +33,7 @@
         "Unknown build status '", status, "'. ",
         "Use a OneDev keyword: successful, failed, cancelled, timed out, ",
         "finished, running, waiting, pending ",
-        "(or enum-like SUCCESSFUL / FAILED / …)."
+        "(or enum-like SUCCESSFUL / FAILED / ...)."
       ),
       call. = FALSE
     )
@@ -46,7 +46,7 @@
 #' @param query Raw OneDev build query string (see [od_get_query_description()]
 #'   with `kind = "build"`, or `tod build get-query-description`). Example:
 #'   `'"Number" is "group/project#100"'`.
-#' @param status Optional status filter. OneDev uses keyword criteria — pass
+#' @param status Optional status filter. OneDev uses keyword criteria - pass
 #'   `"successful"`, `"failed"`, `"cancelled"`, `"timed out"`, `"finished"`,
 #'   `"running"`, `"waiting"`, or `"pending"` (enum spellings like
 #'   `"SUCCESSFUL"` are accepted and mapped). Combined with `query` via `and`.

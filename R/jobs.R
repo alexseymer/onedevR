@@ -45,9 +45,9 @@
 #'
 #' @param job_name Job name from the project build spec.
 #' @param project Project path or id; defaults to the connection project.
-#' @param branch Branch name (e.g. `"main"`) — mutually exclusive with `tag`,
+#' @param branch Branch name (e.g. `"main"`) - mutually exclusive with `tag`,
 #'   `commit_hash`, and `pull_request_id`.
-#' @param tag Tag name — mutually exclusive with `branch` / commit / PR modes.
+#' @param tag Tag name - mutually exclusive with `branch` / commit / PR modes.
 #' @param commit_hash Commit SHA to build (requires `ref_name`).
 #' @param ref_name Full git ref (e.g. `"refs/heads/main"`) when using
 #'   `commit_hash`.

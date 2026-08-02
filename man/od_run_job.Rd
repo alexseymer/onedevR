@@ -22,10 +22,10 @@ od_run_job(
 
 \item{project}{Project path or id; defaults to the connection project.}
 
-\item{branch}{Branch name (e.g. \code{"main"}) — mutually exclusive with \code{tag},
+\item{branch}{Branch name (e.g. \code{"main"}) - mutually exclusive with \code{tag},
 \code{commit_hash}, and \code{pull_request_id}.}
 
-\item{tag}{Tag name — mutually exclusive with \code{branch} / commit / PR modes.}
+\item{tag}{Tag name - mutually exclusive with \code{branch} / commit / PR modes.}
 
 \item{commit_hash}{Commit SHA to build (requires \code{ref_name}).}
 
