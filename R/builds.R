@@ -6,15 +6,18 @@
 #'   Combined with `query` via `and`.
 #' @param count Maximum number of results (default `100`).
 #' @param offset Result offset (default `0`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #'
-#' @return Parsed API response (list).
+#' @return A tibble of builds (default), or a list when `as_tibble = FALSE`.
 #' @export
 od_query_builds <- function(
   query = NULL,
   status = NULL,
   count = 100L,
   offset = 0L,
+  as_tibble = NULL,
   conn = NULL
 ) {
   conn <- .od_conn(conn)
@@ -30,7 +33,7 @@ od_query_builds <- function(
     }
   }
 
-  od_request(
+  payload <- od_request(
     method = "GET",
     endpoint = "/builds",
     query = list(
@@ -40,6 +43,7 @@ od_query_builds <- function(
     ),
     conn = conn
   )
+  od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Get a single build by UI number

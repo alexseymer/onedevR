@@ -9,6 +9,7 @@ od_query_issues(
   state = NULL,
   count = 100L,
   offset = 0L,
+  as_tibble = NULL,
   conn = NULL
 )
 }
@@ -24,11 +25,13 @@ via \code{and}. When both are empty, falls back to \code{conn$default_issue_stat
 
 \item{offset}{Result offset (default \code{0}).}
 
+\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}; if \code{FALSE}, the raw list payload / items.}
+
 \item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
 }
 \value{
-Parsed API response (list). Use the internal normalizer when you
-need a flat item list (handles \code{items} / \code{data} wrappers).
+A tibble of issues (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Query OneDev issues

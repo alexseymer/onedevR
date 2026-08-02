@@ -1,3 +1,16 @@
+# onedevr 0.3.0
+
+## Ergonomics
+
+* List/query getters return tibbles by default (`od_query_issues()`,
+  `od_query_builds()`, `od_query_pull_requests()`, `od_list_iterations()`,
+  comment/review getters). Opt out with `as_tibble = FALSE` or
+  `options(onedevr.as_tibble = FALSE)`. Helper: `od_as_tibble()`.
+* Basic Auth: `od_connection(username =, password =)` and env vars
+  `ONEDEV_USERNAME` / `ONEDEV_PASSWORD` / `ONEDEV_AUTH`. Bearer remains the
+  default when only a token is set.
+* Roadmap open questions settled (org, prefix, license, auth, return format).
+
 # onedevr 0.2.0
 
 ## API depth

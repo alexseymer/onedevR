@@ -47,11 +47,13 @@ Estimate per plan: 1 week+.
   2026-08-02). Actual CRAN submission deferred; GitHub (+ optional R-universe)
   is the distribution path for v0.1.0.
 
-## Open questions (plan §17)
+## Settled questions (plan §17)
 
-1. GitHub org — stay under `alexseymer` or move to a dedicated org?
-2. Function prefix: `od_*` (short) vs `onedev_*` (explicit)?
-3. CRAN, or GitHub + R-universe only? → **v0.1.0: GitHub (+ pkgdown); CRAN later**
-4. License: MIT vs GPL-3 (`gitlabr` itself uses GPL-3)? → **MIT for now**
-5. Basic Auth support in Phase 1 or deferred to Phase 2? → **deferred (Bearer only)**
-6. Return format: plain `list` vs. `tibble` (`gitlabr`-style)?
+1. GitHub org — stay under `alexseymer` (no dedicated org for now).
+2. Function prefix — keep `od_*` (mirrors `gitlabr`'s `gl_*`).
+3. Distribution — GitHub + pkgdown; CRAN later if demand warrants it.
+4. License — **MIT**.
+5. Auth — Bearer (token) and **Basic Auth** (`username` + `password`/`token`).
+6. Return format — list endpoints return **tibbles** by default
+   (`options(onedevr.as_tibble = TRUE)` / `as_tibble = FALSE` to opt out);
+   single-object getters and write helpers stay as lists.

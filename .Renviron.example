@@ -13,4 +13,9 @@ ONEDEV_REPO_URL=https://git.example.test/group/my-project.git
 ONEDEV_ISSUE_STATE=Open
 # ONEDEV_CURL_INSECURE=1
 
+# Basic Auth alternative (sets auth=basic when username is non-empty):
+# ONEDEV_USERNAME=alice
+# ONEDEV_PASSWORD=secret
+# ONEDEV_AUTH=basic
+
 # ONEDEV_RUN_LIVE_TESTS=1

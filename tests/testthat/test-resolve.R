@@ -16,12 +16,13 @@ test_that("od_resolve_issue_id tries path then bare Number queries", {
   seen <- character()
   with_mocked_bindings(
     od_resolve_project_path = function(conn = NULL) "my-project",
-    od_query_issues = function(query, count, offset, conn = NULL) {
+    od_query_issues = function(query, count, offset, as_tibble = NULL, conn = NULL) {
       seen <<- c(seen, query)
       if (grepl("my-project#", query, fixed = TRUE)) {
         stop("Invalid number: my-project#145", call. = FALSE)
       }
       expect_equal(count, 1L)
+      expect_false(isTRUE(as_tibble))
       list(list(id = 283, number = 145))
     },
     {
@@ -48,7 +49,7 @@ test_that("od_resolve_issue_id errors when issue not found", {
 test_that("od_resolve_build_id falls back to bare Number query", {
   with_mocked_bindings(
     od_resolve_project_path = function(conn = NULL) "my-project",
-    od_query_builds = function(query, count, offset, conn = NULL) {
+    od_query_builds = function(query, count, offset, as_tibble = NULL, conn = NULL) {
       if (grepl("my-project#", query, fixed = TRUE)) {
         stop("Invalid number", call. = FALSE)
       }
@@ -75,7 +76,7 @@ test_that("od_resolve_build_id errors when build not found", {
 test_that("od_resolve_pull_request_id falls back to bare Number query", {
   with_mocked_bindings(
     od_resolve_project_path = function(conn = NULL) "my-project",
-    od_query_pull_requests = function(query, count, offset, conn = NULL) {
+    od_query_pull_requests = function(query, count, offset, as_tibble = NULL, conn = NULL) {
       if (grepl("my-project#", query, fixed = TRUE)) {
         stop("Invalid number", call. = FALSE)
       }

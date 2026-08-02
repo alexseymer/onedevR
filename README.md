@@ -14,7 +14,7 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**v0.2.0** adds issue/PR comments, PR write actions, and build logs. See
+**v0.3.0** returns tibbles from list queries and supports Basic Auth. See
 [`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
 https://alexseymer.github.io/onedevR/.
 
@@ -57,7 +57,7 @@ created <- od_create_issue(
   title = "API test",
   description = "Created from R",
   fields = list(Priority = "Normal"),
-  iteration_ids = c(iterations[[1]]$id),
+  iteration_ids = iterations$id[1],
   conn = conn
 )
 
@@ -90,7 +90,11 @@ variable list for non-R tooling. Live integration tests are gated behind
   `fields` is treated as a named list.
 - **Connections:** pass `conn = od_connection(...)` per call, or
   `od_set_connection(conn)` for a package default. Env vars remain the
-  fallback.
+  fallback. Bearer token is default; Basic Auth via `username`/`password`
+  (or `ONEDEV_USERNAME` / `ONEDEV_PASSWORD`).
+- **List queries return tibbles** by default (`od_query_issues()`, etc.).
+  Use `as_tibble = FALSE` or `options(onedevr.as_tibble = FALSE)` for raw
+  lists. Single-object getters stay as lists.
 
 ## Development
 

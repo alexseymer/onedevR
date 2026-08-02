@@ -43,7 +43,7 @@ editing the Dockerfile and pushing; change dependency refresh by editing the
 ### Toolchain baked into the image
 
 - R **≥ 4.6** from `cloud.r-project.org/.../noble-cran40`
-- Runtime: `httr2`, `jsonlite`, `rlang`
+- Runtime: `httr2`, `jsonlite`, `rlang`, `tibble`
 - Dev/test: `testthat`, `mockery`, `withr`, `devtools`, `roxygen2`, `knitr`,
   `rmarkdown`
 
@@ -69,8 +69,11 @@ There is no long-running service or GUI — this is a library exercised from R.
 Copy [`.env.example`](.env.example) into `.Renviron` / `.env` (both are
 gitignored) or set Cursor Cloud secrets. Vars are documented in
 `project_plan.md` §8: `ONEDEV_HOST`, `ONEDEV_API_TOKEN` (or `ONEDEV_TOKEN` /
-`ONEDEV_ISSUE_REPORTER_API_KEY`), `ONEDEV_PROJECT_PATH`, `ONEDEV_PROJECT_ID`,
+`ONEDEV_ISSUE_REPORTER_API_KEY`), `ONEDEV_USERNAME` / `ONEDEV_PASSWORD` /
+`ONEDEV_AUTH` (Basic Auth), `ONEDEV_PROJECT_PATH`, `ONEDEV_PROJECT_ID`,
 `ONEDEV_REPO_URL`, `ONEDEV_ISSUE_STATE`, `ONEDEV_CURL_INSECURE`.
+
+Runtime also includes `tibble` (list queries return tibbles by default).
 
 Unit tests are designed to run **offline** (env parsing via `withr`, HTTP paths
 stubbed via `mockery`) — no network or real OneDev server needed. Live

@@ -3,7 +3,7 @@ test_that("od_get_issue live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  issues <- onedevr:::.od_normalize_collection(od_query_issues(count = 1L, offset = 0L))
+  issues <- od_query_issues(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(issues) < 1L, "No issues available in project")
   issue_number <- issues[[1]]$number
   issue <- od_get_issue(issue_number)
@@ -17,7 +17,7 @@ test_that("od_list_iterations live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
   iterations <- od_list_iterations()
-  expect_true(is.list(iterations))
+  expect_s3_class(iterations, "tbl_df")
 })
 
 test_that("od_get_issue_fields live", {
@@ -25,7 +25,7 @@ test_that("od_get_issue_fields live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  issues <- onedevr:::.od_normalize_collection(od_query_issues(count = 1L, offset = 0L))
+  issues <- od_query_issues(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(issues) < 1L, "No issues available in project")
   fields <- od_get_issue_fields(issues[[1]]$number)
   expect_true(is.list(fields))
@@ -37,7 +37,7 @@ test_that("od_query_builds live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
   builds <- od_query_builds(count = 5L)
-  expect_true(is.list(builds))
+  expect_s3_class(builds, "tbl_df")
 })
 
 test_that("od_query_pull_requests live", {
@@ -46,7 +46,7 @@ test_that("od_query_pull_requests live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
   pulls <- od_query_pull_requests(count = 5L)
-  expect_true(is.list(pulls))
+  expect_s3_class(pulls, "tbl_df")
 })
 
 test_that("od_get_build live resolve", {
@@ -54,7 +54,7 @@ test_that("od_get_build live resolve", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  builds <- onedevr:::.od_normalize_collection(od_query_builds(count = 1L, offset = 0L))
+  builds <- od_query_builds(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(builds) < 1L, "No builds available in project")
   build <- od_get_build(builds[[1]]$number)
   expect_equal(as.character(build$number), as.character(builds[[1]]$number))
@@ -65,7 +65,7 @@ test_that("od_get_pull_request live resolve", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  pulls <- onedevr:::.od_normalize_collection(od_query_pull_requests(count = 1L, offset = 0L))
+  pulls <- od_query_pull_requests(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(pulls) < 1L, "No pull requests available in project")
   pr <- od_get_pull_request(pulls[[1]]$number)
   expect_equal(as.character(pr$number), as.character(pulls[[1]]$number))
@@ -76,10 +76,10 @@ test_that("od_get_issue_comments live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  issues <- onedevr:::.od_normalize_collection(od_query_issues(count = 1L, offset = 0L))
+  issues <- od_query_issues(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(issues) < 1L, "No issues available in project")
   comments <- od_get_issue_comments(issues[[1]]$number)
-  expect_true(is.list(comments))
+  expect_s3_class(comments, "tbl_df")
 })
 
 test_that("od_get_build_params and log live", {
@@ -87,7 +87,7 @@ test_that("od_get_build_params and log live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  builds <- onedevr:::.od_normalize_collection(od_query_builds(count = 1L, offset = 0L))
+  builds <- od_query_builds(count = 1L, offset = 0L, as_tibble = FALSE)
   skip_if(length(builds) < 1L, "No builds available in project")
   params <- od_get_build_params(builds[[1]]$number)
   expect_true(is.list(params))

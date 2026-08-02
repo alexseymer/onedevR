@@ -2,6 +2,9 @@ test_that("od_get_config reads ONEDEV env vars and derives project path", {
   withr::local_envvar(
     ONEDEV_HOST = "https://git.example.test/",
     ONEDEV_API_TOKEN = "api-token",
+    ONEDEV_USERNAME = "",
+    ONEDEV_PASSWORD = "",
+    ONEDEV_AUTH = "",
     ONEDEV_REPO_URL = "https://git.example.test/group/subgroup/project.git",
     ONEDEV_PROJECT_ID = "20",
     ONEDEV_PROJECT_PATH = "",
@@ -14,10 +17,27 @@ test_that("od_get_config reads ONEDEV env vars and derives project path", {
   expect_equal(cfg$host, "https://git.example.test")
   expect_equal(cfg$api_base_url, "https://git.example.test/~api")
   expect_equal(cfg$token, "api-token")
+  expect_equal(cfg$auth, "bearer")
   expect_equal(cfg$project_id, "20")
   expect_equal(cfg$project_path, "group/subgroup/project")
   expect_equal(cfg$default_issue_state, "Open")
   expect_true(isTRUE(cfg$insecure_ssl))
+})
+
+test_that("od_get_config supports Basic Auth via username/password", {
+  withr::local_envvar(
+    ONEDEV_HOST = "https://git.example.test",
+    ONEDEV_API_TOKEN = "",
+    ONEDEV_TOKEN = "",
+    ONEDEV_ISSUE_REPORTER_API_KEY = "",
+    ONEDEV_USERNAME = "alice",
+    ONEDEV_PASSWORD = "secret",
+    ONEDEV_AUTH = ""
+  )
+  cfg <- od_get_config()
+  expect_equal(cfg$auth, "basic")
+  expect_equal(cfg$username, "alice")
+  expect_equal(cfg$password, "secret")
 })
 
 test_that("od_get_config prefers ONEDEV_PROJECT_PATH over repo URL", {
@@ -45,7 +65,10 @@ test_that("od_get_config errors when host/token missing", {
     ONEDEV_HOST = "",
     ONEDEV_API_TOKEN = "",
     ONEDEV_TOKEN = "",
-    ONEDEV_ISSUE_REPORTER_API_KEY = ""
+    ONEDEV_ISSUE_REPORTER_API_KEY = "",
+    ONEDEV_USERNAME = "",
+    ONEDEV_PASSWORD = "",
+    ONEDEV_AUTH = ""
   )
   expect_error(od_get_config(), "ONEDEV_HOST is missing")
 
@@ -53,7 +76,10 @@ test_that("od_get_config errors when host/token missing", {
     ONEDEV_HOST = "https://git.example.test",
     ONEDEV_API_TOKEN = "",
     ONEDEV_TOKEN = "",
-    ONEDEV_ISSUE_REPORTER_API_KEY = ""
+    ONEDEV_ISSUE_REPORTER_API_KEY = "",
+    ONEDEV_USERNAME = "",
+    ONEDEV_PASSWORD = "",
+    ONEDEV_AUTH = ""
   )
   expect_error(od_get_config(), "No OneDev token found")
 })

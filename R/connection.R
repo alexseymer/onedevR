@@ -13,14 +13,58 @@
   conn %||% .onedevr_env$connection %||% od_get_config(validate = validate)
 }
 
+#' Infer auth mode from connection fields
+#' @keywords internal
+.od_infer_auth <- function(auth = NULL, username = "", token = "", password = "") {
+  auth <- trimws(as.character(auth %||% "")[1])
+  if (nzchar(auth)) {
+    auth <- tolower(auth)
+    if (!auth %in% c("bearer", "basic")) {
+      stop("`auth` must be \"bearer\" or \"basic\".", call. = FALSE)
+    }
+    return(auth)
+  }
+  if (nzchar(username)) "basic" else "bearer"
+}
+
+#' Validate connection credentials for the chosen auth mode
+#' @keywords internal
+.od_validate_auth <- function(conn, context = "connection") {
+  auth <- tolower(conn$auth %||% "bearer")
+  if (identical(auth, "basic")) {
+    if (!nzchar(conn$username %||% "")) {
+      stop(paste0(context, ": Basic Auth requires `username`."), call. = FALSE)
+    }
+    if (!nzchar(conn$password %||% "") && !nzchar(conn$token %||% "")) {
+      stop(
+        paste0(context, ": Basic Auth requires `password` (or `token` as password)."),
+        call. = FALSE
+      )
+    }
+  } else if (!nzchar(conn$token %||% "")) {
+    stop(paste0(context, ": Bearer auth requires `token`."), call. = FALSE)
+  }
+  invisible()
+}
+
 #' Build an explicit OneDev connection
 #'
 #' Prefer this over environment variables for scripts and multi-host workflows.
 #' Pass the result as `conn =` to high-level helpers, or register it as the
 #' package default with [od_set_connection()].
 #'
+#' Authentication is **Bearer** by default (`token`). For **Basic Auth**, set
+#' `username` (and `password`, or reuse `token` as the password) — `auth` is
+#' inferred as `"basic"` when `username` is non-empty, or set `auth = "basic"`
+#' explicitly.
+#'
 #' @param host OneDev base URL (e.g. `"https://git.example.test"`).
-#' @param token API access token (Bearer).
+#' @param token API access token (Bearer), or Basic Auth password when
+#'   `auth = "basic"` and `password` is unset.
+#' @param username Optional username for Basic Auth.
+#' @param password Optional Basic Auth password (defaults to `token` when unset).
+#' @param auth `"bearer"` or `"basic"`. Default: `"basic"` when `username` is
+#'   set, otherwise `"bearer"`.
 #' @param project_path Project path (e.g. `"group/my-project"`).
 #' @param project_id Optional numeric project id (skips path resolution when set).
 #' @param repo_url Optional git remote URL; used to derive `project_path` when
@@ -28,10 +72,9 @@
 #' @param default_issue_state Optional default for [od_query_issues()] when no
 #'   query/state is given.
 #' @param insecure_ssl If `TRUE`, skip TLS certificate verification.
-#' @param validate If `TRUE` (default), error when `host` or `token` are empty.
+#' @param validate If `TRUE` (default), error when host/credentials are missing.
 #'
-#' @return A named list with the same fields as [od_get_config()], classed as
-#'   `od_connection`.
+#' @return A named list with connection fields, classed as `od_connection`.
 #'
 #' @examples
 #' \dontrun{
@@ -41,11 +84,21 @@
 #'   project_path = "group/my-project"
 #' )
 #' od_get_issue(145, conn = conn)
+#'
+#' basic <- od_connection(
+#'   host = "https://git.example.test",
+#'   username = "alice",
+#'   password = "secret",
+#'   project_path = "group/my-project"
+#' )
 #' }
 #' @export
 od_connection <- function(
   host,
-  token,
+  token = NULL,
+  username = NULL,
+  password = NULL,
+  auth = NULL,
   project_path = NULL,
   project_id = NULL,
   repo_url = NULL,
@@ -55,6 +108,8 @@ od_connection <- function(
 ) {
   host <- sub("/+$", "", trimws(as.character(host %||% "")[1]))
   token <- trimws(as.character(token %||% "")[1])
+  username <- trimws(as.character(username %||% "")[1])
+  password <- trimws(as.character(password %||% "")[1])
   repo_url <- trimws(as.character(repo_url %||% "")[1])
   project_path <- .od_first_non_empty(
     project_path,
@@ -66,11 +121,15 @@ od_connection <- function(
     trimws(as.character(project_id)[1])
   }
   default_issue_state <- trimws(as.character(default_issue_state %||% "")[1])
+  auth_mode <- .od_infer_auth(auth, username, token, password)
 
   conn <- list(
     host = host,
     api_base_url = if (nzchar(host)) paste0(host, "/~api") else "",
     token = token,
+    username = username,
+    password = password,
+    auth = auth_mode,
     repo_url = repo_url,
     project_id = project_id,
     project_path = project_path,
@@ -83,9 +142,7 @@ od_connection <- function(
     if (!nzchar(conn$host)) {
       stop("`host` is missing or empty.", call. = FALSE)
     }
-    if (!nzchar(conn$token)) {
-      stop("`token` is missing or empty.", call. = FALSE)
-    }
+    .od_validate_auth(conn, context = "`od_connection()`")
   }
 
   conn

@@ -6,7 +6,10 @@
 \usage{
 od_connection(
   host,
-  token,
+  token = NULL,
+  username = NULL,
+  password = NULL,
+  auth = NULL,
   project_path = NULL,
   project_id = NULL,
   repo_url = NULL,
@@ -18,7 +21,15 @@ od_connection(
 \arguments{
 \item{host}{OneDev base URL (e.g. \code{"https://git.example.test"}).}
 
-\item{token}{API access token (Bearer).}
+\item{token}{API access token (Bearer), or Basic Auth password when
+\code{auth = "basic"} and \code{password} is unset.}
+
+\item{username}{Optional username for Basic Auth.}
+
+\item{password}{Optional Basic Auth password (defaults to \code{token} when unset).}
+
+\item{auth}{\code{"bearer"} or \code{"basic"}. Default: \code{"basic"} when \code{username} is
+set, otherwise \code{"bearer"}.}
 
 \item{project_path}{Project path (e.g. \code{"group/my-project"}).}
 
@@ -32,16 +43,21 @@ query/state is given.}
 
 \item{insecure_ssl}{If \code{TRUE}, skip TLS certificate verification.}
 
-\item{validate}{If \code{TRUE} (default), error when \code{host} or \code{token} are empty.}
+\item{validate}{If \code{TRUE} (default), error when host/credentials are missing.}
 }
 \value{
-A named list with the same fields as \code{\link[=od_get_config]{od_get_config()}}, classed as
-\code{od_connection}.
+A named list with connection fields, classed as \code{od_connection}.
 }
 \description{
 Prefer this over environment variables for scripts and multi-host workflows.
 Pass the result as \verb{conn =} to high-level helpers, or register it as the
 package default with \code{\link[=od_set_connection]{od_set_connection()}}.
+}
+\details{
+Authentication is \strong{Bearer} by default (\code{token}). For \strong{Basic Auth}, set
+\code{username} (and \code{password}, or reuse \code{token} as the password) — \code{auth} is
+inferred as \code{"basic"} when \code{username} is non-empty, or set \code{auth = "basic"}
+explicitly.
 }
 \examples{
 \dontrun{
@@ -51,5 +67,12 @@ conn <- od_connection(
   project_path = "group/my-project"
 )
 od_get_issue(145, conn = conn)
+
+basic <- od_connection(
+  host = "https://git.example.test",
+  username = "alice",
+  password = "secret",
+  project_path = "group/my-project"
+)
 }
 }
