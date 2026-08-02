@@ -21,7 +21,7 @@ od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0
     state <- conn$default_issue_state %||% ""
   }
   if (nzchar(state)) {
-    state_clause <- paste0('State is "', state, '"')
+    state_clause <- paste0('"State" is "', state, '"')
     query <- if (nzchar(query)) {
       paste0("(", query, ") and ", state_clause)
     } else {

@@ -24,14 +24,14 @@ test_that("od_query_issues builds state clause and default state", {
   )
   expect_equal(captured$method, "GET")
   expect_equal(captured$endpoint, "/issues")
-  expect_equal(captured$query$query, 'State is "Open"')
+  expect_equal(captured$query$query, '"State" is "Open"')
   expect_equal(captured$query$count, 10L)
 
   od_query_issues(conn = list(default_issue_state = "Open"))
-  expect_equal(captured$query$query, 'State is "Open"')
+  expect_equal(captured$query$query, '"State" is "Open"')
 
   od_query_issues(query = '"Type" is "Bug"', state = "Open", conn = list())
-  expect_equal(captured$query$query, '("Type" is "Bug") and State is "Open"')
+  expect_equal(captured$query$query, '("Type" is "Bug") and "State" is "Open"')
 })
 
 test_that("od_get_issue resolves UI number then GETs internal id", {

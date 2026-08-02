@@ -16,7 +16,7 @@ Character internal issue id.
 }
 \description{
 OneDev UI numbers (\verb{#145}) differ from internal REST \code{id} values. High-level
-helpers always take the UI number; this function queries
-\verb{"Number" is "<projectPath>#<n>"} (same convention as
-\href{https://github.com/theonedev/tod}{tod}).
+helpers always take the UI number. Tries \verb{"Number" is "<projectPath>#<n>"}
+then bare \code{"#n"} / \code{"n"} (same idea as \href{https://github.com/theonedev/tod}{tod};
+bare forms are required on some OneDev versions).
 }

@@ -4,6 +4,7 @@
 ^\.cursor$
 ^\.env
 ^\.env\.example$
+^\.Renviron\.example$
 ^AGENTS\.md$
 ^project_plan\.md$
 ^ROADMAP\.md$

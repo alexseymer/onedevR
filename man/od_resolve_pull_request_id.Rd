@@ -15,6 +15,5 @@ od_resolve_pull_request_id(pull_request_number, conn = NULL)
 Character internal pull request id.
 }
 \description{
-Same \verb{"Number" is "<projectPath>#<n>"} convention as
-\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}} / \href{https://github.com/theonedev/tod}{tod}.
+Same Number-query variants as \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}.
 }
