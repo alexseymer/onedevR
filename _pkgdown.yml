@@ -24,6 +24,7 @@ reference:
       - starts_with("od_query_issues")
       - starts_with("od_get_issue")
       - starts_with("od_create_issue")
+      - starts_with("od_add_issue")
       - starts_with("od_issue_")
       - od_resolve_issue_id
       - od_list_iterations
@@ -32,11 +33,19 @@ reference:
     contents:
       - od_query_builds
       - od_get_build
+      - od_get_build_params
+      - od_get_build_log
       - od_resolve_build_id
   - title: Pull requests
     contents:
       - starts_with("od_query_pull")
       - starts_with("od_get_pull")
+      - starts_with("od_create_pull")
+      - starts_with("od_add_pull")
+      - starts_with("od_approve_pull")
+      - starts_with("od_request_pull")
+      - starts_with("od_merge_pull")
+      - starts_with("od_discard_pull")
       - od_resolve_pull_request_id
   - title: Projects & low-level
     contents:

@@ -221,3 +221,43 @@ od_issue_transition_state <- function(issue_number, state, conn = NULL) {
     conn = conn
   )
 }
+
+#' Get comments on an issue
+#'
+#' @param issue_number UI number (`145` or `"#145"`).
+#' @param conn Connection list.
+#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
+#' @return Parsed comments payload (list).
+#' @export
+od_get_issue_comments <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
+  conn <- .od_conn(conn)
+  issue_id <- if (isTRUE(use_internal_id)) {
+    .od_strip_hash(issue_number)
+  } else {
+    od_resolve_issue_id(issue_number, conn = conn)
+  }
+  od_request("GET", paste0("/issues/", issue_id, "/comments"), conn = conn)
+}
+
+#' Add a comment to an issue
+#'
+#' Posts to `POST /issue-comments` with `issueId` + `content`.
+#'
+#' @param issue_number UI number (`145` or `"#145"`).
+#' @param content Comment body (Markdown).
+#' @param conn Connection list.
+#' @return Parsed API response.
+#' @export
+od_add_issue_comment <- function(issue_number, content, conn = NULL) {
+  conn <- .od_conn(conn)
+  issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
+  od_request(
+    method = "POST",
+    endpoint = "/issue-comments",
+    body = list(
+      issueId = issue_id,
+      content = as.character(content)[1]
+    ),
+    conn = conn
+  )
+}

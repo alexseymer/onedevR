@@ -10,13 +10,13 @@
   paste0(sub("/+$", "", base), "/", sub("^/+", "", endpoint))
 }
 
-.od_prepare_request <- function(method, url, token, insecure_ssl = FALSE) {
+.od_prepare_request <- function(method, url, token, insecure_ssl = FALSE, accept = "application/json") {
   req <- httr2::request(url)
   req <- httr2::req_method(req, method)
   req <- httr2::req_headers(
     req,
     Authorization = paste("Bearer", token),
-    Accept = "application/json"
+    Accept = accept
   )
   req <- httr2::req_timeout(req, 30)
   req <- httr2::req_error(req, is_error = function(resp) FALSE)
@@ -100,4 +100,51 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   }
 
   payload
+}
+
+#' Low-level OneDev request returning raw bytes
+#'
+#' Used for non-JSON endpoints such as streaming build logs
+#' (`Accept: */*`). Prefer [od_request()] for normal JSON APIs.
+#'
+#' @inheritParams od_request
+#' @param accept HTTP Accept header (default `"*/*"`).
+#' @param timeout Request timeout in seconds (default `60`).
+#' @return Raw vector of the response body.
+#' @keywords internal
+.od_request_raw <- function(
+  method = "GET",
+  endpoint,
+  query = NULL,
+  body = NULL,
+  conn = NULL,
+  accept = "*/*",
+  timeout = 60
+) {
+  conn <- .od_conn(conn)
+  method <- toupper(trimws(as.character(method)[1]))
+  url <- .od_resolve_api_url(endpoint, conn)
+  req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl, accept = accept)
+  req <- httr2::req_timeout(req, as.numeric(timeout)[1])
+
+  if (length(query) > 0) {
+    query <- query[!vapply(query, is.null, logical(1))]
+    if (length(query) > 0) {
+      req <- do.call(httr2::req_url_query, c(list(req), query))
+    }
+  }
+
+  if (!is.null(body)) {
+    json_body <- jsonlite::toJSON(body, auto_unbox = TRUE, null = "null")
+    req <- httr2::req_headers(req, "Content-Type" = "application/json")
+    req <- httr2::req_body_raw(req, charToRaw(enc2utf8(as.character(json_body))))
+  }
+
+  response <- httr2::req_perform(req)
+  if (httr2::resp_status(response) >= 400L) {
+    payload <- .od_parse_response_body(response)
+    .od_http_error(response, payload)
+  }
+
+  httr2::resp_body_raw(response)
 }

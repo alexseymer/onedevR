@@ -14,8 +14,8 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**v0.1.0 is released** (Phases 1–4). See [`NEWS.md`](NEWS.md),
-[`ROADMAP.md`](ROADMAP.md), and the docs site at
+**v0.2.0** adds issue/PR comments, PR write actions, and build logs. See
+[`NEWS.md`](NEWS.md), [`ROADMAP.md`](ROADMAP.md), and
 https://alexseymer.github.io/onedevR/.
 
 ## Install
