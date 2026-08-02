@@ -14,9 +14,9 @@ projects, builds, and pull requests, for self-hosted OneDev instances.
 
 ## Status
 
-**Phase 4 (Publishing) is in progress** — pkgdown + release packaging for
-`v0.1.0`. API coverage through Phase 3 is on `main`. See
-[`ROADMAP.md`](ROADMAP.md) and [`NEWS.md`](NEWS.md).
+**v0.1.0 is released** (Phases 1–4). See [`NEWS.md`](NEWS.md),
+[`ROADMAP.md`](ROADMAP.md), and the docs site at
+https://alexseymer.github.io/onedevR/.
 
 ## Install
 

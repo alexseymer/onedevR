@@ -40,8 +40,7 @@ Estimate per plan: 2–3 working days.
 Estimate per plan: 1 week+.
 
 ## Phase 4 — Publishing
-- [ ] GitHub Release v0.1.0 (checklist in [`RELEASE.md`](RELEASE.md); cut after this
-  branch lands on `main`)
+- [x] GitHub Release v0.1.0 — https://github.com/alexseymer/onedevR/releases/tag/v0.1.0
 - [x] pkgdown site (`_pkgdown.yml` + GitHub Pages workflow →
   https://alexseymer.github.io/onedevR/)
 - [x] CRAN name check: `onedevr` appears **available** (no CRAN page as of
