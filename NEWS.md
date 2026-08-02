@@ -1,3 +1,14 @@
+# onedevr 0.5.0
+
+## Jobs, packages, and git
+
+* Job control: `od_run_job()`, `od_rebuild_job()`, `od_cancel_job()`.
+* Packages: `od_query_packages()`, `od_get_pack()`, `od_get_pack_blobs()`,
+  `od_get_pack_labels()`.
+* Repository: `od_list_branches()`, `od_get_branch()`, `od_get_default_branch()`,
+  `od_list_tags()`, `od_get_tag()`, `od_query_commits()`, `od_get_commit()`,
+  `od_get_file()`.
+
 # onedevr 0.4.0
 
 ## API surface
