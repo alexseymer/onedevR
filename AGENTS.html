@@ -69,18 +69,20 @@
 <ul><li>
 <a href=".cursor/environment.json"><code>.cursor/environment.json</code></a> — Dockerfile build + install (dependency refresh) script</li>
 <li>
-<a href=".cursor/Dockerfile"><code>.cursor/Dockerfile</code></a> — R 4.6 from the CRAN apt repo, r2u binary CRAN packages, and the baseline runtime/dev toolchain</li>
+<a href=".cursor/Dockerfile"><code>.cursor/Dockerfile</code></a> — <code>rocker/r-ver:4.6</code> plus <code>git</code>/<code>sudo</code> (required by Cursor Cloud), system libs, and the baseline runtime/dev toolchain via Posit Package Manager binaries</li>
 </ul><p>Do <strong>not</strong> rely on a personal/team dashboard snapshot for this repo; the committed <code>.cursor/environment.json</code> takes precedence. Change the image by editing the Dockerfile and pushing; change dependency refresh by editing the <code>install</code> field (keep it idempotent and free of service-startup commands).</p>
+<p>If a saved dashboard snapshot exists for this repo, delete it so Cloud Agents rebuild from the Dockerfile (snapshots override <code>build.dockerfile</code>).</p>
 </div>
 <div class="section level3">
 <h3 id="toolchain-baked-into-the-image">Toolchain baked into the image<a class="anchor" aria-label="anchor" href="#toolchain-baked-into-the-image"></a></h3>
-<ul><li>R <strong>≥ 4.6</strong> from <code>cloud.r-project.org/.../noble-cran40</code>
+<ul><li>R <strong>4.6</strong> from <a href="https://hub.docker.com/r/rocker/r-ver" class="external-link"><code>rocker/r-ver</code></a> (Ubuntu LTS + Posit Public Package Manager binaries on amd64)</li>
+<li>Cursor Cloud essentials: <code>git</code>, <code>sudo</code>
 </li>
-<li>Runtime: <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>
+<li>Runtime: <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>, <code>vctrs</code>
 </li>
-<li>Dev/test: <code>testthat</code>, <code>mockery</code>, <code>withr</code>, <code>devtools</code>, <code>roxygen2</code>, <code>knitr</code>, <code>rmarkdown</code>
+<li>Dev/test: <code>testthat</code>, <code>mockery</code>, <code>withr</code>, <code>remotes</code>, <code>devtools</code>, <code>roxygen2</code>, <code>knitr</code>, <code>rmarkdown</code>, <code>pkgload</code>, <code>pkgdown</code>
 </li>
-</ul><p>Gotcha: r2u (<code>r2u.stat.illinois.edu</code>) is the fast way to add more CRAN packages (<code>sudo apt-get install -y r-cran-&lt;name&gt;</code>). Those binaries need <strong>R ≥ 4.5/4.6</strong> — Ubuntu 24.04’s own <code>r-base-core</code> (4.3.3) is too old. The Dockerfile already pulls R from the CRAN apt repo; do not “downgrade” to the distro R.</p>
+</ul><p>Gotcha: add packages with <code>install2.r …</code> or <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (P3M binaries), not <code>apt install r-cran-*</code>. The image already sets dual repos (P3M + CRAN) so <code>R CMD check</code> / pkgdown can resolve <code>packages.rds</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="running--testing">Running / testing<a class="anchor" aria-label="anchor" href="#running--testing"></a></h3>
