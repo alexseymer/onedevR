@@ -32,25 +32,30 @@ Environment config lives in the repo and travels with the code you push:
 
 - [`.cursor/environment.json`](.cursor/environment.json) — Dockerfile build +
   install (dependency refresh) script
-- [`.cursor/Dockerfile`](.cursor/Dockerfile) — R 4.6 from the CRAN apt repo,
-  r2u binary CRAN packages, and the baseline runtime/dev toolchain
+- [`.cursor/Dockerfile`](.cursor/Dockerfile) — `rocker/r-ver:4.6` plus
+  `git`/`sudo` (required by Cursor Cloud), system libs, and the baseline
+  runtime/dev toolchain via Posit Package Manager binaries
 
 Do **not** rely on a personal/team dashboard snapshot for this repo; the
 committed `.cursor/environment.json` takes precedence. Change the image by
 editing the Dockerfile and pushing; change dependency refresh by editing the
 `install` field (keep it idempotent and free of service-startup commands).
 
+If a saved dashboard snapshot exists for this repo, delete it so Cloud Agents
+rebuild from the Dockerfile (snapshots override `build.dockerfile`).
+
 ### Toolchain baked into the image
 
-- R **≥ 4.6** from `cloud.r-project.org/.../noble-cran40`
-- Runtime: `httr2`, `jsonlite`, `rlang`, `tibble`
-- Dev/test: `testthat`, `mockery`, `withr`, `devtools`, `roxygen2`, `knitr`,
-  `rmarkdown`
+- R **4.6** from [`rocker/r-ver`](https://hub.docker.com/r/rocker/r-ver)
+  (Ubuntu LTS + Posit Public Package Manager binaries on amd64)
+- Cursor Cloud essentials: `git`, `sudo`
+- Runtime: `httr2`, `jsonlite`, `rlang`, `tibble`, `vctrs`
+- Dev/test: `testthat`, `mockery`, `withr`, `remotes`, `devtools`,
+  `roxygen2`, `knitr`, `rmarkdown`, `pkgload`, `pkgdown`
 
-Gotcha: r2u (`r2u.stat.illinois.edu`) is the fast way to add more CRAN packages
-(`sudo apt-get install -y r-cran-<name>`). Those binaries need **R ≥ 4.5/4.6** —
-Ubuntu 24.04's own `r-base-core` (4.3.3) is too old. The Dockerfile already
-pulls R from the CRAN apt repo; do not "downgrade" to the distro R.
+Gotcha: add packages with `install2.r …` or `install.packages()` (P3M
+binaries), not `apt install r-cran-*`. The image already sets dual repos
+(P3M + CRAN) so `R CMD check` / pkgdown can resolve `packages.rds`.
 
 ### Running / testing
 
