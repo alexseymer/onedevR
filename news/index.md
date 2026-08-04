@@ -18,6 +18,8 @@
 
 ### Documentation
 
+- Package hex logo at `man/figures/logo.png` (README + pkgdown
+  favicons), following the usual `usethis::use_logo()` / gitlabr layout.
 - Expanded getting-started vignette (tibbles, status keywords, jobs,
   git, pagination).
 - `\dontrun` examples and `@family` tags on exported helpers; pkgdown
