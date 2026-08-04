@@ -25,7 +25,11 @@ inst/doc
 
 # Docs build (site is deployed from the gh-pages branch)
 docs/
-pkgdown/
+# Keep pkgdown/favicon committed (pkgdown discovers logo + favicons);
+# ignore other local pkgdown build artefacts if any appear later.
+pkgdown/*
+!pkgdown/favicon/
+!pkgdown/favicon/**
 
 # Local docker package builds
 dist/
