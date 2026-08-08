@@ -1,7 +1,7 @@
 # onedevR <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 `onedevr` is an R client for the [OneDev](https://onedev.io) REST API — issues,
-projects, builds, and pull requests, for self-hosted OneDev instances.
+projects, builds, and pull requests, for OneDev.
 
 **References:**
 
