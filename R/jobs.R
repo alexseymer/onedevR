@@ -20,8 +20,8 @@
 #' Build a git refs/heads or refs/tags name
 #' @noRd
 .od_git_ref <- function(branch = NULL, tag = NULL) {
-  branch <- trimws(as.character(branch %||% "")[1])
-  tag <- trimws(as.character(tag %||% "")[1])
+  branch <- .od_coerce_string(branch)
+  tag <- .od_coerce_string(tag)
   if (nzchar(branch) && nzchar(tag)) {
     stop("Specify only one of `branch` or `tag`.", call. = FALSE)
   }
@@ -76,8 +76,8 @@ od_run_job <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  job_name <- trimws(as.character(job_name %||% "")[1])
-  reason <- trimws(as.character(reason %||% "")[1])
+  job_name <- .od_coerce_string(job_name)
+  reason <- .od_coerce_string(reason)
   if (!nzchar(job_name)) {
     stop("`job_name` is required.", call. = FALSE)
   }
@@ -86,11 +86,11 @@ od_run_job <- function(
   }
 
   job_params <- .od_job_params(params)
-  pr_id <- trimws(as.character(pull_request_id %||% "")[1])
-  commit_hash <- trimws(as.character(commit_hash %||% "")[1])
-  ref_name <- trimws(as.character(ref_name %||% "")[1])
-  branch <- trimws(as.character(branch %||% "")[1])
-  tag <- trimws(as.character(tag %||% "")[1])
+  pr_id <- .od_coerce_string(pull_request_id)
+  commit_hash <- .od_coerce_string(commit_hash)
+  ref_name <- .od_coerce_string(ref_name)
+  branch <- .od_coerce_string(branch)
+  tag <- .od_coerce_string(tag)
 
   modes <- sum(c(
     nzchar(pr_id),
@@ -172,7 +172,7 @@ od_rebuild_job <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  reason <- trimws(as.character(reason %||% "")[1])
+  reason <- .od_coerce_string(reason)
   if (!nzchar(reason)) {
     stop("`reason` is required.", call. = FALSE)
   }

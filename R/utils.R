@@ -36,3 +36,19 @@
 .od_strip_hash <- function(x) {
   gsub("^#", "", trimws(as.character(x)[1]), perl = TRUE)
 }
+
+#' Normalize a string value with optional trimming and defaults
+#'
+#' Consolidates the repeated pattern of converting to character, extracting
+#' first element, trimming whitespace, and applying defaults. Used to normalize
+#' string parameters across onedevr functions.
+#'
+#' @param x Value to normalize.
+#' @param trim If `TRUE` (default), trim whitespace.
+#' @param default Default value if x is empty/NULL (default: "").
+#' @return Character string, trimmed or with default applied.
+#' @noRd
+.od_coerce_string <- function(x, trim = TRUE, default = "") {
+  x <- as.character(x %||% default)[1]
+  if (isTRUE(trim)) trimws(x) else x
+}
