@@ -1,0 +1,487 @@
+---
+title: "Builds Workflow - CI/CD Integration"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Builds Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+# Builds Workflow
+
+This vignette covers build querying, monitoring, and triggering with onedevr.
+
+```r
+library(onedevr)
+library(dplyr)
+```
+
+# Understanding Build Status
+
+Onedev uses **status keywords** for filtering, not simple "success/failure" strings.
+
+## Available Status Keywords
+
+```r
+# View OneDev's build query language
+cat(od_get_query_description("build"))
+```
+
+Common status values:
+
+| Status | Meaning |
+|--------|---------|
+| `successful` | Build passed all checks |
+| `failed` | Build had failures |
+| `errored` | Build encountered errors |
+| `cancelled` | Build was cancelled |
+| `running` | Build is in progress |
+| `waiting` | Build is queued |
+
+**Note:** Status keywords are case-insensitive. `"SUCCESSFUL"` and `"successful"` both work.
+
+# Querying Builds
+
+## Simple Queries
+
+```r
+# Recent successful builds
+success <- od_query_builds(status = "successful", count = 20L)
+
+# Failed builds
+failures <- od_query_builds(status = "failed", count = 20L)
+
+# All builds (no filter)
+all_builds <- od_query_builds(count = 50L)
+```
+
+## Advanced Filtering
+
+```r
+# Builds from specific branch
+main_builds <- od_query_builds(
+  query = '"Branch" is "main" and "Status" is "successful"',
+  count = 20L
+)
+
+# Builds by commit
+commit_builds <- od_query_builds(
+  query = '"Commit" is "abc1234567"',
+  count = 10L
+)
+
+# Recent builds with errors
+errors <- od_query_builds(
+  query = '"Status" is "errored" and "Date" is after "2 days ago"',
+  count = 50L
+)
+
+# See full query syntax
+cat(od_get_query_description("build"))
+```
+
+## Filtering Results
+
+```r
+# Get all builds and filter locally
+all <- od_paginate(
+  od_query_builds,
+  page_size = 50L,
+  max_pages = Inf
+)
+
+# Filter by date
+recent <- all %>%
+  filter(started_date >= Sys.Date() - 7)
+
+# Group by status
+by_status <- all %>%
+  group_by(status) %>%
+  summarise(
+    count = n(),
+    avg_duration_mins = mean(duration / 60, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Longest running builds
+slow <- all %>%
+  arrange(desc(duration)) %>%
+  slice_head(n = 10)
+```
+
+# Inspecting Builds
+
+## Get Build Details
+
+```r
+# Detailed build information
+build <- od_get_build(123)
+
+# See structure
+str(build)
+
+# Common fields
+cat(
+  "Build #", build$number, "\n",
+  "Status: ", build$status, "\n",
+  "Branch: ", build$branch, "\n",
+  "Duration: ", build$duration, " seconds\n"
+)
+```
+
+## Build Parameters
+
+```r
+# Get build parameters (for parameterized builds)
+params <- od_get_build_params(123)
+
+# View as data frame
+as.data.frame(params)
+```
+
+## Build Logs
+
+```r
+# Get build log output
+logs <- od_get_build_log(123)
+
+# View log
+cat(paste(logs, collapse = "\n"))
+
+# Filter log by pattern
+error_lines <- logs %>%
+  grep("ERROR|error|Exception", ., value = TRUE)
+
+if (length(error_lines) > 0) {
+  cat("Errors found:\n")
+  print(error_lines)
+}
+
+# Save to file
+writeLines(logs, "build-123-log.txt")
+```
+
+## Build Results
+
+```r
+# Get structured build results
+results <- od_get_build_results(123)
+
+# Inspect structure
+str(results)
+```
+
+# Build Artifacts
+
+## List Artifacts
+
+```r
+# Get all artifacts for a build
+artifacts <- od_list_build_artifacts(123)
+
+# View artifact names
+artifacts %>%
+  select(name, size) %>%
+  arrange(desc(size))
+```
+
+## Download Artifacts
+
+```r
+# Download a single artifact
+od_download_artifact(
+  build_number = 123,
+  artifact_path = "dist/app.zip",
+  local_path = "downloaded-app.zip"
+)
+
+# Download multiple artifacts
+for (artifact in c("dist/app.zip", "reports/coverage.html")) {
+  local_file <- basename(artifact)
+  od_download_artifact(123, artifact, local_file)
+  cat("Downloaded:", local_file, "\n")
+}
+```
+
+# Triggering Builds
+
+## Run a Job
+
+```r
+# Run a job by name
+od_run_job(
+  job_name = "CI",
+  branch = "main"
+)
+
+# With parameters
+od_run_job(
+  job_name = "Deploy",
+  branch = "main",
+  parameters = list(
+    ENVIRONMENT = "staging",
+    VERBOSE = TRUE,
+    VERSION = "1.0.0"
+  )
+)
+```
+
+## Rebuild
+
+```r
+# Rebuild existing build
+od_rebuild_job(build_number = 123)
+
+# With additional parameters
+od_rebuild_job(
+  build_number = 123,
+  parameters = list(FORCE_REBUILD = TRUE)
+)
+```
+
+## Cancel Build
+
+```r
+# Cancel a running build
+od_cancel_job(build_number = 123)
+
+# Usually used for running/waiting builds
+running <- od_query_builds(status = "running")
+if (nrow(running) > 0) {
+  purrr::walk(running$number, od_cancel_job)
+  cat("Cancelled", nrow(running), "builds\n")
+}
+```
+
+# Monitoring and Alerts
+
+## Track Build Status
+
+```r
+# Function to check build status
+check_build_status <- function(build_num, max_wait = 3600) {
+  start_time <- Sys.time()
+
+  while (Sys.time() - start_time < max_wait) {
+    build <- od_get_build(build_num)
+
+    if (build$status %in% c("successful", "failed", "errored", "cancelled")) {
+      return(build)
+    }
+
+    Sys.sleep(30)  # Check every 30 seconds
+  }
+
+  stop("Build did not complete within ", max_wait, " seconds")
+}
+
+# Usage
+result <- check_build_status(123, max_wait = 1800)
+cat("Build completed with status:", result$status, "\n")
+```
+
+## Build Health Dashboard
+
+```r
+# Generate build health summary
+build_health <- function(days = 7) {
+  recent <- od_paginate(
+    od_query_builds,
+    page_size = 50L,
+    max_pages = 10L
+  ) %>%
+    filter(started_date >= Sys.Date() - days)
+
+  summary_stats <- recent %>%
+    summarise(
+      total_builds = n(),
+      successful = sum(status == "successful"),
+      failed = sum(status == "failed"),
+      errored = sum(status == "errored"),
+      cancelled = sum(status == "cancelled"),
+      success_rate = round(100 * successful / total_builds, 1),
+      avg_duration_mins = round(mean(duration, na.rm = TRUE) / 60, 1),
+      .groups = "drop"
+    )
+
+  return(summary_stats)
+}
+
+# Usage
+health <- build_health(days = 7)
+print(health)
+```
+
+## Notification on Failures
+
+```r
+# Function to notify on build failure
+notify_on_failure <- function(build_num) {
+  build <- od_get_build(build_num)
+
+  if (build$status == "failed") {
+    # Send email or notification
+    message <- sprintf(
+      "Build #%d FAILED\nBranch: %s\nCommit: %s\nDuration: %d mins",
+      build$number,
+      build$branch,
+      build$commit,
+      build$duration / 60
+    )
+
+    # Use emailer package or similar
+    # blastula::compose_email(body = message) %>%
+    #   blastula::smtp_send(...)
+
+    cat("ALERT:", message, "\n")
+  }
+}
+```
+
+# Automation Patterns
+
+## Continuous Deployment
+
+```r
+# Deploy on successful build
+check_and_deploy <- function(build_num) {
+  build <- od_get_build(build_num)
+
+  if (build$status == "successful" && build$branch == "main") {
+    cat("Build successful. Starting deployment...\n")
+
+    # Download artifacts
+    artifacts <- od_list_build_artifacts(build_num)
+    for (artifact in artifacts$name) {
+      od_download_artifact(build_num, artifact, basename(artifact))
+    }
+
+    # Deploy (custom logic)
+    # system("./deploy.sh")
+    cat("Deployment complete\n")
+  }
+}
+```
+
+## Scheduled Build Monitoring
+
+```r
+# Monitor builds periodically
+monitor_builds <- function(interval_secs = 300, duration_mins = 120) {
+  start_time <- Sys.time()
+
+  while (as.numeric(Sys.time() - start_time) < duration_mins * 60) {
+    recent <- od_query_builds(count = 10L)
+
+    # Check for failures
+    failures <- recent %>%
+      filter(status == "failed")
+
+    if (nrow(failures) > 0) {
+      cat("ALERT: Found", nrow(failures), "failed builds\n")
+      print(failures %>% select(number, branch, started_date))
+    }
+
+    Sys.sleep(interval_secs)
+  }
+}
+```
+
+## Performance Analysis
+
+```r
+# Analyze build performance over time
+build_performance <- function(days = 30, job_name = NULL) {
+  all_builds <- od_paginate(
+    od_query_builds,
+    page_size = 100L,
+    max_pages = Inf
+  ) %>%
+    filter(started_date >= Sys.Date() - days)
+
+  if (!is.null(job_name)) {
+    all_builds <- all_builds %>%
+      filter(job_name == !!job_name)
+  }
+
+  performance <- all_builds %>%
+    group_by(branch) %>%
+    summarise(
+      builds = n(),
+      avg_duration = mean(duration, na.rm = TRUE) / 60,
+      median_duration = median(duration, na.rm = TRUE) / 60,
+      success_rate = sum(status == "successful") / n() * 100,
+      .groups = "drop"
+    ) %>%
+    arrange(desc(builds))
+
+  return(performance)
+}
+
+# Usage
+perf <- build_performance(days = 30)
+print(perf)
+```
+
+# Best Practices
+
+1. **Always paginate** for production scripts:
+   ```r
+   all <- od_paginate(od_query_builds, page_size = 50L, max_pages = Inf)
+   ```
+
+2. **Cache results** to reduce API calls:
+   ```r
+   builds_cache <- od_query_builds(count = 100L)
+   # Reuse cache instead of querying again
+   ```
+
+3. **Use query syntax** for complex filters:
+   ```r
+   # More efficient than querying all and filtering
+   od_query_builds(
+     query = '"Status" is "failed" and "Date" is after "yesterday"'
+   )
+   ```
+
+4. **Handle timeouts** when waiting for builds:
+   ```r
+   tryCatch(
+     check_build_status(123, max_wait = 300),
+     error = function(e) message("Build check timed out: ", e$message)
+   )
+   ```
+
+5. **Monitor resource usage** for long-running monitors:
+   ```r
+   # Periodically check memory usage
+   if (as.numeric(gc()[2, 6]) > 500) {
+     cat("Memory usage high. Consider restarting.\n")
+   }
+   ```
+
+# Troubleshooting
+
+**Q: Build query returns no results but I know builds exist?**
+A: Try removing filters or using `od_query_builds(count = 100L)` to increase limit.
+
+**Q: Status keyword not recognized?**
+A: Run `cat(od_get_query_description("build"))` to see valid syntax.
+
+**Q: Download fails with "artifact not found"?**
+A: Check artifact name exactly with `od_list_build_artifacts()`.
+
+**Q: Getting 401/403 when triggering builds?**
+A: Verify API token has `buildJob.run` permission in OneDev.
+
+---
+
+For more information, see the [getting-started vignette](getting-started.html) or OneDev API docs at `https://your-host/~help/api`.
