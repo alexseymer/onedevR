@@ -16,7 +16,7 @@
 #' Infer auth mode from connection fields
 #' @noRd
 .od_infer_auth <- function(auth = NULL, username = "", token = "", password = "") {
-  auth <- trimws(as.character(auth %||% "")[1])
+  auth <- .od_coerce_string(auth)
   if (nzchar(auth)) {
     auth <- tolower(auth)
     if (!auth %in% c("bearer", "basic")) {
@@ -107,11 +107,11 @@ od_connection <- function(
   insecure_ssl = FALSE,
   validate = TRUE
 ) {
-  host <- sub("/+$", "", trimws(as.character(host %||% "")[1]))
-  token <- trimws(as.character(token %||% "")[1])
-  username <- trimws(as.character(username %||% "")[1])
-  password <- trimws(as.character(password %||% "")[1])
-  repo_url <- trimws(as.character(repo_url %||% "")[1])
+  host <- sub("/+$", "", .od_coerce_string(host))
+  token <- .od_coerce_string(token)
+  username <- .od_coerce_string(username)
+  password <- .od_coerce_string(password)
+  repo_url <- .od_coerce_string(repo_url)
   project_path <- .od_first_non_empty(
     project_path,
     .od_derive_project_path(repo_url)
@@ -119,9 +119,9 @@ od_connection <- function(
   project_id <- if (is.null(project_id) || !nzchar(as.character(project_id)[1])) {
     ""
   } else {
-    trimws(as.character(project_id)[1])
+    .od_coerce_string(project_id)
   }
-  default_issue_state <- trimws(as.character(default_issue_state %||% "")[1])
+  default_issue_state <- .od_coerce_string(default_issue_state)
   auth_mode <- .od_infer_auth(auth, username, token, password)
 
   conn <- list(
