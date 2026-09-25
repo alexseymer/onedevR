@@ -117,6 +117,59 @@ onedevR/
 - **Variables:** `snake_case`
 - **Constants:** `UPPER_SNAKE_CASE`
 
+### Internal Helper Functions
+
+The package includes shared internal helpers to reduce duplication and maintain consistency:
+
+#### `.od_coerce_string(x, trim = TRUE, default = "")`
+Normalizes string values with optional trimming and defaults. Consolidates the repeated pattern:
+```r
+trimws(as.character(x %||% default)[1])
+```
+
+**Usage:**
+```r
+param <- .od_coerce_string(user_input)  # Trim + default to ""
+name <- .od_coerce_string(name, default = "Unnamed")
+value <- .od_coerce_string(value, trim = FALSE)  # No trimming
+```
+
+#### `.od_resolve_entity_id(number, resolver_fn, use_internal_id = FALSE, conn = NULL)`
+Resolves UI numbers (e.g., `#100`) to internal REST IDs. Handles both:
+- Direct numeric/string IDs (returned as-is)
+- UI numbers requiring resolution via an API call
+
+**Usage:**
+```r
+issue_id <- .od_resolve_entity_id(145, od_resolve_issue_id, conn = conn)
+build_id <- .od_resolve_entity_id(
+  build_number,
+  od_resolve_build_id,
+  use_internal_id = use_internal_id,
+  conn = conn
+)
+```
+
+#### `.od_require(x, name)`
+Validates that a parameter is non-empty; stops with a clear error if not.
+```r
+.od_require(job_name, "job_name")  # Stops if job_name is ""
+.od_require(branch, "branch")
+```
+
+**Usage pattern:**
+```r
+branch <- .od_coerce_string(branch)
+.od_require(branch, "branch")
+```
+
+Other helpers (in `utils.R`):
+- `.od_trim_env()` — Trim environment variables
+- `.od_first_non_empty()` — Return first non-empty value from list
+- `.od_parse_flag()` — Parse boolean string flags
+- `.od_derive_project_path()` — Extract path from git remote URL
+- `.od_strip_hash()` — Remove leading `#` from UI numbers
+
 ### OneDev API Reference
 
 Always check the [OneDev API documentation](https://onedev.io/~help/api) when:
