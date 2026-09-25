@@ -27,8 +27,8 @@ od_query_issues <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
-  state <- trimws(as.character(state %||% "")[1])
+  query <- .od_coerce_string(query)
+  state <- .od_coerce_string(state)
 
   if (!nzchar(query) && !nzchar(state)) {
     state <- conn$default_issue_state %||% ""
