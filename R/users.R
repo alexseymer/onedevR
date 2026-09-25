@@ -13,7 +13,7 @@
 #' @export
 od_resolve_user_id <- function(user, conn = NULL) {
   conn <- .od_conn(conn)
-  user <- trimws(as.character(user %||% "")[1])
+  user <- .od_coerce_string(user)
   if (!nzchar(user)) {
     stop("`user` is missing or empty.", call. = FALSE)
   }
@@ -59,7 +59,7 @@ od_query_users <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
+  query <- .od_coerce_string(query)
   payload <- od_request(
     method = "GET",
     endpoint = "/users",
