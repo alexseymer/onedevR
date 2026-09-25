@@ -52,3 +52,18 @@
   x <- as.character(x %||% default)[1]
   if (isTRUE(trim)) trimws(x) else x
 }
+
+#' Require a non-empty string parameter
+#'
+#' Validates that a parameter is non-empty; stops with an error if not.
+#' Useful for required string parameters after coercion.
+#'
+#' @param x Parameter value to check (should already be coerced to string).
+#' @param name Parameter name for error message.
+#' @return `NULL` invisibly on success (or stops).
+#' @noRd
+.od_require <- function(x, name) {
+  if (!nzchar(x)) {
+    stop(paste0("`", name, "` is required."), call. = FALSE)
+  }
+}

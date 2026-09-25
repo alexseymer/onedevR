@@ -52,9 +52,7 @@ od_query_packages <- function(
 od_get_pack <- function(pack_id, conn = NULL) {
   conn <- .od_conn(conn)
   pack_id <- .od_coerce_string(pack_id)
-  if (!nzchar(pack_id)) {
-    stop("`pack_id` is required.", call. = FALSE)
-  }
+  .od_require(pack_id, "pack_id")
   od_request("GET", paste0("/packages/", pack_id), conn = conn)
 }
 
@@ -74,9 +72,7 @@ od_get_pack <- function(pack_id, conn = NULL) {
 od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
   pack_id <- .od_coerce_string(pack_id)
-  if (!nzchar(pack_id)) {
-    stop("`pack_id` is required.", call. = FALSE)
-  }
+  .od_require(pack_id, "pack_id")
   payload <- od_request("GET", paste0("/packages/", pack_id, "/blobs"), conn = conn)
   od_as_tibble(payload, as_tibble = as_tibble)
 }
@@ -97,9 +93,7 @@ od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
 od_get_pack_labels <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
   pack_id <- .od_coerce_string(pack_id)
-  if (!nzchar(pack_id)) {
-    stop("`pack_id` is required.", call. = FALSE)
-  }
+  .od_require(pack_id, "pack_id")
   payload <- od_request("GET", paste0("/packages/", pack_id, "/labels"), conn = conn)
   od_as_tibble(payload, as_tibble = as_tibble)
 }

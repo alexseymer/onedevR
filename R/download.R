@@ -47,9 +47,7 @@
 od_download <- function(resource_url, path, conn = NULL) {
   conn <- .od_conn(conn)
   path <- as.character(path)[1]
-  if (!nzchar(path)) {
-    stop("`path` is required.", call. = FALSE)
-  }
+  .od_require(path, "path")
 
   url <- .od_resolve_markdown_url(conn$host %||% "", resource_url)
   raw <- .od_request_raw(

@@ -92,13 +92,9 @@ od_download_build_artifact <- function(
     conn = conn
   )
   rel <- .od_artifact_path(artifact_path, leading_slash = FALSE)
-  if (!nzchar(rel)) {
-    stop("`artifact_path` is required.", call. = FALSE)
-  }
+  .od_require(rel, "artifact_path")
   path <- as.character(path)[1]
-  if (!nzchar(path)) {
-    stop("`path` is required.", call. = FALSE)
-  }
+  .od_require(path, "path")
 
   raw <- .od_request_raw(
     method = "GET",

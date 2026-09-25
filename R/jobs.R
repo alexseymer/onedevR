@@ -78,12 +78,8 @@ od_run_job <- function(
   conn <- .od_conn(conn)
   job_name <- .od_coerce_string(job_name)
   reason <- .od_coerce_string(reason)
-  if (!nzchar(job_name)) {
-    stop("`job_name` is required.", call. = FALSE)
-  }
-  if (!nzchar(reason)) {
-    stop("`reason` is required.", call. = FALSE)
-  }
+  .od_require(job_name, "job_name")
+  .od_require(reason, "reason")
 
   job_params <- .od_job_params(params)
   pr_id <- .od_coerce_string(pull_request_id)
@@ -173,9 +169,7 @@ od_rebuild_job <- function(
 ) {
   conn <- .od_conn(conn)
   reason <- .od_coerce_string(reason)
-  if (!nzchar(reason)) {
-    stop("`reason` is required.", call. = FALSE)
-  }
+  .od_require(reason, "reason")
   build_id <- .od_resolve_entity_id(
     build_number,
     od_resolve_build_id,
