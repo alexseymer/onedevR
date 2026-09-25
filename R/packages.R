@@ -24,7 +24,7 @@ od_query_packages <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
+  query <- .od_coerce_string(query)
   payload <- od_request(
     method = "GET",
     endpoint = "/packages",
@@ -51,7 +51,7 @@ od_query_packages <- function(
 #' @export
 od_get_pack <- function(pack_id, conn = NULL) {
   conn <- .od_conn(conn)
-  pack_id <- trimws(as.character(pack_id %||% "")[1])
+  pack_id <- .od_coerce_string(pack_id)
   if (!nzchar(pack_id)) {
     stop("`pack_id` is required.", call. = FALSE)
   }
@@ -73,7 +73,7 @@ od_get_pack <- function(pack_id, conn = NULL) {
 #' @export
 od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  pack_id <- trimws(as.character(pack_id %||% "")[1])
+  pack_id <- .od_coerce_string(pack_id)
   if (!nzchar(pack_id)) {
     stop("`pack_id` is required.", call. = FALSE)
   }
@@ -96,7 +96,7 @@ od_get_pack_blobs <- function(pack_id, as_tibble = NULL, conn = NULL) {
 #' @export
 od_get_pack_labels <- function(pack_id, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  pack_id <- trimws(as.character(pack_id %||% "")[1])
+  pack_id <- .od_coerce_string(pack_id)
   if (!nzchar(pack_id)) {
     stop("`pack_id` is required.", call. = FALSE)
   }
