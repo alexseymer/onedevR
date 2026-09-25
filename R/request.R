@@ -89,7 +89,7 @@
 #' @export
 od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  method <- toupper(trimws(as.character(method)[1]))
+  method <- toupper(.od_coerce_string(method))
   url <- .od_resolve_api_url(endpoint, conn)
   req <- .od_prepare_request(method, url, conn)
 
@@ -135,7 +135,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   timeout = 60
 ) {
   conn <- .od_conn(conn)
-  method <- toupper(trimws(as.character(method)[1]))
+  method <- toupper(.od_coerce_string(method))
   url <- .od_resolve_api_url(endpoint, conn)
   req <- .od_prepare_request(method, url, conn, accept = accept)
   req <- httr2::req_timeout(req, as.numeric(timeout)[1])
