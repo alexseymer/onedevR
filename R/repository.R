@@ -95,7 +95,7 @@ od_get_default_branch <- function(project = NULL, conn = NULL) {
 #' @export
 od_get_branch <- function(branch, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  branch <- trimws(as.character(branch %||% "")[1])
+  branch <- .od_coerce_string(branch)
   if (!nzchar(branch)) {
     stop("`branch` is required.", call. = FALSE)
   }
@@ -144,7 +144,7 @@ od_list_tags <- function(project = NULL, conn = NULL) {
 #' @export
 od_get_tag <- function(tag, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  tag <- trimws(as.character(tag %||% "")[1])
+  tag <- .od_coerce_string(tag)
   if (!nzchar(tag)) {
     stop("`tag` is required.", call. = FALSE)
   }
@@ -216,7 +216,7 @@ od_get_commit <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  commit_hash <- trimws(as.character(commit_hash %||% "")[1])
+  commit_hash <- .od_coerce_string(commit_hash)
   if (!nzchar(commit_hash)) {
     stop("`commit_hash` is required.", call. = FALSE)
   }
@@ -246,8 +246,8 @@ od_get_commit <- function(
 #' @export
 od_get_file <- function(revision, path, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  revision <- trimws(as.character(revision %||% "")[1])
-  path <- trimws(as.character(path %||% "")[1])
+  revision <- .od_coerce_string(revision)
+  path <- .od_coerce_string(path)
   path <- sub("^/+", "", path)
   if (!nzchar(revision) || !nzchar(path)) {
     stop("`revision` and `path` are required.", call. = FALSE)
