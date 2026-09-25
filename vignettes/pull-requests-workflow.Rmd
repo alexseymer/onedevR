@@ -2,7 +2,7 @@
 title: "Pull Requests Workflow - Review and Merge"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Pull Requests Workflow}
+  %\VignetteIndexEntry{pull-requests}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

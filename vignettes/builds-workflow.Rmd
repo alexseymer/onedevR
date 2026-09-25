@@ -2,7 +2,7 @@
 title: "Builds Workflow - CI/CD Integration"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Builds Workflow}
+  %\VignetteIndexEntry{builds}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -2,7 +2,7 @@
 title: "Issues Workflow - Advanced Patterns"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Issues Workflow}
+  %\VignetteIndexEntry{issues}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
