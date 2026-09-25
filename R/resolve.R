@@ -7,7 +7,7 @@
 #' @noRd
 .od_number_query_variants <- function(project_path, number) {
   numeric_part <- .od_strip_hash(number)
-  project_path <- trimws(as.character(project_path %||% "")[1])
+  project_path <- .od_coerce_string(project_path)
   variants <- character()
   if (nzchar(project_path)) {
     variants <- c(variants, paste0('"Number" is "', project_path, "#", numeric_part, '"'))

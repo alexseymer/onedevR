@@ -1,7 +1,7 @@
 #' Normalize an artifact path for OneDev artifact endpoints
 #' @noRd
 .od_artifact_path <- function(artifact_path = NULL, leading_slash = FALSE) {
-  path <- trimws(as.character(artifact_path %||% "")[1])
+  path <- .od_coerce_string(artifact_path)
   path <- sub("^/+", "", path)
   if (!nzchar(path)) {
     return("")
