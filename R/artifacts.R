@@ -18,15 +18,6 @@
   if (isTRUE(leading_slash)) paste0("/", encoded) else encoded
 }
 
-#' Resolve a build UI number to internal id for artifact calls
-#' @noRd
-.od_artifact_build_id <- function(build_number, conn, use_internal_id = FALSE) {
-  if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
-}
 
 #' List build artifact metadata
 #'
@@ -54,7 +45,12 @@ od_list_build_artifacts <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  build_id <- .od_artifact_build_id(build_number, conn, use_internal_id)
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   suffix <- .od_artifact_path(artifact_path, leading_slash = TRUE)
   payload <- od_request(
     "GET",
@@ -89,7 +85,12 @@ od_download_build_artifact <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  build_id <- .od_artifact_build_id(build_number, conn, use_internal_id)
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   rel <- .od_artifact_path(artifact_path, leading_slash = FALSE)
   if (!nzchar(rel)) {
     stop("`artifact_path` is required.", call. = FALSE)

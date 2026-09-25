@@ -111,11 +111,12 @@ od_query_builds <- function(
 #' @export
 od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  build_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/builds/", build_id), conn = conn)
 }
 
@@ -133,11 +134,12 @@ od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
 #' @export
 od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  build_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/builds/", build_id, "/params"), conn = conn)
 }
 
@@ -231,11 +233,12 @@ od_get_build_log <- function(
   timeout = 60
 ) {
   conn <- .od_conn(conn)
-  build_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   raw <- .od_request_raw(
     method = "GET",
     endpoint = paste0("/streaming/build-logs/", build_id),

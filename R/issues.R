@@ -70,11 +70,12 @@ od_query_issues <- function(
 #' @export
 od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  issue_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(issue_number)
-  } else {
-    od_resolve_issue_id(issue_number, conn = conn)
-  }
+  issue_id <- .od_resolve_entity_id(
+    issue_number,
+    od_resolve_issue_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/issues/", issue_id), conn = conn)
 }
 
@@ -96,11 +97,12 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' @export
 od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  issue_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(issue_number)
-  } else {
-    od_resolve_issue_id(issue_number, conn = conn)
-  }
+  issue_id <- .od_resolve_entity_id(
+    issue_number,
+    od_resolve_issue_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/issues/", issue_id, "/fields"), conn = conn)
 }
 
@@ -292,11 +294,12 @@ od_get_issue_comments <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  issue_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(issue_number)
-  } else {
-    od_resolve_issue_id(issue_number, conn = conn)
-  }
+  issue_id <- .od_resolve_entity_id(
+    issue_number,
+    od_resolve_issue_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   payload <- od_request("GET", paste0("/issues/", issue_id, "/comments"), conn = conn)
   od_as_tibble(payload, as_tibble = as_tibble)
 }

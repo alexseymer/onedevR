@@ -128,3 +128,23 @@ od_resolve_pull_request_id <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)
   .od_resolve_number_id("pull", pull_request_number, conn, "pull request")
 }
+
+#' Internal helper: resolve entity ID with optional internal fallback
+#'
+#' Consolidates the repeated pattern of checking `use_internal_id` and either
+#' stripping the hash or calling a resolver function. Used by issue/build/PR
+#' helper functions.
+#'
+#' @param number UI number (e.g., issue/build/PR number).
+#' @param resolver Function to call for resolution (e.g., `od_resolve_issue_id`).
+#' @param use_internal_id If `TRUE`, treat `number` as internal id.
+#' @param conn Connection list.
+#' @return Character internal id.
+#' @noRd
+.od_resolve_entity_id <- function(number, resolver, use_internal_id = FALSE, conn = NULL) {
+  if (isTRUE(use_internal_id)) {
+    .od_strip_hash(number)
+  } else {
+    resolver(number, conn = conn)
+  }
+}

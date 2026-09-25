@@ -87,11 +87,12 @@ od_query_users <- function(
 #' @export
 od_get_user <- function(user, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  user_id <- if (isTRUE(use_internal_id)) {
-    trimws(as.character(user)[1])
-  } else {
-    od_resolve_user_id(user, conn = conn)
-  }
+  user_id <- .od_resolve_entity_id(
+    user,
+    od_resolve_user_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/users/", user_id), conn = conn)
 }
 

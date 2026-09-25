@@ -176,11 +176,12 @@ od_rebuild_job <- function(
   if (!nzchar(reason)) {
     stop("`reason` is required.", call. = FALSE)
   }
-  build_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request(
     method = "POST",
     endpoint = "/job-runs/rebuild",
@@ -209,11 +210,12 @@ od_rebuild_job <- function(
 #' @export
 od_cancel_job <- function(build_number, conn = NULL, use_internal_id = FALSE) {
   conn <- .od_conn(conn)
-  build_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(build_number)
-  } else {
-    od_resolve_build_id(build_number, conn = conn)
-  }
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request(
     method = "DELETE",
     endpoint = paste0("/job-runs/", build_id),

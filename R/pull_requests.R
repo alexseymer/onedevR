@@ -75,11 +75,12 @@ od_get_pull_request <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  request_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(pull_request_number)
-  } else {
-    od_resolve_pull_request_id(pull_request_number, conn = conn)
-  }
+  request_id <- .od_resolve_entity_id(
+    pull_request_number,
+    od_resolve_pull_request_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   od_request("GET", paste0("/pulls/", request_id), conn = conn)
 }
 
@@ -105,11 +106,12 @@ od_get_pull_request_comments <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  request_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(pull_request_number)
-  } else {
-    od_resolve_pull_request_id(pull_request_number, conn = conn)
-  }
+  request_id <- .od_resolve_entity_id(
+    pull_request_number,
+    od_resolve_pull_request_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   payload <- od_request("GET", paste0("/pulls/", request_id, "/comments"), conn = conn)
   od_as_tibble(payload, as_tibble = as_tibble)
 }
@@ -136,11 +138,12 @@ od_get_pull_request_reviews <- function(
   use_internal_id = FALSE
 ) {
   conn <- .od_conn(conn)
-  request_id <- if (isTRUE(use_internal_id)) {
-    .od_strip_hash(pull_request_number)
-  } else {
-    od_resolve_pull_request_id(pull_request_number, conn = conn)
-  }
+  request_id <- .od_resolve_entity_id(
+    pull_request_number,
+    od_resolve_pull_request_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
   payload <- od_request("GET", paste0("/pulls/", request_id, "/reviews"), conn = conn)
   od_as_tibble(payload, as_tibble = as_tibble)
 }
