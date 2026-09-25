@@ -8,7 +8,7 @@
 #' @return Absolute URL string.
 #' @noRd
 .od_resolve_markdown_url <- function(host, resource_url) {
-  resource_url <- trimws(as.character(resource_url %||% "")[1])
+  resource_url <- .od_coerce_string(resource_url)
   if (!nzchar(resource_url)) {
     stop("`resource_url` is missing or empty.", call. = FALSE)
   }
@@ -16,7 +16,7 @@
     return(resource_url)
   }
 
-  host <- sub("/+$", "", trimws(as.character(host %||% "")[1]))
+  host <- sub("/+$", "", .od_coerce_string(host))
   if (!nzchar(host)) {
     stop("No host available to resolve relative resource URL.", call. = FALSE)
   }
