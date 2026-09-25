@@ -96,7 +96,20 @@
 <strong>High-level:</strong> <code><a href="reference/od_get_issue.html">od_get_issue()</a></code>, <code><a href="reference/od_create_issue.html">od_create_issue()</a></code>, <code><a href="reference/od_query_issues.html">od_query_issues()</a></code>, …</li>
 </ul><hr></div>
 <div class="section level2">
-<h2 id="id_2-motivation--referenzmodell-gitlabr">2. Motivation &amp; Referenzmodell (gitlabr)<a class="anchor" aria-label="anchor" href="#id_2-motivation--referenzmodell-gitlabr"></a></h2>
+<h2 id="id_2-motivation--referenzmodell-gitlabr--tod">2. Motivation &amp; Referenzmodell (gitlabr + tod)<a class="anchor" aria-label="anchor" href="#id_2-motivation--referenzmodell-gitlabr--tod"></a></h2>
+<p><strong>Zwei getrennte Referenzen:</strong></p>
+<table class="table"><colgroup><col width="18%"><col width="27%"><col width="54%"></colgroup><thead><tr><th>Rolle</th>
+<th>Referenz</th>
+<th>Nutzen für onedevr</th>
+</tr></thead><tbody><tr><td>R-Paket-Architektur (GitLab → R)</td>
+<td><a href="https://thinkr-open.github.io/gitlabr/" class="external-link">gitlabr</a></td>
+<td>Connection-Objekt, Low-level Escape Hatch, High-level <code>gl_*</code> → <code>od_*</code>
+</td>
+</tr><tr><td>OneDev selbst bedienen (CLI / API-Formen)</td>
+<td><a href="https://github.com/theonedev/tod" class="external-link">tod</a></td>
+<td>Issue/PR/Build-Refs (<code>#n</code>, <code>project#n</code>), Query-DSL, Payload-Konventionen — siehe <a href="https://github.com/theonedev/tod/blob/main/cli.md" class="external-link"><code>cli.md</code></a>
+</td>
+</tr></tbody></table><p><code>onedevr</code> wrappt <strong>nicht</strong> die <code>tod</code>-CLI; es spricht die REST-API direkt an (<code>httr2</code>). <code>tod</code> ist die kanonische Referenz dafür, <em>wie</em> OneDev gemeint ist — nicht die Laufzeitabhängigkeit.</p>
 <div class="section level3">
 <h3 id="was-gitlabr-liefert">Was gitlabr liefert<a class="anchor" aria-label="anchor" href="#was-gitlabr-liefert"></a></h3>
 <table class="table"><colgroup><col width="15%"><col width="19%"><col width="65%"></colgroup><thead><tr><th>Ebene</th>
@@ -1232,7 +1245,12 @@
 <td><a href="https://docs.onedev.io/concepts" class="external-link uri">https://docs.onedev.io/concepts</a></td>
 </tr><tr><td>API-Hilfe (pro Instanz)</td>
 <td><code>https://&lt;ONEDEV_HOST&gt;/~help/api</code></td>
-</tr><tr><td>gitlabr (Referenzarchitektur)</td>
+</tr><tr><td>
+<strong>tod</strong> (OneDev CLI — Referenz für API-Nutzung, Refs, Query-DSL)</td>
+<td><a href="https://github.com/theonedev/tod" class="external-link uri">https://github.com/theonedev/tod</a></td>
+</tr><tr><td>tod CLI-Referenz</td>
+<td><a href="https://github.com/theonedev/tod/blob/main/cli.md" class="external-link uri">https://github.com/theonedev/tod/blob/main/cli.md</a></td>
+</tr><tr><td>gitlabr (R-Paket-Referenzarchitektur, GitLab → R)</td>
 <td><a href="https://thinkr-open.github.io/gitlabr/" class="external-link uri">https://thinkr-open.github.io/gitlabr/</a></td>
 </tr><tr><td>gitlabr GitHub</td>
 <td><a href="https://github.com/ThinkR-open/gitlabr" class="external-link uri">https://github.com/ThinkR-open/gitlabr</a></td>
