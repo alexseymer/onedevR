@@ -24,14 +24,12 @@ and developer tools. See [`NEWS.md`](NEWS.md) for details on recent changes.
 remotes::install_github("alexseymer/onedevR")
 ```
 
-**Documentation:**
+**Documentation:** (also available on [pkgdown site](https://alexseymer.github.io/onedevR/))
 - [**Getting started**](vignettes/getting-started.Rmd) — Installation, config, basic workflows
 - [**Issues workflow**](vignettes/issues-workflow.Rmd) — Querying, creating, updating, automation
 - [**Builds workflow**](vignettes/builds-workflow.Rmd) — Build management, artifacts, CI/CD
 - [**Pull requests workflow**](vignettes/pull-requests-workflow.Rmd) — PR review, commenting, merging
 - [**Contributing**](CONTRIBUTING.md) — Development setup, testing, documentation standards
-
-Full docs: [pkgdown site](https://alexseymer.github.io/onedevR/)
 
 ## Quick start
 
