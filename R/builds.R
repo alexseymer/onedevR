@@ -5,7 +5,7 @@
 #' (`SUCCESSFUL`, `FAILED`, `TIMED_OUT`, ...).
 #' @noRd
 .od_build_status_clause <- function(status) {
-  status <- trimws(as.character(status %||% "")[1])
+  status <- .od_coerce_string(status)
   if (!nzchar(status)) {
     return("")
   }
@@ -72,7 +72,7 @@ od_query_builds <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
+  query <- .od_coerce_string(query)
   status_clause <- .od_build_status_clause(status)
 
   if (nzchar(status_clause)) {
