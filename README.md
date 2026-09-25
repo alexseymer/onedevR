@@ -14,8 +14,8 @@ projects, builds, and pull requests, for OneDev.
 
 ## Status
 
-**v0.5.1** hardens live query helpers (build/PR status keywords, pagination,
-query descriptions, file text). See [`NEWS.md`](NEWS.md).
+**v1.0.0** — stable release with comprehensive documentation, workflow guides,
+and developer tools. See [`NEWS.md`](NEWS.md) for details on recent changes.
 
 ## Install
 
@@ -24,8 +24,14 @@ query descriptions, file text). See [`NEWS.md`](NEWS.md).
 remotes::install_github("alexseymer/onedevR")
 ```
 
-Docs: [pkgdown site](https://alexseymer.github.io/onedevR/) · vignette
-`vignette("getting-started", package = "onedevr")`.
+**Documentation:**
+- [**Getting started**](vignettes/getting-started.Rmd) — Installation, config, basic workflows
+- [**Issues workflow**](vignettes/issues-workflow.Rmd) — Querying, creating, updating, automation
+- [**Builds workflow**](vignettes/builds-workflow.Rmd) — Build management, artifacts, CI/CD
+- [**Pull requests workflow**](vignettes/pull-requests-workflow.Rmd) — PR review, commenting, merging
+- [**Contributing**](CONTRIBUTING.md) — Development setup, testing, documentation standards
+
+Full docs: [pkgdown site](https://alexseymer.github.io/onedevR/)
 
 ## Quick start
 
@@ -76,6 +82,24 @@ Copy [`.Renviron.example`](.Renviron.example) to `.Renviron` (gitignored) and
 fill in your host/token/project. [`.env.example`](.env.example) is the same
 variable list for non-R tooling. Live integration tests are gated behind
 `ONEDEV_RUN_LIVE_TESTS=1`.
+
+## v1.0.0 Highlights
+
+✨ **Comprehensive documentation suite** for all major workflows
+- In-depth vignettes covering issues, builds, and pull requests
+- Real-world automation examples and best practices
+- Troubleshooting guides and common patterns
+
+🔧 **Developer-friendly tools**
+- Contributing guide with setup instructions and testing patterns
+- Roxygen2 documentation standards and examples
+- Development environment configuration in Cursor Cloud / Docker
+
+🚀 **Production-ready features**
+- Pagination support for large result sets
+- Flexible connection management (env vars or explicit objects)
+- Low-level escape hatch (`od_request()`) for custom queries
+- Comprehensive error handling and validation
 
 ## Design notes worth knowing up front
 
