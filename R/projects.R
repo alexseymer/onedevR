@@ -50,7 +50,7 @@ od_resolve_project_id <- function(project = NULL, conn = NULL) {
     project <- od_resolve_project_path(conn = conn)
   }
 
-  project <- trimws(as.character(project)[1])
+  project <- .od_coerce_string(project)
   # Numeric path argument is treated as an already-resolved id
   if (grepl("^[0-9]+$", project)) {
     return(project)
@@ -100,7 +100,7 @@ od_query_projects <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
+  query <- .od_coerce_string(query)
   payload <- od_request(
     method = "GET",
     endpoint = "/projects",
