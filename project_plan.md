@@ -48,7 +48,16 @@
 
 ---
 
-## 2. Motivation & Referenzmodell (gitlabr)
+## 2. Motivation & Referenzmodell (gitlabr + tod)
+
+**Zwei getrennte Referenzen:**
+
+| Rolle | Referenz | Nutzen für onedevr |
+|-------|----------|--------------------|
+| R-Paket-Architektur (GitLab → R) | [gitlabr](https://thinkr-open.github.io/gitlabr/) | Connection-Objekt, Low-level Escape Hatch, High-level `gl_*` → `od_*` |
+| OneDev selbst bedienen (CLI / API-Formen) | [tod](https://github.com/theonedev/tod) | Issue/PR/Build-Refs (`#n`, `project#n`), Query-DSL, Payload-Konventionen — siehe [`cli.md`](https://github.com/theonedev/tod/blob/main/cli.md) |
+
+`onedevr` wrappt **nicht** die `tod`-CLI; es spricht die REST-API direkt an (`httr2`). `tod` ist die kanonische Referenz dafür, *wie* OneDev gemeint ist — nicht die Laufzeitabhängigkeit.
 
 ### Was gitlabr liefert
 
@@ -1060,7 +1069,9 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 | OneDev REST API (allgemein) | https://docs.onedev.io/restful-api |
 | OneDev Concepts | https://docs.onedev.io/concepts |
 | API-Hilfe (pro Instanz) | `https://<ONEDEV_HOST>/~help/api` |
-| gitlabr (Referenzarchitektur) | https://thinkr-open.github.io/gitlabr/ |
+| **tod** (OneDev CLI — Referenz für API-Nutzung, Refs, Query-DSL) | https://github.com/theonedev/tod |
+| tod CLI-Referenz | https://github.com/theonedev/tod/blob/main/cli.md |
+| gitlabr (R-Paket-Referenzarchitektur, GitLab → R) | https://thinkr-open.github.io/gitlabr/ |
 | gitlabr GitHub | https://github.com/ThinkR-open/gitlabr |
 | httr2 | https://httr2.r-lib.org/ |
 | usethis | https://usethis.r-lib.org/ |
