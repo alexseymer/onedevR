@@ -26,8 +26,8 @@ od_query_pull_requests <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  query <- trimws(as.character(query %||% "")[1])
-  status <- tolower(trimws(as.character(status %||% "")[1]))
+  query <- .od_coerce_string(query)
+  status <- tolower(.od_coerce_string(status))
 
   if (nzchar(status)) {
     if (!status %in% c("open", "merged", "discarded")) {
