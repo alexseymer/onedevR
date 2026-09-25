@@ -169,14 +169,19 @@ if (length(error_lines) > 0) {
 writeLines(logs, "build-123-log.txt")
 ```
 
-## Build Results
+## Build Details
 
 ```r
-# Get structured build results
-results <- od_get_build_results(123)
+# Get detailed build information
+build <- od_get_build(123)
 
 # Inspect structure
-str(results)
+str(build)
+
+# Access build fields
+build$status
+build$duration
+build$started_date
 ```
 
 # Build Artifacts
@@ -197,7 +202,7 @@ artifacts %>%
 
 ```r
 # Download a single artifact
-od_download_artifact(
+od_download_build_artifact(
   build_number = 123,
   artifact_path = "dist/app.zip",
   local_path = "downloaded-app.zip"
@@ -206,7 +211,7 @@ od_download_artifact(
 # Download multiple artifacts
 for (artifact in c("dist/app.zip", "reports/coverage.html")) {
   local_file <- basename(artifact)
-  od_download_artifact(123, artifact, local_file)
+  od_download_build_artifact(123, artifact, local_file)
   cat("Downloaded:", local_file, "\n")
 }
 ```
@@ -361,7 +366,7 @@ check_and_deploy <- function(build_num) {
     # Download artifacts
     artifacts <- od_list_build_artifacts(build_num)
     for (artifact in artifacts$name) {
-      od_download_artifact(build_num, artifact, basename(artifact))
+      od_download_build_artifact(build_num, artifact, basename(artifact))
     }
 
     # Deploy (custom logic)

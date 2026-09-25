@@ -235,25 +235,18 @@ od_approve_pull_request(
 ## Request Changes
 
 ```r
-# Request changes (if function available)
-od_request_review_changes(
-  5,
-  message = "Please update the error handling per the comments"
-)
+# Request changes
+od_request_pull_request_changes(5)
 ```
 
 ## Merge PR
 
 ```r
-# Merge a PR (if function available)
-od_merge_pull_request(
-  5,
-  commit_message = "Add OAuth2 authentication (#5)",
-  method = "squash"  # or "merge" or "rebase"
-)
+# Merge a PR
+od_merge_pull_request(5)
 
-# Close without merging (if needed)
-od_close_pull_request(5, reason = "Duplicate of #3")
+# Discard PR without merging
+od_discard_pull_request(5)
 ```
 
 # Review Workflows

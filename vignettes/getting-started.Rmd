@@ -208,10 +208,7 @@ logs <- od_get_build_log(123)  # Returns log lines
 artifacts <- od_list_build_artifacts(123)
 
 # Download artifact
-od_download_artifact(123, "dist/app.zip", "app-123.zip")
-
-# Inspect results
-results <- od_get_build_results(123)
+od_download_build_artifact(123, "dist/app.zip", "app-123.zip")
 ```
 
 ## Trigger Builds
