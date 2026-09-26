@@ -2,13 +2,13 @@
 #'
 #' Lists user groups in the OneDev instance.
 #'
-#' @param query Optional OneDev group query string.
-#' @param count Maximum number of results (default `100`).
-#' @param offset Result offset (default `0`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of groups (default), or a list when `as_tibble = FALSE`.
+#' @param query {character} Optional OneDev group query string. Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of groups (default), or a list when `as_tibble = FALSE`.
 #' @endpoint GET /groups
 #' @family users
 #' @examples
@@ -42,9 +42,9 @@ od_query_groups <- function(
 #'
 #' Retrieves details for a specific user group.
 #'
-#' @param name Group name.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed group object (list).
+#' @param name {character} Group name.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed group object.
 #' @endpoint GET /groups/{groupName}
 #' @family users
 #' @examples
@@ -68,10 +68,10 @@ od_get_group <- function(name, conn = NULL) {
 #'
 #' Adds a user to the specified group's membership.
 #'
-#' @param group_name Name of the group.
-#' @param user Login name or numeric user id.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response.
+#' @param group_name {character} Name of the group.
+#' @param user {character|numeric} Login name or numeric user id.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @endpoint POST /groups/{groupName}/members
 #' @family users
 #' @examples
@@ -98,10 +98,10 @@ od_add_group_member <- function(group_name, user, conn = NULL) {
 #'
 #' Removes a user from the specified group's membership.
 #'
-#' @param group_name Name of the group.
-#' @param user Login name or numeric user id.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response.
+#' @param group_name {character} Name of the group.
+#' @param user {character|numeric} Login name or numeric user id.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @endpoint DELETE /groups/{groupName}/members/{userId}
 #' @family users
 #' @examples
@@ -127,11 +127,11 @@ od_remove_group_member <- function(group_name, user, conn = NULL) {
 #'
 #' Retrieves all members of a user group.
 #'
-#' @param group_name Name of the group.
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of group members (default), or a list when `as_tibble = FALSE`.
+#' @param group_name {character} Name of the group.
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of group members (default), or a list when `as_tibble = FALSE`.
 #' @endpoint GET /groups/{groupName}/members
 #' @family users
 #' @examples
