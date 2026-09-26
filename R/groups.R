@@ -9,6 +9,7 @@
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of groups (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /groups
 #' @family users
 #' @examples
 #' \dontrun{
@@ -44,6 +45,7 @@ od_query_groups <- function(
 #' @param name Group name.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed group object (list).
+#' @endpoint GET /groups/{groupName}
 #' @family users
 #' @examples
 #' \dontrun{
@@ -70,6 +72,7 @@ od_get_group <- function(name, conn = NULL) {
 #' @param user Login name or numeric user id.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed API response.
+#' @endpoint POST /groups/{groupName}/members
 #' @family users
 #' @examples
 #' \dontrun{
@@ -99,6 +102,7 @@ od_add_group_member <- function(group_name, user, conn = NULL) {
 #' @param user Login name or numeric user id.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed API response.
+#' @endpoint DELETE /groups/{groupName}/members/{userId}
 #' @family users
 #' @examples
 #' \dontrun{
@@ -128,6 +132,7 @@ od_remove_group_member <- function(group_name, user, conn = NULL) {
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of group members (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /groups/{groupName}/members
 #' @family users
 #' @examples
 #' \dontrun{
