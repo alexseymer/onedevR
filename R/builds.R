@@ -104,6 +104,7 @@ od_query_builds <- function(
 #' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST
 #'   id (debugging only). Default: `FALSE`.
 #' @return {list} Parsed build object.
+#' @endpoint GET /builds/{buildId}
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -127,6 +128,7 @@ od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST id. Default: `FALSE`.
 #' @return {list} Parsed params payload.
+#' @endpoint GET /builds/{buildId}/params
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -221,6 +223,7 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 #' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST id. Default: `FALSE`.
 #' @param timeout {numeric} Seconds to wait for the full log stream (default `60`). Default: `60`.
 #' @return {character} Character vector of log lines.
+#' @endpoint GET /streaming/build-logs/{buildId}
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -259,6 +262,7 @@ od_get_build_log <- function(
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
 #' @return Parsed API response.
+#' @endpoint POST /builds/{buildId}/promotions
 #' @family builds
 #' @examples
 #' \dontrun{
