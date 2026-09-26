@@ -12,6 +12,23 @@ projects, builds, and pull requests, for OneDev.
   (TheOneDev CLI) — issue/PR/build refs, query DSL, and API conventions to
   mirror when implementing / extending `onedevr`.
 
+## Motivation
+
+`onedevr` was born from a practical constraint: **restricted development environments**.
+
+Many corporate environments restrict tooling to essential languages only. If your development environment is confined to **R and Git**, you cannot use the official `tod` CLI (e.g., due to firewall restrictions or tooling policies). Yet you still need to interact with OneDev for:
+
+- Running builds, managing artifacts, querying repositories
+- Automating issue/PR workflows within R scripts or Quarto documents
+- Leveraging AI-assisted coding workflows that need programmatic OneDev access
+
+**`onedevr` solves this by:**
+1. **Removing the `tod` dependency** — communicate directly with OneDev's REST API from R
+2. **Enabling AI-assisted workflows** — your coding AI (Claude, etc.) can use `onedevr` to interact with OneDev on your behalf
+3. **Being AI-efficient** — clean, predictable function naming (`od_*`), consistent parameter patterns, and comprehensive documentation so LLMs can reason about the API without ambiguity
+
+If your constraint is "I have R, I have Git, I need OneDev", `onedevr` is for you.
+
 ## Status
 
 **v1.0.0** — stable release with comprehensive documentation, workflow guides,
