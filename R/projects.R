@@ -34,6 +34,7 @@ od_resolve_project_path <- function(conn = NULL) {
 #' @param project {character} Optional project path; defaults to [od_resolve_project_path()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {character} Character project id.
+#' @endpoint GET /projects/ids/{projectPath}
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -86,6 +87,7 @@ od_resolve_project_id <- function(project = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {tibble|list} A tibble of projects (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /projects
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -149,6 +151,7 @@ od_list_projects <- function(
 #'   Defaults to the connection project. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed project object.
+#' @endpoint GET /projects/{projectId}
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -166,6 +169,7 @@ od_get_project <- function(project = NULL, conn = NULL) {
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed clone-url payload (typically `http` and `ssh` keys).
+#' @endpoint GET /projects/{projectId}/clone-url
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -187,6 +191,7 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {tibble|list} A tibble of webhooks (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /projects/{projectId}/webhooks
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -212,6 +217,7 @@ od_list_webhooks <- function(project = NULL, as_tibble = NULL, conn = NULL) {
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed webhook object.
+#' @endpoint GET /projects/{projectId}/webhooks/{webhookId}
 #' @family projects
 #' @examples
 #' \dontrun{
