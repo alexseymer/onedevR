@@ -246,6 +246,7 @@ od_get_webhook <- function(webhook_id, project = NULL, conn = NULL) {
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed webhook object with ID and configuration.
+#' @endpoint POST /projects/{projectId}/webhooks
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -279,6 +280,7 @@ od_create_webhook <- function(url, events = NULL, project = NULL, conn = NULL) {
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed API response (typically `NULL` on success).
+#' @endpoint DELETE /projects/{projectId}/webhooks/{webhookId}
 #' @family projects
 #' @examples
 #' \dontrun{
