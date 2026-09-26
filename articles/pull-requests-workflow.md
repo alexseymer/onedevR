@@ -1,0 +1,603 @@
+# Pull Requests Workflow - Review and Merge
+
+## Pull Requests Workflow
+
+This vignette covers common patterns for pull request management with
+onedevr.
+
+``` r
+
+library(onedevr)
+library(dplyr)
+```
+
+## Querying Pull Requests
+
+### Basic Queries
+
+``` r
+
+# Open pull requests
+open_prs <- od_query_pull_requests(status = "open")
+
+# Merged pull requests
+merged <- od_query_pull_requests(status = "merged")
+
+# All PRs with count limit
+recent_prs <- od_query_pull_requests(count = 50L)
+```
+
+### Custom Query Syntax
+
+OneDev uses a powerful query syntax for PRs. Use
+[`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+to see available filters:
+
+``` r
+
+# View query language for pull requests
+cat(od_get_query_description("pullRequest"))
+
+# Example: Complex query
+advanced <- od_query_pull_requests(
+  query = '"Number" >= 10 and "Number" <= 50 and "Status" is "open"'
+)
+
+# PRs by source branch
+feature_prs <- od_query_pull_requests(
+  query = '"Source Branch" is "feature/auth"'
+)
+
+# PRs by target branch
+to_main <- od_query_pull_requests(
+  query = '"Target Branch" is "main"'
+)
+```
+
+### Filtering and Analysis
+
+``` r
+
+# Get all open PRs
+all_open <- od_paginate(
+  od_query_pull_requests,
+  status = "open",
+  page_size = 50L
+)
+
+# Find stale PRs (created >7 days ago, still open)
+stale <- all_open %>%
+  mutate(age_days = as.numeric(Sys.Date() - created_date)) %>%
+  filter(age_days > 7)
+
+# Group by author
+by_author <- all_open %>%
+  group_by(author) %>%
+  summarise(
+    count = n(),
+    avg_review_time = mean(review_time, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# PRs awaiting review
+needs_review <- all_open %>%
+  filter(review_count == 0)
+```
+
+## Inspecting Pull Requests
+
+### Get PR Details
+
+``` r
+
+# Detailed PR information
+pr <- od_get_pull_request(5)
+
+# See structure
+str(pr)
+
+# Common fields
+cat(
+  "PR #", pr$number, "\n",
+  "Title: ", pr$title, "\n",
+  "Status: ", pr$status, "\n",
+  "Source: ", pr$source_branch, " → ", pr$target_branch, "\n",
+  "Author: ", pr$author, "\n"
+)
+```
+
+### PR Metadata
+
+``` r
+
+# Get PR comments
+comments <- od_get_pull_request_comments(5)
+
+# See comment structure
+glimpse(comments)
+
+# Filter comments by author
+my_comments <- comments %>%
+  filter(author == "me")
+
+# Get reviews
+reviews <- od_get_pull_request_reviews(5)
+
+# See review statuses
+reviews %>%
+  select(reviewer, status, created_date)
+```
+
+### Check PR Status
+
+``` r
+
+# Get CI build status for PR
+builds <- od_query_builds(
+  query = '"Pull Request" is "#5"'
+)
+
+# Check if all checks passed
+all_passed <- builds %>%
+  filter(status == "successful") %>%
+  nrow() > 0
+
+cat("All checks passed:", all_passed, "\n")
+```
+
+## Commenting on PRs
+
+### Add Comments
+
+``` r
+
+# Simple comment
+od_add_pull_request_comment(
+  5,
+  "This looks good to me"
+)
+
+# Comment with detail
+od_add_pull_request_comment(
+  5,
+  "Great changes here. The new auth flow is cleaner.
+   I have one small suggestion in the review."
+)
+
+# Reply to a comment (threading)
+original_comment_id <- comments$id[1]
+od_add_pull_request_comment(
+  5,
+  "Good point! I'll update the docs.",
+  reply_to = original_comment_id
+)
+```
+
+### Mention Users
+
+``` r
+
+# Use @ syntax for mentions
+od_add_pull_request_comment(
+  5,
+  "Hey @alice, can you take a look at the error handling?"
+)
+
+# Tag multiple reviewers
+od_add_pull_request_comment(
+  5,
+  "@bob and @charlie, security review needed for auth changes"
+)
+```
+
+### Comment Analysis
+
+``` r
+
+# Get all comments
+comments <- od_get_pull_request_comments(5)
+
+# Count reviews by status
+review_summary <- comments %>%
+  filter(!is.na(review_status)) %>%
+  group_by(review_status) %>%
+  summarise(count = n(), .groups = "drop")
+
+# Find unresolved threads
+unresolved <- comments %>%
+  filter(resolved == FALSE)
+
+# Comments from code review bots
+bot_comments <- comments %>%
+  filter(author %like% "bot|bot$")
+```
+
+## Approval and Merging
+
+### Approve Pull Request
+
+``` r
+
+# Approve a PR
+od_approve_pull_request(
+  5,
+  message = "Approved and verified in CI"
+)
+
+# Approve with custom message
+od_approve_pull_request(
+  5,
+  message = "LGTM! Security review complete. Ready to merge."
+)
+```
+
+### Request Changes
+
+``` r
+
+# Request changes
+od_request_pull_request_changes(5)
+```
+
+### Merge PR
+
+``` r
+
+# Merge a PR
+od_merge_pull_request(5)
+
+# Discard PR without merging
+od_discard_pull_request(5)
+```
+
+## Review Workflows
+
+### Bulk Review Status Check
+
+``` r
+
+# Get all open PRs and their review status
+all_prs <- od_paginate(
+  od_query_pull_requests,
+  status = "open",
+  page_size = 50L
+)
+
+review_status <- all_prs %>%
+  select(number, title, review_count, approvals) %>%
+  mutate(
+    status_group = case_when(
+      approvals >= 2 ~ "Ready to merge",
+      review_count >= 1 ~ "In review",
+      TRUE ~ "Needs review"
+    )
+  ) %>%
+  group_by(status_group) %>%
+  summarise(count = n(), .groups = "drop")
+
+print(review_status)
+```
+
+### Track PR Progress
+
+``` r
+
+# Monitor PR through workflow
+track_pr <- function(pr_num) {
+  pr <- od_get_pull_request(pr_num)
+
+  cat("PR #", pr$number, ": ", pr$title, "\n")
+  cat("Status: ", pr$status, "\n")
+  cat("Reviews: ", pr$review_count, " | Approvals: ", pr$approvals, "\n")
+
+  builds <- od_query_builds(
+    query = sprintf('"Pull Request" is "#%d"', pr_num)
+  )
+
+  if (nrow(builds) > 0) {
+    cat("Latest build: ", builds$status[1], "\n")
+  }
+
+  return(invisible(pr))
+}
+
+# Usage
+track_pr(5)
+```
+
+### PR Metrics Dashboard
+
+``` r
+
+# Generate PR health summary
+pr_dashboard <- function() {
+  all_prs <- od_paginate(
+    od_query_pull_requests,
+    page_size = 50L,
+    max_pages = 5L
+  )
+
+  summary_stats <- all_prs %>%
+    summarise(
+      total_open = sum(status == "open"),
+      total_merged = sum(status == "merged"),
+      total_closed = sum(status == "closed"),
+      avg_review_time = round(mean(review_time, na.rm = TRUE) / 60, 1),
+      stale_prs = sum(age_days > 7, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  return(summary_stats)
+}
+
+# Usage
+dashboard <- pr_dashboard()
+print(dashboard)
+```
+
+## Automation Patterns
+
+### Auto-Comment on PR Creation
+
+``` r
+
+# Monitor for new PRs and auto-comment
+auto_welcome <- function() {
+  recent <- od_query_pull_requests(count = 5L)
+
+  for (pr_num in recent$number) {
+    comments <- od_get_pull_request_comments(pr_num)
+
+    if (nrow(comments) == 0) {
+      od_add_pull_request_comment(
+        pr_num,
+        "Welcome! Please ensure:
+         - [ ] Tests pass
+         - [ ] Docs updated
+         - [ ] No breaking changes
+         See CONTRIBUTING.md for guidelines."
+      )
+    }
+  }
+}
+```
+
+### Daily PR Report
+
+``` r
+
+# Email report of all PRs
+pr_report_html <- od_paginate(
+  od_query_pull_requests,
+  status = "open",
+  page_size = 50L
+) %>%
+  arrange(desc(created_date)) %>%
+  select(number, title, author, review_count) %>%
+  {
+    knitr::kable(., format = "html")
+  }
+
+# Send with blastula::compose_email()
+# or save to file
+readr::write_file(pr_report_html, "pr-report.html")
+```
+
+### CI Status Monitor
+
+``` r
+
+# Check CI status for all open PRs and alert
+monitor_ci_status <- function() {
+  open_prs <- od_query_pull_requests(status = "open", count = 20L)
+
+  for (pr_num in open_prs$number) {
+    builds <- od_query_builds(
+      query = sprintf('"Pull Request" is "#%d"', pr_num)
+    )
+
+    if (nrow(builds) > 0) {
+      latest_build <- builds %>% slice(1)
+
+      if (latest_build$status == "failed") {
+        cat("ALERT: PR #", pr_num, " has failed CI\n")
+
+        od_add_pull_request_comment(
+          pr_num,
+          "⚠️ CI build failed. Check the logs and fix the issues."
+        )
+      }
+    }
+  }
+}
+```
+
+### Sync to External Issue Tracker
+
+``` r
+
+# Pull all merged PRs and sync to external system
+sync_merged_prs <- function() {
+  merged <- od_paginate(
+    od_query_pull_requests,
+    status = "merged",
+    page_size = 50L
+  ) %>%
+    filter(merged_date >= Sys.Date() - 7)
+
+  # Export to CSV for external processing
+  readr::write_csv(
+    merged %>%
+      select(number, title, author, merged_date),
+    "merged-prs-this-week.csv"
+  )
+
+  cat("Exported", nrow(merged), "merged PRs\n")
+}
+```
+
+### Auto-Merge Ready PRs
+
+``` r
+
+# Automatically merge PRs that meet criteria
+auto_merge_ready <- function() {
+  open_prs <- od_query_pull_requests(status = "open", count = 50L)
+
+  for (pr_num in open_prs$number) {
+    pr <- od_get_pull_request(pr_num)
+
+    # Check if ready to merge
+    if (pr$approvals >= 2 && pr$ci_passed) {
+      cat("Merging PR #", pr_num, "\n")
+      od_merge_pull_request(
+        pr_num,
+        commit_message = sprintf("%s (%s)", pr$title, paste0("#", pr_num))
+      )
+    }
+  }
+}
+```
+
+## Integration Patterns
+
+### PR + Issue Linking
+
+``` r
+
+# When creating a PR, link related issues
+link_issues_to_pr <- function(pr_num, issue_numbers) {
+  for (issue_num in issue_numbers) {
+    od_add_pull_request_comment(
+      pr_num,
+      sprintf("Relates to issue #%d", issue_num)
+    )
+  }
+}
+
+# Usage
+link_issues_to_pr(5, c(123, 124))
+```
+
+### PR + Build Integration
+
+``` r
+
+# Get PR and associated build info
+pr_with_builds <- function(pr_num) {
+  pr <- od_get_pull_request(pr_num)
+
+  builds <- od_query_builds(
+    query = sprintf('"Pull Request" is "#%d"', pr_num)
+  )
+
+  result <- list(
+    pr = pr,
+    builds = builds,
+    latest_build_status = if (nrow(builds) > 0) builds$status[1] else "none"
+  )
+
+  return(result)
+}
+```
+
+### Deployment via PR
+
+``` r
+
+# Auto-deploy to staging when PR approved
+deploy_on_approval <- function(pr_num, target_env = "staging") {
+  pr <- od_get_pull_request(pr_num)
+
+  if (pr$approvals >= 2) {
+    cat("Deploying PR #", pr_num, " to ", target_env, "\n")
+
+    # Trigger deployment job
+    od_run_job(
+      "deploy",
+      branch = pr$source_branch,
+      parameters = list(
+        ENVIRONMENT = target_env,
+        PR_NUMBER = pr_num
+      )
+    )
+
+    od_add_pull_request_comment(
+      pr_num,
+      sprintf("✅ Deployed to %s. Ready for testing.", target_env)
+    )
+  }
+}
+```
+
+## Best Practices
+
+1.  **Always paginate** for production scripts:
+
+    ``` r
+
+    all <- od_paginate(od_query_pull_requests, page_size = 50L, max_pages = Inf)
+    ```
+
+2.  **Check CI before merging** — don’t rely on manual verification:
+
+    ``` r
+
+    builds <- od_query_builds(query = sprintf('"Pull Request" is "#%d"', pr_num))
+    all_passed <- all(builds$status == "successful")
+    ```
+
+3.  **Use threading** for related comments:
+
+    ``` r
+
+    od_add_pull_request_comment(
+      pr_num,
+      "Good catch!",
+      reply_to = comment_id
+    )
+    ```
+
+4.  **Cache PR lists** to reduce API calls:
+
+    ``` r
+
+    open_prs <- od_query_pull_requests(status = "open", count = 100L)
+    # Reuse open_prs instead of querying again
+    ```
+
+5.  **Automate repetitive reviews** with bots:
+
+    ``` r
+
+    # Check for common issues (missing tests, docs, etc.)
+    # and auto-comment with guidance
+    ```
+
+6.  **Log state changes** for audit trails:
+
+    ``` r
+
+    cat("Merging PR #", pr_num, " at ", Sys.time(), "\n")
+    od_merge_pull_request(pr_num, ...)
+    ```
+
+## Troubleshooting
+
+**Q: Can’t merge PR even though CI is green?** A: Check approval
+requirements:
+[`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md)
+shows `approvals` count.
+
+**Q: How do I find PRs that need review?** A: Use queries:
+`'"Review Status" is "pending"'` or count `review_count` field.
+
+**Q: How do I revert a merged PR?** A: Create a new PR with the revert
+commits targeting the same branch.
+
+**Q: Can I trigger CI from a comment?** A: Use special comment commands
+if configured in OneDev. Check server docs.
+
+**Q: How do I diff two branches?** A: Use
+[`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+to access the diff endpoint directly via low-level API.

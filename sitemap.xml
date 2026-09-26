@@ -1,12 +1,20 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://alexseymer.github.io/onedevR/404.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/AGENTS.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/CONTRIBUTING.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/LICENSE-text.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/LICENSE.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/REFACTORING.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/RELEASE.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/ROADMAP.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/ai-examples.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/builds-workflow.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/function-map.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/articles/getting-started.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/articles/index.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/issues-workflow.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/pull-requests-workflow.html</loc></url>
+<url><loc>https://alexseymer.github.io/onedevR/articles/query-dsl-reference.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/authors.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/index.html</loc></url>
 <url><loc>https://alexseymer.github.io/onedevR/news/index.html</loc></url>

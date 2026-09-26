@@ -2,150 +2,376 @@
 
 ## Overview
 
-`onedevr` is an R client for self-hosted [OneDev](https://onedev.io)
-REST APIs. It follows the same shape as
-[`gitlabr`](https://thinkr-open.github.io/gitlabr/) (`od_*` helpers +
-[`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
-escape hatch) and mirrors OneDev conventions from the
-[`tod`](https://github.com/theonedev/tod) CLI.
+`onedevr` is an R client for the [OneDev](https://onedev.io) REST API.
+It provides:
 
-**Important:** high-level helpers take **UI numbers** (`145` /
-`"#145"`), not internal REST ids.
+- **High-level helpers** (`od_*` functions) for common workflows
+- **Low-level escape hatch**
+  ([`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md))
+  for custom queries
+- **Tibble-first results** for easy data manipulation
+- **Connection flexibility** (environment variables or explicit objects)
 
-List/query helpers return **tibbles** by default. Opt out with
-`as_tibble = FALSE` or `options(onedevr.as_tibble = FALSE)`.
+This vignette covers basic setup and common tasks. For detailed
+workflows, see:
 
-## Configure a connection
+- `vignette("issues", package = "onedevr")` — Issue management
+- `vignette("builds", package = "onedevr")` — Build queries and
+  artifacts
+- `vignette("pull-requests", package = "onedevr")` — PR workflows
 
-### Environment variables
+### Key Concepts
+
+**UI Numbers vs. Internal IDs:** onedevr functions use **UI numbers**
+(e.g., `#145`), matching what you see in the OneDev web UI. The package
+handles internal ID resolution automatically.
+
+**Tibbles by Default:** List and query functions return tibbles for easy
+piping and data manipulation:
 
 ``` r
 
 library(onedevr)
 
+issues <- od_query_issues(state = "Open")
+issues %>%
+  dplyr::filter(priority == "High") %>%
+  dplyr::select(number, title, assignee)
+```
+
+## Installation
+
+Install from GitHub:
+
+``` r
+
+remotes::install_github("alexseymer/onedevR")
+```
+
+Verify installation:
+
+``` r
+
+library(onedevr)
+packageVersion("onedevr")  # Should be 0.5.1 or later
+```
+
+## Configuration
+
+### Quick Start: Environment Variables
+
+The simplest setup uses environment variables. Set them in `.Renviron`
+or via [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html):
+
+``` r
+
 Sys.setenv(
-  ONEDEV_HOST = "https://git.example.test",
-  ONEDEV_API_TOKEN = "your-token",
-  ONEDEV_PROJECT_PATH = "group/my-project"
+  ONEDEV_HOST = "https://onedev.example.com",
+  ONEDEV_API_TOKEN = "your-token-here",
+  ONEDEV_PROJECT_PATH = "mygroup/myproject"
 )
 
+# Now you can use onedevr functions directly
 od_query_issues(state = "Open")
 ```
 
-See `.Renviron.example` / `.env.example` in the repository for the full
-variable list (including Basic Auth via `ONEDEV_USERNAME` /
-`ONEDEV_PASSWORD`).
+**Available Environment Variables:**
 
-### Explicit connection
+| Variable | Purpose | Example |
+|----|----|----|
+| `ONEDEV_HOST` | OneDev server URL | `https://onedev.example.com` |
+| `ONEDEV_API_TOKEN` | Bearer token (recommended) | `(token)` |
+| `ONEDEV_USERNAME` | For Basic Auth | `myuser` |
+| `ONEDEV_PASSWORD` | For Basic Auth | `mypass` |
+| `ONEDEV_PROJECT_PATH` | Default project | `group/project` |
+| `ONEDEV_PROJECT_ID` | Default project ID | `1` |
+
+See `.env.example` in the repository for additional variables.
+
+### Advanced: Explicit Connection Objects
+
+For fine-grained control or multiple connections:
 
 ``` r
 
+# Create a connection
 conn <- od_connection(
-  host = "https://git.example.test",
+  host = "https://onedev.example.com",
   token = Sys.getenv("ONEDEV_API_TOKEN"),
-  project_path = "group/my-project"
+  project_path = "group/project"
 )
 
-od_set_connection(conn) # optional package default
-od_get_issue(145, conn = conn)
+# Set as package default (optional)
+od_set_connection(conn)
+
+# Or pass to individual functions
+issues <- od_query_issues(state = "Open", conn = conn)
 ```
 
-## Issues
+### Troubleshooting Connection Issues
+
+**Error: `401 Unauthorized`** - Check token is valid:
+`curl -H "Authorization: Bearer $TOKEN" https://onedev.example.com/~api/issues` -
+Verify `ONEDEV_HOST` has no trailing slash - Try Basic Auth if token
+isn’t working: `ONEDEV_USERNAME` + `ONEDEV_PASSWORD`
+
+**Error: `404 Not Found` (issues/builds)** - Verify project path:
+[`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md)
+to check configured project - For project-independent queries, omit
+`ONEDEV_PROJECT_PATH`
+
+## Working with Issues
+
+### Query and Inspect
 
 ``` r
 
-issues <- od_query_issues(state = "Open", count = 20L)
-issue <- od_get_issue(145)
-fields <- od_get_issue_fields(145)
+library(onedevr)
+
+# Get all open issues (limited to 50 by default)
+open <- od_query_issues(state = "Open", count = 50L)
+
+# Get specific issue by UI number
+issue <- od_get_issue(145)  # Issue #145
+
+# See available issue fields
+fields <- od_get_issue_fields()
+
+# Get comments on an issue
 comments <- od_get_issue_comments(145)
+```
 
-created <- od_create_issue(
-  title = "API test",
-  description = "Created from R",
-  fields = list(Priority = "Normal")
+### Create and Update
+
+``` r
+
+# Create new issue
+new_issue <- od_create_issue(
+  title = "Add user authentication",
+  description = "Implement OAuth2 support",
+  fields = list(Priority = "High", Type = "Feature")
 )
 
-od_issue_set_title(created$number, "API test (renamed)")
-od_issue_transition_state(created$number, "Closed")
+issue_number <- new_issue$number  # e.g., 146
+
+# Update title and description
+od_issue_set_title(issue_number, "Add OAuth2 authentication")
+od_issue_set_description(issue_number, "Enhanced description here")
+
+# Set custom fields
+od_issue_set_fields(issue_number, Priority = "Critical", Assignee = "alice")
+
+# Change state
+od_issue_transition_state(issue_number, "In Progress")
+od_issue_transition_state(issue_number, "Closed")
 ```
 
-Iterations (sprint/version-like objects in OneDev):
+### Iterations and Links
 
 ``` r
 
+# List sprints/iterations
 iterations <- od_list_iterations()
+
+# Add issue to iteration
 od_add_issue_iterations(145, iteration_ids = iterations$id[1])
+
+# Add comment
+od_add_issue_comment(
+  issue_number = 145,
+  content = "Working on this now",
+  reply_to = NA  # or comment ID for threading
+)
 ```
 
-## Builds, jobs, and artifacts
+## Working with Builds
 
-Build **status** filters use OneDev keyword criteria (`successful`,
-`failed`, …), not a `"Status"` field. Enum spellings like `"SUCCESSFUL"`
-are accepted and mapped.
+### Query Builds
 
 ``` r
 
-builds <- od_query_builds(status = "successful", count = 10L)
-build <- od_get_build(100)
-params <- od_get_build_params(100)
-log_lines <- od_get_build_log(100)
-artifacts <- od_list_build_artifacts(100)
+# Query by status (use OneDev keywords)
+successful <- od_query_builds(status = "successful", count = 10L)
+failed <- od_query_builds(status = "failed", count = 10L)
 
-# Run / rebuild / cancel (state-changing — use deliberately)
-# od_run_job("CI", branch = "main")
-# od_rebuild_job(100)
-# od_cancel_job(100)
-```
-
-Inspect the server’s build query grammar:
-
-``` r
-
+# See query language
 cat(od_get_query_description("build"))
+
+# Get specific build
+build <- od_get_build(123)
+
+# Build parameters and logs
+params <- od_get_build_params(123)
+logs <- od_get_build_log(123)  # Returns log lines
 ```
 
-## Pull requests
+### Artifacts and Results
 
 ``` r
 
-open_prs <- od_query_pull_requests(status = "open", count = 10L)
-pr <- od_get_pull_request(1)
-comments <- od_get_pull_request_comments(1)
-reviews <- od_get_pull_request_reviews(1)
+# List build artifacts
+artifacts <- od_list_build_artifacts(123)
+
+# Download artifact
+od_download_build_artifact(123, "dist/app.zip", "app-123.zip")
 ```
 
-## Projects, users, packages, and git
+### Trigger Builds
 
 ``` r
 
-projects <- od_query_projects(count = 20L)
+# Run a job
+od_run_job("CI", branch = "main", parameters = list(VERBOSE = TRUE))
+
+# Rebuild existing build
+od_rebuild_job(123)
+
+# Cancel running build
+od_cancel_job(123)
+```
+
+## Working with Pull Requests
+
+``` r
+
+# Query PRs
+open_prs <- od_query_pull_requests(status = "open", count = 20L)
+
+# Get specific PR
+pr <- od_get_pull_request(5)
+
+# Get comments and reviews
+comments <- od_get_pull_request_comments(5)
+reviews <- od_get_pull_request_reviews(5)
+
+# Add comment
+od_add_pull_request_comment(5, "Looks good, merging now")
+
+# Approve
+od_approve_pull_request(5, "Approved and verified in CI")
+```
+
+## Repository Operations
+
+``` r
+
+# Get project info
 project <- od_get_project()
-clone <- od_get_project_clone_url() # fields: http, ssh
+clone_url <- od_get_project_clone_url()  # http, ssh URLs
 
+# List branches
 branches <- od_list_branches()
-tip <- od_get_branch("main")
-commits <- od_query_commits(count = 10L)
+
+# Get branch info
+main <- od_get_branch("main")
+
+# Query commits
+commits <- od_query_commits(path = "R/", count = 20L)
+
+# Get file contents
 readme <- od_get_file_text("main", "README.md")
 
+# List packages
 packs <- od_query_packages(count = 10L)
 ```
 
 ## Pagination
 
+For large result sets, use
+[`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md):
+
 ``` r
 
-all_open <- od_paginate(
+# Fetch all issues in batches
+all_issues <- od_paginate(
   od_query_issues,
   state = "Open",
-  page_size = 50L,
-  max_pages = 20L
+  page_size = 50L,     # Items per page
+  max_pages = Inf      # Fetch all available
+)
+
+# Or limit total pages
+recent_50 <- od_paginate(
+  od_query_builds,
+  status = "successful",
+  page_size = 10L,
+  max_pages = 5L
 )
 ```
 
-## Low-level escape hatch
+## Low-Level API Access
+
+For queries not covered by high-level helpers, use
+[`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md):
 
 ``` r
 
+# Make custom REST calls
 issue_id <- od_resolve_issue_id(145)
 raw <- od_request("GET", paste0("/issues/", issue_id))
+
+# POST example
+new_branch <- od_request(
+  method = "POST",
+  endpoint = "/repository/branches",
+  data = list(name = "feature/new", baseBranch = "main")
+)
+
+# See full endpoint reference at:
+# https://your-onedev-host/~help/api
 ```
+
+## Best Practices
+
+1.  **Use environment variables** for shared scripts and CI/CD
+2.  **Cache results** when fetching large datasets
+3.  **Handle errors** gracefully — network timeouts can occur
+4.  **Verify queries** using
+    [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+    for syntax
+5.  **Use pagination** for production scripts, not loop + offset
+6.  **Log operations** when making state changes (issue creation, build
+    triggering)
+
+## Examples and Recipes
+
+See `vignette("issues", package = "onedevr")` for detailed workflows
+on: - Bulk issue operations - Custom queries - Filtering and reporting
+
+Additional resources: - **OneDev API docs**:
+`https://your-host/~help/api` - **TheOneDev CLI**:
+<https://github.com/theonedev/tod> - **gitlabr reference**:
+<https://thinkr-open.github.io/gitlabr/>
+
+## Troubleshooting
+
+**Q: How do I use UI numbers vs. internal IDs?** A: Always use UI
+numbers (e.g., `145` for `#145`). onedevr resolves them automatically.
+
+**Q: What’s the tibble option for?** A: Set `as_tibble = FALSE` to get
+plain lists instead of tibbles:
+
+``` r
+
+od_query_issues(as_tibble = FALSE)
+# Or globally:
+options(onedevr.as_tibble = FALSE)
+```
+
+**Q: Can I use this for multiple OneDev instances?** A: Yes, create
+separate connection objects:
+
+``` r
+
+prod <- od_connection(host = "https://prod.ondev", token = "...")
+staging <- od_connection(host = "https://staging.ondev", token = "...")
+od_query_issues(state = "Open", conn = prod)
+```
+
+**Q: Does onedevr support webhooks?** A: Not directly. Use OneDev’s
+webhook settings to POST to your R Shiny app or trigger CI.
+
+------------------------------------------------------------------------
+
+For more help, file an issue:
+<https://github.com/alexseymer/onedevR/issues>

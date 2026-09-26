@@ -38,7 +38,13 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with onedevr</a></li>
+<li><a class="dropdown-item" href="../articles/ai-examples.html">AI-Optimized Examples: Patterns and Edge Cases</a></li>
+    <li><a class="dropdown-item" href="../articles/builds-workflow.html">Builds Workflow - CI/CD Integration</a></li>
+    <li><a class="dropdown-item" href="../articles/function-map.html">Function Relationship Map &amp; API Navigation Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with onedevr</a></li>
+    <li><a class="dropdown-item" href="../articles/issues-workflow.html">Issues Workflow - Advanced Patterns</a></li>
+    <li><a class="dropdown-item" href="../articles/pull-requests-workflow.html">Pull Requests Workflow - Review and Merge</a></li>
+    <li><a class="dropdown-item" href="../articles/query-dsl-reference.html">OneDev Query DSL Reference</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -80,136 +86,406 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>onedevr</code> is an R client for self-hosted <a href="https://onedev.io" class="external-link">OneDev</a> REST APIs. It follows the same shape
-as <a href="https://thinkr-open.github.io/gitlabr/" class="external-link"><code>gitlabr</code></a>
-(<code>od_*</code> helpers + <code><a href="../reference/od_request.html">od_request()</a></code> escape hatch) and
-mirrors OneDev conventions from the <a href="https://github.com/theonedev/tod" class="external-link"><code>tod</code></a> CLI.</p>
-<p><strong>Important:</strong> high-level helpers take <strong>UI
-numbers</strong> (<code>145</code> / <code>"#145"</code>), not internal
-REST ids.</p>
-<p>List/query helpers return <strong>tibbles</strong> by default. Opt
-out with <code>as_tibble = FALSE</code> or
-<code>options(onedevr.as_tibble = FALSE)</code>.</p>
-</div>
-<div class="section level2">
-<h2 id="configure-a-connection">Configure a connection<a class="anchor" aria-label="anchor" href="#configure-a-connection"></a>
-</h2>
+<p><code>onedevr</code> is an R client for the <a href="https://onedev.io" class="external-link">OneDev</a> REST API. It provides:</p>
+<ul>
+<li>
+<strong>High-level helpers</strong> (<code>od_*</code> functions)
+for common workflows</li>
+<li>
+<strong>Low-level escape hatch</strong> (<code><a href="../reference/od_request.html">od_request()</a></code>)
+for custom queries</li>
+<li>
+<strong>Tibble-first results</strong> for easy data
+manipulation</li>
+<li>
+<strong>Connection flexibility</strong> (environment variables or
+explicit objects)</li>
+</ul>
+<p>This vignette covers basic setup and common tasks. For detailed
+workflows, see:</p>
+<ul>
+<li>
+<code>vignette("issues", package = "onedevr")</code> — Issue
+management</li>
+<li>
+<code>vignette("builds", package = "onedevr")</code> — Build queries
+and artifacts</li>
+<li>
+<code>vignette("pull-requests", package = "onedevr")</code> — PR
+workflows</li>
+</ul>
 <div class="section level3">
-<h3 id="environment-variables">Environment variables<a class="anchor" aria-label="anchor" href="#environment-variables"></a>
+<h3 id="key-concepts">Key Concepts<a class="anchor" aria-label="anchor" href="#key-concepts"></a>
 </h3>
+<p><strong>UI Numbers vs. Internal IDs:</strong> onedevr functions use
+<strong>UI numbers</strong> (e.g., <code>#145</code>), matching what you
+see in the OneDev web UI. The package handles internal ID resolution
+automatically.</p>
+<p><strong>Tibbles by Default:</strong> List and query functions return
+tibbles for easy piping and data manipulation:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span></span>
-<span>  ONEDEV_HOST <span class="op">=</span> <span class="st">"https://git.example.test"</span>,</span>
-<span>  ONEDEV_API_TOKEN <span class="op">=</span> <span class="st">"your-token"</span>,</span>
-<span>  ONEDEV_PROJECT_PATH <span class="op">=</span> <span class="st">"group/my-project"</span></span>
+<span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span><span class="op">)</span></span>
+<span><span class="va">issues</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">priority</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">number</span>, <span class="va">title</span>, <span class="va">assignee</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span></code></pre></div>
+<p>Verify installation:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"onedevr"</span><span class="op">)</span>  <span class="co"># Should be 0.5.1 or later</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="configuration">Configuration<a class="anchor" aria-label="anchor" href="#configuration"></a>
+</h2>
+<div class="section level3">
+<h3 id="quick-start-environment-variables">Quick Start: Environment Variables<a class="anchor" aria-label="anchor" href="#quick-start-environment-variables"></a>
+</h3>
+<p>The simplest setup uses environment variables. Set them in
+<code>.Renviron</code> or via <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span></span>
+<span>  ONEDEV_HOST <span class="op">=</span> <span class="st">"https://onedev.example.com"</span>,</span>
+<span>  ONEDEV_API_TOKEN <span class="op">=</span> <span class="st">"your-token-here"</span>,</span>
+<span>  ONEDEV_PROJECT_PATH <span class="op">=</span> <span class="st">"mygroup/myproject"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Now you can use onedevr functions directly</span></span>
 <span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span><span class="op">)</span></span></code></pre></div>
-<p>See <code>.Renviron.example</code> / <code>.env.example</code> in the
-repository for the full variable list (including Basic Auth via
-<code>ONEDEV_USERNAME</code> / <code>ONEDEV_PASSWORD</code>).</p>
+<p><strong>Available Environment Variables:</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th>Variable</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>ONEDEV_HOST</code></td>
+<td>OneDev server URL</td>
+<td><code>https://onedev.example.com</code></td>
+</tr>
+<tr class="even">
+<td><code>ONEDEV_API_TOKEN</code></td>
+<td>Bearer token (recommended)</td>
+<td><code>(token)</code></td>
+</tr>
+<tr class="odd">
+<td><code>ONEDEV_USERNAME</code></td>
+<td>For Basic Auth</td>
+<td><code>myuser</code></td>
+</tr>
+<tr class="even">
+<td><code>ONEDEV_PASSWORD</code></td>
+<td>For Basic Auth</td>
+<td><code>mypass</code></td>
+</tr>
+<tr class="odd">
+<td><code>ONEDEV_PROJECT_PATH</code></td>
+<td>Default project</td>
+<td><code>group/project</code></td>
+</tr>
+<tr class="even">
+<td><code>ONEDEV_PROJECT_ID</code></td>
+<td>Default project ID</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>See <code>.env.example</code> in the repository for additional
+variables.</p>
 </div>
 <div class="section level3">
-<h3 id="explicit-connection">Explicit connection<a class="anchor" aria-label="anchor" href="#explicit-connection"></a>
+<h3 id="advanced-explicit-connection-objects">Advanced: Explicit Connection Objects<a class="anchor" aria-label="anchor" href="#advanced-explicit-connection-objects"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span></span>
-<span>  host <span class="op">=</span> <span class="st">"https://git.example.test"</span>,</span>
-<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ONEDEV_API_TOKEN"</span><span class="op">)</span>,</span>
-<span>  project_path <span class="op">=</span> <span class="st">"group/my-project"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/od_set_connection.html">od_set_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span> <span class="co"># optional package default</span></span>
-<span><span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="fl">145</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="issues">Issues<a class="anchor" aria-label="anchor" href="#issues"></a>
-</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
-<span><span class="va">issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
-<span><span class="va">fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue_fields.html">od_get_issue_fields</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
-<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue_comments.html">od_get_issue_comments</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">created</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_create_issue.html">od_create_issue</a></span><span class="op">(</span></span>
-<span>  title <span class="op">=</span> <span class="st">"API test"</span>,</span>
-<span>  description <span class="op">=</span> <span class="st">"Created from R"</span>,</span>
-<span>  fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Priority <span class="op">=</span> <span class="st">"Normal"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/od_issue_set_title.html">od_issue_set_title</a></span><span class="op">(</span><span class="va">created</span><span class="op">$</span><span class="va">number</span>, <span class="st">"API test (renamed)"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">created</span><span class="op">$</span><span class="va">number</span>, <span class="st">"Closed"</span><span class="op">)</span></span></code></pre></div>
-<p>Iterations (sprint/version-like objects in OneDev):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="fl">145</span>, iteration_ids <span class="op">=</span> <span class="va">iterations</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="builds-jobs-and-artifacts">Builds, jobs, and artifacts<a class="anchor" aria-label="anchor" href="#builds-jobs-and-artifacts"></a>
-</h2>
-<p>Build <strong>status</strong> filters use OneDev keyword criteria
-(<code>successful</code>, <code>failed</code>, …), not a
-<code>"Status"</code> field. Enum spellings like
-<code>"SUCCESSFUL"</code> are accepted and mapped.</p>
+<p>For fine-grained control or multiple connections:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"successful"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
-<span><span class="va">build</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build.html">od_get_build</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build_params.html">od_get_build_params</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">log_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build_log.html">od_get_build_log</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Create a connection</span></span>
+<span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span></span>
+<span>  host <span class="op">=</span> <span class="st">"https://onedev.example.com"</span>,</span>
+<span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ONEDEV_API_TOKEN"</span><span class="op">)</span>,</span>
+<span>  project_path <span class="op">=</span> <span class="st">"group/project"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run / rebuild / cancel (state-changing — use deliberately)</span></span>
-<span><span class="co"># od_run_job("CI", branch = "main")</span></span>
-<span><span class="co"># od_rebuild_job(100)</span></span>
-<span><span class="co"># od_cancel_job(100)</span></span></code></pre></div>
-<p>Inspect the server’s build query grammar:</p>
+<span><span class="co"># Set as package default (optional)</span></span>
+<span><span class="fu"><a href="../reference/od_set_connection.html">od_set_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or pass to individual functions</span></span>
+<span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="troubleshooting-connection-issues">Troubleshooting Connection Issues<a class="anchor" aria-label="anchor" href="#troubleshooting-connection-issues"></a>
+</h3>
+<p><strong>Error: <code>401 Unauthorized</code></strong> - Check token
+is valid:
+<code>curl -H "Authorization: Bearer $TOKEN" https://onedev.example.com/~api/issues</code>
+- Verify <code>ONEDEV_HOST</code> has no trailing slash - Try Basic Auth
+if token isn’t working: <code>ONEDEV_USERNAME</code> +
+<code>ONEDEV_PASSWORD</code></p>
+<p><strong>Error: <code>404 Not Found</code> (issues/builds)</strong> -
+Verify project path: <code><a href="../reference/od_get_project.html">od_get_project()</a></code> to check configured
+project - For project-independent queries, omit
+<code>ONEDEV_PROJECT_PATH</code></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="working-with-issues">Working with Issues<a class="anchor" aria-label="anchor" href="#working-with-issues"></a>
+</h2>
+<div class="section level3">
+<h3 id="query-and-inspect">Query and Inspect<a class="anchor" aria-label="anchor" href="#query-and-inspect"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/od_get_query_description.html">od_get_query_description</a></span><span class="op">(</span><span class="st">"build"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="pull-requests">Pull requests<a class="anchor" aria-label="anchor" href="#pull-requests"></a>
-</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">open_prs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_pull_requests.html">od_query_pull_requests</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"open"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
-<span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request.html">od_get_pull_request</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request_comments.html">od_get_pull_request_comments</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">reviews</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request_reviews.html">od_get_pull_request_reviews</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="projects-users-packages-and-git">Projects, users, packages, and git<a class="anchor" aria-label="anchor" href="#projects-users-packages-and-git"></a>
-</h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_projects.html">od_query_projects</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
-<span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project.html">od_get_project</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">clone</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project_clone_url.html">od_get_project_clone_url</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># fields: http, ssh</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Get all open issues (limited to 50 by default)</span></span>
+<span><span class="va">open</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, count <span class="op">=</span> <span class="fl">50L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get specific issue by UI number</span></span>
+<span><span class="va">issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span>  <span class="co"># Issue #145</span></span>
+<span></span>
+<span><span class="co"># See available issue fields</span></span>
+<span><span class="va">fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue_fields.html">od_get_issue_fields</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get comments on an issue</span></span>
+<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue_comments.html">od_get_issue_comments</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="create-and-update">Create and Update<a class="anchor" aria-label="anchor" href="#create-and-update"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create new issue</span></span>
+<span><span class="va">new_issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_create_issue.html">od_create_issue</a></span><span class="op">(</span></span>
+<span>  title <span class="op">=</span> <span class="st">"Add user authentication"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Implement OAuth2 support"</span>,</span>
+<span>  fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Priority <span class="op">=</span> <span class="st">"High"</span>, Type <span class="op">=</span> <span class="st">"Feature"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">issue_number</span> <span class="op">&lt;-</span> <span class="va">new_issue</span><span class="op">$</span><span class="va">number</span>  <span class="co"># e.g., 146</span></span>
+<span></span>
+<span><span class="co"># Update title and description</span></span>
+<span><span class="fu"><a href="../reference/od_issue_set_title.html">od_issue_set_title</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"Add OAuth2 authentication"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_issue_set_description.html">od_issue_set_description</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"Enhanced description here"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set custom fields</span></span>
+<span><span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_number</span>, Priority <span class="op">=</span> <span class="st">"Critical"</span>, Assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Change state</span></span>
+<span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"In Progress"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"Closed"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="iterations-and-links">Iterations and Links<a class="anchor" aria-label="anchor" href="#iterations-and-links"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># List sprints/iterations</span></span>
+<span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add issue to iteration</span></span>
+<span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="fl">145</span>, iteration_ids <span class="op">=</span> <span class="va">iterations</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add comment</span></span>
+<span><span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span></span>
+<span>  issue_number <span class="op">=</span> <span class="fl">145</span>,</span>
+<span>  content <span class="op">=</span> <span class="st">"Working on this now"</span>,</span>
+<span>  reply_to <span class="op">=</span> <span class="cn">NA</span>  <span class="co"># or comment ID for threading</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="working-with-builds">Working with Builds<a class="anchor" aria-label="anchor" href="#working-with-builds"></a>
+</h2>
+<div class="section level3">
+<h3 id="query-builds">Query Builds<a class="anchor" aria-label="anchor" href="#query-builds"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Query by status (use OneDev keywords)</span></span>
+<span><span class="va">successful</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"successful"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span><span class="va">failed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"failed"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># See query language</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/od_get_query_description.html">od_get_query_description</a></span><span class="op">(</span><span class="st">"build"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get specific build</span></span>
+<span><span class="va">build</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build.html">od_get_build</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Build parameters and logs</span></span>
+<span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build_params.html">od_get_build_params</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">logs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build_log.html">od_get_build_log</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>  <span class="co"># Returns log lines</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="artifacts-and-results">Artifacts and Results<a class="anchor" aria-label="anchor" href="#artifacts-and-results"></a>
+</h3>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># List build artifacts</span></span>
+<span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Download artifact</span></span>
+<span><span class="fu"><a href="../reference/od_download_build_artifact.html">od_download_build_artifact</a></span><span class="op">(</span><span class="fl">123</span>, <span class="st">"dist/app.zip"</span>, <span class="st">"app-123.zip"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="trigger-builds">Trigger Builds<a class="anchor" aria-label="anchor" href="#trigger-builds"></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run a job</span></span>
+<span><span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span><span class="st">"CI"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>VERBOSE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Rebuild existing build</span></span>
+<span><span class="fu"><a href="../reference/od_rebuild_job.html">od_rebuild_job</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Cancel running build</span></span>
+<span><span class="fu"><a href="../reference/od_cancel_job.html">od_cancel_job</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="working-with-pull-requests">Working with Pull Requests<a class="anchor" aria-label="anchor" href="#working-with-pull-requests"></a>
+</h2>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Query PRs</span></span>
+<span><span class="va">open_prs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_pull_requests.html">od_query_pull_requests</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"open"</span>, count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get specific PR</span></span>
+<span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request.html">od_get_pull_request</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get comments and reviews</span></span>
+<span><span class="va">comments</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request_comments.html">od_get_pull_request_comments</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">reviews</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request_reviews.html">od_get_pull_request_reviews</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add comment</span></span>
+<span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Looks good, merging now"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Approve</span></span>
+<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Approved and verified in CI"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="repository-operations">Repository Operations<a class="anchor" aria-label="anchor" href="#repository-operations"></a>
+</h2>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get project info</span></span>
+<span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project.html">od_get_project</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">clone_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project_clone_url.html">od_get_project_clone_url</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># http, ssh URLs</span></span>
+<span></span>
+<span><span class="co"># List branches</span></span>
 <span><span class="va">branches</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_branches.html">od_list_branches</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">tip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_branch.html">od_get_branch</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">)</span></span>
-<span><span class="va">commits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_commits.html">od_query_commits</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get branch info</span></span>
+<span><span class="va">main</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_branch.html">od_get_branch</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Query commits</span></span>
+<span><span class="va">commits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_commits.html">od_query_commits</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"R/"</span>, count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get file contents</span></span>
 <span><span class="va">readme</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_file_text.html">od_get_file_text</a></span><span class="op">(</span><span class="st">"main"</span>, <span class="st">"README.md"</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># List packages</span></span>
 <span><span class="va">packs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_packages.html">od_query_packages</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="pagination">Pagination<a class="anchor" aria-label="anchor" href="#pagination"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">all_open</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_paginate.html">od_paginate</a></span><span class="op">(</span></span>
+<p>For large result sets, use <code><a href="../reference/od_paginate.html">od_paginate()</a></code>:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fetch all issues in batches</span></span>
+<span><span class="va">all_issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_paginate.html">od_paginate</a></span><span class="op">(</span></span>
 <span>  <span class="va">od_query_issues</span>,</span>
 <span>  state <span class="op">=</span> <span class="st">"Open"</span>,</span>
-<span>  page_size <span class="op">=</span> <span class="fl">50L</span>,</span>
-<span>  max_pages <span class="op">=</span> <span class="fl">20L</span></span>
+<span>  page_size <span class="op">=</span> <span class="fl">50L</span>,     <span class="co"># Items per page</span></span>
+<span>  max_pages <span class="op">=</span> <span class="cn">Inf</span>      <span class="co"># Fetch all available</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or limit total pages</span></span>
+<span><span class="va">recent_50</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_paginate.html">od_paginate</a></span><span class="op">(</span></span>
+<span>  <span class="va">od_query_builds</span>,</span>
+<span>  status <span class="op">=</span> <span class="st">"successful"</span>,</span>
+<span>  page_size <span class="op">=</span> <span class="fl">10L</span>,</span>
+<span>  max_pages <span class="op">=</span> <span class="fl">5L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="low-level-escape-hatch">Low-level escape hatch<a class="anchor" aria-label="anchor" href="#low-level-escape-hatch"></a>
+<h2 id="low-level-api-access">Low-Level API Access<a class="anchor" aria-label="anchor" href="#low-level-api-access"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">issue_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_resolve_issue_id.html">od_resolve_issue_id</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
-<span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>For queries not covered by high-level helpers, use
+<code><a href="../reference/od_request.html">od_request()</a></code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Make custom REST calls</span></span>
+<span><span class="va">issue_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_resolve_issue_id.html">od_resolve_issue_id</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
+<span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># POST example</span></span>
+<span><span class="va">new_branch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="st">"POST"</span>,</span>
+<span>  endpoint <span class="op">=</span> <span class="st">"/repository/branches"</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"feature/new"</span>, baseBranch <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># See full endpoint reference at:</span></span>
+<span><span class="co"># https://your-onedev-host/~help/api</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="best-practices">Best Practices<a class="anchor" aria-label="anchor" href="#best-practices"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Use environment variables</strong> for shared scripts and
+CI/CD</li>
+<li>
+<strong>Cache results</strong> when fetching large datasets</li>
+<li>
+<strong>Handle errors</strong> gracefully — network timeouts can
+occur</li>
+<li>
+<strong>Verify queries</strong> using
+<code><a href="../reference/od_get_query_description.html">od_get_query_description()</a></code> for syntax</li>
+<li>
+<strong>Use pagination</strong> for production scripts, not loop +
+offset</li>
+<li>
+<strong>Log operations</strong> when making state changes (issue
+creation, build triggering)</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="examples-and-recipes">Examples and Recipes<a class="anchor" aria-label="anchor" href="#examples-and-recipes"></a>
+</h2>
+<p>See <code>vignette("issues", package = "onedevr")</code> for detailed
+workflows on: - Bulk issue operations - Custom queries - Filtering and
+reporting</p>
+<p>Additional resources: - <strong>OneDev API docs</strong>:
+<code>https://your-host/~help/api</code> - <strong>TheOneDev
+CLI</strong>: <a href="https://github.com/theonedev/tod" class="external-link uri">https://github.com/theonedev/tod</a> - <strong>gitlabr
+reference</strong>: <a href="https://thinkr-open.github.io/gitlabr/" class="external-link uri">https://thinkr-open.github.io/gitlabr/</a></p>
+</div>
+<div class="section level2">
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
+</h2>
+<p><strong>Q: How do I use UI numbers vs. internal IDs?</strong> A:
+Always use UI numbers (e.g., <code>145</code> for <code>#145</code>).
+onedevr resolves them automatically.</p>
+<p><strong>Q: What’s the tibble option for?</strong> A: Set
+<code>as_tibble = FALSE</code> to get plain lists instead of
+tibbles:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>as_tibble <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co"># Or globally:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>onedevr.as_tibble <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Q: Can I use this for multiple OneDev instances?</strong> A:
+Yes, create separate connection objects:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span>host <span class="op">=</span> <span class="st">"https://prod.ondev"</span>, token <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span>
+<span><span class="va">staging</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span>host <span class="op">=</span> <span class="st">"https://staging.ondev"</span>, token <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, conn <span class="op">=</span> <span class="va">prod</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Q: Does onedevr support webhooks?</strong> A: Not directly.
+Use OneDev’s webhook settings to POST to your R Shiny app or trigger
+CI.</p>
+<hr>
+<p>For more help, file an issue: <a href="https://github.com/alexseymer/onedevR/issues" class="external-link uri">https://github.com/alexseymer/onedevR/issues</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
