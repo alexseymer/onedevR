@@ -170,3 +170,116 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
   project_id <- od_resolve_project_id(project = project, conn = conn)
   od_request("GET", paste0("/projects/", project_id, "/clone-url"), conn = conn)
 }
+
+#' List webhooks for a project
+#'
+#' Retrieves all webhooks configured for a project.
+#'
+#' @param project Project path or numeric id; defaults to the connection project.
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return A tibble of webhooks (default), or a list when `as_tibble = FALSE`.
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_list_webhooks()
+#' }
+#' @export
+od_list_webhooks <- function(project = NULL, as_tibble = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  payload <- od_request(
+    "GET",
+    paste0("/projects/", project_id, "/webhooks"),
+    conn = conn
+  )
+  od_as_tibble(payload, as_tibble = as_tibble)
+}
+
+#' Get a webhook by ID
+#'
+#' Retrieves details for a specific webhook.
+#'
+#' @param webhook_id Numeric webhook ID.
+#' @param project Project path or numeric id; defaults to the connection project.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed webhook object (list).
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_get_webhook(1)
+#' }
+#' @export
+od_get_webhook <- function(webhook_id, project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  webhook_id <- .od_coerce_string(webhook_id)
+  .od_require(webhook_id, "webhook_id")
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  od_request(
+    "GET",
+    paste0("/projects/", project_id, "/webhooks/", webhook_id),
+    conn = conn
+  )
+}
+
+#' Create a webhook for a project
+#'
+#' Creates a new webhook that will POST events to the specified URL.
+#'
+#' @param url Target URL where webhook events will be POSTed.
+#' @param events Character vector of event types to trigger on (e.g., c("push", "pull_request")).
+#'   Omit or pass `NULL` for all events.
+#' @param project Project path or numeric id; defaults to the connection project.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed webhook object (list) with ID and configuration.
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_create_webhook("https://example.com/webhook", events = c("push", "pull_request"))
+#' }
+#' @export
+od_create_webhook <- function(url, events = NULL, project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  url <- .od_coerce_string(url)
+  .od_require(url, "url")
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+
+  body <- list(url = url)
+  if (!is.null(events) && length(events) > 0) {
+    body$events <- as.character(events)
+  }
+
+  od_request(
+    method = "POST",
+    endpoint = paste0("/projects/", project_id, "/webhooks"),
+    body = body,
+    conn = conn
+  )
+}
+
+#' Delete a webhook
+#'
+#' Removes a webhook from a project.
+#'
+#' @param webhook_id Numeric webhook ID.
+#' @param project Project path or numeric id; defaults to the connection project.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed API response (typically `NULL` on success).
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_delete_webhook(1)
+#' }
+#' @export
+od_delete_webhook <- function(webhook_id, project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  webhook_id <- .od_coerce_string(webhook_id)
+  .od_require(webhook_id, "webhook_id")
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  od_request(
+    method = "DELETE",
+    endpoint = paste0("/projects/", project_id, "/webhooks/", webhook_id),
+    conn = conn
+  )
+}
