@@ -69,3 +69,16 @@ test_that("od_get_build_log uses streaming endpoint", {
   mockery::stub(od_get_build_log, ".od_parse_build_log_raw", function(raw) c("line1"))
   expect_equal(od_get_build_log(100, conn = list()), "line1")
 })
+
+test_that("od_promote_build sends status to promotions endpoint", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_promote_build, "od_resolve_build_id", function(...) "501")
+  mockery::stub(od_promote_build, "od_request", function(method, endpoint, body = NULL, ...) {
+    expect_equal(method, "POST")
+    expect_equal(endpoint, "/builds/501/promotions")
+    expect_equal(body$status, "production")
+    list(status = "production")
+  })
+  result <- od_promote_build(100, status = "production", conn = list())
+  expect_equal(result$status, "production")
+})

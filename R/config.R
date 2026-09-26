@@ -10,9 +10,9 @@
 #' `ONEDEV_USERNAME` is set (password from `ONEDEV_PASSWORD`, or the token as
 #' password). Override with `ONEDEV_AUTH=bearer|basic`.
 #'
-#' @param validate If `TRUE` (default), error when host or credentials are missing.
+#' @param validate {logical} If `TRUE` (default), error when host or credentials are missing. Default: `TRUE`.
 #'
-#' @return A named list with fields `host`, `api_base_url`, `token`, `username`,
+#' @return {list} A named list with fields `host`, `api_base_url`, `token`, `username`,
 #'   `password`, `auth`, `repo_url`, `project_id`, `project_path`,
 #'   `default_issue_state`, and `insecure_ssl`.
 #'

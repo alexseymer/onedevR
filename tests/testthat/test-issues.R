@@ -154,3 +154,43 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
   })
   expect_equal(od_add_issue_comment(145, "note", conn = list())$id, 9)
 })
+
+test_that("od_link_issue_to_pull_request creates correct endpoint", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_link_issue_to_pull_request, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_link_issue_to_pull_request, "od_resolve_pull_request_id", function(...) "456")
+  mockery::stub(od_link_issue_to_pull_request, "od_request", function(method, endpoint, body = NULL, ...) {
+    expect_equal(method, "POST")
+    expect_equal(endpoint, "/issues/283/pull-requests")
+    expect_equal(body$pullRequestId, 456L)
+    list(ok = TRUE)
+  })
+  result <- od_link_issue_to_pull_request(145, 42, conn = list())
+  expect_equal(result$ok, TRUE)
+})
+
+test_that("od_get_issue_pull_requests retrieves linked PRs", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_get_issue_pull_requests, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_get_issue_pull_requests, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "GET")
+    expect_equal(endpoint, "/issues/283/pull-requests")
+    list(list(number = 42, title = "Fix issue"), list(number = 43, title = "Update"))
+  })
+  prs <- od_get_issue_pull_requests(145, as_tibble = FALSE, conn = list())
+  expect_equal(length(prs), 2)
+  expect_equal(prs[[1]]$number, 42)
+})
+
+test_that("od_unlink_issue_from_pull_request removes link", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_unlink_issue_from_pull_request, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_unlink_issue_from_pull_request, "od_resolve_pull_request_id", function(...) "456")
+  mockery::stub(od_unlink_issue_from_pull_request, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "DELETE")
+    expect_equal(endpoint, "/issues/283/pull-requests/456")
+    NULL
+  })
+  result <- od_unlink_issue_from_pull_request(145, 42, conn = list())
+  expect_null(result)
+})

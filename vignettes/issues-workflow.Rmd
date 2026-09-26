@@ -1,0 +1,380 @@
+---
+title: "Issues Workflow - Advanced Patterns"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{issues}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+# Issues Workflow
+
+This vignette covers common patterns for issue management with onedevr.
+
+```r
+library(onedevr)
+library(dplyr)
+```
+
+# Querying Issues
+
+## Basic Queries
+
+```r
+# Open issues
+open_issues <- od_query_issues(state = "Open")
+
+# Closed issues from last 30 days
+recently_closed <- od_query_issues(state = "Closed")
+
+# Issue with specific fields
+high_priority <- od_query_issues(state = "Open", Priority = "High")
+```
+
+## Custom Query Syntax
+
+OneDev uses a powerful query syntax. Use `od_get_query_description()` to see available filters:
+
+```r
+# View query language for issues
+cat(od_get_query_description("issue"))
+
+# Example: Complex query
+advanced <- od_query_issues(
+  query = '"Number" >= 100 and "Number" <= 200 and "State" is "Open" and "Priority" is "High"'
+)
+```
+
+## Query by Assignee
+
+```r
+# Issues assigned to me
+my_issues <- od_query_issues(
+  query = '"Assignee" is currentUser()'
+)
+
+# Issues assigned to specific user
+alice_issues <- od_query_issues(
+  query = '"Assignee" is "alice"'
+)
+
+# Unassigned issues
+unassigned <- od_query_issues(
+  query = '"Assignee" is empty'
+)
+```
+
+## Filtering and Analysis
+
+```r
+# Get all open issues
+all_open <- od_paginate(
+  od_query_issues,
+  state = "Open",
+  page_size = 50L
+)
+
+# Find overdue (created >30 days ago)
+overdue <- all_open %>%
+  mutate(age_days = as.numeric(Sys.Date() - created_date)) %>%
+  filter(age_days > 30, state == "Open")
+
+# Group by priority
+by_priority <- all_open %>%
+  group_by(priority) %>%
+  summarise(count = n(), .groups = "drop")
+```
+
+# Creating Issues
+
+## Simple Creation
+
+```r
+issue <- od_create_issue(
+  title = "New feature request",
+  description = "Provide details here"
+)
+
+cat("Created issue #", issue$number)
+```
+
+## Creation with Fields
+
+```r
+issue <- od_create_issue(
+  title = "API endpoint slow",
+  description = "The `/issues` endpoint returns results in >5s",
+  fields = list(
+    Priority = "High",
+    Type = "Bug",
+    Component = "API"
+  )
+)
+```
+
+## Bulk Issue Creation
+
+```r
+# Create multiple issues from data frame
+issues_data <- tibble::tibble(
+  title = c(
+    "Feature 1: Auth system",
+    "Feature 2: Caching",
+    "Feature 3: Logging"
+  ),
+  description = c(
+    "Implement OAuth2",
+    "Add Redis cache",
+    "Structured logging with JSON"
+  ),
+  priority = c("High", "Medium", "Low")
+)
+
+created_issues <- issues_data %>%
+  purrr::map_df(~od_create_issue(
+    title = .x$title,
+    description = .x$description,
+    fields = list(Priority = .x$priority)
+  ))
+
+print(created_issues)
+```
+
+# Updating Issues
+
+## Title and Description
+
+```r
+issue_num <- 145
+
+od_issue_set_title(issue_num, "New title")
+od_issue_set_description(
+  issue_num,
+  "Updated description with more context"
+)
+```
+
+## Fields
+
+```r
+od_issue_set_fields(
+  issue_num,
+  Priority = "Critical",
+  Assignee = "alice",
+  Status = "In Progress"
+)
+```
+
+## State Transitions
+
+```r
+# Common states: Open, In Progress, Closed
+od_issue_transition_state(issue_num, "In Progress")
+od_issue_transition_state(issue_num, "Closed")
+
+# Reopen
+od_issue_transition_state(issue_num, "Open")
+```
+
+# Interactions and Comments
+
+## Working with Comments
+
+```r
+# Get all comments
+comments <- od_get_issue_comments(145)
+
+# Get comment structure
+str(comments)
+
+# Filter comments
+recent <- comments %>%
+  filter(created_date >= Sys.Date() - 7)
+```
+
+## Add Comments
+
+```r
+# Simple comment
+od_add_issue_comment(145, "This looks good to me")
+
+# Reply to a comment (threading)
+original_comment_id <- comments$id[1]
+od_add_issue_comment(
+  145,
+  "Great point, agreed",
+  reply_to = original_comment_id
+)
+```
+
+## Mention Users
+
+```r
+# Use @ syntax
+od_add_issue_comment(
+  145,
+  "Hey @alice, can you review this when you get a chance?"
+)
+```
+
+# Iterations and Sprints
+
+## List and Inspect
+
+```r
+# Get all iterations (sprints)
+iterations <- od_list_iterations()
+
+# See structure
+glimpse(iterations)
+
+# Filter to active iterations
+active <- iterations %>%
+  filter(status == "active")
+```
+
+## Assign to Iterations
+
+```r
+# Add issue to iteration
+iteration_id <- iterations$id[1]
+od_add_issue_iterations(145, iteration_ids = iteration_id)
+
+# Multiple issues
+issue_numbers <- c(145, 146, 147)
+purrr::walk(
+  issue_numbers,
+  ~od_add_issue_iterations(., iteration_ids = iteration_id)
+)
+```
+
+## Sprint Reports
+
+```r
+# Get all issues in iteration
+iteration_issues <- od_query_issues(
+  query = sprintf('"Iteration" is "%s"', iterations$name[1])
+)
+
+# Sprint summary
+sprint_summary <- iteration_issues %>%
+  group_by(state) %>%
+  summarise(
+    count = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = state, values_from = count, values_fill = 0)
+
+print(sprint_summary)
+```
+
+# Automation Patterns
+
+## Auto-Comment on Creation
+
+```r
+# Create issue and immediately add comment
+issue <- od_create_issue(
+  title = "Automated report",
+  description = "Generated by R automation"
+)
+
+od_add_issue_comment(
+  issue$number,
+  "This issue was automatically created at " %_% Sys.time()
+)
+```
+
+## Daily Issue Report
+
+```r
+# Email report of open issues
+report_html <- od_query_issues(state = "Open") %>%
+  arrange(priority) %>%
+  {
+    knitr::kable(., format = "html")
+  }
+
+# Send with blastula::compose_email()
+# or save to file
+```
+
+## Sync with External Systems
+
+```r
+# Pull issues and sync to CSV
+all_issues <- od_paginate(
+  od_query_issues,
+  state = "Open",
+  page_size = 100L
+)
+
+readr::write_csv(all_issues, "onedev-issues.csv")
+
+# Process with Excel/Sheets
+# Sync back after changes
+```
+
+# Best Practices
+
+1. **Always use pagination** for production code:
+   ```r
+   all_issues <- od_paginate(od_query_issues, state = "Open")
+   ```
+
+2. **Cache API responses** when making multiple queries:
+   ```r
+   issues_cache <- od_query_issues(state = "Open")
+   # Reuse issues_cache instead of calling again
+   ```
+
+3. **Batch operations** to reduce API calls:
+   ```r
+   # Good: One paginate call
+   all <- od_paginate(od_query_issues, state = "Open")
+
+   # Avoid: Multiple calls in a loop
+   # for (i in 1:100) od_get_issue(i)  # BAD
+   ```
+
+4. **Handle errors gracefully**:
+   ```r
+   tryCatch(
+     od_get_issue(99999),
+     error = function(e) message("Issue not found: ", e$message)
+   )
+   ```
+
+5. **Log operations** when making state changes:
+   ```r
+   cat("Transitioning issue", issue_num, "to Closed\n")
+   od_issue_transition_state(issue_num, "Closed")
+   ```
+
+# Troubleshooting
+
+**Q: Get "issue not found" for a valid issue number?**
+A: Check the project is correct. Use `od_get_project()` to verify.
+
+**Q: API returns only 100 issues but I know there are more?**
+A: Use `od_paginate()` to fetch all results automatically.
+
+**Q: How do I find issues by custom field value?**
+A: Use query syntax:
+```r
+od_query_issues(query = '"MyCustomField" is "value"')
+```
+
+**Q: Can I reorder issues or set priorities?**
+A: Reordering is manual in the UI. Set priority via:
+```r
+od_issue_set_fields(issue_num, Priority = "High")
+```

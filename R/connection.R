@@ -16,7 +16,7 @@
 #' Infer auth mode from connection fields
 #' @noRd
 .od_infer_auth <- function(auth = NULL, username = "", token = "", password = "") {
-  auth <- trimws(as.character(auth %||% "")[1])
+  auth <- .od_coerce_string(auth)
   if (nzchar(auth)) {
     auth <- tolower(auth)
     if (!auth %in% c("bearer", "basic")) {
@@ -58,23 +58,23 @@
 #' inferred as `"basic"` when `username` is non-empty, or set `auth = "basic"`
 #' explicitly.
 #'
-#' @param host OneDev base URL (e.g. `"https://git.example.test"`).
-#' @param token API access token (Bearer), or Basic Auth password when
-#'   `auth = "basic"` and `password` is unset.
-#' @param username Optional username for Basic Auth.
-#' @param password Optional Basic Auth password (defaults to `token` when unset).
-#' @param auth `"bearer"` or `"basic"`. Default: `"basic"` when `username` is
-#'   set, otherwise `"bearer"`.
-#' @param project_path Project path (e.g. `"group/my-project"`).
-#' @param project_id Optional numeric project id (skips path resolution when set).
-#' @param repo_url Optional git remote URL; used to derive `project_path` when
-#'   that is unset.
-#' @param default_issue_state Optional default for [od_query_issues()] when no
-#'   query/state is given.
-#' @param insecure_ssl If `TRUE`, skip TLS certificate verification.
-#' @param validate If `TRUE` (default), error when host/credentials are missing.
+#' @param host {character} OneDev base URL (e.g. `"https://git.example.test"`).
+#' @param token {character} API access token (Bearer), or Basic Auth password when
+#'   `auth = "basic"` and `password` is unset. Default: `NULL`.
+#' @param username {character} Optional username for Basic Auth. Default: `NULL`.
+#' @param password {character} Optional Basic Auth password (defaults to `token` when unset). Default: `NULL`.
+#' @param auth {character} `"bearer"` or `"basic"`. Default: `"basic"` when `username` is
+#'   set, otherwise `"bearer"`. Default: `NULL`.
+#' @param project_path {character} Project path (e.g. `"group/my-project"`). Default: `NULL`.
+#' @param project_id {character|numeric} Optional numeric project id (skips path resolution when set). Default: `NULL`.
+#' @param repo_url {character} Optional git remote URL; used to derive `project_path` when
+#'   that is unset. Default: `NULL`.
+#' @param default_issue_state {character} Optional default for [od_query_issues()] when no
+#'   query/state is given. Default: `NULL`.
+#' @param insecure_ssl {logical} If `TRUE`, skip TLS certificate verification. Default: `FALSE`.
+#' @param validate {logical} If `TRUE` (default), error when host/credentials are missing. Default: `TRUE`.
 #'
-#' @return A named list with connection fields, classed as `od_connection`.
+#' @return {list} A named list with connection fields, classed as `od_connection`.
 #'
 #' @examples
 #' \dontrun{
@@ -107,11 +107,11 @@ od_connection <- function(
   insecure_ssl = FALSE,
   validate = TRUE
 ) {
-  host <- sub("/+$", "", trimws(as.character(host %||% "")[1]))
-  token <- trimws(as.character(token %||% "")[1])
-  username <- trimws(as.character(username %||% "")[1])
-  password <- trimws(as.character(password %||% "")[1])
-  repo_url <- trimws(as.character(repo_url %||% "")[1])
+  host <- sub("/+$", "", .od_coerce_string(host))
+  token <- .od_coerce_string(token)
+  username <- .od_coerce_string(username)
+  password <- .od_coerce_string(password)
+  repo_url <- .od_coerce_string(repo_url)
   project_path <- .od_first_non_empty(
     project_path,
     .od_derive_project_path(repo_url)
@@ -119,9 +119,9 @@ od_connection <- function(
   project_id <- if (is.null(project_id) || !nzchar(as.character(project_id)[1])) {
     ""
   } else {
-    trimws(as.character(project_id)[1])
+    .od_coerce_string(project_id)
   }
-  default_issue_state <- trimws(as.character(default_issue_state %||% "")[1])
+  default_issue_state <- .od_coerce_string(default_issue_state)
   auth_mode <- .od_infer_auth(auth, username, token, password)
 
   conn <- list(
@@ -155,8 +155,8 @@ od_connection <- function(
 #' registered connection instead of reading `ONEDEV_*` environment variables.
 #' Pass `NULL` to clear the default.
 #'
-#' @param conn An [od_connection()] (or compatible list), or `NULL` to unset.
-#' @return `conn`, invisibly.
+#' @param conn {list} An [od_connection()] (or compatible list), or `NULL` to unset.
+#' @return {list} `conn`, invisibly.
 #' @family connection
 #' @examples
 #' \dontrun{
@@ -173,7 +173,7 @@ od_set_connection <- function(conn) {
 
 #' Get the package-default OneDev connection
 #'
-#' @return The connection registered with [od_set_connection()], or `NULL`.
+#' @return {list} The connection registered with [od_set_connection()], or `NULL`.
 #' @family connection
 #' @examples
 #' \dontrun{

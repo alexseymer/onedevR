@@ -7,7 +7,7 @@
 #' @noRd
 .od_number_query_variants <- function(project_path, number) {
   numeric_part <- .od_strip_hash(number)
-  project_path <- trimws(as.character(project_path %||% "")[1])
+  project_path <- .od_coerce_string(project_path)
   variants <- character()
   if (nzchar(project_path)) {
     variants <- c(variants, paste0('"Number" is "', project_path, "#", numeric_part, '"'))
@@ -79,9 +79,9 @@
 #' then bare `"#n"` / `"n"` (same idea as [tod](https://github.com/theonedev/tod);
 #' bare forms are required on some OneDev versions).
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal issue id.
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal issue id.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -97,9 +97,9 @@ od_resolve_issue_id <- function(issue_number, conn = NULL) {
 #'
 #' Same Number-query variants as [od_resolve_issue_id()].
 #'
-#' @param build_number UI number (`100` or `"#100"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal build id.
+#' @param build_number {character|numeric} UI number (`100` or `"#100"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal build id.
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -115,9 +115,9 @@ od_resolve_build_id <- function(build_number, conn = NULL) {
 #'
 #' Same Number-query variants as [od_resolve_issue_id()].
 #'
-#' @param pull_request_number UI number (`42` or `"#42"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal pull request id.
+#' @param pull_request_number {character|numeric} UI number (`42` or `"#42"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal pull request id.
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -127,4 +127,24 @@ od_resolve_build_id <- function(build_number, conn = NULL) {
 od_resolve_pull_request_id <- function(pull_request_number, conn = NULL) {
   conn <- .od_conn(conn)
   .od_resolve_number_id("pull", pull_request_number, conn, "pull request")
+}
+
+#' Internal helper: resolve entity ID with optional internal fallback
+#'
+#' Consolidates the repeated pattern of checking `use_internal_id` and either
+#' stripping the hash or calling a resolver function. Used by issue/build/PR
+#' helper functions.
+#'
+#' @param number UI number (e.g., issue/build/PR number).
+#' @param resolver Function to call for resolution (e.g., `od_resolve_issue_id`).
+#' @param use_internal_id If `TRUE`, treat `number` as internal id.
+#' @param conn Connection list.
+#' @return Character internal id.
+#' @noRd
+.od_resolve_entity_id <- function(number, resolver, use_internal_id = FALSE, conn = NULL) {
+  if (isTRUE(use_internal_id)) {
+    .od_strip_hash(number)
+  } else {
+    resolver(number, conn = conn)
+  }
 }

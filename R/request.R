@@ -74,13 +74,13 @@
 #' Escape hatch for any `/~api/...` endpoint. Prefer high-level `od_*`
 #' helpers when they exist.
 #'
-#' @param method HTTP method (default `"GET"`).
-#' @param endpoint API path (e.g. `"/issues"`) or absolute URL.
-#' @param query Named list of query parameters (NULLs dropped).
-#' @param body Request body; JSON-encoded with `jsonlite::toJSON()`.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param method {character} HTTP method (default `"GET"`). Default: `"GET"`.
+#' @param endpoint {character} API path (e.g. `"/issues"`) or absolute URL.
+#' @param query {list} Named list of query parameters (NULLs dropped). Default: `NULL`.
+#' @param body {list} Request body; JSON-encoded with `jsonlite::toJSON()`. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
-#' @return Parsed JSON payload (list), or `NULL` for empty bodies.
+#' @return {list} Parsed JSON payload, or `NULL` for empty bodies.
 #' @family utilities
 #' @examples
 #' \dontrun{
@@ -89,7 +89,7 @@
 #' @export
 od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  method <- toupper(trimws(as.character(method)[1]))
+  method <- toupper(.od_coerce_string(method))
   url <- .od_resolve_api_url(endpoint, conn)
   req <- .od_prepare_request(method, url, conn)
 
@@ -135,7 +135,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   timeout = 60
 ) {
   conn <- .od_conn(conn)
-  method <- toupper(trimws(as.character(method)[1]))
+  method <- toupper(.od_coerce_string(method))
   url <- .od_resolve_api_url(endpoint, conn)
   req <- .od_prepare_request(method, url, conn, accept = accept)
   req <- httr2::req_timeout(req, as.numeric(timeout)[1])

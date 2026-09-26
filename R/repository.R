@@ -95,10 +95,8 @@ od_get_default_branch <- function(project = NULL, conn = NULL) {
 #' @export
 od_get_branch <- function(branch, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  branch <- trimws(as.character(branch %||% "")[1])
-  if (!nzchar(branch)) {
-    stop("`branch` is required.", call. = FALSE)
-  }
+  branch <- .od_coerce_string(branch)
+  .od_require(branch, "branch")
   project_id <- od_resolve_project_id(project = project, conn = conn)
   encoded <- utils::URLencode(branch, reserved = TRUE)
   od_request(
@@ -144,10 +142,8 @@ od_list_tags <- function(project = NULL, conn = NULL) {
 #' @export
 od_get_tag <- function(tag, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  tag <- trimws(as.character(tag %||% "")[1])
-  if (!nzchar(tag)) {
-    stop("`tag` is required.", call. = FALSE)
-  }
+  tag <- .od_coerce_string(tag)
+  .od_require(tag, "tag")
   project_id <- od_resolve_project_id(project = project, conn = conn)
   encoded <- utils::URLencode(tag, reserved = TRUE)
   od_request(
@@ -216,10 +212,8 @@ od_get_commit <- function(
   conn = NULL
 ) {
   conn <- .od_conn(conn)
-  commit_hash <- trimws(as.character(commit_hash %||% "")[1])
-  if (!nzchar(commit_hash)) {
-    stop("`commit_hash` is required.", call. = FALSE)
-  }
+  commit_hash <- .od_coerce_string(commit_hash)
+  .od_require(commit_hash, "commit_hash")
   project_id <- od_resolve_project_id(project = project, conn = conn)
   od_request(
     method = "GET",
@@ -246,8 +240,8 @@ od_get_commit <- function(
 #' @export
 od_get_file <- function(revision, path, project = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  revision <- trimws(as.character(revision %||% "")[1])
-  path <- trimws(as.character(path %||% "")[1])
+  revision <- .od_coerce_string(revision)
+  path <- .od_coerce_string(path)
   path <- sub("^/+", "", path)
   if (!nzchar(revision) || !nzchar(path)) {
     stop("`revision` and `path` are required.", call. = FALSE)

@@ -12,10 +12,27 @@ projects, builds, and pull requests, for OneDev.
   (TheOneDev CLI) — issue/PR/build refs, query DSL, and API conventions to
   mirror when implementing / extending `onedevr`.
 
+## Motivation
+
+`onedevr` was born from a practical constraint: **restricted development environments**.
+
+Many corporate environments restrict tooling to essential languages only. If your development environment is confined to **R and Git**, you cannot use the official `tod` CLI (e.g., due to firewall restrictions or tooling policies). Yet you still need to interact with OneDev for:
+
+- Running builds, managing artifacts, querying repositories
+- Automating issue/PR workflows within R scripts or Quarto documents
+- Leveraging AI-assisted coding workflows that need programmatic OneDev access
+
+**`onedevr` solves this by:**
+1. **Removing the `tod` dependency** — communicate directly with OneDev's REST API from R
+2. **Enabling AI-assisted workflows** — your coding AI (Claude, etc.) can use `onedevr` to interact with OneDev on your behalf
+3. **Being AI-efficient** — clean, predictable function naming (`od_*`), consistent parameter patterns, and comprehensive documentation so LLMs can reason about the API without ambiguity
+
+If your constraint is "I have R, I have Git, I need OneDev", `onedevr` is for you.
+
 ## Status
 
-**v0.5.1** hardens live query helpers (build/PR status keywords, pagination,
-query descriptions, file text). See [`NEWS.md`](NEWS.md).
+**v1.0.0** — stable release with comprehensive documentation, workflow guides,
+and developer tools. See [`NEWS.md`](NEWS.md) for details on recent changes.
 
 ## Install
 
@@ -24,8 +41,12 @@ query descriptions, file text). See [`NEWS.md`](NEWS.md).
 remotes::install_github("alexseymer/onedevR")
 ```
 
-Docs: [pkgdown site](https://alexseymer.github.io/onedevR/) · vignette
-`vignette("getting-started", package = "onedevr")`.
+**Documentation:** (also available on [pkgdown site](https://alexseymer.github.io/onedevR/))
+- [**Getting started**](vignettes/getting-started.Rmd) — Installation, config, basic workflows
+- [**Issues workflow**](vignettes/issues-workflow.Rmd) — Querying, creating, updating, automation
+- [**Builds workflow**](vignettes/builds-workflow.Rmd) — Build management, artifacts, CI/CD
+- [**Pull requests workflow**](vignettes/pull-requests-workflow.Rmd) — PR review, commenting, merging
+- [**Contributing**](CONTRIBUTING.md) — Development setup, testing, documentation standards
 
 ## Quick start
 
@@ -76,6 +97,24 @@ Copy [`.Renviron.example`](.Renviron.example) to `.Renviron` (gitignored) and
 fill in your host/token/project. [`.env.example`](.env.example) is the same
 variable list for non-R tooling. Live integration tests are gated behind
 `ONEDEV_RUN_LIVE_TESTS=1`.
+
+## v1.0.0 Highlights
+
+✨ **Comprehensive documentation suite** for all major workflows
+- In-depth vignettes covering issues, builds, and pull requests
+- Real-world automation examples and best practices
+- Troubleshooting guides and common patterns
+
+🔧 **Developer-friendly tools**
+- Contributing guide with setup instructions and testing patterns
+- Roxygen2 documentation standards and examples
+- Development environment configuration in Cursor Cloud / Docker
+
+🚀 **Production-ready features**
+- Pagination support for large result sets
+- Flexible connection management (env vars or explicit objects)
+- Low-level escape hatch (`od_request()`) for custom queries
+- Comprehensive error handling and validation
 
 ## Design notes worth knowing up front
 
