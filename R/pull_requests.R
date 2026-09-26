@@ -318,3 +318,40 @@ od_discard_pull_request <- function(pull_request_number, conn = NULL) {
     conn = conn
   )
 }
+
+#' Get issues linked to a pull request
+#'
+#' Retrieves all issues that are linked to a specific pull request.
+#'
+#' @param pull_request_number UI pull request number (`42` or `"#42"`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param use_internal_id If `TRUE`, treat `pull_request_number` as the internal REST id.
+#' @return A tibble of linked issues (default), or a list when `as_tibble = FALSE`.
+#' @family pull requests
+#' @examples
+#' \dontrun{
+#' od_get_pull_request_issues(42)
+#' }
+#' @export
+od_get_pull_request_issues <- function(
+  pull_request_number,
+  as_tibble = NULL,
+  conn = NULL,
+  use_internal_id = FALSE
+) {
+  conn <- .od_conn(conn)
+  pr_id <- .od_resolve_entity_id(
+    pull_request_number,
+    od_resolve_pull_request_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
+  payload <- od_request(
+    "GET",
+    paste0("/pulls/", pr_id, "/issues"),
+    conn = conn
+  )
+  od_as_tibble(payload, as_tibble = as_tibble)
+}

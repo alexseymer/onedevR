@@ -331,3 +331,100 @@ od_add_issue_comment <- function(issue_number, content, conn = NULL) {
     conn = conn
   )
 }
+
+#' Link an issue to a pull request
+#'
+#' Creates a link between an issue and a pull request, indicating the PR is
+#' related to or closes the issue.
+#'
+#' @param issue_number UI issue number (`145` or `"#145"`).
+#' @param pull_request_number UI pull request number (`42` or `"#42"`).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_link_issue_to_pull_request(145, 42)
+#' }
+#' @export
+od_link_issue_to_pull_request <- function(
+  issue_number,
+  pull_request_number,
+  conn = NULL
+) {
+  conn <- .od_conn(conn)
+  issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
+  pr_id <- as.integer(od_resolve_pull_request_id(pull_request_number, conn = conn))
+  od_request(
+    method = "POST",
+    endpoint = paste0("/issues/", issue_id, "/pull-requests"),
+    body = list(pullRequestId = pr_id),
+    conn = conn
+  )
+}
+
+#' Get pull requests linked to an issue
+#'
+#' Retrieves all pull requests that are linked to a specific issue.
+#'
+#' @param issue_number UI issue number (`145` or `"#145"`).
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
+#' @return A tibble of linked pull requests (default), or a list when `as_tibble = FALSE`.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_get_issue_pull_requests(145)
+#' }
+#' @export
+od_get_issue_pull_requests <- function(
+  issue_number,
+  as_tibble = NULL,
+  conn = NULL,
+  use_internal_id = FALSE
+) {
+  conn <- .od_conn(conn)
+  issue_id <- .od_resolve_entity_id(
+    issue_number,
+    od_resolve_issue_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
+  payload <- od_request(
+    "GET",
+    paste0("/issues/", issue_id, "/pull-requests"),
+    conn = conn
+  )
+  od_as_tibble(payload, as_tibble = as_tibble)
+}
+
+#' Remove a link between an issue and a pull request
+#'
+#' Removes the link between an issue and a pull request.
+#'
+#' @param issue_number UI issue number (`145` or `"#145"`).
+#' @param pull_request_number UI pull request number (`42` or `"#42"`).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed API response.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_unlink_issue_from_pull_request(145, 42)
+#' }
+#' @export
+od_unlink_issue_from_pull_request <- function(
+  issue_number,
+  pull_request_number,
+  conn = NULL
+) {
+  conn <- .od_conn(conn)
+  issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
+  pr_id <- as.integer(od_resolve_pull_request_id(pull_request_number, conn = conn))
+  od_request(
+    method = "DELETE",
+    endpoint = paste0("/issues/", issue_id, "/pull-requests/", pr_id),
+    conn = conn
+  )
+}
