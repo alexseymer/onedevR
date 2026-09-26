@@ -12,6 +12,7 @@
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
 #' @return {tibble|list} A tibble of issues (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /issues
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -62,6 +63,7 @@ od_query_issues <- function(
 #' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only). Default: `FALSE`.
 #' @return {list} Parsed issue object.
+#' @endpoint GET /issues/{issueId}
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -89,6 +91,7 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST
 #'   id (debugging only). Default: `FALSE`.
 #' @return {list} Named list (or map) of field name -> value.
+#' @endpoint GET /issues/{issueId}/fields
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -118,6 +121,7 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #'   [od_list_iterations()]; sent as `iterationIds` in the create body. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed created issue.
+#' @endpoint POST /issues
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -170,6 +174,7 @@ od_create_issue <- function(
 #' @param title {character} New title.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issues/{issueId}/title
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -196,6 +201,7 @@ od_issue_set_title <- function(issue_number, title, conn = NULL) {
 #' @param description {character} New description (Markdown).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issues/{issueId}/description
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -222,6 +228,7 @@ od_issue_set_description <- function(issue_number, description, conn = NULL) {
 #' @param fields {list} Named list of field values (installation-specific schema).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issues/{issueId}/fields
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -275,12 +282,12 @@ od_issue_transition_state <- function(issue_number, state, conn = NULL) {
 
 #' Get comments on an issue
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list.
-#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
-#' @return A tibble of comments (default), or a list when `as_tibble = FALSE`.
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST id. Default: `FALSE`.
+#' @return {tibble|list} A tibble of comments (default), or a list when `as_tibble = FALSE`.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -308,10 +315,10 @@ od_get_issue_comments <- function(
 #'
 #' Posts to `POST /issue-comments` with `issueId` + `content`.
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param content Comment body (Markdown).
-#' @param conn Connection list.
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param content {character} Comment body (Markdown).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -337,10 +344,10 @@ od_add_issue_comment <- function(issue_number, content, conn = NULL) {
 #' Creates a link between an issue and a pull request, indicating the PR is
 #' related to or closes the issue.
 #'
-#' @param issue_number UI issue number (`145` or `"#145"`).
-#' @param pull_request_number UI pull request number (`42` or `"#42"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI issue number (`145` or `"#145"`).
+#' @param pull_request_number {character|numeric} UI pull request number (`42` or `"#42"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -367,12 +374,12 @@ od_link_issue_to_pull_request <- function(
 #'
 #' Retrieves all pull requests that are linked to a specific issue.
 #'
-#' @param issue_number UI issue number (`145` or `"#145"`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST id.
-#' @return A tibble of linked pull requests (default), or a list when `as_tibble = FALSE`.
+#' @param issue_number {character|numeric} UI issue number (`145` or `"#145"`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST id. Default: `FALSE`.
+#' @return {tibble|list} A tibble of linked pull requests (default), or a list when `as_tibble = FALSE`.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -404,10 +411,10 @@ od_get_issue_pull_requests <- function(
 #'
 #' Removes the link between an issue and a pull request.
 #'
-#' @param issue_number UI issue number (`145` or `"#145"`).
-#' @param pull_request_number UI pull request number (`42` or `"#42"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI issue number (`145` or `"#145"`).
+#' @param pull_request_number {character|numeric} UI pull request number (`42` or `"#42"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
