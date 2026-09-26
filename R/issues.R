@@ -258,6 +258,7 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #' @param state {character} Target state name (e.g. `"Closed"`).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issues/{issueId}/state-transitions
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -288,6 +289,7 @@ od_issue_transition_state <- function(issue_number, state, conn = NULL) {
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of comments (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /issues/{issueId}/comments
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -319,6 +321,7 @@ od_get_issue_comments <- function(
 #' @param content {character} Comment body (Markdown).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issue-comments
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -348,6 +351,7 @@ od_add_issue_comment <- function(issue_number, content, conn = NULL) {
 #' @param pull_request_number {character|numeric} UI pull request number (`42` or `"#42"`).
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /issues/{issueId}/pull-requests
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -380,6 +384,7 @@ od_link_issue_to_pull_request <- function(
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of linked pull requests (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /issues/{issueId}/pull-requests
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -415,6 +420,7 @@ od_get_issue_pull_requests <- function(
 #' @param pull_request_number {character|numeric} UI pull request number (`42` or `"#42"`).
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint DELETE /issues/{issueId}/pull-requests/{prId}
 #' @family issues
 #' @examples
 #' \dontrun{
