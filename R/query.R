@@ -3,9 +3,9 @@
 #' Calls `/~api/tod/get-{kind}-query-description` (same source `tod ... get-query-description`
 #' uses). Useful when crafting `query =` strings for list helpers.
 #'
-#' @param kind One of `"issue"`, `"build"`, `"pull_request"`, or `"project"`.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character scalar (HTML-ish grammar text from the server).
+#' @param kind {character} One of `"issue"`, `"build"`, `"pull_request"`, or `"project"`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character scalar (HTML-ish grammar text from the server).
 #' @family utilities
 #' @examples
 #' \dontrun{
@@ -35,13 +35,13 @@ od_get_query_description <- function(
 #' short page is returned or `max_pages` is hit. Designed for
 #' [od_query_issues()], [od_query_builds()], [od_query_projects()], etc.
 #'
-#' @param fetcher A function that accepts at least `offset` and `count`. Extra
+#' @param fetcher {function} A function that accepts at least `offset` and `count`. Extra
 #'   arguments may be passed via `...`.
-#' @param ... Forwarded to `fetcher` (e.g. `state = "Open"`, `query = ...`).
-#' @param page_size Page size / `count` (default `100`).
-#' @param max_pages Safety cap on number of pages (default `100`).
-#' @param as_tibble Passed to `fetcher` when it has a formal `as_tibble`.
-#' @return A combined tibble when pages are tibbles; otherwise a concatenated
+#' @param ... Additional arguments forwarded to `fetcher` (e.g. `state = "Open"`, `query = ...`).
+#' @param page_size {integer} Page size / `count` (default `100`). Default: `100L`.
+#' @param max_pages {integer} Safety cap on number of pages (default `100`). Default: `100L`.
+#' @param as_tibble {logical} Passed to `fetcher` when it has a formal `as_tibble`. Default: `NULL`.
+#' @return {tibble|list} A combined tibble when pages are tibbles; otherwise a concatenated
 #'   list of items.
 #' @family utilities
 #' @examples
