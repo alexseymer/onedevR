@@ -43,3 +43,45 @@ test_that("od_get_user resolves login then GETs /users/{id}", {
   })
   expect_equal(od_get_user("alice", conn = list())$id, 7)
 })
+
+test_that("od_list_user_ssh_keys retrieves SSH keys", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_list_user_ssh_keys, "od_get_me", function(...) list(id = "1"))
+  mockery::stub(od_list_user_ssh_keys, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "GET")
+    expect_equal(endpoint, "/users/1/ssh-keys")
+    list(
+      list(id = 1, name = "Laptop", fingerprint = "SHA256:abc123"),
+      list(id = 2, name = "Desktop", fingerprint = "SHA256:def456")
+    )
+  })
+  keys <- od_list_user_ssh_keys(conn = list())
+  expect_equal(nrow(keys), 2)
+  expect_equal(keys$name[[1]], "Laptop")
+})
+
+test_that("od_add_user_ssh_key sends key content and optional name", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_add_user_ssh_key, "od_get_me", function(...) list(id = "1"))
+  mockery::stub(od_add_user_ssh_key, "od_request", function(method, endpoint, body = NULL, ...) {
+    expect_equal(method, "POST")
+    expect_equal(endpoint, "/users/1/ssh-keys")
+    expect_equal(body$content, "ssh-rsa AAAA...")
+    expect_equal(body$name, "Laptop")
+    list(id = 1, name = "Laptop", fingerprint = "SHA256:abc123")
+  })
+  key <- od_add_user_ssh_key("ssh-rsa AAAA...", name = "Laptop", conn = list())
+  expect_equal(key$id, 1)
+})
+
+test_that("od_delete_user_ssh_key sends DELETE request", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_delete_user_ssh_key, "od_get_me", function(...) list(id = "1"))
+  mockery::stub(od_delete_user_ssh_key, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "DELETE")
+    expect_equal(endpoint, "/users/1/ssh-keys/1")
+    NULL
+  })
+  result <- od_delete_user_ssh_key(1, conn = list())
+  expect_null(result)
+})

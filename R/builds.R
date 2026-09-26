@@ -248,3 +248,42 @@ od_get_build_log <- function(
   )
   .od_parse_build_log_raw(raw)
 }
+
+#' Promote a build to a new status/environment
+#'
+#' Transitions a build to a new promotion status (e.g., "staging", "production").
+#'
+#' @param build_number UI build number (`100` or `"#100"`).
+#' @param status Target promotion status name (e.g., `"staging"`, `"production"`).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
+#' @return Parsed API response.
+#' @family builds
+#' @examples
+#' \dontrun{
+#' od_promote_build(100, status = "production")
+#' }
+#' @export
+od_promote_build <- function(
+  build_number,
+  status,
+  conn = NULL,
+  use_internal_id = FALSE
+) {
+  conn <- .od_conn(conn)
+  build_id <- .od_resolve_entity_id(
+    build_number,
+    od_resolve_build_id,
+    use_internal_id = use_internal_id,
+    conn = conn
+  )
+  status <- .od_coerce_string(status)
+  .od_require(status, "status")
+
+  od_request(
+    method = "POST",
+    endpoint = paste0("/builds/", build_id, "/promotions"),
+    body = list(status = status),
+    conn = conn
+  )
+}

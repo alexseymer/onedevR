@@ -144,3 +144,117 @@ od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }
+
+#' List SSH keys for a user
+#'
+#' Retrieves all SSH public keys registered for a user account.
+#'
+#' @param user Login name or numeric user id. Defaults to the authenticated user
+#'   via [od_get_me()] when `NULL`.
+#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()].
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return A tibble of SSH keys (default), or a list when `as_tibble = FALSE`.
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_list_user_ssh_keys()
+#' }
+#' @export
+od_list_user_ssh_keys <- function(user = NULL, as_tibble = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
+    me <- od_get_me(conn = conn)
+    as.character(me$id %||% "")[1]
+  } else {
+    od_resolve_user_id(user, conn = conn)
+  }
+  if (!nzchar(user_id)) {
+    stop("Could not determine user id for SSH key lookup.", call. = FALSE)
+  }
+  payload <- od_request(
+    "GET",
+    paste0("/users/", user_id, "/ssh-keys"),
+    conn = conn
+  )
+  od_as_tibble(payload, as_tibble = as_tibble)
+}
+
+#' Add an SSH key to a user account
+#'
+#' Registers a new SSH public key for the authenticated or specified user.
+#'
+#' @param content SSH public key content (starting with `ssh-rsa`, `ssh-ed25519`, etc.).
+#' @param name Optional name/description for the key (e.g., "My Laptop").
+#' @param user Login name or numeric user id. Defaults to the authenticated user.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed SSH key object (list) with ID and fingerprint.
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_add_user_ssh_key("ssh-rsa AAAA...", name = "Laptop")
+#' }
+#' @export
+od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  content <- .od_coerce_string(content)
+  .od_require(content, "content")
+
+  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
+    me <- od_get_me(conn = conn)
+    as.character(me$id %||% "")[1]
+  } else {
+    od_resolve_user_id(user, conn = conn)
+  }
+  if (!nzchar(user_id)) {
+    stop("Could not determine user id for SSH key registration.", call. = FALSE)
+  }
+
+  body <- list(content = content)
+  if (!is.null(name) && nzchar(as.character(name)[1])) {
+    body$name <- as.character(name)[1]
+  }
+
+  od_request(
+    method = "POST",
+    endpoint = paste0("/users/", user_id, "/ssh-keys"),
+    body = body,
+    conn = conn
+  )
+}
+
+#' Delete an SSH key from a user account
+#'
+#' Removes an SSH public key from the authenticated or specified user.
+#'
+#' @param ssh_key_id Numeric SSH key ID.
+#' @param user Login name or numeric user id. Defaults to the authenticated user.
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return Parsed API response (typically `NULL` on success).
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_delete_user_ssh_key(1)
+#' }
+#' @export
+od_delete_user_ssh_key <- function(ssh_key_id, user = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  ssh_key_id <- .od_coerce_string(ssh_key_id)
+  .od_require(ssh_key_id, "ssh_key_id")
+
+  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
+    me <- od_get_me(conn = conn)
+    as.character(me$id %||% "")[1]
+  } else {
+    od_resolve_user_id(user, conn = conn)
+  }
+  if (!nzchar(user_id)) {
+    stop("Could not determine user id for SSH key deletion.", call. = FALSE)
+  }
+
+  od_request(
+    method = "DELETE",
+    endpoint = paste0("/users/", user_id, "/ssh-keys/", ssh_key_id),
+    conn = conn
+  )
+}
