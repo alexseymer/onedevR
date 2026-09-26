@@ -5,6 +5,7 @@
 #' @param user {character|numeric} Login name or numeric user id.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {character} Character user id.
+#' @endpoint GET /users/ids/{userName}
 #' @family users
 #' @examples
 #' \dontrun{
@@ -45,6 +46,7 @@ od_resolve_user_id <- function(user, conn = NULL) {
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {tibble|list} A tibble of users (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /users
 #' @family users
 #' @examples
 #' \dontrun{
@@ -79,6 +81,7 @@ od_query_users <- function(
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `user` as the internal REST id. Default: `FALSE`.
 #' @return {list} Parsed user object.
+#' @endpoint GET /users/{userId}
 #' @family users
 #' @examples
 #' \dontrun{
@@ -100,6 +103,7 @@ od_get_user <- function(user, conn = NULL, use_internal_id = FALSE) {
 #'
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed user object.
+#' @endpoint GET /users/me
 #' @family users
 #' @examples
 #' \dontrun{
@@ -120,6 +124,7 @@ od_get_me <- function(conn = NULL) {
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {tibble|list} A tibble of email addresses (default), or a list when
 #'   `as_tibble = FALSE`.
+#' @endpoint GET /users/{userId}/email-addresses
 #' @family users
 #' @examples
 #' \dontrun{
@@ -155,6 +160,7 @@ od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {tibble|list} A tibble of SSH keys (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /users/{userId}/ssh-keys
 #' @family users
 #' @examples
 #' \dontrun{
@@ -189,6 +195,7 @@ od_list_user_ssh_keys <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 #' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed SSH key object with ID and fingerprint.
+#' @endpoint POST /users/{userId}/ssh-keys
 #' @family users
 #' @examples
 #' \dontrun{
@@ -231,6 +238,7 @@ od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) 
 #' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed API response (typically `NULL` on success).
+#' @endpoint DELETE /users/{userId}/ssh-keys/{sshKeyId}
 #' @family users
 #' @examples
 #' \dontrun{
