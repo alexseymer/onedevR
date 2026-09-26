@@ -11,6 +11,7 @@
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
 #' @return {tibble|list} A tibble of pull requests (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /pulls
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -63,6 +64,7 @@ od_query_pull_requests <- function(
 #' @param use_internal_id {logical} If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id (debugging only). Default: `FALSE`.
 #' @return {list} Parsed pull request object.
+#' @endpoint GET /pulls/{pullRequestId}
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -93,6 +95,7 @@ od_get_pull_request <- function(
 #' @param use_internal_id {logical} If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of comments (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /pulls/{pullRequestId}/comments
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -125,6 +128,7 @@ od_get_pull_request_comments <- function(
 #' @param use_internal_id {logical} If `TRUE`, treat `pull_request_number` as the
 #'   internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of reviews (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /pulls/{pullRequestId}/reviews
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -162,6 +166,7 @@ od_get_pull_request_reviews <- function(
 #' @param assignee_ids {numeric} Optional numeric user ids. Default: `NULL`.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed created PR, or `NULL` if the server returns an empty body.
+#' @endpoint POST /pulls
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -215,6 +220,7 @@ od_create_pull_request <- function(
 #' @param content {character} Comment body (Markdown).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
+#' @endpoint POST /pull-request-comments
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -240,6 +246,7 @@ od_add_pull_request_comment <- function(pull_request_number, content, conn = NUL
 #' @param pull_request_number {character|numeric} UI number.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response (may be `NULL`).
+#' @endpoint POST /pulls/{pullRequestId}/approve
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -261,6 +268,7 @@ od_approve_pull_request <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number {character|numeric} UI number.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response (may be `NULL`).
+#' @endpoint POST /pulls/{pullRequestId}/request-for-changes
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -282,6 +290,7 @@ od_request_pull_request_changes <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number {character|numeric} UI number.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response (may be `NULL`).
+#' @endpoint POST /pulls/{pullRequestId}/merge
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -303,6 +312,7 @@ od_merge_pull_request <- function(pull_request_number, conn = NULL) {
 #' @param pull_request_number {character|numeric} UI number.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response (may be `NULL`).
+#' @endpoint POST /pulls/{pullRequestId}/discard
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -329,6 +339,7 @@ od_discard_pull_request <- function(pull_request_number, conn = NULL) {
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `pull_request_number` as the internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of linked issues (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /pulls/{pullRequestId}/issues
 #' @family pull requests
 #' @examples
 #' \dontrun{
