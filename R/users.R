@@ -2,9 +2,9 @@
 #'
 #' Calls `GET /users/ids/{name}`. Numeric `user` values are returned as-is.
 #'
-#' @param user Login name or numeric user id.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character user id.
+#' @param user {character|numeric} Login name or numeric user id.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character user id.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -38,13 +38,13 @@ od_resolve_user_id <- function(user, conn = NULL) {
 #'
 #' Calls `GET /users`.
 #'
-#' @param query Optional OneDev user query string.
-#' @param count Maximum number of results (default `100`).
-#' @param offset Result offset (default `0`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of users (default), or a list when `as_tibble = FALSE`.
+#' @param query {character} Optional OneDev user query string. Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of users (default), or a list when `as_tibble = FALSE`.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -75,10 +75,10 @@ od_query_users <- function(
 
 #' Get a single user
 #'
-#' @param user Login name or numeric user id.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @param use_internal_id If `TRUE`, treat `user` as the internal REST id.
-#' @return Parsed user object (list).
+#' @param user {character|numeric} Login name or numeric user id.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `user` as the internal REST id. Default: `FALSE`.
+#' @return {list} Parsed user object.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -98,8 +98,8 @@ od_get_user <- function(user, conn = NULL, use_internal_id = FALSE) {
 
 #' Get the authenticated user (`/users/me`)
 #'
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed user object (list).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed user object.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -113,12 +113,12 @@ od_get_me <- function(conn = NULL) {
 
 #' Get email addresses for a user
 #'
-#' @param user Login name or numeric user id. Defaults to the authenticated user
-#'   via [od_get_me()] when `NULL`.
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of email addresses (default), or a list when
+#' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user
+#'   via [od_get_me()] when `NULL`. Default: `NULL`.
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of email addresses (default), or a list when
 #'   `as_tibble = FALSE`.
 #' @family users
 #' @examples
@@ -149,12 +149,12 @@ od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 #'
 #' Retrieves all SSH public keys registered for a user account.
 #'
-#' @param user Login name or numeric user id. Defaults to the authenticated user
-#'   via [od_get_me()] when `NULL`.
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of SSH keys (default), or a list when `as_tibble = FALSE`.
+#' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user
+#'   via [od_get_me()] when `NULL`. Default: `NULL`.
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of SSH keys (default), or a list when `as_tibble = FALSE`.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -184,11 +184,11 @@ od_list_user_ssh_keys <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 #'
 #' Registers a new SSH public key for the authenticated or specified user.
 #'
-#' @param content SSH public key content (starting with `ssh-rsa`, `ssh-ed25519`, etc.).
-#' @param name Optional name/description for the key (e.g., "My Laptop").
-#' @param user Login name or numeric user id. Defaults to the authenticated user.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed SSH key object (list) with ID and fingerprint.
+#' @param content {character} SSH public key content (starting with `ssh-rsa`, `ssh-ed25519`, etc.).
+#' @param name {character} Optional name/description for the key (e.g., "My Laptop"). Default: `NULL`.
+#' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed SSH key object with ID and fingerprint.
 #' @family users
 #' @examples
 #' \dontrun{
@@ -227,10 +227,10 @@ od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) 
 #'
 #' Removes an SSH public key from the authenticated or specified user.
 #'
-#' @param ssh_key_id Numeric SSH key ID.
-#' @param user Login name or numeric user id. Defaults to the authenticated user.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response (typically `NULL` on success).
+#' @param ssh_key_id {character|numeric} Numeric SSH key ID.
+#' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response (typically `NULL` on success).
 #' @family users
 #' @examples
 #' \dontrun{
