@@ -3,8 +3,8 @@
 #' Uses `conn$project_path`, falling back to deriving a path from
 #' `conn$repo_url` (git remote URL).
 #'
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character project path (e.g. `"group/my-project"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character project path (e.g. `"group/my-project"`).
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -31,9 +31,9 @@ od_resolve_project_path <- function(conn = NULL) {
 #' Calls `GET /projects/ids/{path}`. If `conn$project_id` is already set, that
 #' value is returned without a network call.
 #'
-#' @param project Optional project path; defaults to [od_resolve_project_path()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character project id.
+#' @param project {character} Optional project path; defaults to [od_resolve_project_path()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character project id.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -79,13 +79,13 @@ od_resolve_project_id <- function(project = NULL, conn = NULL) {
 #' Calls `GET /projects` with OneDev's project query DSL (see
 #' `tod project get-query-description` on a live server).
 #'
-#' @param query Raw OneDev project query string.
-#' @param count Maximum number of results (default `100`).
-#' @param offset Result offset (default `0`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of projects (default), or a list when `as_tibble = FALSE`.
+#' @param query {character} Raw OneDev project query string. Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of projects (default), or a list when `as_tibble = FALSE`.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -114,6 +114,13 @@ od_query_projects <- function(
   od_as_tibble(payload, as_tibble = as_tibble)
 }
 
+#' @param query {character} Raw OneDev project query string. Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of projects (default), or a list when `as_tibble = FALSE`.
 #' @rdname od_query_projects
 #' @family projects
 #' @examples
@@ -138,10 +145,10 @@ od_list_projects <- function(
 }
 #' Get a single project
 #'
-#' @param project Project path (e.g. `"group/my-project"`) or numeric id.
-#'   Defaults to the connection project.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed project object (list).
+#' @param project {character|numeric} Project path (e.g. `"group/my-project"`) or numeric id.
+#'   Defaults to the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed project object.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -156,9 +163,9 @@ od_get_project <- function(project = NULL, conn = NULL) {
 
 #' Get clone URLs for a project
 #'
-#' @param project Project path or numeric id; defaults to the connection project.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed clone-url payload (list; typically `http` and `ssh`).
+#' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed clone-url payload (typically `http` and `ssh` keys).
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -175,11 +182,11 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
 #'
 #' Retrieves all webhooks configured for a project.
 #'
-#' @param project Project path or numeric id; defaults to the connection project.
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return A tibble of webhooks (default), or a list when `as_tibble = FALSE`.
+#' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {tibble|list} A tibble of webhooks (default), or a list when `as_tibble = FALSE`.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -201,10 +208,10 @@ od_list_webhooks <- function(project = NULL, as_tibble = NULL, conn = NULL) {
 #'
 #' Retrieves details for a specific webhook.
 #'
-#' @param webhook_id Numeric webhook ID.
-#' @param project Project path or numeric id; defaults to the connection project.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed webhook object (list).
+#' @param webhook_id {character|numeric} Numeric webhook ID.
+#' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed webhook object.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -227,12 +234,12 @@ od_get_webhook <- function(webhook_id, project = NULL, conn = NULL) {
 #'
 #' Creates a new webhook that will POST events to the specified URL.
 #'
-#' @param url Target URL where webhook events will be POSTed.
-#' @param events Character vector of event types to trigger on (e.g., c("push", "pull_request")).
-#'   Omit or pass `NULL` for all events.
-#' @param project Project path or numeric id; defaults to the connection project.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed webhook object (list) with ID and configuration.
+#' @param url {character} Target URL where webhook events will be POSTed.
+#' @param events {character} Character vector of event types to trigger on (e.g., c("push", "pull_request")).
+#'   Omit or pass `NULL` for all events. Default: `NULL`.
+#' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed webhook object with ID and configuration.
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -262,10 +269,10 @@ od_create_webhook <- function(url, events = NULL, project = NULL, conn = NULL) {
 #'
 #' Removes a webhook from a project.
 #'
-#' @param webhook_id Numeric webhook ID.
-#' @param project Project path or numeric id; defaults to the connection project.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed API response (typically `NULL` on success).
+#' @param webhook_id {character|numeric} Numeric webhook ID.
+#' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed API response (typically `NULL` on success).
 #' @family projects
 #' @examples
 #' \dontrun{
