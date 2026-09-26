@@ -43,20 +43,21 @@
 
 #' Query OneDev builds
 #'
-#' @param query Raw OneDev build query string (see [od_get_query_description()]
+#' @param query {character} Raw OneDev build query string (see [od_get_query_description()]
 #'   with `kind = "build"`, or `tod build get-query-description`). Example:
-#'   `'"Number" is "group/project#100"'`.
-#' @param status Optional status filter. OneDev uses keyword criteria - pass
+#'   `'"Number" is "group/project#100"'`. Default: `NULL`.
+#' @param status {character} Optional status filter. OneDev uses keyword criteria - pass
 #'   `"successful"`, `"failed"`, `"cancelled"`, `"timed out"`, `"finished"`,
 #'   `"running"`, `"waiting"`, or `"pending"` (enum spellings like
-#'   `"SUCCESSFUL"` are accepted and mapped). Combined with `query` via `and`.
-#' @param count Maximum number of results (default `100`).
-#' @param offset Result offset (default `0`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()].
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#'   `"SUCCESSFUL"` are accepted and mapped). Combined with `query` via `and`. Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
-#' @return A tibble of builds (default), or a list when `as_tibble = FALSE`.
+#' @return {tibble|list} A tibble of builds (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /builds
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -98,11 +99,11 @@ od_query_builds <- function(
 
 #' Get a single build by UI number
 #'
-#' @param build_number UI number (`100` or `"#100"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST
-#'   id (debugging only).
-#' @return Parsed build object (list).
+#' @param build_number {character|numeric} UI number (`100` or `"#100"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST
+#'   id (debugging only). Default: `FALSE`.
+#' @return {list} Parsed build object.
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -122,10 +123,10 @@ od_get_build <- function(build_number, conn = NULL, use_internal_id = FALSE) {
 
 #' Get parameters for a build
 #'
-#' @param build_number UI number (`100` or `"#100"`).
-#' @param conn Connection list.
-#' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
-#' @return Parsed params payload (list).
+#' @param build_number {character|numeric} UI number (`100` or `"#100"`).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST id. Default: `FALSE`.
+#' @return {list} Parsed params payload.
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -157,8 +158,8 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 #' status string (negative length) or a JSON log entry (positive length) whose
 #' `messages[].text` fields are concatenated.
 #'
-#' @param raw Raw response body.
-#' @return Character vector of log lines (status markers included as
+#' @param raw {raw} Raw response body.
+#' @return {character} Character vector of log lines (status markers included as
 #'   `[status] ...` when present).
 #' @noRd
 .od_parse_build_log_raw <- function(raw) {
@@ -215,11 +216,11 @@ od_get_build_params <- function(build_number, conn = NULL, use_internal_id = FAL
 #' Downloads `/~api/streaming/build-logs/{id}` and parses OneDev's binary log
 #' stream into plain-text lines (same idea as `tod build get-log`).
 #'
-#' @param build_number UI number (`100` or `"#100"`).
-#' @param conn Connection list.
-#' @param use_internal_id If `TRUE`, treat `build_number` as the internal REST id.
-#' @param timeout Seconds to wait for the full log stream (default `60`).
-#' @return Character vector of log lines.
+#' @param build_number {character|numeric} UI number (`100` or `"#100"`).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `build_number` as the internal REST id. Default: `FALSE`.
+#' @param timeout {numeric} Seconds to wait for the full log stream (default `60`). Default: `60`.
+#' @return {character} Character vector of log lines.
 #' @family builds
 #' @examples
 #' \dontrun{
