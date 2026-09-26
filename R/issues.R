@@ -1,17 +1,17 @@
 #' Query OneDev issues
 #'
-#' @param query Raw OneDev issue query string (see `tod issue get-query-description`
-#'   / OneDev query DSL). Example: `'"Number" is "group/project#145"'`.
-#' @param state Optional state filter (e.g. `"Open"`). Combined with `query`
+#' @param query {character} Raw OneDev issue query string (see `tod issue get-query-description`
+#'   / OneDev query DSL). Example: `'"Number" is "group/project#145"'`. Default: `NULL`.
+#' @param state {character} Optional state filter (e.g. `"Open"`). Combined with `query`
 #'   via `and`. When both are empty, falls back to `conn$default_issue_state`
-#'   (`ONEDEV_ISSUE_STATE`).
-#' @param count Maximum number of results (default `100`).
-#' @param offset Result offset (default `0`).
-#' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()]; if `FALSE`, the raw list payload / items.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#'   (`ONEDEV_ISSUE_STATE`). Default: `NULL`.
+#' @param count {integer} Maximum number of results (default `100`).
+#' @param offset {integer} Result offset (default `0`).
+#' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
+#'   a tibble via [od_as_tibble()]; if `FALSE`, the raw list payload / items. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
-#' @return A tibble of issues (default), or a list when `as_tibble = FALSE`.
+#' @return {tibble|list} A tibble of issues (default), or a list when `as_tibble = FALSE`.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -57,11 +57,11 @@ od_query_issues <- function(
 
 #' Get a single issue by UI number
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
-#'   id (debugging only).
-#' @return Parsed issue object (list).
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST
+#'   id (debugging only). Default: `FALSE`.
+#' @return {list} Parsed issue object.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -84,11 +84,11 @@ od_get_issue <- function(issue_number, conn = NULL, use_internal_id = FALSE) {
 #' Calls `GET /issues/{id}/fields`. Field names and allowed values are
 #' installation-specific (see `project_plan.md` sec 10).
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @param use_internal_id If `TRUE`, treat `issue_number` as the internal REST
-#'   id (debugging only).
-#' @return Named list (or map) of field name -> value.
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST
+#'   id (debugging only). Default: `FALSE`.
+#' @return {list} Named list (or map) of field name -> value.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -111,13 +111,13 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #' Tries both common create body shapes (`projectId` scalar and
 #' `project = list(id = ...)`) via the internal request-variants helper.
 #'
-#' @param title Issue title.
-#' @param description Issue description (Markdown).
-#' @param fields Named list of custom fields (installation-specific).
-#' @param iteration_ids Optional numeric iteration ids from
-#'   [od_list_iterations()]; sent as `iterationIds` in the create body.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Parsed created issue (list).
+#' @param title {character} Issue title.
+#' @param description {character} Issue description (Markdown). Default: `""`.
+#' @param fields {list} Named list of custom fields (installation-specific). Default: `list()`.
+#' @param iteration_ids {numeric} Optional numeric iteration ids from
+#'   [od_list_iterations()]; sent as `iterationIds` in the create body. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {list} Parsed created issue.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -166,10 +166,10 @@ od_create_issue <- function(
 
 #' Set an issue title
 #'
-#' @param issue_number UI number.
-#' @param title New title.
-#' @param conn Connection list.
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI number.
+#' @param title {character} New title.
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -192,10 +192,10 @@ od_issue_set_title <- function(issue_number, title, conn = NULL) {
 
 #' Set an issue description
 #'
-#' @param issue_number UI number.
-#' @param description New description (Markdown).
-#' @param conn Connection list.
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI number.
+#' @param description {character} New description (Markdown).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -218,10 +218,10 @@ od_issue_set_description <- function(issue_number, description, conn = NULL) {
 
 #' Set custom issue fields
 #'
-#' @param issue_number UI number.
-#' @param fields Named list of field values (installation-specific schema).
-#' @param conn Connection list.
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI number.
+#' @param fields {list} Named list of field values (installation-specific schema).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -247,10 +247,10 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #' Tries the known body shapes (`list(state=)`, `list(transition=)`, raw
 #' string) - see `project_plan.md` sec 10 and `tod issue change-state`.
 #'
-#' @param issue_number UI number.
-#' @param state Target state name (e.g. `"Closed"`).
-#' @param conn Connection list.
-#' @return Parsed API response.
+#' @param issue_number {character|numeric} UI number.
+#' @param state {character} Target state name (e.g. `"Closed"`).
+#' @param conn {list} Connection list. Default: `NULL`.
+#' @return {list} Parsed API response.
 #' @family issues
 #' @examples
 #' \dontrun{
