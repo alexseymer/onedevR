@@ -10,6 +10,7 @@
 #' @param project Project path or numeric id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed commit status object (list).
+#' @endpoint POST /repositories/{projectId}/commits/{commitHash}/statuses
 #' @family repository
 #' @examples
 #' \dontrun{
@@ -68,6 +69,7 @@ od_set_commit_status <- function(
 #'   a tibble via [od_as_tibble()].
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return A tibble of commit statuses (default), or a list when `as_tibble = FALSE`.
+#' @endpoint GET /repositories/{projectId}/commits/{commitHash}/statuses
 #' @family repository
 #' @examples
 #' \dontrun{
