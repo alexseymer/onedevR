@@ -79,9 +79,9 @@
 #' then bare `"#n"` / `"n"` (same idea as [tod](https://github.com/theonedev/tod);
 #' bare forms are required on some OneDev versions).
 #'
-#' @param issue_number UI number (`145` or `"#145"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal issue id.
+#' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal issue id.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -97,9 +97,9 @@ od_resolve_issue_id <- function(issue_number, conn = NULL) {
 #'
 #' Same Number-query variants as [od_resolve_issue_id()].
 #'
-#' @param build_number UI number (`100` or `"#100"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal build id.
+#' @param build_number {character|numeric} UI number (`100` or `"#100"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal build id.
 #' @family builds
 #' @examples
 #' \dontrun{
@@ -115,9 +115,9 @@ od_resolve_build_id <- function(build_number, conn = NULL) {
 #'
 #' Same Number-query variants as [od_resolve_issue_id()].
 #'
-#' @param pull_request_number UI number (`42` or `"#42"`).
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
-#' @return Character internal pull request id.
+#' @param pull_request_number {character|numeric} UI number (`42` or `"#42"`).
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Character internal pull request id.
 #' @family pull requests
 #' @examples
 #' \dontrun{
