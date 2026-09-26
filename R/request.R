@@ -74,13 +74,13 @@
 #' Escape hatch for any `/~api/...` endpoint. Prefer high-level `od_*`
 #' helpers when they exist.
 #'
-#' @param method HTTP method (default `"GET"`).
-#' @param endpoint API path (e.g. `"/issues"`) or absolute URL.
-#' @param query Named list of query parameters (NULLs dropped).
-#' @param body Request body; JSON-encoded with `jsonlite::toJSON()`.
-#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @param method {character} HTTP method (default `"GET"`). Default: `"GET"`.
+#' @param endpoint {character} API path (e.g. `"/issues"`) or absolute URL.
+#' @param query {list} Named list of query parameters (NULLs dropped). Default: `NULL`.
+#' @param body {list} Request body; JSON-encoded with `jsonlite::toJSON()`. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
-#' @return Parsed JSON payload (list), or `NULL` for empty bodies.
+#' @return {list} Parsed JSON payload, or `NULL` for empty bodies.
 #' @family utilities
 #' @examples
 #' \dontrun{
