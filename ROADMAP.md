@@ -65,4 +65,6 @@ Estimate per plan: 1 week+.
 - [x] Job run / rebuild / cancel (v0.5.0)
 - [x] Packages + repository commit helpers (v0.5.0)
 - [x] Dogfood hardening (v0.5.1): build/PR status keywords, pagination, query DSL
+- [x] Issue title/description payload fix + variant error aggregation (v0.5.2) —
+  https://github.com/alexseymer/onedevR/releases/tag/v0.5.2
 - [ ] R-universe / CRAN when demand warrants it
