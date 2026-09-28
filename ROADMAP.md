@@ -112,4 +112,7 @@ Packages + repository commit helpers (v0.5.0)
 Dogfood hardening (v0.5.1): build/PR status keywords, pagination, query
 DSL
 
+Issue title/description payload fix + variant error aggregation (v0.5.2)
+— <https://github.com/alexseymer/onedevR/releases/tag/v0.5.2>
+
 R-universe / CRAN when demand warrants it

@@ -1,5 +1,14 @@
 # onedevR
 
+[![R-CMD-check](https://github.com/alexseymer/onedevR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexseymer/onedevR/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/alexseymer/onedevR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/alexseymer/onedevR/actions/workflows/pkgdown.yaml)
+[![GitHub
+release](https://img.shields.io/github/v/release/alexseymer/onedevR)](https://github.com/alexseymer/onedevR/releases/latest)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 `onedevr` is an R client for the [OneDev](https://onedev.io) REST API —
 issues, projects, builds, and pull requests, for OneDev.
 
@@ -42,10 +51,10 @@ is for you.
 
 ## Status
 
-**v1.0.0** — stable release with comprehensive documentation, workflow
-guides, and developer tools. See
-[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for details on
-recent changes.
+**v0.5.2** — current GitHub release. Issue/build/PR workflows, jobs,
+packages, repository helpers, tibbles by default, and Bearer + Basic
+Auth. See [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for
+the full changelog.
 
 ## Install
 
@@ -121,23 +130,20 @@ to `.Renviron` (gitignored) and fill in your host/token/project.
 the same variable list for non-R tooling. Live integration tests are
 gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
 
-## v1.0.0 Highlights
+## What’s in v0.5.x
 
-✨ **Comprehensive documentation suite** for all major workflows -
-In-depth vignettes covering issues, builds, and pull requests -
-Real-world automation examples and best practices - Troubleshooting
-guides and common patterns
-
-🔧 **Developer-friendly tools** - Contributing guide with setup
-instructions and testing patterns - Roxygen2 documentation standards and
-examples - Development environment configuration in Cursor Cloud /
-Docker
-
-🚀 **Production-ready features** - Pagination support for large result
-sets - Flexible connection management (env vars or explicit objects) -
-Low-level escape hatch
-([`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md))
-for custom queries - Comprehensive error handling and validation
+- Issues, builds, PRs, jobs, packages, and repository
+  (branches/tags/commits/files)
+- Status keywords for builds/PRs, query DSL helpers, and
+  [`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md)
+- Tibbles by default for list queries;
+  [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
+  or env-based config
+- Bearer token or Basic Auth;
+  [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  escape hatch for custom endpoints
+- Workflow vignettes (issues, builds, PRs) plus getting-started and
+  function map
 
 ## Design notes worth knowing up front
 
