@@ -1,3 +1,18 @@
+# onedevr 0.5.2
+
+## Bug fixes / DX
+
+* `od_issue_set_title()` / `od_issue_set_description()` try the raw JSON string
+  body first, then the object form — avoids OneDev accepting
+  `list(title=)` / `list(description=)` and persisting the JSON literal as the
+  title or description.
+* `.od_request_with_variants()` aggregates every variant error (numbered) when
+  all shapes fail, so earlier failures (e.g. unknown state name) are not hidden
+  behind a bare-string Jackson `StateTransitionData` message.
+* Docs: issue query fuzzy text (`~text~`), board-specific state names, UTF-8
+  titles from R vs Windows `cmd` codepage, and PR merge 406 conflicts → rebase
+  then retry.
+
 # onedevr 0.5.1
 
 ## Dogfood hardening

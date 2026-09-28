@@ -14,7 +14,7 @@ od_query_issues(
 )
 }
 \arguments{
-\item{query}{Raw OneDev issue query string (see \verb{tod issue get-query-description}
+\item{query}{Raw OneDev issue query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
 / OneDev query DSL). Example: \code{'"Number" is "group/project#145"'}.}
 
 \item{state}{Optional state filter (e.g. \code{"Open"}). Combined with \code{query}
@@ -34,11 +34,15 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}; if \code{FALSE}, the r
 A tibble of issues (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
-Query OneDev issues
+For fuzzy title/description search use OneDev text criteria such as
+\verb{~GeoJSON~} (see \code{\link[=od_get_query_description]{od_get_query_description()}} with \code{kind = "issue"}). Forms
+like \verb{"Title" contains "…"} are often rejected (HTTP 406) by the issue query
+parser — prefer the server grammar from \code{od_get_query_description("issue")}.
 }
 \examples{
 \dontrun{
 od_query_issues(state = "Open", count = 20L)
+od_query_issues(query = "~GeoJSON~")
 }
 }
 \seealso{

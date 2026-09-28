@@ -107,6 +107,40 @@ test_that("od_get_issue_fields resolves UI number then GETs fields", {
   expect_equal(fields$Type, "Task")
 })
 
+test_that("od_issue_set_title passes raw string body first", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_issue_set_title, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(
+    od_issue_set_title,
+    ".od_request_with_variants",
+    function(method, endpoint, body_variants, conn = NULL) {
+      expect_equal(method, "POST")
+      expect_equal(endpoint, "/issues/283/title")
+      expect_equal(body_variants[[1]], "New title")
+      expect_equal(body_variants[[2]], list(title = "New title"))
+      list(ok = TRUE)
+    }
+  )
+  expect_true(od_issue_set_title(145, "New title", conn = list())$ok)
+})
+
+test_that("od_issue_set_description passes raw string body first", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_issue_set_description, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(
+    od_issue_set_description,
+    ".od_request_with_variants",
+    function(method, endpoint, body_variants, conn = NULL) {
+      expect_equal(method, "POST")
+      expect_equal(endpoint, "/issues/283/description")
+      expect_equal(body_variants[[1]], "Updated body")
+      expect_equal(body_variants[[2]], list(description = "Updated body"))
+      list(ok = TRUE)
+    }
+  )
+  expect_true(od_issue_set_description(145, "Updated body", conn = list())$ok)
+})
+
 test_that("od_issue_transition_state tries three body variants", {
   skip_if_not_installed("mockery")
   mockery::stub(od_issue_transition_state, "od_resolve_issue_id", function(...) "283")

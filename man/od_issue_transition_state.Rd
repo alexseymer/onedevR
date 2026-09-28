@@ -19,6 +19,8 @@ Parsed API response.
 \description{
 Tries the known body shapes (\code{list(state=)}, \code{list(transition=)}, raw
 string) - see \code{project_plan.md} sec 10 and \verb{tod issue change-state}.
+State names are installation- and board-specific (e.g. \code{"Closed"} vs
+\code{"Done"}); use a name that exists on the project's issue board.
 }
 \examples{
 \dontrun{

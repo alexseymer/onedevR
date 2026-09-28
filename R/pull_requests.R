@@ -287,6 +287,10 @@ od_request_pull_request_changes <- function(pull_request_number, conn = NULL) {
 
 #' Merge a pull request
 #'
+#' HTTP 406 with a merge-conflicts message means the source branch has diverged
+#' from the target: rebase (or merge) the source onto the target and retry.
+#' That response is expected server behavior, not a client bug.
+#'
 #' @param pull_request_number {character|numeric} UI number.
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response (may be `NULL`).

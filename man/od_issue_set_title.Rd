@@ -17,7 +17,9 @@ od_issue_set_title(issue_number, title, conn = NULL)
 Parsed API response.
 }
 \description{
-Set an issue title
+Sends the raw JSON string body first (then the object form) so OneDev does
+not accept \code{list(title=)} and store the JSON literal as the title.
+Prefer UTF-8 from R; Windows \code{cmd} may mangle non-ASCII in CLI wrappers.
 }
 \examples{
 \dontrun{

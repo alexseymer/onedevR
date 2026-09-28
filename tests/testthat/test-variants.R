@@ -30,7 +30,7 @@ test_that(".od_request_with_variants returns first successful body", {
   expect_equal(length(calls), 2L)
 })
 
-test_that(".od_request_with_variants rethrows last error when all fail", {
+test_that(".od_request_with_variants rethrows single error when all fail the same", {
   skip_if_not_installed("mockery")
   variants <- onedevr:::.od_request_with_variants
   mockery::stub(
@@ -40,8 +40,43 @@ test_that(".od_request_with_variants rethrows last error when all fail", {
   )
   expect_error(
     variants("POST", "/x", body_variants = list(list(a = 1), list(b = 2))),
-    "nope"
+    "All request body variants failed:.*1\\. nope.*2\\. nope"
   )
+})
+
+test_that(".od_request_with_variants aggregates distinct variant errors", {
+  skip_if_not_installed("mockery")
+  variants <- onedevr:::.od_request_with_variants
+  mockery::stub(
+    variants,
+    "od_request",
+    function(method, endpoint, query = NULL, body = NULL, conn = NULL) {
+      if (identical(body, list(state = "Done"))) {
+        stop("unknown state Done", call. = FALSE)
+      }
+      if (identical(body, list(transition = "Done"))) {
+        stop("no such transition", call. = FALSE)
+      }
+      stop("Cannot construct instance of StateTransitionData", call. = FALSE)
+    }
+  )
+  err <- tryCatch(
+    variants(
+      "POST",
+      "/issues/1/state-transitions",
+      body_variants = list(
+        list(state = "Done"),
+        list(transition = "Done"),
+        "Done"
+      )
+    ),
+    error = function(e) e
+  )
+  msg <- conditionMessage(err)
+  expect_match(msg, "All request body variants failed")
+  expect_match(msg, "1\\. unknown state Done")
+  expect_match(msg, "2\\. no such transition")
+  expect_match(msg, "3\\. Cannot construct instance of StateTransitionData")
 })
 
 test_that("od_request builds URL and surfaces HTTP errors", {

@@ -17,7 +17,9 @@ od_issue_set_description(issue_number, description, conn = NULL)
 Parsed API response.
 }
 \description{
-Set an issue description
+Sends the raw JSON string body first (then the object form), same rationale
+as \code{\link[=od_issue_set_title]{od_issue_set_title()}}. Prefer UTF-8 from R; Windows \code{cmd} may mangle
+non-ASCII in CLI wrappers.
 }
 \examples{
 \dontrun{

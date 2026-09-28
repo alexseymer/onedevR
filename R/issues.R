@@ -1,6 +1,11 @@
 #' Query OneDev issues
 #'
-#' @param query {character} Raw OneDev issue query string (see `tod issue get-query-description`
+#' For fuzzy title/description search use OneDev text criteria such as
+#' `~GeoJSON~` (see [od_get_query_description()] with `kind = "issue"`). Forms
+#' like `"Title" contains "…"` are often rejected (HTTP 406) by the issue query
+#' parser — prefer the server grammar from `od_get_query_description("issue")`.
+#'
+#' @param query {character} Raw OneDev issue query string (see [od_get_query_description()]
 #'   / OneDev query DSL). Example: `'"Number" is "group/project#145"'`. Default: `NULL`.
 #' @param state {character} Optional state filter (e.g. `"Open"`). Combined with `query`
 #'   via `and`. When both are empty, falls back to `conn$default_issue_state`
@@ -17,6 +22,7 @@
 #' @examples
 #' \dontrun{
 #' od_query_issues(state = "Open", count = 20L)
+#' od_query_issues(query = "~GeoJSON~")
 #' }
 #' @export
 od_query_issues <- function(
@@ -114,6 +120,10 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #' Tries both common create body shapes (`projectId` scalar and
 #' `project = list(id = ...)`) via the internal request-variants helper.
 #'
+#' Pass UTF-8 strings from R. On Windows, `cmd.exe` / legacy codepages may
+#' corrupt non-ASCII characters in CLI wrappers; prefer calling from R
+#' directly or stick to ASCII in shell-driven scripts.
+#'
 #' @param title {character} Issue title.
 #' @param description {character} Issue description (Markdown). Default: `""`.
 #' @param fields {list} Named list of custom fields (installation-specific). Default: `list()`.
@@ -170,6 +180,10 @@ od_create_issue <- function(
 
 #' Set an issue title
 #'
+#' Sends the raw JSON string body first (then the object form) so OneDev does
+#' not accept `list(title=)` and store the JSON literal as the title.
+#' Prefer UTF-8 from R; Windows `cmd` may mangle non-ASCII in CLI wrappers.
+#'
 #' @param issue_number {character|numeric} UI number.
 #' @param title {character} New title.
 #' @param conn {list} Connection list. Default: `NULL`.
@@ -188,14 +202,18 @@ od_issue_set_title <- function(issue_number, title, conn = NULL) {
     method = "POST",
     endpoint = paste0("/issues/", issue_id, "/title"),
     body_variants = list(
-      list(title = as.character(title)[1]),
-      as.character(title)[1]
+      as.character(title)[1],
+      list(title = as.character(title)[1])
     ),
     conn = conn
   )
 }
 
 #' Set an issue description
+#'
+#' Sends the raw JSON string body first (then the object form), same rationale
+#' as [od_issue_set_title()]. Prefer UTF-8 from R; Windows `cmd` may mangle
+#' non-ASCII in CLI wrappers.
 #'
 #' @param issue_number {character|numeric} UI number.
 #' @param description {character} New description (Markdown).
@@ -215,8 +233,8 @@ od_issue_set_description <- function(issue_number, description, conn = NULL) {
     method = "POST",
     endpoint = paste0("/issues/", issue_id, "/description"),
     body_variants = list(
-      list(description = as.character(description)[1]),
-      as.character(description)[1]
+      as.character(description)[1],
+      list(description = as.character(description)[1])
     ),
     conn = conn
   )
@@ -253,6 +271,8 @@ od_issue_set_fields <- function(issue_number, fields, conn = NULL) {
 #'
 #' Tries the known body shapes (`list(state=)`, `list(transition=)`, raw
 #' string) - see `project_plan.md` sec 10 and `tod issue change-state`.
+#' State names are installation- and board-specific (e.g. `"Closed"` vs
+#' `"Done"`); use a name that exists on the project's issue board.
 #'
 #' @param issue_number {character|numeric} UI number.
 #' @param state {character} Target state name (e.g. `"Closed"`).

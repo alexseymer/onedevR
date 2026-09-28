@@ -739,6 +739,23 @@ Analog für Builds (Phase 3):
 | 2 | `list(transition = "Closed")` |
 | 3 | `"Closed"` (raw string) |
 
+Structured forms stay preferred; the bare string is a last-resort compatibility
+probe. When every variant fails, `.od_request_with_variants()` reports **all**
+errors (numbered), not only the last — so an unknown board state is not hidden
+behind a Jackson `StateTransitionData` message from the raw-string attempt.
+State names are board-/installation-specific (`Closed` vs `Done`, etc.).
+
+### Set Title / Description: raw string before object form
+
+| # | Body |
+|---|------|
+| 1 | `"New title"` (raw JSON string) |
+| 2 | `list(title = "New title")` (same pattern for description) |
+
+Some OneDev builds accept the object form and persist the JSON literal as the
+title/description. Prefer the raw string first so the stored value is the plain
+text.
+
 ### Iterations POST: mehrere Body-Formen (zu verifizieren)
 
 ```r

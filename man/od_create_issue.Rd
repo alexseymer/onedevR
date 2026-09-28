@@ -31,6 +31,11 @@ Parsed created issue (list).
 Tries both common create body shapes (\code{projectId} scalar and
 \code{project = list(id = ...)}) via the internal request-variants helper.
 }
+\details{
+Pass UTF-8 strings from R. On Windows, \code{cmd.exe} / legacy codepages may
+corrupt non-ASCII characters in CLI wrappers; prefer calling from R
+directly or stick to ASCII in shell-driven scripts.
+}
 \examples{
 \dontrun{
 od_create_issue(title = "API test", description = "From R")
