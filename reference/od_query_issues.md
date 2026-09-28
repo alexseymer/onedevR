@@ -1,6 +1,11 @@
 # Query OneDev issues
 
-Query OneDev issues
+For fuzzy title/description search use OneDev text criteria such as
+`~GeoJSON~` (see
+[`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+with `kind = "issue"`). Forms like `"Title" contains "…"` are often
+rejected (HTTP 406) by the issue query parser — prefer the server
+grammar from `od_get_query_description("issue")`.
 
 ## Usage
 
@@ -19,8 +24,9 @@ od_query_issues(
 
 - query:
 
-  Raw OneDev issue query string (see `tod issue get-query-description` /
-  OneDev query DSL). Example: `'"Number" is "group/project#145"'`.
+  Raw OneDev issue query string (see
+  [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+  / OneDev query DSL). Example: `'"Number" is "group/project#145"'`.
 
 - state:
 
@@ -75,5 +81,6 @@ Other issues:
 ``` r
 if (FALSE) { # \dontrun{
 od_query_issues(state = "Open", count = 20L)
+od_query_issues(query = "~GeoJSON~")
 } # }
 ```

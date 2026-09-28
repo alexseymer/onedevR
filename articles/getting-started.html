@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -282,9 +282,28 @@ project - For project-independent queries, omit
 <span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"Closed"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="query-dsl-and-states">Query DSL and states<a class="anchor" aria-label="anchor" href="#query-dsl-and-states"></a>
+</h3>
+<p>Fuzzy text uses <code>~…~</code> (not
+<code>"Title" contains "…"</code>, which often returns HTTP 406).
+Inspect the live grammar with
+<code>od_get_query_description("issue")</code>. Transition targets must
+match a state on the project’s board (e.g. <code>"Closed"</code> vs
+<code>"Done"</code> — names are installation-specific).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fuzzy search across issue text fields</span></span>
+<span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>query <span class="op">=</span> <span class="st">"~GeoJSON~"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspect allowed operators / fields for this OneDev version</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/od_get_query_description.html">od_get_query_description</a></span><span class="op">(</span><span class="st">"issue"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use a board state that exists on your project</span></span>
+<span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Closed"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="iterations-and-links">Iterations and Links<a class="anchor" aria-label="anchor" href="#iterations-and-links"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List sprints/iterations</span></span>
 <span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -305,7 +324,7 @@ project - For project-independent queries, omit
 <div class="section level3">
 <h3 id="query-builds">Query Builds<a class="anchor" aria-label="anchor" href="#query-builds"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query by status (use OneDev keywords)</span></span>
 <span><span class="va">successful</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"successful"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
 <span><span class="va">failed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"failed"</span>, count <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
@@ -323,7 +342,7 @@ project - For project-independent queries, omit
 <div class="section level3">
 <h3 id="artifacts-and-results">Artifacts and Results<a class="anchor" aria-label="anchor" href="#artifacts-and-results"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List build artifacts</span></span>
 <span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
@@ -333,7 +352,7 @@ project - For project-independent queries, omit
 <div class="section level3">
 <h3 id="trigger-builds">Trigger Builds<a class="anchor" aria-label="anchor" href="#trigger-builds"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run a job</span></span>
 <span><span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span><span class="st">"CI"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>VERBOSE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -347,7 +366,7 @@ project - For project-independent queries, omit
 <div class="section level2">
 <h2 id="working-with-pull-requests">Working with Pull Requests<a class="anchor" aria-label="anchor" href="#working-with-pull-requests"></a>
 </h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query PRs</span></span>
 <span><span class="va">open_prs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_pull_requests.html">od_query_pull_requests</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"open"</span>, count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
 <span></span>
@@ -367,7 +386,7 @@ project - For project-independent queries, omit
 <div class="section level2">
 <h2 id="repository-operations">Repository Operations<a class="anchor" aria-label="anchor" href="#repository-operations"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get project info</span></span>
 <span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project.html">od_get_project</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">clone_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_project_clone_url.html">od_get_project_clone_url</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># http, ssh URLs</span></span>
@@ -391,7 +410,7 @@ project - For project-independent queries, omit
 <h2 id="pagination">Pagination<a class="anchor" aria-label="anchor" href="#pagination"></a>
 </h2>
 <p>For large result sets, use <code><a href="../reference/od_paginate.html">od_paginate()</a></code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch all issues in batches</span></span>
 <span><span class="va">all_issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_paginate.html">od_paginate</a></span><span class="op">(</span></span>
 <span>  <span class="va">od_query_issues</span>,</span>
@@ -413,7 +432,7 @@ project - For project-independent queries, omit
 </h2>
 <p>For queries not covered by high-level helpers, use
 <code><a href="../reference/od_request.html">od_request()</a></code>:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make custom REST calls</span></span>
 <span><span class="va">issue_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_resolve_issue_id.html">od_resolve_issue_id</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
 <span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span><span class="op">)</span><span class="op">)</span></span>
@@ -471,13 +490,13 @@ onedevr resolves them automatically.</p>
 <p><strong>Q: What’s the tibble option for?</strong> A: Set
 <code>as_tibble = FALSE</code> to get plain lists instead of
 tibbles:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>as_tibble <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># Or globally:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>onedevr.as_tibble <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Q: Can I use this for multiple OneDev instances?</strong> A:
 Yes, create separate connection objects:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span>host <span class="op">=</span> <span class="st">"https://prod.ondev"</span>, token <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span>
 <span><span class="va">staging</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span>host <span class="op">=</span> <span class="st">"https://staging.ondev"</span>, token <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, conn <span class="op">=</span> <span class="va">prod</span><span class="op">)</span></span></code></pre></div>

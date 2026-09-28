@@ -1,6 +1,8 @@
 # Merge a pull request
 
-Merge a pull request
+HTTP 406 with a merge-conflicts message means the source branch has
+diverged from the target: rebase (or merge) the source onto the target
+and retry. That response is expected server behavior, not a client bug.
 
 ## Usage
 

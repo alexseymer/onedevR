@@ -1,6 +1,8 @@
 # Set an issue title
 
-Set an issue title
+Sends the raw JSON string body first (then the object form) so OneDev
+does not accept `list(title=)` and store the JSON literal as the title.
+Prefer UTF-8 from R; Windows `cmd` may mangle non-ASCII in CLI wrappers.
 
 ## Usage
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -872,7 +872,20 @@
 </tr><tr><td>3</td>
 <td>
 <code>"Closed"</code> (raw string)</td>
-</tr></tbody></table></div>
+</tr></tbody></table><p>Structured forms stay preferred; the bare string is a last-resort compatibility probe. When every variant fails, <code>.od_request_with_variants()</code> reports <strong>all</strong> errors (numbered), not only the last — so an unknown board state is not hidden behind a Jackson <code>StateTransitionData</code> message from the raw-string attempt. State names are board-/installation-specific (<code>Closed</code> vs <code>Done</code>, etc.).</p>
+</div>
+<div class="section level3">
+<h3 id="set-title--description-raw-string-before-object-form">Set Title / Description: raw string before object form<a class="anchor" aria-label="anchor" href="#set-title--description-raw-string-before-object-form"></a></h3>
+<table class="table"><thead><tr><th>#</th>
+<th>Body</th>
+</tr></thead><tbody><tr><td>1</td>
+<td>
+<code>"New title"</code> (raw JSON string)</td>
+</tr><tr><td>2</td>
+<td>
+<code>list(title = "New title")</code> (same pattern for description)</td>
+</tr></tbody></table><p>Some OneDev builds accept the object form and persist the JSON literal as the title/description. Prefer the raw string first so the stored value is the plain text.</p>
+</div>
 <div class="section level3">
 <h3 id="iterations-post-mehrere-body-formen-zu-verifizieren">Iterations POST: mehrere Body-Formen (zu verifizieren)<a class="anchor" aria-label="anchor" href="#iterations-post-mehrere-body-formen-zu-verifizieren"></a></h3>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">

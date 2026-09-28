@@ -46,6 +46,12 @@ od_create_issue(
 
 Parsed created issue (list).
 
+## Details
+
+Pass UTF-8 strings from R. On Windows, `cmd.exe` / legacy codepages may
+corrupt non-ASCII characters in CLI wrappers; prefer calling from R
+directly or stick to ASCII in shell-driven scripts.
+
 ## See also
 
 Other issues:

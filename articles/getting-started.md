@@ -166,6 +166,26 @@ od_issue_transition_state(issue_number, "In Progress")
 od_issue_transition_state(issue_number, "Closed")
 ```
 
+### Query DSL and states
+
+Fuzzy text uses `~…~` (not `"Title" contains "…"`, which often returns
+HTTP 406). Inspect the live grammar with
+`od_get_query_description("issue")`. Transition targets must match a
+state on the project’s board (e.g. `"Closed"` vs `"Done"` — names are
+installation-specific).
+
+``` r
+
+# Fuzzy search across issue text fields
+od_query_issues(query = "~GeoJSON~", count = 10L)
+
+# Inspect allowed operators / fields for this OneDev version
+cat(od_get_query_description("issue"))
+
+# Use a board state that exists on your project
+od_issue_transition_state(145, "Closed")
+```
+
 ### Iterations and Links
 
 ``` r

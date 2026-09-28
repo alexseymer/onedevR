@@ -2,6 +2,8 @@
 
 Tries the known body shapes (`list(state=)`, `list(transition=)`, raw
 string) - see `project_plan.md` sec 10 and `tod issue change-state`.
+State names are installation- and board-specific (e.g. `"Closed"` vs
+`"Done"`); use a name that exists on the project's issue board.
 
 ## Usage
 

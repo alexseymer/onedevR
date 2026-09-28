@@ -1,6 +1,9 @@
 # Set an issue description
 
-Set an issue description
+Sends the raw JSON string body first (then the object form), same
+rationale as
+[`od_issue_set_title()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_title.md).
+Prefer UTF-8 from R; Windows `cmd` may mangle non-ASCII in CLI wrappers.
 
 ## Usage
 
