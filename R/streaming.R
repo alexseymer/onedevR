@@ -160,10 +160,10 @@ od_stream_query_results <- function(
 
   for (i in seq_len(max_pages)) {
     args <- list(..., offset = offset, count = chunk_size)
-    if ("as_tibble" %in% formals_names) {
+    if ("as_tibble" %in% formals_names || "..." %in% formals_names) {
       args$as_tibble <- as_tibble
     }
-    if ("conn" %in% formals_names) {
+    if ("conn" %in% formals_names || "..." %in% formals_names) {
       args$conn <- conn
     }
 
@@ -369,7 +369,9 @@ od_write_log_file <- function(
       timeout = timeout
     ),
     finally = {
-      if (isOpen(file_conn)) close(file_conn)
+      if (inherits(file_conn, "connection") && isOpen(file_conn)) {
+        close(file_conn)
+      }
     }
   )
 
