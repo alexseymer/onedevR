@@ -352,22 +352,27 @@ od_write_log_file <- function(
     }
   )
 
-  on.exit(close(file_conn), add = TRUE)
+  on.exit(if (!isOpen(file_conn)) NULL else close(file_conn), add = TRUE)
 
-  od_stream_build_log(
-    build_number = build_number,
-    callback = function(chunk, line_number, is_last) {
-      tryCatch(
-        writeLines(chunk, file_conn),
-        error = function(e) {
-          stop(sprintf("Error writing line %d: %s", line_number, e$message), call. = FALSE)
-        }
-      )
-      line_count <<- line_number
-    },
-    conn = conn,
-    use_internal_id = use_internal_id,
-    timeout = timeout
+  tryCatch(
+    od_stream_build_log(
+      build_number = build_number,
+      callback = function(chunk, line_number, is_last) {
+        tryCatch(
+          writeLines(chunk, file_conn),
+          error = function(e) {
+            stop(sprintf("Error writing line %d: %s", line_number, e$message), call. = FALSE)
+          }
+        )
+        line_count <<- line_number
+      },
+      conn = conn,
+      use_internal_id = use_internal_id,
+      timeout = timeout
+    ),
+    finally = {
+      if (isOpen(file_conn)) close(file_conn)
+    }
   )
 
   file_size <- tryCatch(
