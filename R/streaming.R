@@ -352,8 +352,6 @@ od_write_log_file <- function(
     }
   )
 
-  on.exit(if (!isOpen(file_conn)) NULL else close(file_conn), add = TRUE)
-
   tryCatch(
     od_stream_build_log(
       build_number = build_number,
