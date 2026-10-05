@@ -1,9 +1,9 @@
 # Cache storage environment
 .onedevr_cache_env <- new.env(parent = emptyenv())
 
-# Initialize cache metadata (using environments for proper variable scoping)
+# Initialize cache metadata (both as environments for consistent access patterns)
 .onedevr_cache_env$cache_data <- new.env(parent = emptyenv())
-.onedevr_cache_env$cache_metadata <- list()
+.onedevr_cache_env$cache_metadata <- new.env(parent = emptyenv())
 .onedevr_cache_env$cache_stats <- list(
   hits = 0L,
   misses = 0L
@@ -157,7 +157,7 @@ od_clear_cache <- function(pattern = NULL) {
 
   for (key in keys_to_remove) {
     rm(list = key, envir = .onedevr_cache_env$cache_data, inherits = FALSE)
-    .onedevr_cache_env$cache_metadata[[key]] <- NULL
+    rm(list = key, envir = .onedevr_cache_env$cache_metadata, inherits = FALSE)
   }
 
   length(keys_to_remove)
@@ -167,12 +167,13 @@ od_clear_cache <- function(pattern = NULL) {
 #' @noRd
 .od_cache_clear_all <- function() {
   count <- length(ls(.onedevr_cache_env$cache_data))
-  # Clear environment (cache_data)
+  # Clear both environments
   rm(list = ls(.onedevr_cache_env$cache_data),
      envir = .onedevr_cache_env$cache_data,
      inherits = FALSE)
-  # Clear list (cache_metadata)
-  .onedevr_cache_env$cache_metadata <- list()
+  rm(list = ls(.onedevr_cache_env$cache_metadata),
+     envir = .onedevr_cache_env$cache_metadata,
+     inherits = FALSE)
   .onedevr_cache_env$cache_stats$hits <- 0L
   .onedevr_cache_env$cache_stats$misses <- 0L
   count
@@ -224,10 +225,10 @@ od_get_cache_stats <- function() {
 
   # Calculate TTL remaining for oldest item
   ttl_remaining <- NA_real_
-  if (n_items > 0 && length(.onedevr_cache_env$cache_metadata) > 0) {
+  if (n_items > 0) {
     all_times <- lapply(
-      names(.onedevr_cache_env$cache_metadata),
-      function(k) .onedevr_cache_env$cache_metadata[[k]]$cached_at
+      ls(.onedevr_cache_env$cache_metadata),
+      function(k) get(k, envir = .onedevr_cache_env$cache_metadata)$cached_at
     )
     oldest_time <- min(do.call(c, all_times))
     elapsed <- as.numeric(difftime(Sys.time(), oldest_time, units = "secs"))
@@ -321,7 +322,7 @@ od_with_cache <- function(expr, ttl_seconds = 3600) {
   ttl <- .onedevr_cache_env$cache_options$ttl_seconds
   if (.od_cache_expired(metadata$cached_at, ttl)) {
     rm(list = key, envir = .onedevr_cache_env$cache_data, inherits = FALSE)
-    .onedevr_cache_env$cache_metadata[[key]] <- NULL
+    rm(list = key, envir = .onedevr_cache_env$cache_metadata, inherits = FALSE)
     .onedevr_cache_env$cache_stats$misses <-
       .onedevr_cache_env$cache_stats$misses + 1L
     return(NULL)
@@ -329,7 +330,7 @@ od_with_cache <- function(expr, ttl_seconds = 3600) {
 
   # Update access time for LRU tracking
   metadata$accessed_at <- Sys.time()
-  .onedevr_cache_env$cache_metadata[[key]] <- metadata
+  assign(key, metadata, envir = .onedevr_cache_env$cache_metadata)
 
   .onedevr_cache_env$cache_stats$hits <-
     .onedevr_cache_env$cache_stats$hits + 1L
@@ -366,18 +367,18 @@ od_with_cache <- function(expr, ttl_seconds = 3600) {
 
   if (cache_size >= max_size) {
     # Find least recently used item
-    metadata_keys <- names(.onedevr_cache_env$cache_metadata)
+    metadata_keys <- ls(.onedevr_cache_env$cache_metadata)
     if (length(metadata_keys) > 0) {
       access_times <- sapply(
         metadata_keys,
         function(k) {
-          meta <- .onedevr_cache_env$cache_metadata[[k]]
+          meta <- get(k, envir = .onedevr_cache_env$cache_metadata)
           meta$accessed_at %||% meta$cached_at %||% Sys.time()
         }
       )
       lru_key <- metadata_keys[which.min(access_times)]
       rm(list = lru_key, envir = .onedevr_cache_env$cache_data, inherits = FALSE)
-      .onedevr_cache_env$cache_metadata[[lru_key]] <- NULL
+      rm(list = lru_key, envir = .onedevr_cache_env$cache_metadata, inherits = FALSE)
     }
   }
 
