@@ -44,6 +44,11 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Generate roxygen2 documentation
+        run: |
+          Rscript -e 'devtools::document()'
+        shell: bash
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
