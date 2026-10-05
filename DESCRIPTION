@@ -16,6 +16,7 @@ URL: https://alexseymer.github.io/onedevR/,
 BugReports: https://github.com/alexseymer/onedevR/issues
 Depends: R (>= 4.2.0)
 Imports:
+    digest (>= 0.6.0),
     httr2 (>= 1.0.0),
     jsonlite (>= 1.8.0),
     rlang (>= 1.0.0),
@@ -27,7 +28,8 @@ Suggests:
     withr,
     knitr,
     rmarkdown,
-    pkgdown
+    pkgdown,
+    future
 VignetteBuilder: knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
