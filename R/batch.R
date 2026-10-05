@@ -170,12 +170,18 @@ od_batch_update_issues <- function(
 ) {
   conn <- .od_conn(conn)
 
-  # Coerce to character and strip hashes
-  issue_numbers <- vapply(
+  # Normalize issue numbers: convert to numeric if numeric, or strip hash if string
+  issue_numbers <- lapply(
     issue_numbers,
-    function(x) .od_strip_hash(as.character(x)[1]),
-    character(1)
+    function(x) {
+      if (is.numeric(x)) {
+        as.numeric(x)[1]
+      } else {
+        .od_strip_hash(as.character(x)[1])
+      }
+    }
   )
+  issue_numbers <- unlist(issue_numbers, use.names = FALSE)
 
   if (length(issue_numbers) == 0) {
     return(list(
@@ -403,12 +409,18 @@ od_batch_transition_issues <- function(
 ) {
   conn <- .od_conn(conn)
 
-  # Coerce to character and strip hashes
-  issue_numbers <- vapply(
+  # Normalize issue numbers: convert to numeric if numeric, or strip hash if string
+  issue_numbers <- lapply(
     issue_numbers,
-    function(x) .od_strip_hash(as.character(x)[1]),
-    character(1)
+    function(x) {
+      if (is.numeric(x)) {
+        as.numeric(x)[1]
+      } else {
+        .od_strip_hash(as.character(x)[1])
+      }
+    }
   )
+  issue_numbers <- unlist(issue_numbers, use.names = FALSE)
 
   target_state <- .od_coerce_string(target_state)
   if (!nzchar(target_state)) {
