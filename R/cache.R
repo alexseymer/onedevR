@@ -201,6 +201,7 @@ od_clear_cache <- function(pattern = NULL) {
 #' }
 #'
 #' @family cache
+#' @importFrom utils object.size
 #' @export
 od_get_cache_stats <- function() {
   keys <- ls(.onedevr_cache_env$cache_data)

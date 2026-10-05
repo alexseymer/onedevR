@@ -98,7 +98,8 @@ test_that("od_stream_query_results paginates and calls callback", {
     if (offset == 0) {
       data.frame(id = 1:50, name = paste0("item_", 1:50))
     } else if (offset == 50) {
-      data.frame(id = 51:100, name = paste0("item_", 51:100))
+      # Return only 25 rows to signal this is the last page
+      data.frame(id = 51:75, name = paste0("item_", 51:75))
     } else {
       # No more data - return empty data frame
       data.frame(id = integer(0), name = character(0))
@@ -124,8 +125,9 @@ test_that("od_stream_query_results paginates and calls callback", {
   expect_equal(captured$calls[[1]]$rows, 50)
   expect_equal(captured$calls[[1]]$page, 1)
   expect_equal(captured$calls[[1]]$has_more, TRUE)
+  expect_equal(captured$calls[[2]]$rows, 25)
   expect_equal(captured$calls[[2]]$has_more, FALSE)
-  expect_equal(result$total_count, 100)
+  expect_equal(result$total_count, 75)
   expect_equal(result$page_count, 2)
 })
 
