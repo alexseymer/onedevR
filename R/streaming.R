@@ -174,15 +174,28 @@ od_stream_query_results <- function(
       }
     )
 
-    n_chunk <- if (inherits(chunk, "data.frame")) {
-      nrow(chunk)
+    # Extract data and metadata from response
+    # Handle both direct data frames and API response objects with .data field
+    response_data <- if (is.list(chunk) && ".data" %in% names(chunk)) {
+      chunk$.data
     } else {
-      length(.od_normalize_collection(chunk))
+      chunk
+    }
+
+    n_chunk <- if (inherits(response_data, "data.frame")) {
+      nrow(response_data)
+    } else {
+      length(.od_normalize_collection(response_data))
     }
 
     total_count <- total_count + n_chunk
     page <- i
-    has_more <- (n_chunk >= chunk_size)
+    # Check for explicit has_more flag in response, otherwise infer from chunk size
+    has_more <- if (is.list(chunk) && "has_more" %in% names(chunk)) {
+      isTRUE(chunk$has_more)
+    } else {
+      (n_chunk == chunk_size)
+    }
 
     if (isTRUE(progress)) {
       elapsed <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
@@ -193,7 +206,7 @@ od_stream_query_results <- function(
     }
 
     tryCatch(
-      callback(chunk, page, has_more),
+      callback(response_data, page, has_more),
       error = function(e) {
         warning(sprintf("Error in callback at page %d: %s", page, e$message), call. = FALSE)
       }
@@ -323,10 +336,10 @@ od_write_log_file <- function(
   use_internal_id = FALSE,
   timeout = 60
 ) {
-  file_path <- as.character(file_path)[1]
-  if (!nzchar(file_path)) {
+  if (is.null(file_path) || !nzchar(as.character(file_path)[1])) {
     stop("`file_path` is required.", call. = FALSE)
   }
+  file_path <- as.character(file_path)[1]
 
   # Expand path to handle ~ and other shell expansions
   file_path <- path.expand(file_path)

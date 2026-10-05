@@ -2,8 +2,8 @@
 .onedevr_cache_env <- new.env(parent = emptyenv())
 
 # Initialize cache metadata
-.onedevr_cache_env$cache_data <- list()
-.onedevr_cache_env$cache_metadata <- list()
+.onedevr_cache_env$cache_data <- new.env(parent = emptyenv())
+.onedevr_cache_env$cache_metadata <- new.env(parent = emptyenv())
 .onedevr_cache_env$cache_stats <- list(
   hits = 0L,
   misses = 0L
