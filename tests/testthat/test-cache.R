@@ -236,6 +236,9 @@ test_that(".od_put_in_cache stores value when cache enabled", {
     value
   )
   expect_true(exists(key, envir = .onedevr_cache_env$cache_metadata))
+
+  # Clean up for next test
+  od_clear_cache()
 })
 
 test_that(".od_put_in_cache does not cache non-GET requests", {

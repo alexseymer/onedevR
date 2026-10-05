@@ -94,11 +94,14 @@ test_that("od_stream_query_results paginates and calls callback", {
   mockery::stub(od_stream_query_results, "do.call", function(fn, args, ...) {
     captured$fetcher_calls <- captured$fetcher_calls + 1
     offset <- args$offset
-    # Simulate paginated results
+    # Simulate paginated results - return fewer rows on second page to signal end
     if (offset == 0) {
       data.frame(id = 1:50, name = paste0("item_", 1:50))
-    } else {
+    } else if (offset == 50) {
       data.frame(id = 51:100, name = paste0("item_", 51:100))
+    } else {
+      # No more data - return empty data frame
+      data.frame(id = integer(0), name = character(0))
     }
   })
 
