@@ -314,7 +314,11 @@ od_with_cache <- function(expr, ttl_seconds = 3600) {
     return(NULL)
   }
 
-  metadata <- .onedevr_cache_env$cache_metadata[[key]]
+  if (!exists(key, envir = .onedevr_cache_env$cache_metadata)) {
+    return(NULL)
+  }
+
+  metadata <- get(key, envir = .onedevr_cache_env$cache_metadata)
   if (is.null(metadata)) {
     return(NULL)
   }
@@ -386,12 +390,16 @@ od_with_cache <- function(expr, ttl_seconds = 3600) {
   assign(key, value, envir = .onedevr_cache_env$cache_data)
 
   # Store metadata
-  .onedevr_cache_env$cache_metadata[[key]] <- list(
-    cached_at = Sys.time(),
-    accessed_at = Sys.time(),
-    endpoint = endpoint,
-    method = method,
-    host = conn_host
+  assign(
+    key,
+    list(
+      cached_at = Sys.time(),
+      accessed_at = Sys.time(),
+      endpoint = endpoint,
+      method = method,
+      host = conn_host
+    ),
+    envir = .onedevr_cache_env$cache_metadata
   )
 
   invisible(NULL)
