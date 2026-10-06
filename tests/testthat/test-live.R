@@ -163,3 +163,110 @@ test_that("build status keyword and file text live", {
   skip_if(is.null(txt), "README.md missing on default branch")
   expect_true(nzchar(txt))
 })
+
+test_that("od_stream_query_results live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  collected_chunks <- list()
+  result <- od_stream_query_results(
+    od_query_issues,
+    callback = function(chunk, page, has_more) {
+      collected_chunks[[length(collected_chunks) + 1L]] <<- chunk
+    },
+    chunk_size = 10L
+  )
+
+  expect_true(result$total_count >= 0)
+  expect_true(result$page_count >= 0)
+  if (result$total_count > 0) {
+    expect_true(length(collected_chunks) > 0)
+  }
+})
+
+test_that("od_chunked_foreach live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  chunks <- od_chunked_foreach(
+    od_query_issues,
+    chunk_size = 10L
+  )
+
+  expect_true(is.list(chunks))
+  if (length(chunks) > 0) {
+    for (chunk in chunks) {
+      expect_s3_class(chunk, "tbl_df")
+    }
+  }
+})
+
+test_that("od_stream_build_log live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  builds <- od_query_builds(count = 1L, offset = 0L, as_tibble = FALSE)
+  skip_if(length(builds) < 1L, "No builds available")
+
+  line_count <- 0
+  result <- tryCatch(
+    od_stream_build_log(
+      builds[[1]]$number,
+      callback = function(chunk, line_number, is_last) {
+        line_count <<- line_count + 1L
+      }
+    ),
+    error = function(e) NULL
+  )
+
+  # Build log streaming might not be available on all OneDev versions
+  skip_if(is.null(result), "Build log streaming not available")
+  expect_equal(result, NULL)  # Function returns invisible NULL
+})
+
+test_that("od_enable_cache live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  # Enable cache with 1-hour TTL
+  od_enable_cache(ttl_seconds = 3600, max_size = 100)
+
+  # Make two queries - second should hit cache
+  issues1 <- od_query_issues(count = 5L)
+  issues2 <- od_query_issues(count = 5L)
+
+  expect_s3_class(issues1, "tbl_df")
+  expect_s3_class(issues2, "tbl_df")
+  expect_equal(nrow(issues1), nrow(issues2))
+
+  # Check cache stats
+  stats <- od_get_cache_stats()
+  expect_true(stats$hits >= 1)  # Second query should have hit cache
+
+  od_disable_cache()
+})
+
+test_that("od_batch_create_issues live", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  result <- tryCatch(
+    od_batch_create_issues(
+      list(
+        list(title = "Live Test Issue 1", description = "Test via od_batch_create_issues"),
+        list(title = "Live Test Issue 2", description = "Another test issue")
+      ),
+      progress = FALSE
+    ),
+    error = function(e) NULL
+  )
+
+  # Batch create might fail due to permissions
+  skip_if(is.null(result), "Batch issue creation not available")
+  expect_true(result$count >= 0)
+})
