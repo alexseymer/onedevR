@@ -1,3 +1,8 @@
+# onedevr (development)
+
+* `od_resolve_iteration_ids()` maps iteration names to ids; `od_create_issue()`
+  and `od_add_issue_iterations()` now accept names in `iteration_ids` (#14).
+
 # onedevr 0.5.2
 
 ## Bug fixes / DX

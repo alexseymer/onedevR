@@ -127,8 +127,8 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #' @param title {character} Issue title.
 #' @param description {character} Issue description (Markdown). Default: `""`.
 #' @param fields {list} Named list of custom fields (installation-specific). Default: `list()`.
-#' @param iteration_ids {numeric} Optional numeric iteration ids from
-#'   [od_list_iterations()]; sent as `iterationIds` in the create body. Default: `NULL`.
+#' @param iteration_ids {numeric|character} Optional iteration ids or names (see
+#'   [od_resolve_iteration_ids()]); sent as `iterationIds` in the create body. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed created issue.
 #' @endpoint POST /issues
@@ -165,7 +165,7 @@ od_create_issue <- function(
     base_b$fields <- fields
   }
   if (!is.null(iteration_ids) && length(iteration_ids) > 0) {
-    ids <- as.list(as.integer(iteration_ids))
+    ids <- as.list(od_resolve_iteration_ids(iteration_ids, conn = conn))
     base_a$iterationIds <- ids
     base_b$iterationIds <- ids
   }

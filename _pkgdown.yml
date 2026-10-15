@@ -29,6 +29,7 @@ reference:
       - starts_with("od_issue_")
       - od_resolve_issue_id
       - od_list_iterations
+      - od_resolve_iteration_ids
       - od_add_issue_iterations
   - title: Builds and jobs
     desc: Query builds, logs, artifacts, and run/rebuild/cancel jobs.
