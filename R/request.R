@@ -59,6 +59,14 @@
     msg <- payload
   }
   msg <- as.character(msg)[1]
+  if (status == 406L && grepl("Invalid query", msg, fixed = TRUE)) {
+    msg <- paste0(
+      msg,
+      " (hint: use fuzzy text like ~text~ instead of \"Title\" contains, check",
+      " state names on the project's board, and see",
+      " od_get_query_description(\"issue\"))"
+    )
+  }
   stop(
     sprintf(
       "OneDev API request failed [HTTP %d]%s",
