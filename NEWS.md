@@ -2,6 +2,10 @@
 
 * `od_resolve_iteration_ids()` maps iteration names to ids; `od_create_issue()`
   and `od_add_issue_iterations()` now accept names in `iteration_ids` (#14).
+* HTTP 406 "Invalid query" errors now include a hint on fuzzy text, board
+  state names and `od_get_query_description()` (#15).
+* `od_add_issue_comment()` tries a second body shape and reports all variant
+  errors on failure (#16).
 
 # onedevr 0.5.2
 

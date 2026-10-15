@@ -351,12 +351,13 @@ od_get_issue_comments <- function(
 od_add_issue_comment <- function(issue_number, content, conn = NULL) {
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
-  od_request(
+  content <- as.character(content)[1]
+  .od_request_with_variants(
     method = "POST",
     endpoint = "/issue-comments",
-    body = list(
-      issueId = issue_id,
-      content = as.character(content)[1]
+    body_variants = list(
+      list(issueId = issue_id, content = content),
+      list(issue = list(id = issue_id), content = content)
     ),
     conn = conn
   )
