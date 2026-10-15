@@ -7,15 +7,15 @@
 od_get_pull_request(pull_request_number, conn = NULL, use_internal_id = FALSE)
 }
 \arguments{
-\item{pull_request_number}{UI number (\code{42} or \code{"#42"}).}
+\item{pull_request_number}{{character|numeric} UI number (\code{42} or \code{"#42"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 
-\item{use_internal_id}{If \code{TRUE}, treat \code{pull_request_number} as the
-internal REST id (debugging only).}
+\item{use_internal_id}{{logical} If \code{TRUE}, treat \code{pull_request_number} as the
+internal REST id (debugging only). Default: \code{FALSE}.}
 }
 \value{
-Parsed pull request object (list).
+{list} Parsed pull request object.
 }
 \description{
 Get a single pull request by UI number
@@ -32,6 +32,7 @@ Other pull requests:
 \code{\link[=od_create_pull_request]{od_create_pull_request()}},
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},

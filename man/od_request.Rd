@@ -7,18 +7,18 @@
 od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 }
 \arguments{
-\item{method}{HTTP method (default \code{"GET"}).}
+\item{method}{{character} HTTP method (default \code{"GET"}). Default: \code{"GET"}.}
 
-\item{endpoint}{API path (e.g. \code{"/issues"}) or absolute URL.}
+\item{endpoint}{{character} API path (e.g. \code{"/issues"}) or absolute URL.}
 
-\item{query}{Named list of query parameters (NULLs dropped).}
+\item{query}{{list} Named list of query parameters (NULLs dropped). Default: \code{NULL}.}
 
-\item{body}{Request body; JSON-encoded with \code{jsonlite::toJSON()}.}
+\item{body}{{list} Request body; JSON-encoded with \code{jsonlite::toJSON()}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Parsed JSON payload (list), or \code{NULL} for empty bodies.
+{list} Parsed JSON payload, or \code{NULL} for empty bodies.
 }
 \description{
 Escape hatch for any \verb{/~api/...} endpoint. Prefer high-level \verb{od_*}

@@ -105,9 +105,10 @@ fill in your host/token/project. [`.env.example`](.env.example) is the same
 variable list for non-R tooling. Live integration tests are gated behind
 `ONEDEV_RUN_LIVE_TESTS=1`.
 
-## What's in v0.5.x
+## What's in v0.6.x
 
-- Issues, builds, PRs, jobs, packages, and repository (branches/tags/commits/files)
+- Issues, boards, builds, PRs, jobs, packages, and repository (branches/tags/commits/files)
+- Board helpers: `od_list_boards()`, `od_get_board()`, `od_query_board_issues()`
 - Status keywords for builds/PRs, query DSL helpers, and `od_paginate()`
 - Tibbles by default for list queries; `od_connection()` or env-based config
 - Bearer token or Basic Auth; `od_request()` escape hatch for custom endpoints

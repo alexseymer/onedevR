@@ -14,23 +14,23 @@ od_query_pull_requests(
 )
 }
 \arguments{
-\item{query}{Raw OneDev pull-request query string (see
-\code{\link[=od_get_query_description]{od_get_query_description()}} with \code{kind = "pull_request"}).}
+\item{query}{{character} Raw OneDev pull-request query string (see
+\code{\link[=od_get_query_description]{od_get_query_description()}} with \code{kind = "pull_request"}). Default: \code{NULL}.}
 
-\item{status}{Optional status keyword: \code{"open"}, \code{"merged"}, or \code{"discarded"}
-(case-insensitive). Combined with \code{query} via \code{and}.}
+\item{status}{{character} Optional status keyword: \code{"open"}, \code{"merged"}, or \code{"discarded"}
+(case-insensitive). Combined with \code{query} via \code{and}. Default: \code{NULL}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}).}
 
-\item{offset}{Result offset (default \code{0}).}
+\item{offset}{{integer} Result offset (default \code{0}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of pull requests (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of pull requests (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Query OneDev pull requests
@@ -48,6 +48,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_request_pull_request_changes]{od_request_pull_request_changes()}},

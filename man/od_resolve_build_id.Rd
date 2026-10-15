@@ -7,12 +7,12 @@
 od_resolve_build_id(build_number, conn = NULL)
 }
 \arguments{
-\item{build_number}{UI number (\code{100} or \code{"#100"}).}
+\item{build_number}{{character|numeric} UI number (\code{100} or \code{"#100"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Character internal build id.
+{character} Character internal build id.
 }
 \description{
 Same Number-query variants as \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}.
@@ -30,6 +30,7 @@ Other builds:
 \code{\link[=od_get_build_log]{od_get_build_log()}},
 \code{\link[=od_get_build_params]{od_get_build_params()}},
 \code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_promote_build]{od_promote_build()}},
 \code{\link[=od_query_builds]{od_query_builds()}},
 \code{\link[=od_rebuild_job]{od_rebuild_job()}},
 \code{\link[=od_run_job]{od_run_job()}}

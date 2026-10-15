@@ -13,19 +13,19 @@ od_query_users(
 )
 }
 \arguments{
-\item{query}{Optional OneDev user query string.}
+\item{query}{{character} Optional OneDev user query string. Default: \code{NULL}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}).}
 
-\item{offset}{Result offset (default \code{0}).}
+\item{offset}{{integer} Result offset (default \code{0}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of users (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of users (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Calls \code{GET /users}.
@@ -37,9 +37,17 @@ od_query_users(count = 20L)
 }
 \seealso{
 Other users:
+\code{\link[=od_add_group_member]{od_add_group_member()}},
+\code{\link[=od_add_user_ssh_key]{od_add_user_ssh_key()}},
+\code{\link[=od_delete_user_ssh_key]{od_delete_user_ssh_key()}},
+\code{\link[=od_get_group]{od_get_group()}},
 \code{\link[=od_get_me]{od_get_me()}},
 \code{\link[=od_get_user]{od_get_user()}},
 \code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_list_group_members]{od_list_group_members()}},
+\code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
+\code{\link[=od_query_groups]{od_query_groups()}},
+\code{\link[=od_remove_group_member]{od_remove_group_member()}},
 \code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
 }
 \concept{users}

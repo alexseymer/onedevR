@@ -10,12 +10,12 @@ od_get_query_description(
 )
 }
 \arguments{
-\item{kind}{One of \code{"issue"}, \code{"build"}, \code{"pull_request"}, or \code{"project"}.}
+\item{kind}{{character} One of \code{"issue"}, \code{"build"}, \code{"pull_request"}, or \code{"project"}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Character scalar (HTML-ish grammar text from the server).
+{character} Character scalar (HTML-ish grammar text from the server).
 }
 \description{
 Calls \verb{/~api/tod/get-\{kind\}-query-description} (same source \verb{tod ... get-query-description}

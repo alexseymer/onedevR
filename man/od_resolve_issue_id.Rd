@@ -7,12 +7,12 @@
 od_resolve_issue_id(issue_number, conn = NULL)
 }
 \arguments{
-\item{issue_number}{UI number (\code{145} or \code{"#145"}).}
+\item{issue_number}{{character|numeric} UI number (\code{145} or \code{"#145"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Character internal issue id.
+{character} Character internal issue id.
 }
 \description{
 OneDev UI numbers (\verb{#145}) differ from internal REST \code{id} values. High-level
@@ -30,14 +30,21 @@ Other issues:
 \code{\link[=od_add_issue_comment]{od_add_issue_comment()}},
 \code{\link[=od_add_issue_iterations]{od_add_issue_iterations()}},
 \code{\link[=od_create_issue]{od_create_issue()}},
+\code{\link[=od_get_board]{od_get_board()}},
 \code{\link[=od_get_issue]{od_get_issue()}},
 \code{\link[=od_get_issue_comments]{od_get_issue_comments()}},
 \code{\link[=od_get_issue_fields]{od_get_issue_fields()}},
+\code{\link[=od_get_issue_pull_requests]{od_get_issue_pull_requests()}},
+\code{\link[=od_get_iteration]{od_get_iteration()}},
 \code{\link[=od_issue_set_description]{od_issue_set_description()}},
 \code{\link[=od_issue_set_fields]{od_issue_set_fields()}},
 \code{\link[=od_issue_set_title]{od_issue_set_title()}},
 \code{\link[=od_issue_transition_state]{od_issue_transition_state()}},
+\code{\link[=od_link_issue_to_pull_request]{od_link_issue_to_pull_request()}},
+\code{\link[=od_list_boards]{od_list_boards()}},
 \code{\link[=od_list_iterations]{od_list_iterations()}},
-\code{\link[=od_query_issues]{od_query_issues()}}
+\code{\link[=od_query_board_issues]{od_query_board_issues()}},
+\code{\link[=od_query_issues]{od_query_issues()}},
+\code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}

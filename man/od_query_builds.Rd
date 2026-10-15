@@ -14,26 +14,26 @@ od_query_builds(
 )
 }
 \arguments{
-\item{query}{Raw OneDev build query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
+\item{query}{{character} Raw OneDev build query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
 with \code{kind = "build"}, or \verb{tod build get-query-description}). Example:
-\code{'"Number" is "group/project#100"'}.}
+\code{'"Number" is "group/project#100"'}. Default: \code{NULL}.}
 
-\item{status}{Optional status filter. OneDev uses keyword criteria - pass
+\item{status}{{character} Optional status filter. OneDev uses keyword criteria - pass
 \code{"successful"}, \code{"failed"}, \code{"cancelled"}, \code{"timed out"}, \code{"finished"},
 \code{"running"}, \code{"waiting"}, or \code{"pending"} (enum spellings like
-\code{"SUCCESSFUL"} are accepted and mapped). Combined with \code{query} via \code{and}.}
+\code{"SUCCESSFUL"} are accepted and mapped). Combined with \code{query} via \code{and}. Default: \code{NULL}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}).}
 
-\item{offset}{Result offset (default \code{0}).}
+\item{offset}{{integer} Result offset (default \code{0}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of builds (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of builds (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Query OneDev builds
@@ -51,6 +51,7 @@ Other builds:
 \code{\link[=od_get_build_log]{od_get_build_log()}},
 \code{\link[=od_get_build_params]{od_get_build_params()}},
 \code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_promote_build]{od_promote_build()}},
 \code{\link[=od_rebuild_job]{od_rebuild_job()}},
 \code{\link[=od_resolve_build_id]{od_resolve_build_id()}},
 \code{\link[=od_run_job]{od_run_job()}}

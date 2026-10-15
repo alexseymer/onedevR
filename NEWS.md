@@ -1,3 +1,14 @@
+# onedevr 0.6.0
+
+## Boards and project settings
+
+* `od_get_project_setting()` — `GET /projects/{id}/setting`.
+* `od_list_boards()` / `od_get_board()` — read `issueSetting$boardSpecs`.
+* `od_query_board_issues()` — compose a board's base/backlog query with an
+  optional iteration filter, then call `od_query_issues()` (does not inject
+  `default_issue_state`).
+* `od_get_iteration()` — resolve an iteration by id or name.
+
 # onedevr 0.5.2
 
 ## Bug fixes / DX

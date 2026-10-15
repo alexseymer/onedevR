@@ -6,7 +6,9 @@
 \alias{onedevr-package}
 \title{onedevr: Access to the OneDev REST API}
 \description{
-R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (https://github.com/theonedev/tod).
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, boards, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (https://github.com/theonedev/tod).
 }
 \seealso{
 Useful links:

@@ -7,19 +7,19 @@
 od_paginate(fetcher, ..., page_size = 100L, max_pages = 100L, as_tibble = NULL)
 }
 \arguments{
-\item{fetcher}{A function that accepts at least \code{offset} and \code{count}. Extra
+\item{fetcher}{{function} A function that accepts at least \code{offset} and \code{count}. Extra
 arguments may be passed via \code{...}.}
 
-\item{...}{Forwarded to \code{fetcher} (e.g. \code{state = "Open"}, \code{query = ...}).}
+\item{...}{Additional arguments forwarded to \code{fetcher} (e.g. \code{state = "Open"}, \code{query = ...}).}
 
-\item{page_size}{Page size / \code{count} (default \code{100}).}
+\item{page_size}{{integer} Page size / \code{count} (default \code{100}). Default: \code{100L}.}
 
-\item{max_pages}{Safety cap on number of pages (default \code{100}).}
+\item{max_pages}{{integer} Safety cap on number of pages (default \code{100}). Default: \code{100L}.}
 
-\item{as_tibble}{Passed to \code{fetcher} when it has a formal \code{as_tibble}.}
+\item{as_tibble}{{logical} Passed to \code{fetcher} when it has a formal \code{as_tibble}. Default: \code{NULL}.}
 }
 \value{
-A combined tibble when pages are tibbles; otherwise a concatenated
+{tibble|list} A combined tibble when pages are tibbles; otherwise a concatenated
 list of items.
 }
 \description{

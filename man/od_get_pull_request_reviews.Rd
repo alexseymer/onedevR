@@ -12,18 +12,18 @@ od_get_pull_request_reviews(
 )
 }
 \arguments{
-\item{pull_request_number}{UI number (\code{42} or \code{"#42"}).}
+\item{pull_request_number}{{character|numeric} UI number (\code{42} or \code{"#42"}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list.}
+\item{conn}{{list} Connection list. Default: \code{NULL}.}
 
-\item{use_internal_id}{If \code{TRUE}, treat \code{pull_request_number} as the
-internal REST id.}
+\item{use_internal_id}{{logical} If \code{TRUE}, treat \code{pull_request_number} as the
+internal REST id. Default: \code{FALSE}.}
 }
 \value{
-A tibble of reviews (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of reviews (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Get reviews on a pull request
@@ -41,6 +41,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},
 \code{\link[=od_request_pull_request_changes]{od_request_pull_request_changes()}},

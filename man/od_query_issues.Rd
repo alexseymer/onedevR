@@ -14,24 +14,24 @@ od_query_issues(
 )
 }
 \arguments{
-\item{query}{Raw OneDev issue query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
-/ OneDev query DSL). Example: \code{'"Number" is "group/project#145"'}.}
+\item{query}{{character} Raw OneDev issue query string (see \code{\link[=od_get_query_description]{od_get_query_description()}}
+/ OneDev query DSL). Example: \code{'"Number" is "group/project#145"'}. Default: \code{NULL}.}
 
-\item{state}{Optional state filter (e.g. \code{"Open"}). Combined with \code{query}
+\item{state}{{character} Optional state filter (e.g. \code{"Open"}). Combined with \code{query}
 via \code{and}. When both are empty, falls back to \code{conn$default_issue_state}
-(\code{ONEDEV_ISSUE_STATE}).}
+(\code{ONEDEV_ISSUE_STATE}). Default: \code{NULL}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}).}
 
-\item{offset}{Result offset (default \code{0}).}
+\item{offset}{{integer} Result offset (default \code{0}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}; if \code{FALSE}, the raw list payload / items.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}; if \code{FALSE}, the raw list payload / items. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of issues (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of issues (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 For fuzzy title/description search use OneDev text criteria such as
@@ -50,14 +50,21 @@ Other issues:
 \code{\link[=od_add_issue_comment]{od_add_issue_comment()}},
 \code{\link[=od_add_issue_iterations]{od_add_issue_iterations()}},
 \code{\link[=od_create_issue]{od_create_issue()}},
+\code{\link[=od_get_board]{od_get_board()}},
 \code{\link[=od_get_issue]{od_get_issue()}},
 \code{\link[=od_get_issue_comments]{od_get_issue_comments()}},
 \code{\link[=od_get_issue_fields]{od_get_issue_fields()}},
+\code{\link[=od_get_issue_pull_requests]{od_get_issue_pull_requests()}},
+\code{\link[=od_get_iteration]{od_get_iteration()}},
 \code{\link[=od_issue_set_description]{od_issue_set_description()}},
 \code{\link[=od_issue_set_fields]{od_issue_set_fields()}},
 \code{\link[=od_issue_set_title]{od_issue_set_title()}},
 \code{\link[=od_issue_transition_state]{od_issue_transition_state()}},
+\code{\link[=od_link_issue_to_pull_request]{od_link_issue_to_pull_request()}},
+\code{\link[=od_list_boards]{od_list_boards()}},
 \code{\link[=od_list_iterations]{od_list_iterations()}},
-\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}
+\code{\link[=od_query_board_issues]{od_query_board_issues()}},
+\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}},
+\code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}

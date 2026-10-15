@@ -182,11 +182,20 @@ cat(od_get_query_description("issue"))
 od_issue_transition_state(145, "Closed")
 ```
 
-## Iterations and Links
+## Boards, iterations, and links
 
 ```r
+# List issue boards (from project settings)
+boards <- od_list_boards()
+board <- od_get_board("Development")
+
+# Issues on a board, optionally scoped to an iteration
+od_query_board_issues("Development", iteration = "Sprint 5")
+od_query_board_issues("Development", backlog = TRUE)
+
 # List sprints/iterations
 iterations <- od_list_iterations()
+sprint <- od_get_iteration("Sprint 5")
 
 # Add issue to iteration
 od_add_issue_iterations(145, iteration_ids = iterations$id[1])

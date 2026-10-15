@@ -19,34 +19,34 @@ od_connection(
 )
 }
 \arguments{
-\item{host}{OneDev base URL (e.g. \code{"https://git.example.test"}).}
+\item{host}{{character} OneDev base URL (e.g. \code{"https://git.example.test"}).}
 
-\item{token}{API access token (Bearer), or Basic Auth password when
-\code{auth = "basic"} and \code{password} is unset.}
+\item{token}{{character} API access token (Bearer), or Basic Auth password when
+\code{auth = "basic"} and \code{password} is unset. Default: \code{NULL}.}
 
-\item{username}{Optional username for Basic Auth.}
+\item{username}{{character} Optional username for Basic Auth. Default: \code{NULL}.}
 
-\item{password}{Optional Basic Auth password (defaults to \code{token} when unset).}
+\item{password}{{character} Optional Basic Auth password (defaults to \code{token} when unset). Default: \code{NULL}.}
 
-\item{auth}{\code{"bearer"} or \code{"basic"}. Default: \code{"basic"} when \code{username} is
-set, otherwise \code{"bearer"}.}
+\item{auth}{{character} \code{"bearer"} or \code{"basic"}. Default: \code{"basic"} when \code{username} is
+set, otherwise \code{"bearer"}. Default: \code{NULL}.}
 
-\item{project_path}{Project path (e.g. \code{"group/my-project"}).}
+\item{project_path}{{character} Project path (e.g. \code{"group/my-project"}). Default: \code{NULL}.}
 
-\item{project_id}{Optional numeric project id (skips path resolution when set).}
+\item{project_id}{{character|numeric} Optional numeric project id (skips path resolution when set). Default: \code{NULL}.}
 
-\item{repo_url}{Optional git remote URL; used to derive \code{project_path} when
-that is unset.}
+\item{repo_url}{{character} Optional git remote URL; used to derive \code{project_path} when
+that is unset. Default: \code{NULL}.}
 
-\item{default_issue_state}{Optional default for \code{\link[=od_query_issues]{od_query_issues()}} when no
-query/state is given.}
+\item{default_issue_state}{{character} Optional default for \code{\link[=od_query_issues]{od_query_issues()}} when no
+query/state is given. Default: \code{NULL}.}
 
-\item{insecure_ssl}{If \code{TRUE}, skip TLS certificate verification.}
+\item{insecure_ssl}{{logical} If \code{TRUE}, skip TLS certificate verification. Default: \code{FALSE}.}
 
-\item{validate}{If \code{TRUE} (default), error when host/credentials are missing.}
+\item{validate}{{logical} If \code{TRUE} (default), error when host/credentials are missing. Default: \code{TRUE}.}
 }
 \value{
-A named list with connection fields, classed as \code{od_connection}.
+{list} A named list with connection fields, classed as \code{od_connection}.
 }
 \description{
 Prefer this over environment variables for scripts and multi-host workflows.

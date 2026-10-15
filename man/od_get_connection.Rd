@@ -7,7 +7,7 @@
 od_get_connection()
 }
 \value{
-The connection registered with \code{\link[=od_set_connection]{od_set_connection()}}, or \code{NULL}.
+{list} The connection registered with \code{\link[=od_set_connection]{od_set_connection()}}, or \code{NULL}.
 }
 \description{
 Get the package-default OneDev connection
