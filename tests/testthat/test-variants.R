@@ -111,3 +111,15 @@ test_that("od_request builds URL and surfaces HTTP errors", {
     "HTTP 404.*missing"
   )
 })
+
+test_that("HTTP 406 Invalid query errors carry a hint", {
+  resp <- httr2::response(
+    status_code = 406L,
+    headers = list("Content-Type" = "text/plain"),
+    body = charToRaw("Invalid query")
+  )
+  expect_error(
+    .od_http_error(resp, "Invalid query"),
+    "HTTP 406.*Invalid query.*od_get_query_description"
+  )
+})

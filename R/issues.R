@@ -127,8 +127,8 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #' @param title {character} Issue title.
 #' @param description {character} Issue description (Markdown). Default: `""`.
 #' @param fields {list} Named list of custom fields (installation-specific). Default: `list()`.
-#' @param iteration_ids {numeric} Optional numeric iteration ids from
-#'   [od_list_iterations()]; sent as `iterationIds` in the create body. Default: `NULL`.
+#' @param iteration_ids {numeric|character} Optional iteration ids or names (see
+#'   [od_resolve_iteration_ids()]); sent as `iterationIds` in the create body. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed created issue.
 #' @endpoint POST /issues
@@ -165,7 +165,7 @@ od_create_issue <- function(
     base_b$fields <- fields
   }
   if (!is.null(iteration_ids) && length(iteration_ids) > 0) {
-    ids <- as.list(as.integer(iteration_ids))
+    ids <- as.list(od_resolve_iteration_ids(iteration_ids, conn = conn))
     base_a$iterationIds <- ids
     base_b$iterationIds <- ids
   }
@@ -351,12 +351,13 @@ od_get_issue_comments <- function(
 od_add_issue_comment <- function(issue_number, content, conn = NULL) {
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
-  od_request(
+  content <- as.character(content)[1]
+  .od_request_with_variants(
     method = "POST",
     endpoint = "/issue-comments",
-    body = list(
-      issueId = issue_id,
-      content = as.character(content)[1]
+    body_variants = list(
+      list(issueId = issue_id, content = content),
+      list(issue = list(id = issue_id), content = content)
     ),
     conn = conn
   )

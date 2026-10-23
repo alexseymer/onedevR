@@ -108,7 +108,7 @@ od_get_iteration <- function(
 #' `project_plan.md` sec 10.
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
-#' @param iteration_ids Numeric iteration ids from [od_list_iterations()].
+#' @param iteration_ids Iteration ids or names (see [od_resolve_iteration_ids()]).
 #' @param conn Connection list.
 #' @return Parsed API response.
 #' @family issues
@@ -122,7 +122,7 @@ od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
   if (is.null(iteration_ids) || length(iteration_ids) < 1L) {
     stop("`iteration_ids` must contain at least one id.", call. = FALSE)
   }
-  ids <- as.list(as.integer(iteration_ids))
+  ids <- as.list(od_resolve_iteration_ids(iteration_ids, conn = conn))
   issue_id <- od_resolve_issue_id(issue_number, conn = conn)
 
   .od_request_with_variants(
@@ -134,4 +134,51 @@ od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
     ),
     conn = conn
   )
+}
+
+#' Resolve iteration names to ids
+#'
+#' Accepts numeric ids (returned as integers) and/or iteration names, which are
+#' matched exactly against [od_list_iterations()]. Unknown names raise an error
+#' listing the available iterations.
+#'
+#' @param iterations Character names and/or numeric ids.
+#' @param project Optional project path or numeric id.
+#' @param conn Connection list.
+#' @return Integer vector of iteration ids.
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_resolve_iteration_ids(c("Version 3.0.0", 17L))
+#' }
+#' @export
+od_resolve_iteration_ids <- function(iterations, project = NULL, conn = NULL) {
+  if (is.null(iterations) || length(iterations) < 1L) {
+    return(integer(0))
+  }
+  is_id <- is.numeric(iterations) |
+    (is.character(iterations) & grepl("^[0-9]+$", iterations))
+  ids <- rep(NA_integer_, length(iterations))
+  ids[is_id] <- as.integer(iterations[is_id])
+  if (any(!is_id)) {
+    conn <- .od_conn(conn)
+    its <- od_list_iterations(project = project, as_tibble = FALSE, conn = conn)
+    known <- vapply(its, function(x) as.character(x$name %||% ""), character(1))
+    known_ids <- vapply(its, function(x) as.integer(x$id %||% NA), integer(1))
+    for (i in which(!is_id)) {
+      hit <- match(as.character(iterations[[i]]), known)
+      if (is.na(hit)) {
+        stop(
+          sprintf(
+            "Iteration not found: %s. Available: %s",
+            iterations[[i]],
+            paste(known, collapse = ", ")
+          ),
+          call. = FALSE
+        )
+      }
+      ids[i] <- known_ids[[hit]]
+    }
+  }
+  ids
 }

@@ -179,7 +179,9 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
     "hi"
   )
   mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
-  mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
+  mockery::stub(od_add_issue_comment, ".od_request_with_variants", function(method, endpoint, body_variants = NULL, ...) {
+    body <- body_variants[[1]]
+    expect_equal(body_variants[[2]]$issue$id, body$issueId)
     expect_equal(method, "POST")
     expect_equal(endpoint, "/issue-comments")
     expect_equal(body$issueId, 283L)

@@ -46,6 +46,19 @@ test_that("od_add_issue_iterations rejects empty ids", {
   )
 })
 
+test_that("od_resolve_iteration_ids maps names, passes ids, errors on unknown", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_resolve_iteration_ids, "od_list_iterations", function(...) {
+    list(list(id = 17L, name = "Version 3.0.0"), list(id = 18L, name = "Version 2.X.X"))
+  })
+  expect_equal(od_resolve_iteration_ids(c("Version 2.X.X", 5L), conn = list()), c(18L, 5L))
+  expect_equal(od_resolve_iteration_ids(NULL), integer(0))
+  expect_error(
+    od_resolve_iteration_ids("Pipelines", conn = list()),
+    "Iteration not found: Pipelines. Available: Version 3.0.0, Version 2.X.X"
+  )
+})
+
 test_that("od_get_iteration resolves by name and by id", {
   skip_if_not_installed("mockery")
 
