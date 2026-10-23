@@ -1,7 +1,7 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
 **Stand:** 2026-10-23 (Review/Revision; Paketversion 0.5.2 + `development`)  
-**Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`, `DESCRIPTION`, `NEWS.md` und `ROADMAP.md`; Code-Snippets in §7 und §13–§14 sind historische Entwurfsvorlagen und können von der Implementierung abweichen.  
+**Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`, `DESCRIPTION`, `NEWS.md` und `ROADMAP.md`; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.  
 **Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt.
 
 ---
@@ -14,7 +14,7 @@
 4. [Abhängigkeiten & öffentliche API](#4-abhängigkeiten--öffentliche-api)
 5. [Architektur](#5-architektur)
 6. [API-Design](#6-api-design)
-7. [Referenz-Implementierung (Code-Snippets)](#7-referenz-implementierung-code-snippets)
+7. [Referenz-Implementierung (Code-Snippets)](#7-referenz-implementierung)
 8. [Umgebungsvariablen & Konfiguration](#8-umgebungsvariablen--konfiguration)
 9. [UI-Nummern vs. interne API-IDs](#9-ui-nummern-vs-interne-api-ids)
 10. [Bekannte API-Quirks](#10-bekannte-api-quirks)
@@ -337,301 +337,26 @@ raw <- od_request("GET", paste0("/issues/", issue_id))
 
 ---
 
-## 7. Referenz-Implementierung (Code-Snippets)
+## 7. Referenz-Implementierung
 
 > Ziel-API mit `od_*`-Präfix. Snippets sind Implementierungsvorlagen für das neue Paket.
 
-### 7.1 HTTP-Request-Vorbereitung
+### Wo die Referenz-Implementierung liegt
 
-```r
-.od_prepare_request <- function(method, url, token, insecure_ssl = FALSE) {
-  req <- httr2::request(url)
-  req <- httr2::req_method(req, method)
-  req <- httr2::req_headers(
-    req,
-    Authorization = paste("Bearer", token),
-    Accept = "application/json"
-  )
-  req <- httr2::req_timeout(req, 30)
-  req <- httr2::req_error(req, is_error = function(resp) FALSE)
+Die früheren Entwurfs-Snippets (7.1–7.10) sind durch den Code ersetzt und wurden entfernt, damit die Spec nicht vom Code driftet. Maßgeblich sind:
 
-  if (isTRUE(insecure_ssl)) {
-    req <- httr2::req_options(req, ssl_verifypeer = 0L, ssl_verifyhost = 0L)
-  }
+| Thema | Quelle |
+|-------|--------|
+| HTTP-Request-Vorbereitung, Auth-Header, TLS-Option | `R/request.R` (`.od_prepare_request()`), `R/connection.R` |
+| Low-level Request, Fehlerbehandlung | `R/request.R` (`od_request()`, `.od_http_error()`) |
+| Config aus Umgebungsvariablen | `R/config.R` (`od_get_config()`) |
+| Response-Normalisierung, Tibbles | `R/normalize.R` |
+| UI-Nummer → interne ID (kritisch, siehe §9) | `R/resolve.R` |
+| Payload-Varianten | `R/variants.R` (`.od_request_with_variants()`), Quirks in §10 |
+| Issue Create/Iterations/Query/Transition | `R/issues.R`, `R/iterations.R` |
+| End-to-End-Beispiele | `README.md`, `vignettes/getting-started.Rmd`, `vignettes/issues-workflow.Rmd` |
 
-  req
-}
-```
-
-### 7.2 Low-level Request (Kern)
-
-```r
-od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
-  conn <- conn %||% od_get_config()
-  method <- toupper(trimws(as.character(method)[1]))
-  url <- .od_resolve_api_url(endpoint, conn)
-  req <- .od_prepare_request(method, url, conn$token, conn$insecure_ssl)
-
-  if (length(query) > 0) {
-    query <- query[!vapply(query, is.null, logical(1))]
-    if (length(query) > 0) {
-      req <- do.call(httr2::req_url_query, c(list(req), query))
-    }
-  }
-
-  if (!is.null(body)) {
-    json_body <- jsonlite::toJSON(body, auto_unbox = TRUE, null = "null")
-    req <- httr2::req_headers(req, "Content-Type" = "application/json")
-    req <- httr2::req_body_raw(req, as.character(json_body))
-  }
-
-  response <- httr2::req_perform(req)
-  payload <- .od_parse_response_body(response)
-  if (httr2::resp_status(response) >= 400L) {
-    .od_http_error(response, payload)
-  }
-
-  payload
-}
-```
-
-### 7.3 Config aus Umgebungsvariablen
-
-```r
-od_get_config <- function(validate = TRUE) {
-  host <- .od_trim_env("ONEDEV_HOST")
-  token <- .od_first_non_empty(
-    .od_trim_env("ONEDEV_API_TOKEN"),
-    .od_trim_env("ONEDEV_TOKEN"),
-    .od_trim_env("ONEDEV_ISSUE_REPORTER_API_KEY")
-  )
-  repo_url <- .od_trim_env("ONEDEV_REPO_URL")
-  project_path <- .od_first_non_empty(
-    .od_trim_env("ONEDEV_PROJECT_PATH"),
-    .od_derive_project_path(repo_url)
-  )
-  project_id <- .od_trim_env("ONEDEV_PROJECT_ID")
-  issue_state <- .od_trim_env("ONEDEV_ISSUE_STATE")
-  insecure_ssl <- .od_parse_flag(.od_trim_env("ONEDEV_CURL_INSECURE"))
-
-  host <- sub("/+$", "", host)
-  conn <- list(
-    host = host,
-    api_base_url = if (nzchar(host)) paste0(host, "/~api") else "",
-    token = token,
-    repo_url = repo_url,
-    project_id = project_id,
-    project_path = project_path,
-    default_issue_state = issue_state,
-    insecure_ssl = insecure_ssl
-  )
-
-  if (isTRUE(validate)) {
-    if (!nzchar(conn$host)) {
-      stop("ONEDEV_HOST is missing or empty.", call. = FALSE)
-    }
-    if (!nzchar(conn$token)) {
-      stop(
-        "No OneDev token found. Expected: ONEDEV_API_TOKEN, ONEDEV_TOKEN, or ONEDEV_ISSUE_REPORTER_API_KEY.",
-        call. = FALSE
-      )
-    }
-  }
-
-  conn
-}
-```
-
-### 7.4 Response-Normalisierung
-
-```r
-.od_normalize_collection <- function(response) {
-  if (is.null(response)) return(list())
-  if (is.list(response) && !is.null(response$items) && is.list(response$items)) {
-    return(response$items)
-  }
-  if (is.list(response) && !is.null(response$data) && is.list(response$data)) {
-    return(response$data)
-  }
-  if (is.list(response) && !is.null(names(response)) && "id" %in% names(response)) {
-    return(list(response))
-  }
-  if (is.list(response)) return(response)
-  list(response)
-}
-```
-
-### 7.5 UI-Nummer → interne ID (kritisch)
-
-```r
-od_resolve_issue_id <- function(issue_number, conn = NULL) {
-  conn <- conn %||% od_get_config()
-  project_path <- od_resolve_project_path(conn = conn)
-  numeric_part <- gsub("^#", "", trimws(as.character(issue_number)[1]), perl = TRUE)
-  ref <- paste0(project_path, "#", numeric_part)
-  issues <- .od_normalize_collection(
-    od_query_issues(
-      query = paste0('"Number" is "', ref, '"'),
-      count = 1L,
-      offset = 0L,
-      conn = conn
-    )
-  )
-
-  if (length(issues) < 1L || is.null(issues[[1]]$id)) {
-    stop(paste0("OneDev issue #", numeric_part, " was not found."), call. = FALSE)
-  }
-
-  as.character(issues[[1]]$id)
-}
-```
-
-### 7.6 Payload-Varianten (API-Inkonsistenz)
-
-```r
-.od_request_with_variants <- function(method, endpoint, body_variants, conn = NULL) {
-  last_error <- NULL
-  for (body in body_variants) {
-    outcome <- tryCatch(
-      list(ok = TRUE, value = od_request(method, endpoint, body = body, conn = conn)),
-      error = function(e) { last_error <<- e; list(ok = FALSE, value = NULL) }
-    )
-    if (isTRUE(outcome$ok)) return(outcome$value)
-  }
-  stop(conditionMessage(last_error), call. = FALSE)
-}
-
-# Create Issue — zwei gängige Body-Formen:
-.od_request_with_variants(
-  method = "POST",
-  endpoint = "/issues",
-  body_variants = list(
-    list(projectId = project_id, title = title, description = description),
-    list(project = list(id = project_id), title = title, description = description)
-  ),
-  conn = conn
-)
-
-# State Transition — drei gängige Body-Formen:
-.od_request_with_variants(
-  method = "POST",
-  endpoint = paste0("/issues/", issue_id, "/state-transitions"),
-  body_variants = list(
-    list(state = state),
-    list(transition = state),
-    state
-  ),
-  conn = conn
-)
-```
-
-### 7.7 Issue Create mit Custom Fields und Iterations
-
-```r
-od_create_issue(
-  title = "API integration test",
-  description = "Created programmatically from R",
-  fields = list(
-    Assignee = "developer",
-    Type = "Task",
-    Priority = "Normal"
-  ),
-  iteration_ids = c(17L),  # Phase 2: internal iteration id from od_list_iterations()
-  conn = conn
-)
-
-# Equivalent low-level body:
-od_request(
-  method = "POST",
-  endpoint = "/issues",
-  body = list(
-    projectId = as.integer(conn$project_id),
-    title = "API integration test",
-    description = "Created programmatically from R",
-    fields = list(Assignee = "developer", Type = "Task", Priority = "Normal"),
-    iterationIds = list(17L)
-  ),
-  conn = conn
-)
-```
-
-### 7.8 Iterations nachträglich setzen (Phase 2)
-
-```r
-od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
-  conn <- conn %||% od_get_config()
-  issue_id <- od_resolve_issue_id(issue_number, conn = conn)
-
-  .od_request_with_variants(
-    method = "POST",
-    endpoint = paste0("/issues/", issue_id, "/iterations"),
-    body_variants = list(
-      as.list(as.integer(iteration_ids)),
-      list(iterationIds = as.list(as.integer(iteration_ids)))
-    ),
-    conn = conn
-  )
-}
-```
-
-### 7.9 Issue Query mit State-Filter
-
-```r
-od_query_issues <- function(query = NULL, state = NULL, count = 100L, offset = 0L, conn = NULL) {
-  conn <- conn %||% od_get_config()
-  query <- trimws(as.character(query %||% "")[1])
-  state <- trimws(as.character(state %||% "")[1])
-
-  if (!nzchar(query) && !nzchar(state)) {
-    state <- conn$default_issue_state %||% ""
-  }
-  if (nzchar(state)) {
-    state_clause <- paste0('State is "', state, '"')
-    query <- if (nzchar(query)) {
-      paste0("(", query, ") and ", state_clause)
-    } else {
-      state_clause
-    }
-  }
-
-  od_request(
-    method = "GET",
-    endpoint = "/issues",
-    query = list(
-      query = if (nzchar(query)) query else NULL,
-      count = as.integer(count),
-      offset = as.integer(offset)
-    ),
-    conn = conn
-  )
-}
-```
-
-### 7.10 Beispiel-Workflow (End-to-End)
-
-```r
-library(onedevr)
-
-# Configure via environment
-Sys.setenv(
-  ONEDEV_HOST = "https://git.example.test",
-  ONEDEV_API_TOKEN = Sys.getenv("ONEDEV_API_TOKEN"),
-  ONEDEV_PROJECT_PATH = "group/my-project"
-)
-
-issue <- od_get_issue(145)
-
-created <- od_create_issue(
-  title = "REST client test",
-  description = "Created from onedevr",
-  fields = list(Priority = "High")
-)
-
-od_issue_set_title(created$number, "REST client verified")
-od_issue_transition_state(created$number, "Closed")
-```
-
-### 7.11 Web-URL für „Neues Issue“ (Consumer-Hinweis, nicht Paket-API)
+### Web-URL für „Neues Issue“ (Consumer-Hinweis, nicht Paket-API)
 
 Anwendungen, die Nutzer im Browser zu einem vorausgefüllten Issue-Formular leiten, bauen URLs selbst:
 
@@ -938,29 +663,13 @@ NULL
 
 | Bedarf | Empfehlung |
 |--------|------------|
-| Browser-Links zu Issue-Formularen | Eigene URL-Builder (siehe §7.11) |
+| Browser-Links zu Issue-Formularen | Eigene URL-Builder (siehe §7, „Web-URL“) |
 | App-spezifische Issue-Titel | Domänenlogik im Consumer |
 | Webhook-Handling | Separates Paket oder App-Code |
 
 ---
 
 ## 13. Paket-Skeleton
-
-### Repo anlegen (usethis) — historisch, Repo existiert bereits
-
-```r
-usethis::create_package("path/to/onedevr")
-usethis::use_mit_license()   # oder use_gpl3_license()
-usethis::use_testthat()
-usethis::use_package("httr2", "Imports")
-usethis::use_package("jsonlite", "Imports")
-usethis::use_package("rlang", "Imports")
-usethis::use_package("mockery", "Suggests")
-usethis::use_package("withr", "Suggests")
-usethis::use_vignette("getting-started")
-usethis::use_git()
-usethis::use_github()
-```
 
 ### Quick Start (Ziel-README)
 
