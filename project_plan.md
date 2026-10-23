@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-10-23 (Review/Revision; Paketversion 0.5.2 + `development`)  
+**Stand:** 2026-10-23 (Review/Revision; Paketversion 0.6.0 + `development`)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`, `DESCRIPTION`, `NEWS.md` und `ROADMAP.md`; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.  
 **Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt.
 
@@ -127,6 +127,7 @@
 | 0.5.0 | Jobs (run/rebuild/cancel), Packages, Repository-/Commit-Helfer |
 | 0.5.1 | Dogfood-Hardening: Build-/PR-Status-Keywords, Pagination, Query-DSL |
 | 0.5.2 | Titel/Beschreibung: Rohstring zuerst; aggregierte Varianten-Fehler |
+| 0.6.0 | Boards/Projekt-Settings (`od_list_boards()`, `od_query_board_issues()`), `od_get_iteration()` |
 | development | `od_resolve_iteration_ids()`, 406-Hinweis, Kommentar-Body-Varianten |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (`R/batch.R`, `R/concurrent.R`, `R/streaming.R`, `R/cache.R`).
