@@ -102,6 +102,49 @@ reference:
       - od_get_query_description
       - od_download
       - od_request
+  - title: Groups, webhooks, and SSH keys
+    contents:
+      - od_query_groups
+      - od_get_group
+      - od_list_group_members
+      - od_add_group_member
+      - od_remove_group_member
+      - od_list_webhooks
+      - od_get_webhook
+      - od_create_webhook
+      - od_delete_webhook
+      - od_list_user_ssh_keys
+      - od_add_user_ssh_key
+      - od_delete_user_ssh_key
+  - title: Commit statuses, build promotion, and issue/PR links
+    contents:
+      - od_get_commit_statuses
+      - od_set_commit_status
+      - od_promote_build
+      - od_link_issue_to_pull_request
+      - od_unlink_issue_from_pull_request
+  - title: Batch, parallel, and streaming
+    desc: Bulk issue operations, concurrent helpers, and streaming of long results or logs.
+    contents:
+      - od_batch_create_issues
+      - od_batch_update_issues
+      - od_batch_transition_issues
+      - od_batch_link_issues_prs
+      - od_map_parallel
+      - od_parallel_query
+      - od_chunked_foreach
+      - od_concurrent_stream
+      - od_stream_query_results
+      - od_stream_build_log
+      - od_write_log_file
+      - is_future_installed
+  - title: Caching
+    contents:
+      - od_enable_cache
+      - od_disable_cache
+      - od_clear_cache
+      - od_get_cache_stats
+      - od_with_cache
 
 navbar:
   structure:
