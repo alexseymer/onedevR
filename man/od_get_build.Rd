@@ -7,15 +7,15 @@
 od_get_build(build_number, conn = NULL, use_internal_id = FALSE)
 }
 \arguments{
-\item{build_number}{UI number (\code{100} or \code{"#100"}).}
+\item{build_number}{{character|numeric} UI number (\code{100} or \code{"#100"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 
-\item{use_internal_id}{If \code{TRUE}, treat \code{build_number} as the internal REST
-id (debugging only).}
+\item{use_internal_id}{{logical} If \code{TRUE}, treat \code{build_number} as the internal REST
+id (debugging only). Default: \code{FALSE}.}
 }
 \value{
-Parsed build object (list).
+{list} Parsed build object.
 }
 \description{
 Get a single build by UI number
@@ -32,6 +32,7 @@ Other builds:
 \code{\link[=od_get_build_log]{od_get_build_log()}},
 \code{\link[=od_get_build_params]{od_get_build_params()}},
 \code{\link[=od_list_build_artifacts]{od_list_build_artifacts()}},
+\code{\link[=od_promote_build]{od_promote_build()}},
 \code{\link[=od_query_builds]{od_query_builds()}},
 \code{\link[=od_rebuild_job]{od_rebuild_job()}},
 \code{\link[=od_resolve_build_id]{od_resolve_build_id()}},

@@ -7,12 +7,12 @@
 od_request_pull_request_changes(pull_request_number, conn = NULL)
 }
 \arguments{
-\item{pull_request_number}{UI number.}
+\item{pull_request_number}{{character|numeric} UI number.}
 
-\item{conn}{Connection list.}
+\item{conn}{{list} Connection list. Default: \code{NULL}.}
 }
 \value{
-Parsed API response (may be \code{NULL}).
+{list} Parsed API response (may be \code{NULL}).
 }
 \description{
 Request changes on a pull request
@@ -30,6 +30,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},

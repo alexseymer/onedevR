@@ -7,10 +7,10 @@
 od_get_config(validate = TRUE)
 }
 \arguments{
-\item{validate}{If \code{TRUE} (default), error when host or credentials are missing.}
+\item{validate}{{logical} If \code{TRUE} (default), error when host or credentials are missing. Default: \code{TRUE}.}
 }
 \value{
-A named list with fields \code{host}, \code{api_base_url}, \code{token}, \code{username},
+{list} A named list with fields \code{host}, \code{api_base_url}, \code{token}, \code{username},
 \code{password}, \code{auth}, \code{repo_url}, \code{project_id}, \code{project_path},
 \code{default_issue_state}, and \code{insecure_ssl}.
 }

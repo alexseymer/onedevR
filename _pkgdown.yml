@@ -20,7 +20,7 @@ reference:
       - od_get_connection
       - od_get_config
   - title: Issues
-    desc: Query and mutate issues, fields, comments, and iterations.
+    desc: Query and mutate issues, fields, comments, boards, and iterations.
     contents:
       - starts_with("od_query_issues")
       - starts_with("od_get_issue")
@@ -28,8 +28,12 @@ reference:
       - starts_with("od_add_issue")
       - starts_with("od_issue_")
       - od_resolve_issue_id
+      - od_list_boards
+      - od_get_board
+      - od_query_board_issues
       - od_list_iterations
       - od_resolve_iteration_ids
+      - od_get_iteration
       - od_add_issue_iterations
   - title: Builds and jobs
     desc: Query builds, logs, artifacts, and run/rebuild/cancel jobs.
@@ -61,6 +65,7 @@ reference:
     contents:
       - od_query_projects
       - od_get_project
+      - od_get_project_setting
       - od_get_project_clone_url
       - od_resolve_project_path
       - od_resolve_project_id

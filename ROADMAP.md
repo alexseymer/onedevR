@@ -67,4 +67,7 @@ Estimate per plan: 1 week+.
 - [x] Dogfood hardening (v0.5.1): build/PR status keywords, pagination, query DSL
 - [x] Issue title/description payload fix + variant error aggregation (v0.5.2) —
   https://github.com/alexseymer/onedevR/releases/tag/v0.5.2
+- [x] Boards + project settings read path (v0.6.0): `od_list_boards()`,
+  `od_get_board()`, `od_query_board_issues()`, `od_get_project_setting()`,
+  `od_get_iteration()`
 - [ ] R-universe / CRAN when demand warrants it

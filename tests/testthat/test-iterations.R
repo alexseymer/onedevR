@@ -58,3 +58,21 @@ test_that("od_resolve_iteration_ids maps names, passes ids, errors on unknown", 
     "Iteration not found: Pipelines. Available: Version 3.0.0, Version 2.X.X"
   )
 })
+
+test_that("od_get_iteration resolves by name and by id", {
+  skip_if_not_installed("mockery")
+
+  sample <- list(
+    list(id = 17L, name = "Sprint 5"),
+    list(id = 18L, name = "Sprint 6")
+  )
+  mockery::stub(od_get_iteration, "od_list_iterations", function(...) sample)
+
+  by_name <- od_get_iteration("Sprint 5", conn = list())
+  expect_equal(by_name$id, 17L)
+
+  by_id <- od_get_iteration(18L, conn = list())
+  expect_equal(by_id$name, "Sprint 6")
+
+  expect_error(od_get_iteration("Missing", conn = list()), "was not found")
+})

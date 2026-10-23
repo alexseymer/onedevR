@@ -39,6 +39,68 @@ od_list_iterations <- function(
   od_as_tibble(payload, as_tibble = as_tibble)
 }
 
+#' Get a single iteration by id or name
+#'
+#' Resolves against [od_list_iterations()] for the project. Numeric values and
+#' digit-only strings match `id`; otherwise the iteration `name` is matched
+#' (case-sensitive).
+#'
+#' @param iteration {character|numeric} Iteration id or name.
+#' @param project Optional project path or numeric id; defaults to the
+#'   connection's project via [od_resolve_project_id()].
+#' @param count Maximum iterations to scan when resolving (default `100`).
+#' @param conn Connection list from [od_get_config()] / [od_connection()].
+#' @return A single iteration as a list (`id`, `name`, …).
+#' @family issues
+#' @examples
+#' \dontrun{
+#' od_get_iteration("Sprint 5")
+#' od_get_iteration(17L)
+#' }
+#' @export
+od_get_iteration <- function(
+  iteration,
+  project = NULL,
+  count = 100L,
+  conn = NULL
+) {
+  conn <- .od_conn(conn)
+  key <- .od_coerce_string(iteration)
+  .od_require(key, "iteration")
+
+  items <- od_list_iterations(
+    project = project,
+    count = count,
+    offset = 0L,
+    as_tibble = FALSE,
+    conn = conn
+  )
+
+  if (grepl("^[0-9]+$", key)) {
+    ids <- vapply(
+      items,
+      function(it) .od_coerce_string(it$id %||% ""),
+      character(1)
+    )
+    idx <- which(ids == key)
+  } else {
+    names_vec <- vapply(
+      items,
+      function(it) .od_coerce_string(it$name %||% ""),
+      character(1)
+    )
+    idx <- which(names_vec == key)
+  }
+
+  if (!length(idx)) {
+    stop(
+      paste0("OneDev iteration '", key, "' was not found."),
+      call. = FALSE
+    )
+  }
+  items[[idx[[1]]]]
+}
+
 #' Set iterations on an existing issue
 #'
 #' Calls `POST /issues/{id}/iterations`. Tries known body shapes (raw id list

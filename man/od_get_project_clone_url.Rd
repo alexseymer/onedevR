@@ -7,12 +7,12 @@
 od_get_project_clone_url(project = NULL, conn = NULL)
 }
 \arguments{
-\item{project}{Project path or numeric id; defaults to the connection project.}
+\item{project}{{character|numeric} Project path or numeric id; defaults to the connection project. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Parsed clone-url payload (list; typically \code{http} and \code{ssh}).
+{list} Parsed clone-url payload (typically \code{http} and \code{ssh} keys).
 }
 \description{
 Get clone URLs for a project
@@ -24,7 +24,12 @@ od_get_project_clone_url()
 }
 \seealso{
 Other projects:
+\code{\link[=od_create_webhook]{od_create_webhook()}},
+\code{\link[=od_delete_webhook]{od_delete_webhook()}},
 \code{\link[=od_get_project]{od_get_project()}},
+\code{\link[=od_get_project_setting]{od_get_project_setting()}},
+\code{\link[=od_get_webhook]{od_get_webhook()}},
+\code{\link[=od_list_webhooks]{od_list_webhooks()}},
 \code{\link[=od_query_projects]{od_query_projects()}},
 \code{\link[=od_resolve_project_id]{od_resolve_project_id()}},
 \code{\link[=od_resolve_project_path]{od_resolve_project_path()}}

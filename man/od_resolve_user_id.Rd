@@ -7,12 +7,12 @@
 od_resolve_user_id(user, conn = NULL)
 }
 \arguments{
-\item{user}{Login name or numeric user id.}
+\item{user}{{character|numeric} Login name or numeric user id.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Character user id.
+{character} Character user id.
 }
 \description{
 Calls \code{GET /users/ids/{name}}. Numeric \code{user} values are returned as-is.
@@ -24,9 +24,17 @@ od_resolve_user_id("alice")
 }
 \seealso{
 Other users:
+\code{\link[=od_add_group_member]{od_add_group_member()}},
+\code{\link[=od_add_user_ssh_key]{od_add_user_ssh_key()}},
+\code{\link[=od_delete_user_ssh_key]{od_delete_user_ssh_key()}},
+\code{\link[=od_get_group]{od_get_group()}},
 \code{\link[=od_get_me]{od_get_me()}},
 \code{\link[=od_get_user]{od_get_user()}},
 \code{\link[=od_get_user_emails]{od_get_user_emails()}},
-\code{\link[=od_query_users]{od_query_users()}}
+\code{\link[=od_list_group_members]{od_list_group_members()}},
+\code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
+\code{\link[=od_query_groups]{od_query_groups()}},
+\code{\link[=od_query_users]{od_query_users()}},
+\code{\link[=od_remove_group_member]{od_remove_group_member()}}
 }
 \concept{users}

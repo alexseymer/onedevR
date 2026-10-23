@@ -164,6 +164,30 @@ od_get_project <- function(project = NULL, conn = NULL) {
   od_request("GET", paste0("/projects/", project_id), conn = conn)
 }
 
+#' Get project settings
+#'
+#' Calls `GET /projects/{id}/setting`. Includes issue configuration such as
+#' board specs (`issueSetting$boardSpecs`); use [od_list_boards()] for a
+#' focused view of boards.
+#'
+#' @param project {character|numeric} Project path or numeric id; defaults to
+#'   the connection project. Default: `NULL`.
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()].
+#'   Default: `NULL`.
+#' @return {list} Parsed project settings object.
+#' @endpoint GET /projects/{projectId}/setting
+#' @family projects
+#' @examples
+#' \dontrun{
+#' od_get_project_setting()
+#' }
+#' @export
+od_get_project_setting <- function(project = NULL, conn = NULL) {
+  conn <- .od_conn(conn)
+  project_id <- od_resolve_project_id(project = project, conn = conn)
+  od_request("GET", paste0("/projects/", project_id, "/setting"), conn = conn)
+}
+
 #' Get clone URLs for a project
 #'
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.

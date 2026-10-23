@@ -7,14 +7,14 @@
 od_get_user(user, conn = NULL, use_internal_id = FALSE)
 }
 \arguments{
-\item{user}{Login name or numeric user id.}
+\item{user}{{character|numeric} Login name or numeric user id.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 
-\item{use_internal_id}{If \code{TRUE}, treat \code{user} as the internal REST id.}
+\item{use_internal_id}{{logical} If \code{TRUE}, treat \code{user} as the internal REST id. Default: \code{FALSE}.}
 }
 \value{
-Parsed user object (list).
+{list} Parsed user object.
 }
 \description{
 Get a single user
@@ -26,9 +26,17 @@ od_get_user("alice")
 }
 \seealso{
 Other users:
+\code{\link[=od_add_group_member]{od_add_group_member()}},
+\code{\link[=od_add_user_ssh_key]{od_add_user_ssh_key()}},
+\code{\link[=od_delete_user_ssh_key]{od_delete_user_ssh_key()}},
+\code{\link[=od_get_group]{od_get_group()}},
 \code{\link[=od_get_me]{od_get_me()}},
 \code{\link[=od_get_user_emails]{od_get_user_emails()}},
+\code{\link[=od_list_group_members]{od_list_group_members()}},
+\code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
+\code{\link[=od_query_groups]{od_query_groups()}},
 \code{\link[=od_query_users]{od_query_users()}},
+\code{\link[=od_remove_group_member]{od_remove_group_member()}},
 \code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
 }
 \concept{users}

@@ -7,14 +7,14 @@
 od_add_pull_request_comment(pull_request_number, content, conn = NULL)
 }
 \arguments{
-\item{pull_request_number}{UI number.}
+\item{pull_request_number}{{character|numeric} UI number.}
 
-\item{content}{Comment body (Markdown).}
+\item{content}{{character} Comment body (Markdown).}
 
-\item{conn}{Connection list.}
+\item{conn}{{list} Connection list. Default: \code{NULL}.}
 }
 \value{
-Parsed API response.
+{list} Parsed API response.
 }
 \description{
 Posts to \code{POST /pull-request-comments} with \code{requestId} + \code{content}.
@@ -31,6 +31,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},

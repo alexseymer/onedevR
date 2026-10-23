@@ -7,10 +7,10 @@
 od_set_connection(conn)
 }
 \arguments{
-\item{conn}{An \code{\link[=od_connection]{od_connection()}} (or compatible list), or \code{NULL} to unset.}
+\item{conn}{{list} An \code{\link[=od_connection]{od_connection()}} (or compatible list), or \code{NULL} to unset.}
 }
 \value{
-\code{conn}, invisibly.
+{list} \code{conn}, invisibly.
 }
 \description{
 After calling this, high-level \verb{od_*} helpers that omit \code{conn} use the

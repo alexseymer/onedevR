@@ -7,12 +7,12 @@
 od_resolve_pull_request_id(pull_request_number, conn = NULL)
 }
 \arguments{
-\item{pull_request_number}{UI number (\code{42} or \code{"#42"}).}
+\item{pull_request_number}{{character|numeric} UI number (\code{42} or \code{"#42"}).}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-Character internal pull request id.
+{character} Character internal pull request id.
 }
 \description{
 Same Number-query variants as \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}.
@@ -30,6 +30,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},

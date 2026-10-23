@@ -7,16 +7,16 @@
 od_get_user_emails(user = NULL, as_tibble = NULL, conn = NULL)
 }
 \arguments{
-\item{user}{Login name or numeric user id. Defaults to the authenticated user
-via \code{\link[=od_get_me]{od_get_me()}} when \code{NULL}.}
+\item{user}{{character|numeric} Login name or numeric user id. Defaults to the authenticated user
+via \code{\link[=od_get_me]{od_get_me()}} when \code{NULL}. Default: \code{NULL}.}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of email addresses (default), or a list when
+{tibble|list} A tibble of email addresses (default), or a list when
 \code{as_tibble = FALSE}.
 }
 \description{
@@ -29,9 +29,17 @@ od_get_user_emails()
 }
 \seealso{
 Other users:
+\code{\link[=od_add_group_member]{od_add_group_member()}},
+\code{\link[=od_add_user_ssh_key]{od_add_user_ssh_key()}},
+\code{\link[=od_delete_user_ssh_key]{od_delete_user_ssh_key()}},
+\code{\link[=od_get_group]{od_get_group()}},
 \code{\link[=od_get_me]{od_get_me()}},
 \code{\link[=od_get_user]{od_get_user()}},
+\code{\link[=od_list_group_members]{od_list_group_members()}},
+\code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
+\code{\link[=od_query_groups]{od_query_groups()}},
 \code{\link[=od_query_users]{od_query_users()}},
+\code{\link[=od_remove_group_member]{od_remove_group_member()}},
 \code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
 }
 \concept{users}

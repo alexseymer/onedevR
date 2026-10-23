@@ -47,6 +47,19 @@ test_that("od_get_project and clone-url resolve project id", {
   )
 })
 
+test_that("od_get_project_setting GETs /projects/{id}/setting", {
+  skip_if_not_installed("mockery")
+
+  mockery::stub(od_get_project_setting, "od_resolve_project_id", function(...) "20")
+  mockery::stub(od_get_project_setting, "od_request", function(method, endpoint, ...) {
+    expect_equal(method, "GET")
+    expect_equal(endpoint, "/projects/20/setting")
+    list(issueSetting = list(boardSpecs = list()))
+  })
+  setting <- od_get_project_setting(conn = list())
+  expect_true(is.list(setting$issueSetting))
+})
+
 test_that("od_list_webhooks retrieves project webhooks", {
   skip_if_not_installed("mockery")
   mockery::stub(od_list_webhooks, "od_resolve_project_id", function(...) "20")

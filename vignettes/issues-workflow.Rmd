@@ -225,6 +225,25 @@ od_add_issue_comment(
 )
 ```
 
+# Boards
+
+Issue boards live in project settings (`issueSetting$boardSpecs`). Use these
+helpers to list boards and query the issues they show (same queries as the UI).
+
+```r
+boards <- od_list_boards()
+board <- od_get_board("Development")
+
+# Board columns / base query
+board$columns
+board$baseQuery
+
+# Issues on the board (optionally for one iteration)
+od_query_board_issues("Development")
+od_query_board_issues("Development", iteration = "Sprint 5")
+od_query_board_issues("Development", backlog = TRUE)
+```
+
 # Iterations and Sprints
 
 ## List and Inspect
@@ -232,6 +251,7 @@ od_add_issue_comment(
 ```r
 # Get all iterations (sprints)
 iterations <- od_list_iterations()
+sprint <- od_get_iteration("Sprint 5")
 
 # See structure
 glimpse(iterations)

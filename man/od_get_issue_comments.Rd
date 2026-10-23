@@ -12,17 +12,17 @@ od_get_issue_comments(
 )
 }
 \arguments{
-\item{issue_number}{UI number (\code{145} or \code{"#145"}).}
+\item{issue_number}{{character|numeric} UI number (\code{145} or \code{"#145"}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list.}
+\item{conn}{{list} Connection list. Default: \code{NULL}.}
 
-\item{use_internal_id}{If \code{TRUE}, treat \code{issue_number} as the internal REST id.}
+\item{use_internal_id}{{logical} If \code{TRUE}, treat \code{issue_number} as the internal REST id. Default: \code{FALSE}.}
 }
 \value{
-A tibble of comments (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of comments (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Get comments on an issue
@@ -37,14 +37,21 @@ Other issues:
 \code{\link[=od_add_issue_comment]{od_add_issue_comment()}},
 \code{\link[=od_add_issue_iterations]{od_add_issue_iterations()}},
 \code{\link[=od_create_issue]{od_create_issue()}},
+\code{\link[=od_get_board]{od_get_board()}},
 \code{\link[=od_get_issue]{od_get_issue()}},
 \code{\link[=od_get_issue_fields]{od_get_issue_fields()}},
+\code{\link[=od_get_issue_pull_requests]{od_get_issue_pull_requests()}},
+\code{\link[=od_get_iteration]{od_get_iteration()}},
 \code{\link[=od_issue_set_description]{od_issue_set_description()}},
 \code{\link[=od_issue_set_fields]{od_issue_set_fields()}},
 \code{\link[=od_issue_set_title]{od_issue_set_title()}},
 \code{\link[=od_issue_transition_state]{od_issue_transition_state()}},
+\code{\link[=od_link_issue_to_pull_request]{od_link_issue_to_pull_request()}},
+\code{\link[=od_list_boards]{od_list_boards()}},
 \code{\link[=od_list_iterations]{od_list_iterations()}},
+\code{\link[=od_query_board_issues]{od_query_board_issues()}},
 \code{\link[=od_query_issues]{od_query_issues()}},
-\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}}
+\code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}},
+\code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}

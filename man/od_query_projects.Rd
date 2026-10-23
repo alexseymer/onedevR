@@ -22,19 +22,21 @@ od_list_projects(
 )
 }
 \arguments{
-\item{query}{Raw OneDev project query string.}
+\item{query}{{character} Raw OneDev project query string. Default: \code{NULL}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}).}
 
-\item{offset}{Result offset (default \code{0}).}
+\item{offset}{{integer} Result offset (default \code{0}).}
 
-\item{as_tibble}{If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
+\item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
+a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 
-\item{conn}{Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}.}
+\item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-A tibble of projects (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of projects (default), or a list when \code{as_tibble = FALSE}.
+
+{tibble|list} A tibble of projects (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
 Calls \code{GET /projects} with OneDev's project query DSL (see
@@ -50,8 +52,13 @@ od_list_projects(count = 20L)
 }
 \seealso{
 Other projects:
+\code{\link[=od_create_webhook]{od_create_webhook()}},
+\code{\link[=od_delete_webhook]{od_delete_webhook()}},
 \code{\link[=od_get_project]{od_get_project()}},
 \code{\link[=od_get_project_clone_url]{od_get_project_clone_url()}},
+\code{\link[=od_get_project_setting]{od_get_project_setting()}},
+\code{\link[=od_get_webhook]{od_get_webhook()}},
+\code{\link[=od_list_webhooks]{od_list_webhooks()}},
 \code{\link[=od_resolve_project_id]{od_resolve_project_id()}},
 \code{\link[=od_resolve_project_path]{od_resolve_project_path()}}
 }

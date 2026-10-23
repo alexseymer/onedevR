@@ -17,28 +17,28 @@ od_create_pull_request(
 )
 }
 \arguments{
-\item{title}{PR title.}
+\item{title}{{character} PR title.}
 
-\item{source_branch}{Source branch name.}
+\item{source_branch}{{character} Source branch name.}
 
-\item{target_branch}{Target branch name (default \code{"main"}).}
+\item{target_branch}{{character} Target branch name (default \code{"main"}). Default: \code{"main"}.}
 
-\item{description}{Optional Markdown description.}
+\item{description}{{character} Optional Markdown description. Default: \code{""}.}
 
-\item{source_project}{Optional source project path/id; defaults to the
-connection project.}
+\item{source_project}{{character} Optional source project path/id; defaults to the
+connection project. Default: \code{NULL}.}
 
-\item{target_project}{Optional target project path/id; defaults to
-\code{source_project}.}
+\item{target_project}{{character} Optional target project path/id; defaults to
+\code{source_project}. Default: \code{NULL}.}
 
-\item{reviewer_ids}{Optional numeric user ids.}
+\item{reviewer_ids}{{numeric} Optional numeric user ids. Default: \code{NULL}.}
 
-\item{assignee_ids}{Optional numeric user ids.}
+\item{assignee_ids}{{numeric} Optional numeric user ids. Default: \code{NULL}.}
 
-\item{conn}{Connection list.}
+\item{conn}{{list} Connection list. Default: \code{NULL}.}
 }
 \value{
-Parsed created PR (list), or \code{NULL} if the server returns an empty body.
+{list} Parsed created PR, or \code{NULL} if the server returns an empty body.
 }
 \description{
 Create a pull request
@@ -55,6 +55,7 @@ Other pull requests:
 \code{\link[=od_discard_pull_request]{od_discard_pull_request()}},
 \code{\link[=od_get_pull_request]{od_get_pull_request()}},
 \code{\link[=od_get_pull_request_comments]{od_get_pull_request_comments()}},
+\code{\link[=od_get_pull_request_issues]{od_get_pull_request_issues()}},
 \code{\link[=od_get_pull_request_reviews]{od_get_pull_request_reviews()}},
 \code{\link[=od_merge_pull_request]{od_merge_pull_request()}},
 \code{\link[=od_query_pull_requests]{od_query_pull_requests()}},
