@@ -22,8 +22,8 @@ reference for how OneDev itself is driven — ref formats (`#n`,
 source over inventing OneDev API shapes.
 
 **Code hosting is GitHub:** https://github.com/alexseymer/onedevR (OneDev is
-the *API target*, not the VCS). **Phases 1–3 are on `main`.** Phase 4 adds
-pkgdown + the `v0.1.0` GitHub Release. Later detail remains in
+the *API target*, not the VCS). **Phases 1–4 are on `main`** (pkgdown site,
+GitHub Releases up to the current version in `DESCRIPTION`). Later detail remains in
 [`ROADMAP.md`](ROADMAP.md) and [`project_plan.md`](project_plan.md).
 
 ### Environment (repo-managed via GitHub)

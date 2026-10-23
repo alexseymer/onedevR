@@ -168,13 +168,8 @@ od_add_pull_request_comment(
    I have one small suggestion in the review."
 )
 
-# Reply to a comment (threading)
-original_comment_id <- comments$id[1]
-od_add_pull_request_comment(
-  5,
-  "Good point! I'll update the docs.",
-  reply_to = original_comment_id
-)
+# Reply as a new comment (threaded replies are not supported by the helper)
+od_add_pull_request_comment(5, "Good point! I'll update the docs.")
 ```
 
 ## Mention Users
@@ -531,12 +526,11 @@ deploy_on_approval <- function(pr_num, target_env = "staging") {
    all_passed <- all(builds$status == "successful")
    ```
 
-3. **Use threading** for related comments:
+3. **Quote the comment you answer** so the context is clear:
    ```r
    od_add_pull_request_comment(
      pr_num,
-     "Good catch!",
-     reply_to = comment_id
+     "> original remark\n\nGood catch!"
    )
    ```
 

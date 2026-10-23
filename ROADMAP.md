@@ -70,4 +70,7 @@ Estimate per plan: 1 week+.
 - [x] Boards + project settings read path (v0.6.0): `od_list_boards()`,
   `od_get_board()`, `od_query_board_issues()`, `od_get_project_setting()`,
   `od_get_iteration()`
+- [x] Unreleased: iteration names (`od_resolve_iteration_ids()`), 406 hint,
+  comment body variants (#14, #15, #16); pkgdown index completed
+- [ ] Next release (0.6.1 / 0.7.0) after live verification of comment variants
 - [ ] R-universe / CRAN when demand warrants it

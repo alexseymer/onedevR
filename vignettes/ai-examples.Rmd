@@ -1422,7 +1422,7 @@ high_priority <- od_query_issues(
 # Update each
 for (i in seq_len(nrow(high_priority))) {
   issue_num <- high_priority[i, ]$number
-  od_issue_set_fields(issue_num, Assignee = "alice")
+  od_issue_set_fields(issue_num, list(Assignee = "alice"))
 }
 ```
 
