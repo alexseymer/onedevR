@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,20 +62,20 @@
 
 
 <dl><dt id="arg-build-number">build_number<a class="anchor" aria-label="anchor" href="#arg-build-number"></a></dt>
-<dd><p>UI number (<code>100</code> or <code>"#100"</code>).</p></dd>
+<dd><p>character|numeric UI number (<code>100</code> or <code>"#100"</code>).</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>Connection list.</p></dd>
+<dd><p>list Connection list. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-use-internal-id">use_internal_id<a class="anchor" aria-label="anchor" href="#arg-use-internal-id"></a></dt>
-<dd><p>If <code>TRUE</code>, treat <code>build_number</code> as the internal REST id.</p></dd>
+<dd><p>logical If <code>TRUE</code>, treat <code>build_number</code> as the internal REST id. Default: <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Parsed params payload (list).</p>
+    <p>list Parsed params payload.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -85,6 +85,7 @@
 <code><a href="od_get_build.html">od_get_build()</a></code>,
 <code><a href="od_get_build_log.html">od_get_build_log()</a></code>,
 <code><a href="od_list_build_artifacts.html">od_list_build_artifacts()</a></code>,
+<code><a href="od_promote_build.html">od_promote_build()</a></code>,
 <code><a href="od_query_builds.html">od_query_builds()</a></code>,
 <code><a href="od_rebuild_job.html">od_rebuild_job()</a></code>,
 <code><a href="od_resolve_build_id.html">od_resolve_build_id()</a></code>,

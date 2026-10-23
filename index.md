@@ -130,10 +130,14 @@ to `.Renviron` (gitignored) and fill in your host/token/project.
 the same variable list for non-R tooling. Live integration tests are
 gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
 
-## What’s in v0.5.x
+## What’s in v0.6.x
 
-- Issues, builds, PRs, jobs, packages, and repository
+- Issues, boards, builds, PRs, jobs, packages, and repository
   (branches/tags/commits/files)
+- Board helpers:
+  [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md),
+  [`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md),
+  [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)
 - Status keywords for builds/PRs, query DSL helpers, and
   [`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md)
 - Tibbles by default for list queries;

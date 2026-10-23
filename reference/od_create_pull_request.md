@@ -22,43 +22,45 @@ od_create_pull_request(
 
 - title:
 
-  PR title.
+  character PR title.
 
 - source_branch:
 
-  Source branch name.
+  character Source branch name.
 
 - target_branch:
 
-  Target branch name (default `"main"`).
+  character Target branch name (default `"main"`). Default: `"main"`.
 
 - description:
 
-  Optional Markdown description.
+  character Optional Markdown description. Default: `""`.
 
 - source_project:
 
-  Optional source project path/id; defaults to the connection project.
+  character Optional source project path/id; defaults to the connection
+  project. Default: `NULL`.
 
 - target_project:
 
-  Optional target project path/id; defaults to `source_project`.
+  character Optional target project path/id; defaults to
+  `source_project`. Default: `NULL`.
 
 - reviewer_ids:
 
-  Optional numeric user ids.
+  numeric Optional numeric user ids. Default: `NULL`.
 
 - assignee_ids:
 
-  Optional numeric user ids.
+  numeric Optional numeric user ids. Default: `NULL`.
 
 - conn:
 
-  Connection list.
+  list Connection list. Default: `NULL`.
 
 ## Value
 
-Parsed created PR (list), or `NULL` if the server returns an empty body.
+list Parsed created PR, or `NULL` if the server returns an empty body.
 
 ## See also
 
@@ -68,6 +70,7 @@ Other pull requests:
 [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md),
 [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md),
 [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md),
+[`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md),
 [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md),
 [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
 [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md),

@@ -19,13 +19,14 @@ od_get_config(validate = TRUE)
 
 - validate:
 
-  If `TRUE` (default), error when host or credentials are missing.
+  logical If `TRUE` (default), error when host or credentials are
+  missing. Default: `TRUE`.
 
 ## Value
 
-A named list with fields `host`, `api_base_url`, `token`, `username`,
-`password`, `auth`, `repo_url`, `project_id`, `project_path`,
-`default_issue_state`, and `insecure_ssl`.
+list A named list with fields `host`, `api_base_url`, `token`,
+`username`, `password`, `auth`, `repo_url`, `project_id`,
+`project_path`, `default_issue_state`, and `insecure_ssl`.
 
 ## Details
 

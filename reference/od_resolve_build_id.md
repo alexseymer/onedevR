@@ -13,18 +13,19 @@ od_resolve_build_id(build_number, conn = NULL)
 
 - build_number:
 
-  UI number (`100` or `"#100"`).
+  character\|numeric UI number (`100` or `"#100"`).
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-Character internal build id.
+character Character internal build id.
 
 ## See also
 
@@ -35,6 +36,7 @@ Other builds:
 [`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md),
 [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md),
 [`od_list_build_artifacts()`](https://alexseymer.github.io/onedevR/reference/od_list_build_artifacts.md),
+[`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md),
 [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md),
 [`od_rebuild_job()`](https://alexseymer.github.io/onedevR/reference/od_rebuild_job.md),
 [`od_run_job()`](https://alexseymer.github.io/onedevR/reference/od_run_job.md)

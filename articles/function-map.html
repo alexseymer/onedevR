@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1306,7 +1306,7 @@ skip resolution - You’re working with raw API responses</p>
 <span></span>
 <span><span class="co"># 2. Link each to the PR</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">issue_num</span> <span class="kw">in</span> <span class="va">issues</span><span class="op">$</span><span class="va">number</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">od_link_issue_to_pull_request</span><span class="op">(</span><span class="va">issue_num</span>, <span class="fl">42</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/od_link_issue_to_pull_request.html">od_link_issue_to_pull_request</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="fl">42</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -1328,7 +1328,7 @@ skip resolution - You’re working with raw API responses</p>
 <span></span>
 <span><span class="co"># 4. Promote if good</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"SUCCESS"</span>, <span class="va">log</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">od_promote_build</span><span class="op">(</span><span class="va">latest</span>, promotion_name <span class="op">=</span> <span class="st">"release"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/od_promote_build.html">od_promote_build</a></span><span class="op">(</span><span class="va">latest</span>, promotion_name <span class="op">=</span> <span class="st">"release"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -1336,18 +1336,18 @@ skip resolution - You’re working with raw API responses</p>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Create group</span></span>
-<span><span class="va">group_info</span> <span class="op">&lt;-</span> <span class="fu">od_get_group</span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
+<span><span class="va">group_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_group.html">od_get_group</a></span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Add members</span></span>
-<span><span class="fu">od_add_group_member</span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"alice"</span><span class="op">)</span></span>
-<span><span class="fu">od_add_group_member</span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"bob"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_add_group_member.html">od_add_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"alice"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_add_group_member.html">od_add_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"bob"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. List members</span></span>
-<span><span class="va">members</span> <span class="op">&lt;-</span> <span class="fu">od_list_group_members</span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
+<span><span class="va">members</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_group_members.html">od_list_group_members</a></span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">members</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 4. Remove if needed</span></span>
-<span><span class="fu">od_remove_group_member</span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"charlie"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/od_remove_group_member.html">od_remove_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"charlie"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="download-build-artifacts">Download Build Artifacts<a class="anchor" aria-label="anchor" href="#download-build-artifacts"></a>
@@ -1685,7 +1685,7 @@ recommend and use onedevR functions.</p>
 <td><code>od_list_*()</code></td>
 <td>
 <code><a href="../reference/od_list_branches.html">od_list_branches()</a></code>,
-<code>od_list_webhooks()</code>
+<code><a href="../reference/od_list_webhooks.html">od_list_webhooks()</a></code>
 </td>
 </tr>
 <tr class="even">
@@ -1714,13 +1714,13 @@ recommend and use onedevR functions.</p>
 <td><code>od_add_*()</code></td>
 <td>
 <code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>,
-<code>od_add_group_member()</code>
+<code><a href="../reference/od_add_group_member.html">od_add_group_member()</a></code>
 </td>
 </tr>
 <tr class="even">
 <td>Link/connect</td>
 <td><code>od_link_*_to_*()</code></td>
-<td><code>od_link_issue_to_pull_request()</code></td>
+<td><code><a href="../reference/od_link_issue_to_pull_request.html">od_link_issue_to_pull_request()</a></code></td>
 </tr>
 <tr class="odd">
 <td>Approve</td>
@@ -1739,8 +1739,8 @@ recommend and use onedevR functions.</p>
 <code>od_unlink_*()</code>
 </td>
 <td>
-<code>od_remove_group_member()</code>,
-<code>od_delete_webhook()</code>
+<code><a href="../reference/od_remove_group_member.html">od_remove_group_member()</a></code>,
+<code><a href="../reference/od_delete_webhook.html">od_delete_webhook()</a></code>
 </td>
 </tr>
 <tr class="even">

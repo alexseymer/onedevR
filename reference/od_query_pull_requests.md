@@ -19,39 +19,43 @@ od_query_pull_requests(
 
 - query:
 
-  Raw OneDev pull-request query string (see
+  character Raw OneDev pull-request query string (see
   [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
-  with `kind = "pull_request"`).
+  with `kind = "pull_request"`). Default: `NULL`.
 
 - status:
 
-  Optional status keyword: `"open"`, `"merged"`, or `"discarded"`
-  (case-insensitive). Combined with `query` via `and`.
+  character Optional status keyword: `"open"`, `"merged"`, or
+  `"discarded"` (case-insensitive). Combined with `query` via `and`.
+  Default: `NULL`.
 
 - count:
 
-  Maximum number of results (default `100`).
+  integer Maximum number of results (default `100`).
 
 - offset:
 
-  Result offset (default `0`).
+  integer Result offset (default `0`).
 
 - as_tibble:
 
-  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
-  via
+  logical If `TRUE` (default via `options(onedevr.as_tibble)`), return a
+  tibble via
   [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
+  Default: `NULL`.
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-A tibble of pull requests (default), or a list when `as_tibble = FALSE`.
+tibble\|list A tibble of pull requests (default), or a list when
+`as_tibble = FALSE`.
 
 ## See also
 
@@ -62,6 +66,7 @@ Other pull requests:
 [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md),
 [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md),
 [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md),
+[`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md),
 [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md),
 [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
 [`od_request_pull_request_changes()`](https://alexseymer.github.io/onedevR/reference/od_request_pull_request_changes.md),

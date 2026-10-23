@@ -12,15 +12,15 @@ od_discard_pull_request(pull_request_number, conn = NULL)
 
 - pull_request_number:
 
-  UI number.
+  character\|numeric UI number.
 
 - conn:
 
-  Connection list.
+  list Connection list. Default: `NULL`.
 
 ## Value
 
-Parsed API response (may be `NULL`).
+list Parsed API response (may be `NULL`).
 
 ## See also
 
@@ -30,6 +30,7 @@ Other pull requests:
 [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md),
 [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md),
 [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md),
+[`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md),
 [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md),
 [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
 [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md),

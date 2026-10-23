@@ -854,15 +854,15 @@ recommend and use onedevR functions.
 |----|----|----|
 | Search/filter | `od_query_*()` | [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md), [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md) |
 | Retrieve one | `od_get_*()` | [`od_get_issue()`](https://alexseymer.github.io/onedevR/reference/od_get_issue.md), [`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md) |
-| Retrieve many | `od_list_*()` | [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md), `od_list_webhooks()` |
+| Retrieve many | `od_list_*()` | [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md), [`od_list_webhooks()`](https://alexseymer.github.io/onedevR/reference/od_list_webhooks.md) |
 | Create | `od_create_*()` | [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md), [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md) |
 | Update field | `od_*_set_*()` | [`od_issue_set_title()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_title.md), [`od_issue_set_fields()`](https://alexseymer.github.io/onedevR/reference/od_issue_set_fields.md) |
 | State change | `od_*_transition_*()` | [`od_issue_transition_state()`](https://alexseymer.github.io/onedevR/reference/od_issue_transition_state.md) |
-| Add/attach | `od_add_*()` | [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md), `od_add_group_member()` |
-| Link/connect | `od_link_*_to_*()` | `od_link_issue_to_pull_request()` |
+| Add/attach | `od_add_*()` | [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md), [`od_add_group_member()`](https://alexseymer.github.io/onedevR/reference/od_add_group_member.md) |
+| Link/connect | `od_link_*_to_*()` | [`od_link_issue_to_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_link_issue_to_pull_request.md) |
 | Approve | `od_approve_*()` | [`od_approve_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_approve_pull_request.md) |
 | Merge | `od_merge_*()` | [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md) |
-| Remove | `od_remove_*()` or `od_delete_*()` or `od_unlink_*()` | `od_remove_group_member()`, `od_delete_webhook()` |
+| Remove | `od_remove_*()` or `od_delete_*()` or `od_unlink_*()` | [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md), [`od_delete_webhook()`](https://alexseymer.github.io/onedevR/reference/od_delete_webhook.md) |
 | Download | `od_download_*()` | [`od_download_build_artifact()`](https://alexseymer.github.io/onedevR/reference/od_download_build_artifact.md) |
 
 ### Pattern Matching: Finding Similar Functions

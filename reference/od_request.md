@@ -13,31 +13,33 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 
 - method:
 
-  HTTP method (default `"GET"`).
+  character HTTP method (default `"GET"`). Default: `"GET"`.
 
 - endpoint:
 
-  API path (e.g. `"/issues"`) or absolute URL.
+  character API path (e.g. `"/issues"`) or absolute URL.
 
 - query:
 
-  Named list of query parameters (NULLs dropped).
+  list Named list of query parameters (NULLs dropped). Default: `NULL`.
 
 - body:
 
-  Request body; JSON-encoded with
+  list Request body; JSON-encoded with
   [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html).
+  Default: `NULL`.
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-Parsed JSON payload (list), or `NULL` for empty bodies.
+list Parsed JSON payload, or `NULL` for empty bodies.
 
 ## See also
 

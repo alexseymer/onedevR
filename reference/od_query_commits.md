@@ -57,12 +57,14 @@ A tibble of commits (default), or a list when `as_tibble = FALSE`.
 Other repository:
 [`od_get_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_branch.md),
 [`od_get_commit()`](https://alexseymer.github.io/onedevR/reference/od_get_commit.md),
+[`od_get_commit_statuses()`](https://alexseymer.github.io/onedevR/reference/od_get_commit_statuses.md),
 [`od_get_default_branch()`](https://alexseymer.github.io/onedevR/reference/od_get_default_branch.md),
 [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md),
 [`od_get_file_text()`](https://alexseymer.github.io/onedevR/reference/od_get_file_text.md),
 [`od_get_tag()`](https://alexseymer.github.io/onedevR/reference/od_get_tag.md),
 [`od_list_branches()`](https://alexseymer.github.io/onedevR/reference/od_list_branches.md),
-[`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md)
+[`od_list_tags()`](https://alexseymer.github.io/onedevR/reference/od_list_tags.md),
+[`od_set_commit_status()`](https://alexseymer.github.io/onedevR/reference/od_set_commit_status.md)
 
 ## Examples
 

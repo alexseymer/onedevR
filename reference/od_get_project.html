@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,22 +62,27 @@
 
 
 <dl><dt id="arg-project">project<a class="anchor" aria-label="anchor" href="#arg-project"></a></dt>
-<dd><p>Project path (e.g. <code>"group/my-project"</code>) or numeric id.
-Defaults to the connection project.</p></dd>
+<dd><p>character|numeric Project path (e.g. <code>"group/my-project"</code>) or numeric id.
+Defaults to the connection project. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>Connection list from <code><a href="od_get_config.html">od_get_config()</a></code> / <code><a href="od_connection.html">od_connection()</a></code>.</p></dd>
+<dd><p>list Connection list from <code><a href="od_get_config.html">od_get_config()</a></code> / <code><a href="od_connection.html">od_connection()</a></code>. Default: <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Parsed project object (list).</p>
+    <p>list Parsed project object.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other projects:
+<code><a href="od_create_webhook.html">od_create_webhook()</a></code>,
+<code><a href="od_delete_webhook.html">od_delete_webhook()</a></code>,
 <code><a href="od_get_project_clone_url.html">od_get_project_clone_url()</a></code>,
+<code><a href="od_get_project_setting.html">od_get_project_setting()</a></code>,
+<code><a href="od_get_webhook.html">od_get_webhook()</a></code>,
+<code><a href="od_list_webhooks.html">od_list_webhooks()</a></code>,
 <code><a href="od_query_projects.html">od_query_projects()</a></code>,
 <code><a href="od_resolve_project_id.html">od_resolve_project_id()</a></code>,
 <code><a href="od_resolve_project_path.html">od_resolve_project_path()</a></code></p></div>

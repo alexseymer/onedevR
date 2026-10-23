@@ -11,7 +11,7 @@ package default with od_set_connection()."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,56 +80,56 @@ package default with <code><a href="od_set_connection.html">od_set_connection()<
 
 
 <dl><dt id="arg-host">host<a class="anchor" aria-label="anchor" href="#arg-host"></a></dt>
-<dd><p>OneDev base URL (e.g. <code>"https://git.example.test"</code>).</p></dd>
+<dd><p>character OneDev base URL (e.g. <code>"https://git.example.test"</code>).</p></dd>
 
 
 <dt id="arg-token">token<a class="anchor" aria-label="anchor" href="#arg-token"></a></dt>
-<dd><p>API access token (Bearer), or Basic Auth password when
-<code>auth = "basic"</code> and <code>password</code> is unset.</p></dd>
+<dd><p>character API access token (Bearer), or Basic Auth password when
+<code>auth = "basic"</code> and <code>password</code> is unset. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-username">username<a class="anchor" aria-label="anchor" href="#arg-username"></a></dt>
-<dd><p>Optional username for Basic Auth.</p></dd>
+<dd><p>character Optional username for Basic Auth. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-password">password<a class="anchor" aria-label="anchor" href="#arg-password"></a></dt>
-<dd><p>Optional Basic Auth password (defaults to <code>token</code> when unset).</p></dd>
+<dd><p>character Optional Basic Auth password (defaults to <code>token</code> when unset). Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-auth">auth<a class="anchor" aria-label="anchor" href="#arg-auth"></a></dt>
-<dd><p><code>"bearer"</code> or <code>"basic"</code>. Default: <code>"basic"</code> when <code>username</code> is
-set, otherwise <code>"bearer"</code>.</p></dd>
+<dd><p>character <code>"bearer"</code> or <code>"basic"</code>. Default: <code>"basic"</code> when <code>username</code> is
+set, otherwise <code>"bearer"</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-project-path">project_path<a class="anchor" aria-label="anchor" href="#arg-project-path"></a></dt>
-<dd><p>Project path (e.g. <code>"group/my-project"</code>).</p></dd>
+<dd><p>character Project path (e.g. <code>"group/my-project"</code>). Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-project-id">project_id<a class="anchor" aria-label="anchor" href="#arg-project-id"></a></dt>
-<dd><p>Optional numeric project id (skips path resolution when set).</p></dd>
+<dd><p>character|numeric Optional numeric project id (skips path resolution when set). Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-repo-url">repo_url<a class="anchor" aria-label="anchor" href="#arg-repo-url"></a></dt>
-<dd><p>Optional git remote URL; used to derive <code>project_path</code> when
-that is unset.</p></dd>
+<dd><p>character Optional git remote URL; used to derive <code>project_path</code> when
+that is unset. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-default-issue-state">default_issue_state<a class="anchor" aria-label="anchor" href="#arg-default-issue-state"></a></dt>
-<dd><p>Optional default for <code><a href="od_query_issues.html">od_query_issues()</a></code> when no
-query/state is given.</p></dd>
+<dd><p>character Optional default for <code><a href="od_query_issues.html">od_query_issues()</a></code> when no
+query/state is given. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-insecure-ssl">insecure_ssl<a class="anchor" aria-label="anchor" href="#arg-insecure-ssl"></a></dt>
-<dd><p>If <code>TRUE</code>, skip TLS certificate verification.</p></dd>
+<dd><p>logical If <code>TRUE</code>, skip TLS certificate verification. Default: <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-validate">validate<a class="anchor" aria-label="anchor" href="#arg-validate"></a></dt>
-<dd><p>If <code>TRUE</code> (default), error when host/credentials are missing.</p></dd>
+<dd><p>logical If <code>TRUE</code> (default), error when host/credentials are missing. Default: <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with connection fields, classed as <code>od_connection</code>.</p>
+    <p>list A named list with connection fields, classed as <code>od_connection</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

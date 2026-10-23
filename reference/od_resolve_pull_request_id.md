@@ -13,18 +13,19 @@ od_resolve_pull_request_id(pull_request_number, conn = NULL)
 
 - pull_request_number:
 
-  UI number (`42` or `"#42"`).
+  character\|numeric UI number (`42` or `"#42"`).
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-Character internal pull request id.
+character Character internal pull request id.
 
 ## See also
 
@@ -35,6 +36,7 @@ Other pull requests:
 [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md),
 [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md),
 [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md),
+[`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md),
 [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md),
 [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
 [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md),

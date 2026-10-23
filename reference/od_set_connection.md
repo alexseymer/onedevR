@@ -14,13 +14,13 @@ od_set_connection(conn)
 
 - conn:
 
-  An
+  list An
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
   (or compatible list), or `NULL` to unset.
 
 ## Value
 
-`conn`, invisibly.
+list `conn`, invisibly.
 
 ## See also
 

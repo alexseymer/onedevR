@@ -10,7 +10,7 @@ od_get_connection()
 
 ## Value
 
-The connection registered with
+list The connection registered with
 [`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md),
 or `NULL`.
 

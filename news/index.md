@@ -1,5 +1,23 @@
 # Changelog
 
+## onedevr 0.6.0
+
+### Boards and project settings
+
+- [`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md)
+  — `GET /projects/{id}/setting`.
+- [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md)
+  /
+  [`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md)
+  — read `issueSetting$boardSpecs`.
+- [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)
+  — compose a board’s base/backlog query with an optional iteration
+  filter, then call
+  [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md)
+  (does not inject `default_issue_state`).
+- [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md)
+  — resolve an iteration by id or name.
+
 ## onedevr 0.5.2
 
 ### Bug fixes / DX

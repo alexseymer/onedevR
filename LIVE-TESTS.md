@@ -70,12 +70,17 @@ Live tests cover:
 
 ### Performance Features (Phase 3)
 
-- **Streaming** – `od_stream_query_results()`, `od_chunked_foreach()`,
-  `od_stream_build_log()`
-- **Caching** – `od_enable_cache()`, `od_disable_cache()`, cache
-  statistics
-- **Batch Operations** – `od_batch_create_issues()` (create-only, no
-  mutations)
+- **Streaming** –
+  [`od_stream_query_results()`](https://alexseymer.github.io/onedevR/reference/od_stream_query_results.md),
+  [`od_chunked_foreach()`](https://alexseymer.github.io/onedevR/reference/od_chunked_foreach.md),
+  [`od_stream_build_log()`](https://alexseymer.github.io/onedevR/reference/od_stream_build_log.md)
+- **Caching** –
+  [`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md),
+  [`od_disable_cache()`](https://alexseymer.github.io/onedevR/reference/od_disable_cache.md),
+  cache statistics
+- **Batch Operations** –
+  [`od_batch_create_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_create_issues.md)
+  (create-only, no mutations)
 
 ### Optional Features
 

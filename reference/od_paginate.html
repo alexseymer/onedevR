@@ -11,7 +11,7 @@ od_query_issues(), od_query_builds(), od_query_projects(), etc."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,29 +68,29 @@ short page is returned or <code>max_pages</code> is hit. Designed for
 
 
 <dl><dt id="arg-fetcher">fetcher<a class="anchor" aria-label="anchor" href="#arg-fetcher"></a></dt>
-<dd><p>A function that accepts at least <code>offset</code> and <code>count</code>. Extra
+<dd><p>function A function that accepts at least <code>offset</code> and <code>count</code>. Extra
 arguments may be passed via <code>...</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Forwarded to <code>fetcher</code> (e.g. <code>state = "Open"</code>, <code>query = ...</code>).</p></dd>
+<dd><p>Additional arguments forwarded to <code>fetcher</code> (e.g. <code>state = "Open"</code>, <code>query = ...</code>).</p></dd>
 
 
 <dt id="arg-page-size">page_size<a class="anchor" aria-label="anchor" href="#arg-page-size"></a></dt>
-<dd><p>Page size / <code>count</code> (default <code>100</code>).</p></dd>
+<dd><p>integer Page size / <code>count</code> (default <code>100</code>). Default: <code>100L</code>.</p></dd>
 
 
 <dt id="arg-max-pages">max_pages<a class="anchor" aria-label="anchor" href="#arg-max-pages"></a></dt>
-<dd><p>Safety cap on number of pages (default <code>100</code>).</p></dd>
+<dd><p>integer Safety cap on number of pages (default <code>100</code>). Default: <code>100L</code>.</p></dd>
 
 
 <dt id="arg-as-tibble">as_tibble<a class="anchor" aria-label="anchor" href="#arg-as-tibble"></a></dt>
-<dd><p>Passed to <code>fetcher</code> when it has a formal <code>as_tibble</code>.</p></dd>
+<dd><p>logical Passed to <code>fetcher</code> when it has a formal <code>as_tibble</code>. Default: <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A combined tibble when pages are tibbles; otherwise a concatenated
+    <p>tibble|list A combined tibble when pages are tibbles; otherwise a concatenated
 list of items.</p>
     </div>
     <div class="section level2">

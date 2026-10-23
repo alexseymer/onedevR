@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -301,11 +301,20 @@ match a state on the project’s board (e.g. <code>"Closed"</code> vs
 <span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Closed"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="iterations-and-links">Iterations and Links<a class="anchor" aria-label="anchor" href="#iterations-and-links"></a>
+<h3 id="boards-iterations-and-links">Boards, iterations, and links<a class="anchor" aria-label="anchor" href="#boards-iterations-and-links"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># List sprints/iterations</span></span>
+<code class="sourceCode R"><span><span class="co"># List issue boards (from project settings)</span></span>
+<span><span class="va">boards</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_boards.html">od_list_boards</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">board</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_board.html">od_get_board</a></span><span class="op">(</span><span class="st">"Development"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Issues on a board, optionally scoped to an iteration</span></span>
+<span><span class="fu"><a href="../reference/od_query_board_issues.html">od_query_board_issues</a></span><span class="op">(</span><span class="st">"Development"</span>, iteration <span class="op">=</span> <span class="st">"Sprint 5"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_query_board_issues.html">od_query_board_issues</a></span><span class="op">(</span><span class="st">"Development"</span>, backlog <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># List sprints/iterations</span></span>
 <span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">sprint</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_iteration.html">od_get_iteration</a></span><span class="op">(</span><span class="st">"Sprint 5"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add issue to iteration</span></span>
 <span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="fl">145</span>, iteration_ids <span class="op">=</span> <span class="va">iterations</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>

@@ -27,56 +27,60 @@ od_connection(
 
 - host:
 
-  OneDev base URL (e.g. `"https://git.example.test"`).
+  character OneDev base URL (e.g. `"https://git.example.test"`).
 
 - token:
 
-  API access token (Bearer), or Basic Auth password when
-  `auth = "basic"` and `password` is unset.
+  character API access token (Bearer), or Basic Auth password when
+  `auth = "basic"` and `password` is unset. Default: `NULL`.
 
 - username:
 
-  Optional username for Basic Auth.
+  character Optional username for Basic Auth. Default: `NULL`.
 
 - password:
 
-  Optional Basic Auth password (defaults to `token` when unset).
+  character Optional Basic Auth password (defaults to `token` when
+  unset). Default: `NULL`.
 
 - auth:
 
-  `"bearer"` or `"basic"`. Default: `"basic"` when `username` is set,
-  otherwise `"bearer"`.
+  character `"bearer"` or `"basic"`. Default: `"basic"` when `username`
+  is set, otherwise `"bearer"`. Default: `NULL`.
 
 - project_path:
 
-  Project path (e.g. `"group/my-project"`).
+  character Project path (e.g. `"group/my-project"`). Default: `NULL`.
 
 - project_id:
 
-  Optional numeric project id (skips path resolution when set).
+  character\|numeric Optional numeric project id (skips path resolution
+  when set). Default: `NULL`.
 
 - repo_url:
 
-  Optional git remote URL; used to derive `project_path` when that is
-  unset.
+  character Optional git remote URL; used to derive `project_path` when
+  that is unset. Default: `NULL`.
 
 - default_issue_state:
 
-  Optional default for
+  character Optional default for
   [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md)
-  when no query/state is given.
+  when no query/state is given. Default: `NULL`.
 
 - insecure_ssl:
 
-  If `TRUE`, skip TLS certificate verification.
+  logical If `TRUE`, skip TLS certificate verification. Default:
+  `FALSE`.
 
 - validate:
 
-  If `TRUE` (default), error when host/credentials are missing.
+  logical If `TRUE` (default), error when host/credentials are missing.
+  Default: `TRUE`.
 
 ## Value
 
-A named list with connection fields, classed as `od_connection`.
+list A named list with connection fields, classed as `od_connection`.
 
 ## Details
 

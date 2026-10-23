@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,38 +69,38 @@
 
 
 <dl><dt id="arg-query">query<a class="anchor" aria-label="anchor" href="#arg-query"></a></dt>
-<dd><p>Raw OneDev build query string (see <code><a href="od_get_query_description.html">od_get_query_description()</a></code>
+<dd><p>character Raw OneDev build query string (see <code><a href="od_get_query_description.html">od_get_query_description()</a></code>
 with <code>kind = "build"</code>, or <code>tod build get-query-description</code>). Example:
-<code>'"Number" is "group/project#100"'</code>.</p></dd>
+<code>'"Number" is "group/project#100"'</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-status">status<a class="anchor" aria-label="anchor" href="#arg-status"></a></dt>
-<dd><p>Optional status filter. OneDev uses keyword criteria - pass
+<dd><p>character Optional status filter. OneDev uses keyword criteria - pass
 <code>"successful"</code>, <code>"failed"</code>, <code>"cancelled"</code>, <code>"timed out"</code>, <code>"finished"</code>,
 <code>"running"</code>, <code>"waiting"</code>, or <code>"pending"</code> (enum spellings like
-<code>"SUCCESSFUL"</code> are accepted and mapped). Combined with <code>query</code> via <code>and</code>.</p></dd>
+<code>"SUCCESSFUL"</code> are accepted and mapped). Combined with <code>query</code> via <code>and</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-count">count<a class="anchor" aria-label="anchor" href="#arg-count"></a></dt>
-<dd><p>Maximum number of results (default <code>100</code>).</p></dd>
+<dd><p>integer Maximum number of results (default <code>100</code>).</p></dd>
 
 
 <dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p>Result offset (default <code>0</code>).</p></dd>
+<dd><p>integer Result offset (default <code>0</code>).</p></dd>
 
 
 <dt id="arg-as-tibble">as_tibble<a class="anchor" aria-label="anchor" href="#arg-as-tibble"></a></dt>
-<dd><p>If <code>TRUE</code> (default via <code>options(onedevr.as_tibble)</code>), return
-a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>.</p></dd>
+<dd><p>logical If <code>TRUE</code> (default via <code>options(onedevr.as_tibble)</code>), return
+a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>Connection list from <code><a href="od_get_config.html">od_get_config()</a></code> / <code><a href="od_connection.html">od_connection()</a></code>.</p></dd>
+<dd><p>list Connection list from <code><a href="od_get_config.html">od_get_config()</a></code> / <code><a href="od_connection.html">od_connection()</a></code>. Default: <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble of builds (default), or a list when <code>as_tibble = FALSE</code>.</p>
+    <p>tibble|list A tibble of builds (default), or a list when <code>as_tibble = FALSE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -111,6 +111,7 @@ a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>.</p></d
 <code><a href="od_get_build_log.html">od_get_build_log()</a></code>,
 <code><a href="od_get_build_params.html">od_get_build_params()</a></code>,
 <code><a href="od_list_build_artifacts.html">od_list_build_artifacts()</a></code>,
+<code><a href="od_promote_build.html">od_promote_build()</a></code>,
 <code><a href="od_rebuild_job.html">od_rebuild_job()</a></code>,
 <code><a href="od_resolve_build_id.html">od_resolve_build_id()</a></code>,
 <code><a href="od_run_job.html">od_run_job()</a></code></p></div>

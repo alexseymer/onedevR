@@ -44,6 +44,7 @@ Other builds:
 [`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md),
 [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md),
 [`od_list_build_artifacts()`](https://alexseymer.github.io/onedevR/reference/od_list_build_artifacts.md),
+[`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md),
 [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md),
 [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md),
 [`od_run_job()`](https://alexseymer.github.io/onedevR/reference/od_run_job.md)

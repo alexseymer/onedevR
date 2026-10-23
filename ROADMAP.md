@@ -115,4 +115,11 @@ DSL
 Issue title/description payload fix + variant error aggregation (v0.5.2)
 — <https://github.com/alexseymer/onedevR/releases/tag/v0.5.2>
 
+Boards + project settings read path (v0.6.0):
+[`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md),
+[`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md),
+[`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md),
+[`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md),
+[`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md)
+
 R-universe / CRAN when demand warrants it

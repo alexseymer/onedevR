@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,20 @@
       <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="onedevr-060">onedevr 0.6.0<a class="anchor" aria-label="anchor" href="#onedevr-060"></a></h2>
+<div class="section level3">
+<h3 id="boards-and-project-settings-0-6-0">Boards and project settings<a class="anchor" aria-label="anchor" href="#boards-and-project-settings-0-6-0"></a></h3>
+<ul><li>
+<code><a href="../reference/od_get_project_setting.html">od_get_project_setting()</a></code> — <code>GET /projects/{id}/setting</code>.</li>
+<li>
+<code><a href="../reference/od_list_boards.html">od_list_boards()</a></code> / <code><a href="../reference/od_get_board.html">od_get_board()</a></code> — read <code>issueSetting$boardSpecs</code>.</li>
+<li>
+<code><a href="../reference/od_query_board_issues.html">od_query_board_issues()</a></code> — compose a board’s base/backlog query with an optional iteration filter, then call <code><a href="../reference/od_query_issues.html">od_query_issues()</a></code> (does not inject <code>default_issue_state</code>).</li>
+<li>
+<code><a href="../reference/od_get_iteration.html">od_get_iteration()</a></code> — resolve an iteration by id or name.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.2" id="onedevr-052">onedevr 0.5.2<a class="anchor" aria-label="anchor" href="#onedevr-052"></a></h2>
 <div class="section level3">

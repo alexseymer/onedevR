@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
       </dl></div><div class="section level2">
       <h2 id="issues">Issues<a class="anchor" aria-label="anchor" href="#issues"></a></h2>
 
-      <div class="section-desc"><p>Query and mutate issues, fields, comments, and iterations.</p></div>
+      <div class="section-desc"><p>Query and mutate issues, fields, comments, boards, and iterations.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -120,6 +120,13 @@
 
         </dt>
         <dd>Get custom fields for an issue</dd>
+
+        <dt>
+
+          <code><a href="od_get_issue_pull_requests.html">od_get_issue_pull_requests()</a></code>
+
+        </dt>
+        <dd>Get pull requests linked to an issue</dd>
 
         <dt>
 
@@ -179,10 +186,45 @@
 
         <dt>
 
+          <code><a href="od_list_boards.html">od_list_boards()</a></code>
+
+        </dt>
+        <dd>List issue boards for a OneDev project</dd>
+
+        <dt>
+
+          <code><a href="od_get_board.html">od_get_board()</a></code>
+
+        </dt>
+        <dd>Get a single issue board by name</dd>
+
+        <dt>
+
+          <code><a href="od_query_board_issues.html">od_query_board_issues()</a></code>
+
+        </dt>
+        <dd>Query issues visible on a board</dd>
+
+        <dt>
+
           <code><a href="od_list_iterations.html">od_list_iterations()</a></code>
 
         </dt>
         <dd>List iterations for a OneDev project</dd>
+
+        <dt>
+
+          <code><a href="od_resolve_iteration_ids.html">od_resolve_iteration_ids()</a></code>
+
+        </dt>
+        <dd>Resolve iteration names to ids</dd>
+
+        <dt>
+
+          <code><a href="od_get_iteration.html">od_get_iteration()</a></code>
+
+        </dt>
+        <dd>Get a single iteration by id or name</dd>
       </dl></div><div class="section level2">
       <h2 id="builds-and-jobs">Builds and jobs<a class="anchor" aria-label="anchor" href="#builds-and-jobs"></a></h2>
 
@@ -295,6 +337,13 @@
 
         <dt>
 
+          <code><a href="od_get_pull_request_issues.html">od_get_pull_request_issues()</a></code>
+
+        </dt>
+        <dd>Get issues linked to a pull request</dd>
+
+        <dt>
+
           <code><a href="od_get_pull_request_reviews.html">od_get_pull_request_reviews()</a></code>
 
         </dt>
@@ -371,6 +420,13 @@
 
         </dt>
         <dd>Get a single project</dd>
+
+        <dt>
+
+          <code><a href="od_get_project_setting.html">od_get_project_setting()</a></code>
+
+        </dt>
+        <dd>Get project settings</dd>
 
         <dt>
 
@@ -589,6 +645,280 @@
 
         </dt>
         <dd>Low-level OneDev REST request</dd>
+      </dl></div><div class="section level2">
+      <h2 id="groups-webhooks-and-ssh-keys">Groups, webhooks, and SSH keys<a class="anchor" aria-label="anchor" href="#groups-webhooks-and-ssh-keys"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="od_query_groups.html">od_query_groups()</a></code>
+
+        </dt>
+        <dd>Query user groups</dd>
+
+        <dt>
+
+          <code><a href="od_get_group.html">od_get_group()</a></code>
+
+        </dt>
+        <dd>Get a user group by name</dd>
+
+        <dt>
+
+          <code><a href="od_list_group_members.html">od_list_group_members()</a></code>
+
+        </dt>
+        <dd>List group members</dd>
+
+        <dt>
+
+          <code><a href="od_add_group_member.html">od_add_group_member()</a></code>
+
+        </dt>
+        <dd>Add a user to a group</dd>
+
+        <dt>
+
+          <code><a href="od_remove_group_member.html">od_remove_group_member()</a></code>
+
+        </dt>
+        <dd>Remove a user from a group</dd>
+
+        <dt>
+
+          <code><a href="od_list_webhooks.html">od_list_webhooks()</a></code>
+
+        </dt>
+        <dd>List webhooks for a project</dd>
+
+        <dt>
+
+          <code><a href="od_get_webhook.html">od_get_webhook()</a></code>
+
+        </dt>
+        <dd>Get a webhook by ID</dd>
+
+        <dt>
+
+          <code><a href="od_create_webhook.html">od_create_webhook()</a></code>
+
+        </dt>
+        <dd>Create a webhook for a project</dd>
+
+        <dt>
+
+          <code><a href="od_delete_webhook.html">od_delete_webhook()</a></code>
+
+        </dt>
+        <dd>Delete a webhook</dd>
+
+        <dt>
+
+          <code><a href="od_list_user_ssh_keys.html">od_list_user_ssh_keys()</a></code>
+
+        </dt>
+        <dd>List SSH keys for a user</dd>
+
+        <dt>
+
+          <code><a href="od_add_user_ssh_key.html">od_add_user_ssh_key()</a></code>
+
+        </dt>
+        <dd>Add an SSH key to a user account</dd>
+
+        <dt>
+
+          <code><a href="od_delete_user_ssh_key.html">od_delete_user_ssh_key()</a></code>
+
+        </dt>
+        <dd>Delete an SSH key from a user account</dd>
+      </dl></div><div class="section level2">
+      <h2 id="commit-statuses-build-promotion-and-issue-pr-links">Commit statuses, build promotion, and issue/PR links<a class="anchor" aria-label="anchor" href="#commit-statuses-build-promotion-and-issue-pr-links"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="od_get_commit_statuses.html">od_get_commit_statuses()</a></code>
+
+        </dt>
+        <dd>Get commit statuses</dd>
+
+        <dt>
+
+          <code><a href="od_set_commit_status.html">od_set_commit_status()</a></code>
+
+        </dt>
+        <dd>Set or update a commit status</dd>
+
+        <dt>
+
+          <code><a href="od_promote_build.html">od_promote_build()</a></code>
+
+        </dt>
+        <dd>Promote a build to a new status/environment</dd>
+
+        <dt>
+
+          <code><a href="od_link_issue_to_pull_request.html">od_link_issue_to_pull_request()</a></code>
+
+        </dt>
+        <dd>Link an issue to a pull request</dd>
+
+        <dt>
+
+          <code><a href="od_unlink_issue_from_pull_request.html">od_unlink_issue_from_pull_request()</a></code>
+
+        </dt>
+        <dd>Remove a link between an issue and a pull request</dd>
+      </dl></div><div class="section level2">
+      <h2 id="batch-parallel-and-streaming">Batch, parallel, and streaming<a class="anchor" aria-label="anchor" href="#batch-parallel-and-streaming"></a></h2>
+
+      <div class="section-desc"><p>Bulk issue operations, concurrent helpers, and streaming of long results or logs.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="od_batch_create_issues.html">od_batch_create_issues()</a></code>
+
+        </dt>
+        <dd>Create multiple issues efficiently</dd>
+
+        <dt>
+
+          <code><a href="od_batch_update_issues.html">od_batch_update_issues()</a></code>
+
+        </dt>
+        <dd>Update multiple issues</dd>
+
+        <dt>
+
+          <code><a href="od_batch_transition_issues.html">od_batch_transition_issues()</a></code>
+
+        </dt>
+        <dd>Transition multiple issues to a new state</dd>
+
+        <dt>
+
+          <code><a href="od_batch_link_issues_prs.html">od_batch_link_issues_prs()</a></code>
+
+        </dt>
+        <dd>Link multiple issue-PR pairs</dd>
+
+        <dt>
+
+          <code><a href="od_map_parallel.html">od_map_parallel()</a></code>
+
+        </dt>
+        <dd>Apply a function to items in parallel</dd>
+
+        <dt>
+
+          <code><a href="od_parallel_query.html">od_parallel_query()</a></code>
+
+        </dt>
+        <dd>Run multiple queries concurrently</dd>
+
+        <dt>
+
+          <code><a href="od_chunked_foreach.html">od_chunked_foreach()</a></code>
+
+        </dt>
+        <dd>Process results in fixed-size chunks</dd>
+
+        <dt>
+
+          <code><a href="od_concurrent_stream.html">od_concurrent_stream()</a></code>
+
+        </dt>
+        <dd>Process a stream of items with concurrent workers</dd>
+
+        <dt>
+
+          <code><a href="od_stream_query_results.html">od_stream_query_results()</a></code>
+
+        </dt>
+        <dd>Stream large query results with chunking</dd>
+
+        <dt>
+
+          <code><a href="od_stream_build_log.html">od_stream_build_log()</a></code>
+
+        </dt>
+        <dd>Stream build log output with callback processing</dd>
+
+        <dt>
+
+          <code><a href="od_write_log_file.html">od_write_log_file()</a></code>
+
+        </dt>
+        <dd>Write build log to a file</dd>
+
+        <dt>
+
+          <code><a href="is_future_installed.html">is_future_installed()</a></code>
+
+        </dt>
+        <dd>Check if future package is available</dd>
+      </dl></div><div class="section level2">
+      <h2 id="caching">Caching<a class="anchor" aria-label="anchor" href="#caching"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="od_enable_cache.html">od_enable_cache()</a></code>
+
+        </dt>
+        <dd>Enable caching globally for all API requests</dd>
+
+        <dt>
+
+          <code><a href="od_disable_cache.html">od_disable_cache()</a></code>
+
+        </dt>
+        <dd>Disable caching globally</dd>
+
+        <dt>
+
+          <code><a href="od_clear_cache.html">od_clear_cache()</a></code>
+
+        </dt>
+        <dd>Clear cached data</dd>
+
+        <dt>
+
+          <code><a href="od_get_cache_stats.html">od_get_cache_stats()</a></code>
+
+        </dt>
+        <dd>Get cache statistics</dd>
+
+        <dt>
+
+          <code><a href="od_with_cache.html">od_with_cache()</a></code>
+
+        </dt>
+        <dd>Execute code within a cache context</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

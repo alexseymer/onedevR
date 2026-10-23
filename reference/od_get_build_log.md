@@ -18,23 +18,25 @@ od_get_build_log(
 
 - build_number:
 
-  UI number (`100` or `"#100"`).
+  character\|numeric UI number (`100` or `"#100"`).
 
 - conn:
 
-  Connection list.
+  list Connection list. Default: `NULL`.
 
 - use_internal_id:
 
-  If `TRUE`, treat `build_number` as the internal REST id.
+  logical If `TRUE`, treat `build_number` as the internal REST id.
+  Default: `FALSE`.
 
 - timeout:
 
-  Seconds to wait for the full log stream (default `60`).
+  numeric Seconds to wait for the full log stream (default `60`).
+  Default: `60`.
 
 ## Value
 
-Character vector of log lines.
+character Character vector of log lines.
 
 ## See also
 
@@ -44,6 +46,7 @@ Other builds:
 [`od_get_build()`](https://alexseymer.github.io/onedevR/reference/od_get_build.md),
 [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md),
 [`od_list_build_artifacts()`](https://alexseymer.github.io/onedevR/reference/od_list_build_artifacts.md),
+[`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md),
 [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md),
 [`od_rebuild_job()`](https://alexseymer.github.io/onedevR/reference/od_rebuild_job.md),
 [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md),

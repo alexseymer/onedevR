@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,26 +67,26 @@
 
 
 <dl><dt id="arg-pull-request-number">pull_request_number<a class="anchor" aria-label="anchor" href="#arg-pull-request-number"></a></dt>
-<dd><p>UI number (<code>42</code> or <code>"#42"</code>).</p></dd>
+<dd><p>character|numeric UI number (<code>42</code> or <code>"#42"</code>).</p></dd>
 
 
 <dt id="arg-as-tibble">as_tibble<a class="anchor" aria-label="anchor" href="#arg-as-tibble"></a></dt>
-<dd><p>If <code>TRUE</code> (default via <code>options(onedevr.as_tibble)</code>), return
-a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>.</p></dd>
+<dd><p>logical If <code>TRUE</code> (default via <code>options(onedevr.as_tibble)</code>), return
+a tibble via <code><a href="od_as_tibble.html">od_as_tibble()</a></code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>Connection list.</p></dd>
+<dd><p>list Connection list. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-use-internal-id">use_internal_id<a class="anchor" aria-label="anchor" href="#arg-use-internal-id"></a></dt>
-<dd><p>If <code>TRUE</code>, treat <code>pull_request_number</code> as the
-internal REST id.</p></dd>
+<dd><p>logical If <code>TRUE</code>, treat <code>pull_request_number</code> as the
+internal REST id. Default: <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble of reviews (default), or a list when <code>as_tibble = FALSE</code>.</p>
+    <p>tibble|list A tibble of reviews (default), or a list when <code>as_tibble = FALSE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -97,6 +97,7 @@ internal REST id.</p></dd>
 <code><a href="od_discard_pull_request.html">od_discard_pull_request()</a></code>,
 <code><a href="od_get_pull_request.html">od_get_pull_request()</a></code>,
 <code><a href="od_get_pull_request_comments.html">od_get_pull_request_comments()</a></code>,
+<code><a href="od_get_pull_request_issues.html">od_get_pull_request_issues()</a></code>,
 <code><a href="od_merge_pull_request.html">od_merge_pull_request()</a></code>,
 <code><a href="od_query_pull_requests.html">od_query_pull_requests()</a></code>,
 <code><a href="od_request_pull_request_changes.html">od_request_pull_request_changes()</a></code>,

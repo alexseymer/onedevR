@@ -17,25 +17,28 @@ od_get_pull_request_comments(
 
 - pull_request_number:
 
-  UI number (`42` or `"#42"`).
+  character\|numeric UI number (`42` or `"#42"`).
 
 - as_tibble:
 
-  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
-  via
+  logical If `TRUE` (default via `options(onedevr.as_tibble)`), return a
+  tibble via
   [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
+  Default: `NULL`.
 
 - conn:
 
-  Connection list.
+  list Connection list. Default: `NULL`.
 
 - use_internal_id:
 
-  If `TRUE`, treat `pull_request_number` as the internal REST id.
+  logical If `TRUE`, treat `pull_request_number` as the internal REST
+  id. Default: `FALSE`.
 
 ## Value
 
-A tibble of comments (default), or a list when `as_tibble = FALSE`.
+tibble\|list A tibble of comments (default), or a list when
+`as_tibble = FALSE`.
 
 ## See also
 
@@ -45,6 +48,7 @@ Other pull requests:
 [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md),
 [`od_discard_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_discard_pull_request.md),
 [`od_get_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request.md),
+[`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md),
 [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md),
 [`od_merge_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_merge_pull_request.md),
 [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md),

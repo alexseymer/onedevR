@@ -17,18 +17,20 @@ od_get_query_description(
 
 - kind:
 
-  One of `"issue"`, `"build"`, `"pull_request"`, or `"project"`.
+  character One of `"issue"`, `"build"`, `"pull_request"`, or
+  `"project"`.
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-Character scalar (HTML-ish grammar text from the server).
+character Character scalar (HTML-ish grammar text from the server).
 
 ## See also
 

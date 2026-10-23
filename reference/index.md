@@ -16,7 +16,7 @@ connection, Basic Auth or Bearer).
 
 ## Issues
 
-Query and mutate issues, fields, comments, and iterations.
+Query and mutate issues, fields, comments, boards, and iterations.
 
 - [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md)
   : Query OneDev issues
@@ -26,6 +26,8 @@ Query and mutate issues, fields, comments, and iterations.
   : Get comments on an issue
 - [`od_get_issue_fields()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_fields.md)
   : Get custom fields for an issue
+- [`od_get_issue_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_pull_requests.md)
+  : Get pull requests linked to an issue
 - [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
   : Create a OneDev issue
 - [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
@@ -42,8 +44,18 @@ Query and mutate issues, fields, comments, and iterations.
   : Transition an issue to a new state
 - [`od_resolve_issue_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_issue_id.md)
   : Resolve a UI issue number to the internal REST id
+- [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md)
+  : List issue boards for a OneDev project
+- [`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md)
+  : Get a single issue board by name
+- [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)
+  : Query issues visible on a board
 - [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md)
   : List iterations for a OneDev project
+- [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)
+  : Resolve iteration names to ids
+- [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md)
+  : Get a single iteration by id or name
 
 ## Builds and jobs
 
@@ -80,6 +92,8 @@ List, review, and write pull requests.
   : Get a single pull request by UI number
 - [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md)
   : Get comments on a pull request
+- [`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md)
+  : Get issues linked to a pull request
 - [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md)
   : Get reviews on a pull request
 - [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md)
@@ -106,6 +120,8 @@ Resolve and inspect OneDev projects.
   : Query OneDev projects
 - [`od_get_project()`](https://alexseymer.github.io/onedevR/reference/od_get_project.md)
   : Get a single project
+- [`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md)
+  : Get project settings
 - [`od_get_project_clone_url()`](https://alexseymer.github.io/onedevR/reference/od_get_project_clone_url.md)
   : Get clone URLs for a project
 - [`od_resolve_project_path()`](https://alexseymer.github.io/onedevR/reference/od_resolve_project_path.md)
@@ -181,3 +197,86 @@ escape hatch.
   : Download a markdown-referenced resource with OneDev auth
 - [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
   : Low-level OneDev REST request
+
+## Groups, webhooks, and SSH keys
+
+- [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md)
+  : Query user groups
+- [`od_get_group()`](https://alexseymer.github.io/onedevR/reference/od_get_group.md)
+  : Get a user group by name
+- [`od_list_group_members()`](https://alexseymer.github.io/onedevR/reference/od_list_group_members.md)
+  : List group members
+- [`od_add_group_member()`](https://alexseymer.github.io/onedevR/reference/od_add_group_member.md)
+  : Add a user to a group
+- [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md)
+  : Remove a user from a group
+- [`od_list_webhooks()`](https://alexseymer.github.io/onedevR/reference/od_list_webhooks.md)
+  : List webhooks for a project
+- [`od_get_webhook()`](https://alexseymer.github.io/onedevR/reference/od_get_webhook.md)
+  : Get a webhook by ID
+- [`od_create_webhook()`](https://alexseymer.github.io/onedevR/reference/od_create_webhook.md)
+  : Create a webhook for a project
+- [`od_delete_webhook()`](https://alexseymer.github.io/onedevR/reference/od_delete_webhook.md)
+  : Delete a webhook
+- [`od_list_user_ssh_keys()`](https://alexseymer.github.io/onedevR/reference/od_list_user_ssh_keys.md)
+  : List SSH keys for a user
+- [`od_add_user_ssh_key()`](https://alexseymer.github.io/onedevR/reference/od_add_user_ssh_key.md)
+  : Add an SSH key to a user account
+- [`od_delete_user_ssh_key()`](https://alexseymer.github.io/onedevR/reference/od_delete_user_ssh_key.md)
+  : Delete an SSH key from a user account
+
+## Commit statuses, build promotion, and issue/PR links
+
+- [`od_get_commit_statuses()`](https://alexseymer.github.io/onedevR/reference/od_get_commit_statuses.md)
+  : Get commit statuses
+- [`od_set_commit_status()`](https://alexseymer.github.io/onedevR/reference/od_set_commit_status.md)
+  : Set or update a commit status
+- [`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md)
+  : Promote a build to a new status/environment
+- [`od_link_issue_to_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_link_issue_to_pull_request.md)
+  : Link an issue to a pull request
+- [`od_unlink_issue_from_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_unlink_issue_from_pull_request.md)
+  : Remove a link between an issue and a pull request
+
+## Batch, parallel, and streaming
+
+Bulk issue operations, concurrent helpers, and streaming of long results
+or logs.
+
+- [`od_batch_create_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_create_issues.md)
+  : Create multiple issues efficiently
+- [`od_batch_update_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_update_issues.md)
+  : Update multiple issues
+- [`od_batch_transition_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_transition_issues.md)
+  : Transition multiple issues to a new state
+- [`od_batch_link_issues_prs()`](https://alexseymer.github.io/onedevR/reference/od_batch_link_issues_prs.md)
+  : Link multiple issue-PR pairs
+- [`od_map_parallel()`](https://alexseymer.github.io/onedevR/reference/od_map_parallel.md)
+  : Apply a function to items in parallel
+- [`od_parallel_query()`](https://alexseymer.github.io/onedevR/reference/od_parallel_query.md)
+  : Run multiple queries concurrently
+- [`od_chunked_foreach()`](https://alexseymer.github.io/onedevR/reference/od_chunked_foreach.md)
+  : Process results in fixed-size chunks
+- [`od_concurrent_stream()`](https://alexseymer.github.io/onedevR/reference/od_concurrent_stream.md)
+  : Process a stream of items with concurrent workers
+- [`od_stream_query_results()`](https://alexseymer.github.io/onedevR/reference/od_stream_query_results.md)
+  : Stream large query results with chunking
+- [`od_stream_build_log()`](https://alexseymer.github.io/onedevR/reference/od_stream_build_log.md)
+  : Stream build log output with callback processing
+- [`od_write_log_file()`](https://alexseymer.github.io/onedevR/reference/od_write_log_file.md)
+  : Write build log to a file
+- [`is_future_installed()`](https://alexseymer.github.io/onedevR/reference/is_future_installed.md)
+  : Check if future package is available
+
+## Caching
+
+- [`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
+  : Enable caching globally for all API requests
+- [`od_disable_cache()`](https://alexseymer.github.io/onedevR/reference/od_disable_cache.md)
+  : Disable caching globally
+- [`od_clear_cache()`](https://alexseymer.github.io/onedevR/reference/od_clear_cache.md)
+  : Clear cached data
+- [`od_get_cache_stats()`](https://alexseymer.github.io/onedevR/reference/od_get_cache_stats.md)
+  : Get cache statistics
+- [`od_with_cache()`](https://alexseymer.github.io/onedevR/reference/od_with_cache.md)
+  : Execute code within a cache context

@@ -19,43 +19,46 @@ od_query_builds(
 
 - query:
 
-  Raw OneDev build query string (see
+  character Raw OneDev build query string (see
   [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
   with `kind = "build"`, or `tod build get-query-description`). Example:
-  `'"Number" is "group/project#100"'`.
+  `'"Number" is "group/project#100"'`. Default: `NULL`.
 
 - status:
 
-  Optional status filter. OneDev uses keyword criteria - pass
+  character Optional status filter. OneDev uses keyword criteria - pass
   `"successful"`, `"failed"`, `"cancelled"`, `"timed out"`,
   `"finished"`, `"running"`, `"waiting"`, or `"pending"` (enum spellings
   like `"SUCCESSFUL"` are accepted and mapped). Combined with `query`
-  via `and`.
+  via `and`. Default: `NULL`.
 
 - count:
 
-  Maximum number of results (default `100`).
+  integer Maximum number of results (default `100`).
 
 - offset:
 
-  Result offset (default `0`).
+  integer Result offset (default `0`).
 
 - as_tibble:
 
-  If `TRUE` (default via `options(onedevr.as_tibble)`), return a tibble
-  via
+  logical If `TRUE` (default via `options(onedevr.as_tibble)`), return a
+  tibble via
   [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
+  Default: `NULL`.
 
 - conn:
 
-  Connection list from
+  list Connection list from
   [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)
   /
   [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md).
+  Default: `NULL`.
 
 ## Value
 
-A tibble of builds (default), or a list when `as_tibble = FALSE`.
+tibble\|list A tibble of builds (default), or a list when
+`as_tibble = FALSE`.
 
 ## See also
 
@@ -66,6 +69,7 @@ Other builds:
 [`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md),
 [`od_get_build_params()`](https://alexseymer.github.io/onedevR/reference/od_get_build_params.md),
 [`od_list_build_artifacts()`](https://alexseymer.github.io/onedevR/reference/od_list_build_artifacts.md),
+[`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md),
 [`od_rebuild_job()`](https://alexseymer.github.io/onedevR/reference/od_rebuild_job.md),
 [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md),
 [`od_run_job()`](https://alexseymer.github.io/onedevR/reference/od_run_job.md)

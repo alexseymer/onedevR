@@ -17,29 +17,32 @@ od_paginate(fetcher, ..., page_size = 100L, max_pages = 100L, as_tibble = NULL)
 
 - fetcher:
 
-  A function that accepts at least `offset` and `count`. Extra arguments
-  may be passed via `...`.
+  function A function that accepts at least `offset` and `count`. Extra
+  arguments may be passed via `...`.
 
 - ...:
 
-  Forwarded to `fetcher` (e.g. `state = "Open"`, `query = ...`).
+  Additional arguments forwarded to `fetcher` (e.g. `state = "Open"`,
+  `query = ...`).
 
 - page_size:
 
-  Page size / `count` (default `100`).
+  integer Page size / `count` (default `100`). Default: `100L`.
 
 - max_pages:
 
-  Safety cap on number of pages (default `100`).
+  integer Safety cap on number of pages (default `100`). Default:
+  `100L`.
 
 - as_tibble:
 
-  Passed to `fetcher` when it has a formal `as_tibble`.
+  logical Passed to `fetcher` when it has a formal `as_tibble`. Default:
+  `NULL`.
 
 ## Value
 
-A combined tibble when pages are tibbles; otherwise a concatenated list
-of items.
+tibble\|list A combined tibble when pages are tibbles; otherwise a
+concatenated list of items.
 
 ## See also
 

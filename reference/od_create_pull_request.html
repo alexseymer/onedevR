@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,46 +72,46 @@
 
 
 <dl><dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
-<dd><p>PR title.</p></dd>
+<dd><p>character PR title.</p></dd>
 
 
 <dt id="arg-source-branch">source_branch<a class="anchor" aria-label="anchor" href="#arg-source-branch"></a></dt>
-<dd><p>Source branch name.</p></dd>
+<dd><p>character Source branch name.</p></dd>
 
 
 <dt id="arg-target-branch">target_branch<a class="anchor" aria-label="anchor" href="#arg-target-branch"></a></dt>
-<dd><p>Target branch name (default <code>"main"</code>).</p></dd>
+<dd><p>character Target branch name (default <code>"main"</code>). Default: <code>"main"</code>.</p></dd>
 
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
-<dd><p>Optional Markdown description.</p></dd>
+<dd><p>character Optional Markdown description. Default: <code>""</code>.</p></dd>
 
 
 <dt id="arg-source-project">source_project<a class="anchor" aria-label="anchor" href="#arg-source-project"></a></dt>
-<dd><p>Optional source project path/id; defaults to the
-connection project.</p></dd>
+<dd><p>character Optional source project path/id; defaults to the
+connection project. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-target-project">target_project<a class="anchor" aria-label="anchor" href="#arg-target-project"></a></dt>
-<dd><p>Optional target project path/id; defaults to
-<code>source_project</code>.</p></dd>
+<dd><p>character Optional target project path/id; defaults to
+<code>source_project</code>. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-reviewer-ids">reviewer_ids<a class="anchor" aria-label="anchor" href="#arg-reviewer-ids"></a></dt>
-<dd><p>Optional numeric user ids.</p></dd>
+<dd><p>numeric Optional numeric user ids. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-assignee-ids">assignee_ids<a class="anchor" aria-label="anchor" href="#arg-assignee-ids"></a></dt>
-<dd><p>Optional numeric user ids.</p></dd>
+<dd><p>numeric Optional numeric user ids. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>Connection list.</p></dd>
+<dd><p>list Connection list. Default: <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Parsed created PR (list), or <code>NULL</code> if the server returns an empty body.</p>
+    <p>list Parsed created PR, or <code>NULL</code> if the server returns an empty body.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -121,6 +121,7 @@ connection project.</p></dd>
 <code><a href="od_discard_pull_request.html">od_discard_pull_request()</a></code>,
 <code><a href="od_get_pull_request.html">od_get_pull_request()</a></code>,
 <code><a href="od_get_pull_request_comments.html">od_get_pull_request_comments()</a></code>,
+<code><a href="od_get_pull_request_issues.html">od_get_pull_request_issues()</a></code>,
 <code><a href="od_get_pull_request_reviews.html">od_get_pull_request_reviews()</a></code>,
 <code><a href="od_merge_pull_request.html">od_merge_pull_request()</a></code>,
 <code><a href="od_query_pull_requests.html">od_query_pull_requests()</a></code>,
