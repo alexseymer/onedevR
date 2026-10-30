@@ -6,6 +6,9 @@
   state names and `od_get_query_description()` (#15).
 * `od_add_issue_comment()` tries a second body shape and reports all variant
   errors on failure (#16).
+* Docs: README, function map, and workflow vignettes updated; fixed examples
+  that used non-existent arguments (`reply_to`, field names as `...`).
+* pkgdown reference index now lists all exported topics.
 
 # onedevr 0.6.0
 

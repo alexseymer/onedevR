@@ -37,8 +37,10 @@ If your constraint is "I have R, I have Git, I need OneDev", `onedevr` is for yo
 
 ## Status
 
-**v0.5.2** — current GitHub release. Issue/build/PR workflows, jobs, packages,
-repository helpers, tibbles by default, and Bearer + Basic Auth. See
+**v0.6.0** — current release. Issue/build/PR workflows, boards, jobs, packages,
+repository helpers, tibbles by default, and Bearer + Basic Auth. Unreleased on
+`main`: iteration names accepted wherever iteration ids are, a hint on HTTP 406
+"Invalid query" errors, and body-variant fallback for issue comments. See
 [`NEWS.md`](NEWS.md) for the full changelog.
 
 ## Install
@@ -83,7 +85,7 @@ created <- od_create_issue(
   title = "API test",
   description = "Created from R",
   fields = list(Priority = "Normal"),
-  iteration_ids = iterations$id[1],
+  iteration_ids = iterations$id[1],  # ids or names, e.g. "Version 3.0.0"
   conn = conn
 )
 
@@ -109,6 +111,7 @@ variable list for non-R tooling. Live integration tests are gated behind
 
 - Issues, boards, builds, PRs, jobs, packages, and repository (branches/tags/commits/files)
 - Board helpers: `od_list_boards()`, `od_get_board()`, `od_query_board_issues()`
+- Iterations by name or id: `od_get_iteration()`, `od_resolve_iteration_ids()`
 - Status keywords for builds/PRs, query DSL helpers, and `od_paginate()`
 - Tibbles by default for list queries; `od_connection()` or env-based config
 - Bearer token or Basic Auth; `od_request()` escape hatch for custom endpoints
@@ -125,6 +128,10 @@ variable list for non-R tooling. Live integration tests are gated behind
   version/installation (e.g. issue creation, state transitions, iterations).
   `onedevr` tries known variants rather than picking one and failing silently
   on others — see §10 of the plan.
+- **Query errors:** `"Title" contains "…"` is often rejected with HTTP 406
+  "Invalid query". Use fuzzy text `~text~` and board-exact state names; check
+  `od_get_query_description("issue")`. Failing request-body variants are
+  reported together, so the real cause is not hidden.
 - **Custom issue fields are installation-specific.** There's no fixed schema;
   `fields` is treated as a named list.
 - **Connections:** pass `conn = od_connection(...)` per call, or
