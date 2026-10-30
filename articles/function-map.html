@@ -200,6 +200,25 @@ iterations/sprints
 <li>Returns: tibble/list of iterations</li>
 </ul>
 </li>
+<li>
+<strong>od_get_iteration()</strong> — Get one iteration by id or
+name
+<ul>
+<li>
+<code>iteration</code>: Iteration id or name</li>
+<li>Returns: iteration list (<code>id</code>, <code>name</code>, …)</li>
+</ul>
+</li>
+<li>
+<strong>od_resolve_iteration_ids()</strong> — Map names and/or ids
+to integer ids
+<ul>
+<li>
+<code>iterations</code>: Character names and/or numeric ids</li>
+<li>Returns: integer vector; unknown names raise an error listing
+available iterations</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section level3">
@@ -267,7 +286,7 @@ issue
 <li>
 <code>fields</code>: Named list of custom fields</li>
 <li>
-<code>iteration_ids</code>: Optional iteration IDs</li>
+<code>iteration_ids</code>: Optional iteration IDs or names</li>
 <li>Returns: Created issue object</li>
 </ul>
 </li>
@@ -332,6 +351,8 @@ description
 <code>issue_number</code>: UI number</li>
 <li>
 <code>content</code>: Comment text (Markdown)</li>
+<li>Tries two request-body shapes and reports all errors if both
+fail</li>
 <li>Returns: Created comment object</li>
 </ul>
 </li>
@@ -342,7 +363,7 @@ issue
 <li>
 <code>issue_number</code>: UI number</li>
 <li>
-<code>iteration_ids</code>: Numeric iteration IDs</li>
+<code>iteration_ids</code>: Iteration IDs or names</li>
 <li>Returns: Updated issue</li>
 </ul>
 </li>

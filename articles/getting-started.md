@@ -159,7 +159,7 @@ od_issue_set_title(issue_number, "Add OAuth2 authentication")
 od_issue_set_description(issue_number, "Enhanced description here")
 
 # Set custom fields
-od_issue_set_fields(issue_number, Priority = "Critical", Assignee = "alice")
+od_issue_set_fields(issue_number, list(Priority = "Critical", Assignee = "alice"))
 
 # Change state
 od_issue_transition_state(issue_number, "In Progress")
@@ -208,8 +208,7 @@ od_add_issue_iterations(145, iteration_ids = iterations$id[1])
 # Add comment
 od_add_issue_comment(
   issue_number = 145,
-  content = "Working on this now",
-  reply_to = NA  # or comment ID for threading
+  content = "Working on this now"
 )
 ```
 

@@ -37,6 +37,10 @@ to see available filters:
 # View query language for issues
 cat(od_get_query_description("issue"))
 
+# Fuzzy text search: use ~text~; `"Title" contains "..."` often fails with
+# HTTP 406 "Invalid query"
+od_query_issues(query = "~GeoJSON~")
+
 # Example: Complex query
 advanced <- od_query_issues(
   query = '"Number" >= 100 and "Number" <= 200 and "State" is "Open" and "Priority" is "High"'
@@ -164,9 +168,11 @@ od_issue_set_description(
 
 od_issue_set_fields(
   issue_num,
-  Priority = "Critical",
-  Assignee = "alice",
-  Status = "In Progress"
+  list(
+    Priority = "Critical",
+    Assignee = "alice",
+    Status = "In Progress"
+  )
 )
 ```
 
@@ -206,13 +212,8 @@ recent <- comments %>%
 # Simple comment
 od_add_issue_comment(145, "This looks good to me")
 
-# Reply to a comment (threading)
-original_comment_id <- comments$id[1]
-od_add_issue_comment(
-  145,
-  "Great point, agreed",
-  reply_to = original_comment_id
-)
+# Multi-line Markdown works too
+od_add_issue_comment(145, "Great point, agreed.\n\n- follow-up in #150")
 ```
 
 ### Mention Users
@@ -421,5 +422,5 @@ in the UI. Set priority via:
 
 ``` r
 
-od_issue_set_fields(issue_num, Priority = "High")
+od_issue_set_fields(issue_num, list(Priority = "High"))
 ```

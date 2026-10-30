@@ -1619,7 +1619,7 @@ edge cases.</p>
 <span><span class="co"># Update each</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">high_priority</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">issue_num</span> <span class="op">&lt;-</span> <span class="va">high_priority</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span><span class="op">$</span><span class="va">number</span></span>
-<span>  <span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_num</span>, Assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">

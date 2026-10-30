@@ -100,6 +100,13 @@ Issues are the core task/bug tracking resource in OneDev.
   - Returns: tibble/list of issues
 - **od_list_iterations()** — List available iterations/sprints
   - Returns: tibble/list of iterations
+- **od_get_iteration()** — Get one iteration by id or name
+  - `iteration`: Iteration id or name
+  - Returns: iteration list (`id`, `name`, …)
+- **od_resolve_iteration_ids()** — Map names and/or ids to integer ids
+  - `iterations`: Character names and/or numeric ids
+  - Returns: integer vector; unknown names raise an error listing
+    available iterations
 
 ### Get/Retrieve Functions
 
@@ -125,7 +132,7 @@ Issues are the core task/bug tracking resource in OneDev.
   - `title`: Issue title (required)
   - `description`: Markdown description (default `""`)
   - `fields`: Named list of custom fields
-  - `iteration_ids`: Optional iteration IDs
+  - `iteration_ids`: Optional iteration IDs or names
   - Returns: Created issue object
 
 ### Update Functions
@@ -152,10 +159,11 @@ Issues are the core task/bug tracking resource in OneDev.
 - **od_add_issue_comment()** — Add a comment to an issue
   - `issue_number`: UI number
   - `content`: Comment text (Markdown)
+  - Tries two request-body shapes and reports all errors if both fail
   - Returns: Created comment object
 - **od_add_issue_iterations()** — Add iterations to an issue
   - `issue_number`: UI number
-  - `iteration_ids`: Numeric iteration IDs
+  - `iteration_ids`: Iteration IDs or names
   - Returns: Updated issue
 
 ### Link/Connect Functions

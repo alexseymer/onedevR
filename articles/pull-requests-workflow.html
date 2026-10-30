@@ -242,13 +242,8 @@ onedevr.</p>
 <span><span class="st">   I have one small suggestion in the review."</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Reply to a comment (threading)</span></span>
-<span><span class="va">original_comment_id</span> <span class="op">&lt;-</span> <span class="va">comments</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span></span>
-<span>  <span class="fl">5</span>,</span>
-<span>  <span class="st">"Good point! I'll update the docs."</span>,</span>
-<span>  reply_to <span class="op">=</span> <span class="va">original_comment_id</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Reply as a new comment (threaded replies are not supported by the helper)</span></span>
+<span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Good point! I'll update the docs."</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mention-users">Mention Users<a class="anchor" aria-label="anchor" href="#mention-users"></a>
@@ -617,12 +612,12 @@ verification:</p>
 <span><span class="va">all_passed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">builds</span><span class="op">$</span><span class="va">status</span> <span class="op">==</span> <span class="st">"successful"</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
-<p><strong>Use threading</strong> for related comments:</p>
+<p><strong>Quote the comment you answer</strong> so the context is
+clear:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span></span>
 <span>  <span class="va">pr_num</span>,</span>
-<span>  <span class="st">"Good catch!"</span>,</span>
-<span>  reply_to <span class="op">=</span> <span class="va">comment_id</span></span>
+<span>  <span class="st">"&gt; original remark\n\nGood catch!"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>

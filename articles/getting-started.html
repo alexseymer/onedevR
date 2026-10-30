@@ -275,7 +275,7 @@ project - For project-independent queries, omit
 <span><span class="fu"><a href="../reference/od_issue_set_description.html">od_issue_set_description</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"Enhanced description here"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set custom fields</span></span>
-<span><span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_number</span>, Priority <span class="op">=</span> <span class="st">"Critical"</span>, Assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Priority <span class="op">=</span> <span class="st">"Critical"</span>, Assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Change state</span></span>
 <span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">issue_number</span>, <span class="st">"In Progress"</span><span class="op">)</span></span>
@@ -322,8 +322,7 @@ match a state on the project’s board (e.g. <code>"Closed"</code> vs
 <span><span class="co"># Add comment</span></span>
 <span><span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span></span>
 <span>  issue_number <span class="op">=</span> <span class="fl">145</span>,</span>
-<span>  content <span class="op">=</span> <span class="st">"Working on this now"</span>,</span>
-<span>  reply_to <span class="op">=</span> <span class="cn">NA</span>  <span class="co"># or comment ID for threading</span></span>
+<span>  content <span class="op">=</span> <span class="st">"Working on this now"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>

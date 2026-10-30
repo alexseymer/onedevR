@@ -122,4 +122,11 @@ Boards + project settings read path (v0.6.0):
 [`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md),
 [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md)
 
+Unreleased: iteration names
+([`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)),
+406 hint, comment body variants (#14, \#15, \#16); pkgdown index
+completed
+
+Next release (0.6.1 / 0.7.0) after live verification of comment variants
+
 R-universe / CRAN when demand warrants it

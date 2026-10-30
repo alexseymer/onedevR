@@ -51,10 +51,13 @@ is for you.
 
 ## Status
 
-**v0.5.2** — current GitHub release. Issue/build/PR workflows, jobs,
+**v0.6.0** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
-Auth. See [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for
-the full changelog.
+Auth. Unreleased on `main`: iteration names accepted wherever iteration
+ids are, a hint on HTTP 406 “Invalid query” errors, and body-variant
+fallback for issue comments. See
+[`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
+changelog.
 
 ## Install
 
@@ -106,7 +109,7 @@ created <- od_create_issue(
   title = "API test",
   description = "Created from R",
   fields = list(Priority = "Normal"),
-  iteration_ids = iterations$id[1],
+  iteration_ids = iterations$id[1],  # ids or names, e.g. "Version 3.0.0"
   conn = conn
 )
 
@@ -138,6 +141,9 @@ gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
   [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md),
   [`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md),
   [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)
+- Iterations by name or id:
+  [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md),
+  [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)
 - Status keywords for builds/PRs, query DSL helpers, and
   [`od_paginate()`](https://alexseymer.github.io/onedevR/reference/od_paginate.md)
 - Tibbles by default for list queries;
@@ -161,6 +167,10 @@ gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
   on version/installation (e.g. issue creation, state transitions,
   iterations). `onedevr` tries known variants rather than picking one
   and failing silently on others — see §10 of the plan.
+- **Query errors:** `"Title" contains "…"` is often rejected with HTTP
+  406 “Invalid query”. Use fuzzy text `~text~` and board-exact state
+  names; check `od_get_query_description("issue")`. Failing request-body
+  variants are reported together, so the real cause is not hidden.
 - **Custom issue fields are installation-specific.** There’s no fixed
   schema; `fields` is treated as a named list.
 - **Connections:** pass `conn = od_connection(...)` per call, or
