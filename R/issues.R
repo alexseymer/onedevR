@@ -41,7 +41,7 @@ od_query_issues <- function(
     state <- conn$default_issue_state %||% ""
   }
   if (nzchar(state)) {
-    state_clause <- paste0('"State" is "', state, '"')
+    state_clause <- paste0('"State" is ', .od_quote_query_value(state))
     query <- if (nzchar(query)) {
       paste0("(", query, ") and ", state_clause)
     } else {

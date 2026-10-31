@@ -1,6 +1,21 @@
+.od_origin <- function(url) {
+  tolower(sub("^(https?://[^/?#]+).*$", "\\1", as.character(url)[1], ignore.case = TRUE))
+}
+
 .od_resolve_api_url <- function(endpoint, conn) {
   endpoint <- as.character(endpoint)[1]
-  if (grepl("^https?://", endpoint)) {
+  if (grepl("^https?://", endpoint, ignore.case = TRUE)) {
+    # Credentials are attached to every request, so only the configured
+    # OneDev origin may receive them.
+    host <- conn$host %||% ""
+    if (!nzchar(host) || !identical(.od_origin(endpoint), .od_origin(host))) {
+      stop(
+        "Absolute endpoint URLs must use the configured OneDev host (",
+        if (nzchar(host)) .od_origin(host) else "not set",
+        "); refusing to send credentials elsewhere.",
+        call. = FALSE
+      )
+    }
     return(endpoint)
   }
   base <- conn$api_base_url %||% ""
@@ -8,6 +23,19 @@
     stop("No api_base_url in connection (set ONEDEV_HOST).", call. = FALSE)
   }
   paste0(sub("/+$", "", base), "/", sub("^/+", "", endpoint))
+}
+
+.od_warn_insecure_once <- function() {
+  if (isTRUE(.onedevr_env$insecure_warned)) {
+    return(invisible(FALSE))
+  }
+  .onedevr_env$insecure_warned <- TRUE
+  warning(
+    "TLS certificate verification is disabled (insecure_ssl / ONEDEV_CURL_INSECURE). ",
+    "Credentials can be intercepted; use this only on networks you trust.",
+    call. = FALSE
+  )
+  invisible(TRUE)
 }
 
 .od_prepare_request <- function(method, url, conn, accept = "application/json") {
@@ -30,6 +58,7 @@
   }
 
   if (isTRUE(conn$insecure_ssl)) {
+    .od_warn_insecure_once()
     req <- httr2::req_options(req, ssl_verifypeer = 0L, ssl_verifyhost = 0L)
   }
 
@@ -114,10 +143,27 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
     req <- httr2::req_body_raw(req, charToRaw(enc2utf8(as.character(json_body))))
   }
 
+  # Cache only GET requests, and only when od_enable_cache() is on. The key
+  # is partitioned by credentials so accounts never share cached responses.
+  use_cache <- identical(method, "GET") &&
+    isTRUE(.onedevr_cache_env$cache_options$enabled)
+  if (use_cache) {
+    cache_partition <- .od_cache_partition(conn)
+    cache_key <- .od_make_cache_key(url, method, query, body, conn_host = cache_partition)
+    cached <- .od_get_from_cache(cache_key, url, method, conn_host = cache_partition)
+    if (!is.null(cached)) {
+      return(cached)
+    }
+  }
+
   response <- httr2::req_perform(req)
   payload <- .od_parse_response_body(response)
   if (httr2::resp_status(response) >= 400L) {
     .od_http_error(response, payload)
+  }
+
+  if (use_cache) {
+    .od_put_in_cache(cache_key, payload, url, method, conn_host = cache_partition)
   }
 
   payload

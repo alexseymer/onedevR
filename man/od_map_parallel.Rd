@@ -20,7 +20,7 @@ Default: \code{NULL}.}
 }
 \value{
 {list} Results from applying \code{FUN} to each item, in the same order.
-Failed items contain an error message.
+Failed items are \code{od_error} objects with a \code{message} field.
 }
 \description{
 Execute a function across multiple items concurrently. The function is
@@ -28,8 +28,8 @@ called once per item in the list/vector with that item and any additional
 arguments passed via \code{...}. Results maintain the same order as input items.
 }
 \details{
-If a single item fails, that position in the result list contains an error
-message, while other items continue processing. If \code{future} is not installed,
+If a single item fails, that position in the result list contains an
+\code{od_error} object (a list with \code{message}), while other items continue processing. If \code{future} is not installed,
 falls back to sequential execution.
 }
 \examples{
@@ -51,8 +51,8 @@ od_map_parallel(
 }
 }
 \seealso{
-Other concurrent:
-\code{\link[=od_concurrent_stream]{od_concurrent_stream()}},
-\code{\link[=od_parallel_query]{od_parallel_query()}}
+Other concurrent: 
+\code{\link{od_concurrent_stream}()},
+\code{\link{od_parallel_query}()}
 }
 \concept{concurrent}

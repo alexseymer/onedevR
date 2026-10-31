@@ -14,6 +14,28 @@
   max_size = 1000L
 )
 
+#' Credential partition for cache keys
+#'
+#' Returns a SHA-256 digest of host, auth mode and credentials, so cache entries
+#' are never shared between accounts. The secret itself is not stored.
+#'
+#' @param conn Connection list.
+#' @return {character} Hex digest.
+#' @noRd
+.od_cache_partition <- function(conn) {
+  digest::digest(
+    paste(
+      conn$host %||% "",
+      conn$auth %||% "bearer",
+      conn$username %||% "",
+      conn$token %||% "",
+      conn$password %||% "",
+      sep = "\u001f"
+    ),
+    algo = "sha256"
+  )
+}
+
 #' Generate cache key from request parameters
 #'
 #' Creates an MD5 hash of the endpoint, method, query params, and body to

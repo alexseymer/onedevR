@@ -10,12 +10,15 @@
   project_path <- .od_coerce_string(project_path)
   variants <- character()
   if (nzchar(project_path)) {
-    variants <- c(variants, paste0('"Number" is "', project_path, "#", numeric_part, '"'))
+    variants <- c(
+      variants,
+      paste0('"Number" is ', .od_quote_query_value(paste0(project_path, "#", numeric_part)))
+    )
   }
   variants <- c(
     variants,
-    paste0('"Number" is "#', numeric_part, '"'),
-    paste0('"Number" is "', numeric_part, '"')
+    paste0('"Number" is ', .od_quote_query_value(paste0("#", numeric_part))),
+    paste0('"Number" is ', .od_quote_query_value(numeric_part))
   )
   unique(variants)
 }

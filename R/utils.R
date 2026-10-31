@@ -53,6 +53,22 @@
   if (isTRUE(trim)) trimws(x) else x
 }
 
+#' Quote a value for use inside a OneDev query string
+#'
+#' Wraps `x` in double quotes and escapes backslashes and double quotes with
+#' a backslash, so user input cannot close the literal early and change the
+#' query.
+#'
+#' @param x {character} Raw value.
+#' @return {character} Quoted, escaped literal, e.g. `"Open"`.
+#' @noRd
+.od_quote_query_value <- function(x) {
+  x <- as.character(x %||% "")[1]
+  x <- gsub("\\", "\\\\", x, fixed = TRUE)
+  x <- gsub('"', '\\"', x, fixed = TRUE)
+  paste0('"', x, '"')
+}
+
 #' Require a non-empty string parameter
 #'
 #' Validates that a parameter is non-empty; stops with an error if not.

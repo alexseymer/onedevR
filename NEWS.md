@@ -1,5 +1,24 @@
 # onedevr (development)
 
+## Security and correctness (review follow-up)
+
+* Values inserted into OneDev query strings (state, iteration, UI-number
+  resolution) are now quoted and escaped (#19).
+* `print()` and `str()` of an `od_connection` mask `token` and `password` (#20).
+* Response caching is now partitioned by credentials, and `od_request()` uses
+  the cache for GET requests when `od_enable_cache()` is on. Before this, the
+  cache was never written, so `od_enable_cache()` had no effect (#21).
+* Absolute endpoint URLs are only accepted for the configured `host`; other
+  origins are refused so credentials are never sent elsewhere (#22).
+* `od_parallel_query()` and `od_map_parallel()` return failed items classed as
+  `od_error`; the `error` and `message` fields are unchanged (#24).
+* A one-time warning is shown when TLS verification is disabled (#25).
+* `test-live.R` runs in a weekly and on-demand workflow (`live-tests.yaml`),
+  not on pull requests. The batch-create live test only runs when
+  `ONEDEV_LIVE_ALLOW_WRITES=1` (#26).
+* Examples in `ai-examples` use `od_query_groups()` and `od_get_connection()`;
+  a test checks that README and vignettes only call exported functions (#23).
+
 * `od_resolve_iteration_ids()` maps iteration names to ids; `od_create_issue()`
   and `od_add_issue_iterations()` now accept names in `iteration_ids` (#14).
 * HTTP 406 "Invalid query" errors now include a hint on fuzzy text, board

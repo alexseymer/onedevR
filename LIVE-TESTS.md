@@ -1,5 +1,10 @@
 # Live Integration Tests
 
+The workflow `.github/workflows/live-tests.yaml` runs these tests weekly and on
+demand, using the repository secrets `ONEDEV_HOST`, `ONEDEV_API_TOKEN`,
+`ONEDEV_PROJECT_PATH` and `ONEDEV_PROJECT_ID`. Point them at a disposable test
+project: the batch-create test creates real issues.
+
 The onedevR package includes comprehensive live integration tests that validate functionality against a real OneDev instance. These tests are separate from unit tests and require network access to an OneDev server.
 
 ## Quick Start

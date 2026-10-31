@@ -1,3 +1,21 @@
+#' Build a per-item error result
+#'
+#' Failed items in parallel and sequential helpers are returned as a list with
+#' `error = TRUE` (kept for backward compatibility), `message` and, when given,
+#' `item`, classed as `od_error`. Test with `inherits(x, "od_error")`.
+#'
+#' @param e {condition} The caught condition.
+#' @param item Optional input item that failed.
+#' @return {list} Classed as `od_error`.
+#' @noRd
+.od_error_item <- function(e, item = NULL) {
+  out <- list(error = TRUE, message = conditionMessage(e))
+  if (!is.null(item)) {
+    out$item <- item
+  }
+  structure(out, class = "od_error")
+}
+
 #' Check if future package is available
 #'
 #' Helper function to verify that the `future` package is installed.
@@ -55,7 +73,7 @@ is_future_installed <- function(fallback = TRUE) {
 #'   Default: `NULL`.
 #'
 #' @return {list} A list of results in the same order as the input queries.
-#'   If a query fails, the error message is returned in its position.
+#'   If a query fails, an `od_error` object (see `inherits()`) is returned in its position.
 #' @family concurrent
 #' @examples
 #' \dontrun{
@@ -99,7 +117,7 @@ od_parallel_query <- function(queries = list(), conn = NULL) {
           do.call(fn, fn_args)
         },
         error = function(e) {
-          list(error = TRUE, message = conditionMessage(e))
+          .od_error_item(e)
         }
       )
     }, evaluator = future::sequential)
@@ -116,8 +134,8 @@ od_parallel_query <- function(queries = list(), conn = NULL) {
 #' called once per item in the list/vector with that item and any additional
 #' arguments passed via `...`. Results maintain the same order as input items.
 #'
-#' If a single item fails, that position in the result list contains an error
-#' message, while other items continue processing. If `future` is not installed,
+#' If a single item fails, that position in the result list contains an
+#' `od_error` object (a list with `message`), while other items continue processing. If `future` is not installed,
 #' falls back to sequential execution.
 #'
 #' @param FUN {function} Function to apply to each item. Called as
@@ -129,7 +147,7 @@ od_parallel_query <- function(queries = list(), conn = NULL) {
 #'   Default: `NULL`.
 #'
 #' @return {list} Results from applying `FUN` to each item, in the same order.
-#'   Failed items contain an error message.
+#'   Failed items are `od_error` objects with a `message` field.
 #' @family concurrent
 #' @examples
 #' \dontrun{
@@ -181,7 +199,7 @@ od_map_parallel <- function(FUN, items = list(), ..., conn = NULL) {
           do.call(FUN, call_args)
         },
         error = function(e) {
-          list(error = TRUE, message = conditionMessage(e), item = item)
+          .od_error_item(e, item = item)
         }
       )
     }, evaluator = future::sequential)
@@ -210,7 +228,7 @@ od_map_parallel <- function(FUN, items = list(), ..., conn = NULL) {
 #'   Default: `NULL`.
 #'
 #' @return {list} Combined results from all items, in the same order.
-#'   Failed items contain error messages.
+#'   Failed items are `od_error` objects with a `message` field.
 #' @family concurrent
 #' @examples
 #' \dontrun{
@@ -275,7 +293,7 @@ od_concurrent_stream <- function(
           do.call(FUN, call_args)
         },
         error = function(e) {
-          list(error = TRUE, message = conditionMessage(e), item = item)
+          .od_error_item(e, item = item)
         }
       )
     }, evaluator = future::sequential)
@@ -308,7 +326,7 @@ od_concurrent_stream <- function(
         do.call(fn, fn_args)
       },
       error = function(e) {
-        list(error = TRUE, message = conditionMessage(e))
+        .od_error_item(e)
       }
     )
   })
@@ -325,7 +343,7 @@ od_concurrent_stream <- function(
         do.call(FUN, call_args)
       },
       error = function(e) {
-        list(error = TRUE, message = conditionMessage(e), item = item)
+        .od_error_item(e, item = item)
       }
     )
   })

@@ -613,7 +613,7 @@ artifacts <- od_list_build_artifacts(
 
 # User/team level queries (no project needed):
 users <- od_query_users()  # Works without project
-groups <- od_list_groups()  # Works without project
+groups <- od_query_groups()  # Works without project
 
 # To use different project than default:
 conn <- od_connection(
@@ -1128,7 +1128,7 @@ Sys.setenv(
 issues <- od_query_issues(state = "Open")  # Uses env vars automatically
 
 # Check which connection is being used
-current <- .od_conn()  # Internal function to see active connection
+current <- od_get_connection()  # Active connection set by od_set_connection(), or NULL
 cat("Using host:", current$host, "\n")
 ```
 
