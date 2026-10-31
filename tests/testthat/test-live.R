@@ -252,6 +252,8 @@ test_that("od_enable_cache live", {
 
 test_that("od_batch_create_issues live", {
   skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  # This test creates real issues; run it only against a disposable project.
+  skip_if(Sys.getenv("ONEDEV_LIVE_ALLOW_WRITES") != "1")
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 

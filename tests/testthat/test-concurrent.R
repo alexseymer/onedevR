@@ -413,3 +413,18 @@ test_that("od_concurrent_stream handles large item counts", {
 
   expect_equal(length(result), 100)
 })
+
+test_that("failed items are classed as od_error and keep the legacy fields", {
+  result <- od_map_parallel(
+    FUN = function(x, ...) {
+      if (x == 2) stop("boom")
+      x
+    },
+    items = list(1, 2),
+    conn = list()
+  )
+  expect_false(inherits(result[[1]], "od_error"))
+  expect_true(inherits(result[[2]], "od_error"))
+  expect_true(result[[2]]$error)
+  expect_match(result[[2]]$message, "boom")
+})

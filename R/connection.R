@@ -149,6 +149,54 @@ od_connection <- function(
   conn
 }
 
+#' Summarise a connection without exposing secrets
+#'
+#' Lists the connection fields; `token` and `password` are shown as `<set>` or
+#' `<unset>` so that printing or logging a connection never reveals them.
+#'
+#' @param x {od_connection} Connection object.
+#' @return {character} One line per field.
+#' @noRd
+.od_connection_summary <- function(x) {
+  secret <- function(v) if (nzchar(as.character(v %||% "")[1])) "<set>" else "<unset>"
+  c(
+    "<od_connection>",
+    paste0("  host:          ", x$host %||% ""),
+    paste0("  auth:          ", x$auth %||% "bearer"),
+    paste0("  username:      ", x$username %||% ""),
+    paste0("  token:         ", secret(x$token)),
+    paste0("  password:      ", secret(x$password)),
+    paste0("  project_path:  ", x$project_path %||% ""),
+    paste0("  project_id:    ", x$project_id %||% ""),
+    paste0("  insecure_ssl:  ", isTRUE(x$insecure_ssl))
+  )
+}
+
+#' Print a OneDev connection
+#'
+#' Prints the connection summary; secrets are masked. Use `unclass()` to access
+#' the raw fields.
+#'
+#' @param x {od_connection} Connection object.
+#' @param ... Ignored.
+#' @return `x`, invisibly.
+#' @export
+print.od_connection <- function(x, ...) {
+  writeLines(.od_connection_summary(x))
+  invisible(x)
+}
+
+#' Show a OneDev connection in `str()` without exposing secrets
+#'
+#' @param object {od_connection} Connection object.
+#' @param ... Ignored.
+#' @return `NULL`, invisibly.
+#' @export
+str.od_connection <- function(object, ...) {
+  writeLines(.od_connection_summary(object))
+  invisible(NULL)
+}
+
 #' Set or clear the package-default OneDev connection
 #'
 #' After calling this, high-level `od_*` helpers that omit `conn` use the

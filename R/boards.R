@@ -128,7 +128,7 @@ od_query_board_issues <- function(
 
   iteration <- .od_coerce_string(iteration)
   iter_clause <- if (nzchar(iteration)) {
-    paste0('"Iteration" is "', iteration, '"')
+    paste0('"Iteration" is ', .od_quote_query_value(iteration))
   } else {
     ""
   }

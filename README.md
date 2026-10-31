@@ -9,6 +9,8 @@
 `onedevr` is an R client for the [OneDev](https://onedev.io) REST API — issues,
 projects, builds, and pull requests, for OneDev.
 
+> **Note:** This code was written with AI assistance and is not yet thoroughly tested. Review results carefully before relying on them, and please report problems in the [issue tracker](https://github.com/alexseymer/onedevR/issues).
+
 **References:**
 
 - R package shape (GitLab → R): [`gitlabr`](https://thinkr-open.github.io/gitlabr/) —

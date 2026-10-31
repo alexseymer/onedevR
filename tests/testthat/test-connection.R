@@ -101,3 +101,20 @@ test_that(".od_conn prefers explicit, then default, then env", {
   expect_equal(env_conn$host, "https://env.example.test")
   expect_equal(env_conn$token, "env-tok")
 })
+
+test_that("print and str of a connection do not reveal secrets", {
+  conn <- od_connection(
+    host = "https://git.example.test",
+    token = "super-secret-token",
+    password = "pw-secret",
+    project_path = "grp/proj",
+    validate = FALSE
+  )
+  printed <- capture.output(print(conn))
+  expect_false(any(grepl("super-secret-token|pw-secret", printed)))
+  expect_true(any(grepl("token:\\s+<set>", printed)))
+  expect_true(any(grepl("host:\\s+https://git.example.test", printed)))
+
+  shown <- capture.output(str(conn))
+  expect_false(any(grepl("super-secret-token|pw-secret", shown)))
+})

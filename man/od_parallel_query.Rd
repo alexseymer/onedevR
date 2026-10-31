@@ -16,7 +16,7 @@ Default: \code{NULL}.}
 }
 \value{
 {list} A list of results in the same order as the input queries.
-If a query fails, the error message is returned in its position.
+If a query fails, an \code{od_error} object (see \code{inherits()}) is returned in its position.
 }
 \description{
 Execute a list of query specifications in parallel using futures.
@@ -40,8 +40,8 @@ results <- od_parallel_query(
 }
 }
 \seealso{
-Other concurrent:
-\code{\link[=od_concurrent_stream]{od_concurrent_stream()}},
-\code{\link[=od_map_parallel]{od_map_parallel()}}
+Other concurrent: 
+\code{\link{od_concurrent_stream}()},
+\code{\link{od_map_parallel}()}
 }
 \concept{concurrent}
