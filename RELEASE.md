@@ -2,16 +2,31 @@
 
 Use this when cutting a GitHub Release (Phase 4+).
 
-1.  Ensure `main` is green on `R-CMD-check`.
-2.  Confirm `DESCRIPTION` `Version` matches the tag (e.g. `0.1.0` →
-    `v0.1.0`).
-3.  Update `NEWS.md` for the release.
+1.  Ensure `main` is green on `R-CMD-check`, `pkgdown` and `security`.
+2.  Bump `Version` in `DESCRIPTION` (tag = `v` + version, e.g. `0.7.0` →
+    `v0.7.0`) and make the first heading of `NEWS.md`
+    `# onedevr <version>`. README, ROADMAP and `project_plan.md` must
+    name the same version; the version-consistency test checks README
+    and NEWS.
+3.  Run the local gates:
+
+``` r
+
+devtools::document()
+devtools::check(args = "--no-manual")
+pkgdown::check_pkgdown()
+```
+
+``` bash
+Rscript scripts/audit-deps.R   # dependency vulnerabilities (OSV), needs network
+```
+
 4.  Tag and publish:
 
 ``` bash
 git checkout main
 git pull
-gh release create v0.1.0 --title "onedevr 0.1.0" --notes-file NEWS.md
+gh release create v0.7.0 --title "onedevr 0.7.0" --notes-file NEWS.md
 ```
 
 5.  Confirm the `pkgdown` workflow deployed to

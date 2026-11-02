@@ -32,7 +32,9 @@ od_parallel_query(queries = list(), conn = NULL)
 ## Value
 
 list A list of results in the same order as the input queries. If a
-query fails, the error message is returned in its position.
+query fails, an `od_error` object (see
+[`inherits()`](https://rdrr.io/r/base/class.html)) is returned in its
+position.
 
 ## Details
 

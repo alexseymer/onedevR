@@ -1,7 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-10-23 (Review/Revision; Paketversion 0.6.0 +
-`development`)  
+**Stand:** 2026-11-02 (Paketversion 0.7.0)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht.
 Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte
 API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`,
@@ -152,7 +151,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.5.1 | Dogfood-Hardening: Build-/PR-Status-Keywords, Pagination, Query-DSL |
 | 0.5.2 | Titel/Beschreibung: Rohstring zuerst; aggregierte Varianten-Fehler |
 | 0.6.0 | Boards/Projekt-Settings ([`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md), [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)), [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md) |
-| development | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis, Kommentar-Body-Varianten |
+| 0.7.0 | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis, Kommentar-Body-Varianten; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache
@@ -184,7 +183,7 @@ Depends: R (>= 4.2.0)
 Imports:
     digest (>= 0.6.0),
     httr2 (>= 1.0.0),
-    jsonlite (>= 1.8.0),
+    jsonlite (>= 1.8.8),
     rlang (>= 1.0.0),
     tibble (>= 3.0.0),
     vctrs (>= 0.5.0)
@@ -573,8 +572,9 @@ gegen echte Instanz zu verifizieren (Live-Tests gated).
 Body-Varianten (`.od_request_with_variants()`):
 `list(issueId, content)`, dann `list(issue = list(id = ...), content)`.
 In der Praxis wurde wiederholt **HTTP 500** am Endpoint beobachtet
-(vermutlich serverseitig, Stand 0.5.1); Wirksamkeit der zweiten Form
-gegen eine echte Instanz noch zu verifizieren.
+(vermutlich serverseitig, Stand 0.5.1; mit 0.7.0 zweite Body-Form,
+serverseitig noch nicht verifiziert); Wirksamkeit der zweiten Form gegen
+eine echte Instanz noch zu verifizieren.
 
 ### Issue-Query: HTTP 406 „Invalid query“
 
@@ -998,8 +998,7 @@ Phase 4: GitHub Release, pkgdown
 Ergänzungen 0.3.0–0.5.2 (Tibbles, Basic Auth, Projects/Users, Jobs,
 Packages, Hardening)
 
-Entwicklung:
-[`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md),
-406-Hinweis, Kommentar-Varianten (PR \#17) mergen und releasen
+0.7.0: Review-Folgearbeit, Sicherheits-Härtung und Monitoring (PR \#17,
+\#18, \#27, diese Version)
 
 CRAN / R-universe (bei Bedarf)

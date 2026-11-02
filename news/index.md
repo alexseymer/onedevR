@@ -1,5 +1,96 @@
 # Changelog
 
+## onedevr 0.7.0
+
+### Security and vulnerability monitoring
+
+- Raised the minimum `jsonlite` to 1.8.8: earlier versions are affected
+  by RSEC-2023-3 (memory leak in the bundled yajl parser).
+- New `scripts/audit-deps.R` checks installed and minimum dependency
+  versions against the OSV vulnerability database. The `security`
+  workflow runs it weekly, on pull requests and on demand, together with
+  a secret scan (gitleaks) and CodeQL analysis of the GitHub Actions
+  workflows. Dependabot keeps the workflow actions up to date. See
+  `SECURITY.md` for the reporting policy.
+
+### Documentation and build
+
+- pkgdown builds again: the
+  [`print()`](https://rdrr.io/r/base/print.html)/[`str()`](https://rdrr.io/r/utils/str.html)
+  methods of `od_connection` are documented on the `od_connection` help
+  page instead of in two extra topics that were missing from the
+  reference index.
+- Version references in README, ROADMAP, the plan and the
+  getting-started vignette are consistent with the package version;
+  `man/` is regenerated with roxygen2 8.1.1.
+- Added an AI-assistance note to the README.
+- Fixed README, function-map and workflow-vignette examples that used
+  non-existent arguments (`reply_to`, field names passed as `...`), and
+  the pkgdown reference index lists all exported topics.
+
+### Tests
+
+- Every exported function is referenced by at least one test (a guard
+  test fails otherwise); new tests for the previously untested
+  functions, query escaping, cache partitioning, origin checks,
+  `od_error` results and the TLS warning.
+
+### Security and correctness (review follow-up)
+
+- Values inserted into OneDev query strings (state, iteration, UI-number
+  resolution) are now quoted and escaped
+  ([\#19](https://github.com/alexseymer/onedevR/issues/19)).
+- [`print()`](https://rdrr.io/r/base/print.html) and
+  [`str()`](https://rdrr.io/r/utils/str.html) of an `od_connection` mask
+  `token` and `password`
+  ([\#20](https://github.com/alexseymer/onedevR/issues/20)).
+- Response caching is now partitioned by credentials, and
+  [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  uses the cache for GET requests when
+  [`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
+  is on. Before this, the cache was never written, so
+  [`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
+  had no effect
+  ([\#21](https://github.com/alexseymer/onedevR/issues/21)).
+- Absolute endpoint URLs are only accepted for the configured `host`;
+  other origins are refused so credentials are never sent elsewhere
+  ([\#22](https://github.com/alexseymer/onedevR/issues/22)).
+- [`od_parallel_query()`](https://alexseymer.github.io/onedevR/reference/od_parallel_query.md)
+  and
+  [`od_map_parallel()`](https://alexseymer.github.io/onedevR/reference/od_map_parallel.md)
+  return failed items classed as `od_error`; the `error` and `message`
+  fields are unchanged
+  ([\#24](https://github.com/alexseymer/onedevR/issues/24)).
+- A one-time warning is shown when TLS verification is disabled
+  ([\#25](https://github.com/alexseymer/onedevR/issues/25)).
+- `test-live.R` runs in a weekly and on-demand workflow
+  (`live-tests.yaml`), not on pull requests. The batch-create live test
+  only runs when `ONEDEV_LIVE_ALLOW_WRITES=1`
+  ([\#26](https://github.com/alexseymer/onedevR/issues/26)).
+- Examples in `ai-examples` use
+  [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md)
+  and
+  [`od_get_connection()`](https://alexseymer.github.io/onedevR/reference/od_get_connection.md);
+  a test checks that README and vignettes only call exported functions
+  ([\#23](https://github.com/alexseymer/onedevR/issues/23)).
+
+### Iterations, errors and comments ([\#14](https://github.com/alexseymer/onedevR/issues/14)-#16)
+
+- [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)
+  maps iteration names to ids;
+  [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
+  and
+  [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+  accept names in `iteration_ids`
+  ([\#14](https://github.com/alexseymer/onedevR/issues/14)).
+- HTTP 406 “Invalid query” errors include a hint on fuzzy text, board
+  state names and
+  [`od_get_query_description()`](https://alexseymer.github.io/onedevR/reference/od_get_query_description.md)
+  ([\#15](https://github.com/alexseymer/onedevR/issues/15)).
+- [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  tries a second body shape and reports all variant errors on failure
+  ([\#16](https://github.com/alexseymer/onedevR/issues/16)).
+
 ## onedevr 0.6.0
 
 ### Boards and project settings

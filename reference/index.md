@@ -6,6 +6,8 @@ Configure how onedevr talks to your OneDev instance (env, explicit
 connection, Basic Auth or Bearer).
 
 - [`od_connection()`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
+  [`print(`*`<od_connection>`*`)`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
+  [`str(`*`<od_connection>`*`)`](https://alexseymer.github.io/onedevR/reference/od_connection.md)
   : Build an explicit OneDev connection
 - [`od_set_connection()`](https://alexseymer.github.io/onedevR/reference/od_set_connection.md)
   : Set or clear the package-default OneDev connection

@@ -41,7 +41,7 @@ od_concurrent_stream(items, FUN, max_workers = 4L, ..., conn = NULL)
 ## Value
 
 list Combined results from all items, in the same order. Failed items
-contain error messages.
+are `od_error` objects with a `message` field.
 
 ## Details
 

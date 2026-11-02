@@ -39,13 +39,14 @@ od_map_parallel(FUN, items = list(), ..., conn = NULL)
 ## Value
 
 list Results from applying `FUN` to each item, in the same order. Failed
-items contain an error message.
+items are `od_error` objects with a `message` field.
 
 ## Details
 
 If a single item fails, that position in the result list contains an
-error message, while other items continue processing. If `future` is not
-installed, falls back to sequential execution.
+`od_error` object (a list with `message`), while other items continue
+processing. If `future` is not installed, falls back to sequential
+execution.
 
 ## See also
 

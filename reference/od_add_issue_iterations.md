@@ -18,8 +18,8 @@ od_add_issue_iterations(issue_number, iteration_ids, conn = NULL)
 
 - iteration_ids:
 
-  Numeric iteration ids from
-  [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md).
+  Iteration ids or names (see
+  [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)).
 
 - conn:
 
@@ -50,6 +50,7 @@ Other issues:
 [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md),
 [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md),
 [`od_resolve_issue_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_issue_id.md),
+[`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md),
 [`od_unlink_issue_from_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_unlink_issue_from_pull_request.md)
 
 ## Examples

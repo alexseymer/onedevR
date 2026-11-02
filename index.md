@@ -12,6 +12,11 @@ MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.or
 `onedevr` is an R client for the [OneDev](https://onedev.io) REST API —
 issues, projects, builds, and pull requests, for OneDev.
 
+> **Note:** This code was written with AI assistance and is not yet
+> thoroughly tested. Review results carefully before relying on them,
+> and please report problems in the [issue
+> tracker](https://github.com/alexseymer/onedevR/issues).
+
 **References:**
 
 - R package shape (GitLab → R):
@@ -51,11 +56,13 @@ is for you.
 
 ## Status
 
-**v0.6.0** — current release. Issue/build/PR workflows, boards, jobs,
+**v0.7.0** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
-Auth. Unreleased on `main`: iteration names accepted wherever iteration
-ids are, a hint on HTTP 406 “Invalid query” errors, and body-variant
-fallback for issue comments. See
+Auth. This release adds iteration names wherever iteration ids are
+accepted, a hint on HTTP 406 “Invalid query” errors, credential-safe
+caching, query-string escaping, masked secrets when printing a
+connection, and automated security and vulnerability monitoring (see
+[`SECURITY.md`](https://alexseymer.github.io/onedevR/SECURITY.md)). See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
 changelog.
 
@@ -133,7 +140,7 @@ to `.Renviron` (gitignored) and fill in your host/token/project.
 the same variable list for non-R tooling. Live integration tests are
 gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
 
-## What’s in v0.6.x
+## What’s in v0.7.x
 
 - Issues, boards, builds, PRs, jobs, packages, and repository
   (branches/tags/commits/files)
@@ -152,8 +159,18 @@ gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
 - Bearer token or Basic Auth;
   [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
   escape hatch for custom endpoints
+- Security: secrets are masked when printed, credentials are only sent
+  to the configured host, and dependencies are audited against OSV in CI
 - Workflow vignettes (issues, builds, PRs) plus getting-started and
   function map
+
+## Security
+
+Tokens and passwords are masked when a connection is printed,
+credentials are only sent to the configured host, and the dependencies
+are audited against the [OSV](https://osv.dev) database in CI. Report
+vulnerabilities privately as described in
+[`SECURITY.md`](https://alexseymer.github.io/onedevR/SECURITY.md).
 
 ## Design notes worth knowing up front
 

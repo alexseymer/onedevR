@@ -21,6 +21,12 @@ od_connection(
   insecure_ssl = FALSE,
   validate = TRUE
 )
+
+# S3 method for class 'od_connection'
+print(x, ...)
+
+# S3 method for class 'od_connection'
+str(object, ...)
 ```
 
 ## Arguments
@@ -77,6 +83,19 @@ od_connection(
 
   logical If `TRUE` (default), error when host/credentials are missing.
   Default: `TRUE`.
+
+- x, object:
+
+  od_connection Connection object to print.
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`str()`](https://rdrr.io/r/utils/str.html) show the connection with
+  `token` and `password` masked; use
+  [`unclass()`](https://rdrr.io/r/base/class.html) to access the raw
+  fields.
+
+- ...:
+
+  Ignored.
 
 ## Value
 

@@ -122,11 +122,14 @@ Boards + project settings read path (v0.6.0):
 [`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md),
 [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md)
 
-Unreleased: iteration names
+Review follow-up and security hardening (v0.7.0): iteration names
 ([`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md)),
-406 hint, comment body variants (#14, \#15, \#16); pkgdown index
-completed
+406 hint, comment body variants (#14–#16), query escaping, secret
+masking, credential-partitioned cache, origin check, `od_error` results,
+TLS warning (#19–#25), tests for every export, live-test workflow (#26),
+vulnerability and secret monitoring in CI
 
-Next release (0.6.1 / 0.7.0) after live verification of comment variants
+Live verification of comment body variants and query escaping against a
+real OneDev instance (needs the `live-tests.yaml` secrets)
 
 R-universe / CRAN when demand warrants it
