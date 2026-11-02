@@ -9,7 +9,7 @@ od_add_issue_iterations(issue_number, iteration_ids, conn = NULL)
 \arguments{
 \item{issue_number}{UI number (\code{145} or \code{"#145"}).}
 
-\item{iteration_ids}{Numeric iteration ids from \code{\link[=od_list_iterations]{od_list_iterations()}}.}
+\item{iteration_ids}{Iteration ids or names (see \code{\link[=od_resolve_iteration_ids]{od_resolve_iteration_ids()}}).}
 
 \item{conn}{Connection list.}
 }
@@ -46,6 +46,7 @@ Other issues:
 \code{\link[=od_query_board_issues]{od_query_board_issues()}},
 \code{\link[=od_query_issues]{od_query_issues()}},
 \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}},
+\code{\link[=od_resolve_iteration_ids]{od_resolve_iteration_ids()}},
 \code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}

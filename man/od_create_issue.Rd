@@ -19,8 +19,8 @@ od_create_issue(
 
 \item{fields}{{list} Named list of custom fields (installation-specific). Default: \code{list()}.}
 
-\item{iteration_ids}{{numeric} Optional numeric iteration ids from
-\code{\link[=od_list_iterations]{od_list_iterations()}}; sent as \code{iterationIds} in the create body. Default: \code{NULL}.}
+\item{iteration_ids}{{numeric|character} Optional iteration ids or names (see
+\code{\link[=od_resolve_iteration_ids]{od_resolve_iteration_ids()}}); sent as \code{iterationIds} in the create body. Default: \code{NULL}.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
@@ -61,6 +61,7 @@ Other issues:
 \code{\link[=od_query_board_issues]{od_query_board_issues()}},
 \code{\link[=od_query_issues]{od_query_issues()}},
 \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}},
+\code{\link[=od_resolve_iteration_ids]{od_resolve_iteration_ids()}},
 \code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}

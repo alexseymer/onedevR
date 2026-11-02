@@ -2,6 +2,8 @@
 % Please edit documentation in R/connection.R
 \name{od_connection}
 \alias{od_connection}
+\alias{print.od_connection}
+\alias{str.od_connection}
 \title{Build an explicit OneDev connection}
 \usage{
 od_connection(
@@ -17,6 +19,10 @@ od_connection(
   insecure_ssl = FALSE,
   validate = TRUE
 )
+
+\method{print}{od_connection}(x, ...)
+
+\method{str}{od_connection}(object, ...)
 }
 \arguments{
 \item{host}{{character} OneDev base URL (e.g. \code{"https://git.example.test"}).}
@@ -44,6 +50,12 @@ query/state is given. Default: \code{NULL}.}
 \item{insecure_ssl}{{logical} If \code{TRUE}, skip TLS certificate verification. Default: \code{FALSE}.}
 
 \item{validate}{{logical} If \code{TRUE} (default), error when host/credentials are missing. Default: \code{TRUE}.}
+
+\item{x, object}{{od_connection} Connection object to print. \code{print()} and
+\code{str()} show the connection with \code{token} and \code{password} masked; use
+\code{unclass()} to access the raw fields.}
+
+\item{...}{Ignored.}
 }
 \value{
 {list} A named list with connection fields, classed as \code{od_connection}.

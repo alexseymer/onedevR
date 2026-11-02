@@ -172,25 +172,18 @@ od_connection <- function(
   )
 }
 
-#' Print a OneDev connection
-#'
-#' Prints the connection summary; secrets are masked. Use `unclass()` to access
-#' the raw fields.
-#'
-#' @param x {od_connection} Connection object.
+#' @rdname od_connection
+#' @param x,object {od_connection} Connection object to print. `print()` and
+#'   `str()` show the connection with `token` and `password` masked; use
+#'   `unclass()` to access the raw fields.
 #' @param ... Ignored.
-#' @return `x`, invisibly.
 #' @export
 print.od_connection <- function(x, ...) {
   writeLines(.od_connection_summary(x))
   invisible(x)
 }
 
-#' Show a OneDev connection in `str()` without exposing secrets
-#'
-#' @param object {od_connection} Connection object.
-#' @param ... Ignored.
-#' @return `NULL`, invisibly.
+#' @rdname od_connection
 #' @export
 str.od_connection <- function(object, ...) {
   writeLines(.od_connection_summary(object))

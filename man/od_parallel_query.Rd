@@ -40,8 +40,8 @@ results <- od_parallel_query(
 }
 }
 \seealso{
-Other concurrent: 
-\code{\link{od_concurrent_stream}()},
-\code{\link{od_map_parallel}()}
+Other concurrent:
+\code{\link[=od_concurrent_stream]{od_concurrent_stream()}},
+\code{\link[=od_map_parallel]{od_map_parallel()}}
 }
 \concept{concurrent}

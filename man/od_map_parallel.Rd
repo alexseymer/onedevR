@@ -51,8 +51,8 @@ od_map_parallel(
 }
 }
 \seealso{
-Other concurrent: 
-\code{\link{od_concurrent_stream}()},
-\code{\link{od_parallel_query}()}
+Other concurrent:
+\code{\link[=od_concurrent_stream]{od_concurrent_stream()}},
+\code{\link[=od_parallel_query]{od_parallel_query()}}
 }
 \concept{concurrent}

@@ -2,7 +2,7 @@
 title: "AI-Optimized Examples: Patterns and Edge Cases"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{AI-Optimized Examples}
+  %\VignetteIndexEntry{AI-Optimized Examples: Patterns and Edge Cases}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

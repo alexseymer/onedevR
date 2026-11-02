@@ -22,7 +22,7 @@ Default: \code{NULL}.}
 }
 \value{
 {list} Combined results from all items, in the same order.
-Failed items contain error messages.
+Failed items are \code{od_error} objects with a \code{message} field.
 }
 \description{
 Apply a function across a potentially large list of items using a
