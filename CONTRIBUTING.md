@@ -323,6 +323,12 @@ od_query_issues <- function(state, count = 50L,
    devtools::check()      # Full R CMD check
    devtools::test()       # Run tests
    devtools::spell_check() # Check spelling
+   pkgdown::check_pkgdown() # Every exported topic must be in _pkgdown.yml
+   ```
+
+   Also audit the dependencies for known vulnerabilities (needs network):
+   ```bash
+   Rscript scripts/audit-deps.R
    ```
 
 2. **Format code** (optional but appreciated):
@@ -333,13 +339,10 @@ od_query_issues <- function(state, count = 50L,
 
 3. **Update NEWS.md** with your changes:
    ```markdown
-   ## Version 0.6.0 (Unreleased)
-   
-   ### New Features
-   - `od_new_function()` for X operation (#issue-number)
-   
-   ### Bug Fixes
-   - Fixed Y bug in `od_existing_function()` (#issue-number)
+   # onedevr (development)
+
+   * `od_new_function()` for X operation (#issue-number)
+   * Fixed Y bug in `od_existing_function()` (#issue-number)
    ```
 
 ### Create a Pull Request

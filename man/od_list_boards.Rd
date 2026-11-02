@@ -51,6 +51,7 @@ Other issues:
 \code{\link[=od_query_board_issues]{od_query_board_issues()}},
 \code{\link[=od_query_issues]{od_query_issues()}},
 \code{\link[=od_resolve_issue_id]{od_resolve_issue_id()}},
+\code{\link[=od_resolve_iteration_ids]{od_resolve_iteration_ids()}},
 \code{\link[=od_unlink_issue_from_pull_request]{od_unlink_issue_from_pull_request()}}
 }
 \concept{issues}
