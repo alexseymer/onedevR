@@ -318,6 +318,11 @@ od_query_issues <- function(state, count = 50L,
 
 ### Before You Push
 
+A change is done when it meets the **Definition of Done** in
+[`project_plan.md`](project_plan.md) (section 11): docs with example, pkgdown
+index entry, at least one offline test, `NEWS.md` entry, no new check
+warnings, and no known vulnerable dependency.
+
 1. **Verify code quality:**
    ```r
    devtools::check()      # Full R CMD check
