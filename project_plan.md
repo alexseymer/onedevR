@@ -664,23 +664,60 @@ Maintainer & Org: persönliches Repo unter `alexseymer`
 
 ### Phase 3 — Builds & Pull Requests
 
-| Task | Endpunkt |
-|----|----|
-| [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md) | `GET /builds` |
-| [`od_get_build()`](https://alexseymer.github.io/onedevR/reference/od_get_build.md) | `GET /builds/{id}` |
-| [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md) | Query `"Number" is "path#N"` |
-| PR-Liste / Review-Kommentare | [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md), [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md), [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md) |
+| Task | Endpunkt | Akzeptanzkriterium |
+|----|----|----|
+| [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md) | `GET /builds` | Offline-Test: Status-Keyword und Query werden korrekt gebaut, Rückgabe ist ein Tibble |
+| [`od_get_build()`](https://alexseymer.github.io/onedevR/reference/od_get_build.md) | `GET /builds/{id}` | Offline-Test: UI-Nummer wird zur internen ID aufgelöst; `use_internal_id` nur für Debugging |
+| [`od_resolve_build_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_build_id.md) | Query `"Number" is "path#N"` | Offline-Test: alle Query-Varianten (`path#N`, `#N`, `N`) werden nacheinander probiert |
+| PR-Liste / Review-Kommentare | [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md), [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md), [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md) | Offline-Tests für Query, Kommentare und Reviews; lesender Live-Test gegen eine Instanz |
 
 **Zeitschätzung:** 1 Woche+
 
 ### Phase 4 — Veröffentlichung
 
-GitHub Release v0.1.0 (weitere Releases bis v0.5.2)
+| Task | Akzeptanzkriterium |
+|----|----|
+| GitHub Release | Tag `v<Version>` = `DESCRIPTION`-Version; Release-Notes aus dem `NEWS.md`-Abschnitt; `RELEASE.md` abgearbeitet |
+| pkgdown-Site | Workflow `pkgdown` grün; [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html) ohne Befund; Seite unter <https://alexseymer.github.io/onedevR/> erreichbar |
+| CRAN oder R-universe (optional) | `R CMD check --as-cran` ohne ERROR und WARNING; Namens-Check bestanden |
+
+GitHub Release v0.1.0 (weitere Releases bis v0.5.2; v0.7.0 als Tag,
+Release-Eintrag noch offen)
 
 pkgdown-Site: <https://alexseymer.github.io/onedevR/>
 
 CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: `onedevr`
 verfügbar, Stand 2026-08-02)
+
+### Seit Phase 4 (Querschnittsbereiche)
+
+| Bereich | Akzeptanzkriterium |
+|----|----|
+| Tibbles, Basic Auth (0.3.0) | Listen-Endpunkte liefern Tibbles, abschaltbar per Option; Basic und Bearer getrennt getestet |
+| Projects, Users, Groups, Artefakte, Download (0.4.0) | je Funktion Offline-Test für Endpunkt und Argumentprüfung; Download schreibt nur an den angegebenen Pfad |
+| Jobs, Packages, Repository (0.5.0) | je Funktion Offline-Test; schreibende Aufrufe (run, rebuild, cancel) nur mit expliziter Nutzeraktion |
+| Boards (0.6.0) | Boards werden aus den Projekt-Settings gelesen; Query wird mit Iterations-Filter korrekt zusammengesetzt |
+| Batch, Parallel, Streaming, Cache | Fehler einzelner Einträge brechen nicht ab (`od_error`); Cache nur auf Anforderung und nach Zugangsdaten getrennt |
+| Sicherheit (0.7.0) | siehe „Definition of Done“, Abschnitt Sicherheit |
+
+### Definition of Done
+
+Gilt für jede Änderung und jeden Release; die Spalte „Prüfung“ sagt, wo
+es erzwungen wird.
+
+| Bereich | Kriterium | Prüfung |
+|----|----|----|
+| Feature | Roxygen-Doku mit Beispiel; Eintrag im pkgdown-Index; mindestens ein Offline-Test; `NEWS.md`-Eintrag | Guard-Test „jeder Export hat einen Test“; `pkgdown`-Workflow |
+| Feature | Argumente für UI-Nummern, Namen oder Query-Werte werden validiert bzw. escaped | Unit-Tests je Funktion |
+| Qualität | `R CMD check` ohne ERROR und WARNING; alle Offline-Tests grün | Workflow `R-CMD-check` (macOS, Windows, Ubuntu release, oldrel) |
+| Doku | README, NEWS, ROADMAP, Plan und Vignetten nennen dieselbe Version; Beispiele rufen nur exportierte Funktionen auf | Tests „version consistency“ und „doc references“ |
+| Release | Tag = `DESCRIPTION`-Version; `check_pkgdown()` ohne Befund; Release-Notes aus `NEWS.md` | `RELEASE.md` |
+| Verifikation | Jede Funktion, die eine API-Annahme trifft (Body-Variante, Escaping, Endpunkt), hat einen Live-Test oder ist in `NEWS.md` bzw. der Doku als „nicht live verifiziert“ markiert | Workflow `live-tests` (manuell und wöchentlich, braucht Secrets) |
+| Sicherheit | Token und Passwort erscheinen nie in Ausgabe, Cache-Schlüsseln oder Fehlermeldungen; Zugangsdaten gehen nur an den konfigurierten Host; deaktivierte TLS-Prüfung warnt | Tests; Workflow `security` (gitleaks, CodeQL) |
+| Abhängigkeiten | Keine bekannte Schwachstelle in installierten oder minimal erlaubten Versionen | `scripts/audit-deps.R` im Workflow `security` |
+
+Noch nicht automatisch prüfbar: Live-Verifikation ohne Test-Instanz.
+Dafür fehlen die Repository-Secrets für `live-tests` (Issue \#26).
 
 ------------------------------------------------------------------------
 

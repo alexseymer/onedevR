@@ -21,7 +21,8 @@ Maintainer & org decided (currently: personal repo under `alexseymer`)
 
 Goal: package installable, tests green, issue CRUD functional.
 
-Package skeleton via `usethis::create_package()`
+Package skeleton via
+[`usethis::create_package()`](https://usethis.r-lib.org/reference/create_package.html)
 
 [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md),
 [`od_get_config()`](https://alexseymer.github.io/onedevR/reference/od_get_config.md)

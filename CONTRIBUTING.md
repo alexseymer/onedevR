@@ -116,7 +116,8 @@ Conduct](https://www.contributor-covenant.org/).
 ### Modifying Existing Functions
 
 1.  Update function code and roxygen2 comments
-2.  Run `devtools::document()`
+2.  Run
+    [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
 3.  Update/add tests
 4.  Verify no other functions break (run full test suite)
 
@@ -346,6 +347,12 @@ od_query_issues <- function(state, count = 50L,
 ## Submitting Changes
 
 ### Before You Push
+
+A change is done when it meets the **Definition of Done** in
+[`project_plan.md`](https://alexseymer.github.io/onedevR/project_plan.md)
+(section 11): docs with example, pkgdown index entry, at least one
+offline test, `NEWS.md` entry, no new check warnings, and no known
+vulnerable dependency.
 
 1.  **Verify code quality:**
 

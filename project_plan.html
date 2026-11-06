@@ -770,27 +770,94 @@
 </div>
 <div class="section level3">
 <h3 id="phase-3--builds--pull-requests-1">Phase 3 — Builds &amp; Pull Requests<a class="anchor" aria-label="anchor" href="#phase-3--builds--pull-requests-1"></a></h3>
-<table class="table"><colgroup><col width="37%"><col width="62%"></colgroup><thead><tr><th>Task</th>
+<table class="table"><colgroup><col width="17%"><col width="28%"><col width="54%"></colgroup><thead><tr><th>Task</th>
 <th>Endpunkt</th>
+<th>Akzeptanzkriterium</th>
 </tr></thead><tbody><tr><td><code><a href="reference/od_query_builds.html">od_query_builds()</a></code></td>
 <td><code>GET /builds</code></td>
+<td>Offline-Test: Status-Keyword und Query werden korrekt gebaut, Rückgabe ist ein Tibble</td>
 </tr><tr><td><code><a href="reference/od_get_build.html">od_get_build()</a></code></td>
 <td><code>GET /builds/{id}</code></td>
+<td>Offline-Test: UI-Nummer wird zur internen ID aufgelöst; <code>use_internal_id</code> nur für Debugging</td>
 </tr><tr><td><code><a href="reference/od_resolve_build_id.html">od_resolve_build_id()</a></code></td>
 <td>Query <code>"Number" is "path#N"</code>
 </td>
+<td>Offline-Test: alle Query-Varianten (<code>path#N</code>, <code>#N</code>, <code>N</code>) werden nacheinander probiert</td>
 </tr><tr><td>PR-Liste / Review-Kommentare</td>
 <td>
 <code><a href="reference/od_query_pull_requests.html">od_query_pull_requests()</a></code>, <code><a href="reference/od_get_pull_request_comments.html">od_get_pull_request_comments()</a></code>, <code><a href="reference/od_get_pull_request_reviews.html">od_get_pull_request_reviews()</a></code>
 </td>
+<td>Offline-Tests für Query, Kommentare und Reviews; lesender Live-Test gegen eine Instanz</td>
 </tr></tbody></table><p><strong>Zeitschätzung:</strong> 1 Woche+</p>
 </div>
 <div class="section level3">
 <h3 id="phase-4--veröffentlichung">Phase 4 — Veröffentlichung<a class="anchor" aria-label="anchor" href="#phase-4--ver%C3%B6ffentlichung"></a></h3>
-<ul class="task-list"><li><label><input type="checkbox" checked>GitHub Release v0.1.0 (weitere Releases bis v0.5.2)</label></li>
+<table class="table"><colgroup><col width="24%"><col width="76%"></colgroup><thead><tr><th>Task</th>
+<th>Akzeptanzkriterium</th>
+</tr></thead><tbody><tr><td>GitHub Release</td>
+<td>Tag <code>v&lt;Version&gt;</code> = <code>DESCRIPTION</code>-Version; Release-Notes aus dem <code>NEWS.md</code>-Abschnitt; <code>RELEASE.md</code> abgearbeitet</td>
+</tr><tr><td>pkgdown-Site</td>
+<td>Workflow <code>pkgdown</code> grün; <code><a href="https://pkgdown.r-lib.org/reference/check_pkgdown.html" class="external-link">pkgdown::check_pkgdown()</a></code> ohne Befund; Seite unter <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a> erreichbar</td>
+</tr><tr><td>CRAN oder R-universe (optional)</td>
+<td>
+<code>R CMD check --as-cran</code> ohne ERROR und WARNING; Namens-Check bestanden</td>
+</tr></tbody></table><ul class="task-list"><li><label><input type="checkbox" checked>GitHub Release v0.1.0 (weitere Releases bis v0.5.2; v0.7.0 als Tag, Release-Eintrag noch offen)</label></li>
 <li><label><input type="checkbox" checked>pkgdown-Site: <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a></label></li>
 <li><label><input type="checkbox">CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: <code>onedevr</code> verfügbar, Stand 2026-08-02)</label></li>
-</ul><hr></div>
+</ul></div>
+<div class="section level3">
+<h3 id="seit-phase-4-querschnittsbereiche">Seit Phase 4 (Querschnittsbereiche)<a class="anchor" aria-label="anchor" href="#seit-phase-4-querschnittsbereiche"></a></h3>
+<table class="table"><colgroup><col width="32%"><col width="67%"></colgroup><thead><tr><th>Bereich</th>
+<th>Akzeptanzkriterium</th>
+</tr></thead><tbody><tr><td>Tibbles, Basic Auth (0.3.0)</td>
+<td>Listen-Endpunkte liefern Tibbles, abschaltbar per Option; Basic und Bearer getrennt getestet</td>
+</tr><tr><td>Projects, Users, Groups, Artefakte, Download (0.4.0)</td>
+<td>je Funktion Offline-Test für Endpunkt und Argumentprüfung; Download schreibt nur an den angegebenen Pfad</td>
+</tr><tr><td>Jobs, Packages, Repository (0.5.0)</td>
+<td>je Funktion Offline-Test; schreibende Aufrufe (run, rebuild, cancel) nur mit expliziter Nutzeraktion</td>
+</tr><tr><td>Boards (0.6.0)</td>
+<td>Boards werden aus den Projekt-Settings gelesen; Query wird mit Iterations-Filter korrekt zusammengesetzt</td>
+</tr><tr><td>Batch, Parallel, Streaming, Cache</td>
+<td>Fehler einzelner Einträge brechen nicht ab (<code>od_error</code>); Cache nur auf Anforderung und nach Zugangsdaten getrennt</td>
+</tr><tr><td>Sicherheit (0.7.0)</td>
+<td>siehe „Definition of Done“, Abschnitt Sicherheit</td>
+</tr></tbody></table></div>
+<div class="section level3">
+<h3 id="definition-of-done">Definition of Done<a class="anchor" aria-label="anchor" href="#definition-of-done"></a></h3>
+<p>Gilt für jede Änderung und jeden Release; die Spalte „Prüfung“ sagt, wo es erzwungen wird.</p>
+<table class="table"><colgroup><col width="31%"><col width="37%"><col width="31%"></colgroup><thead><tr><th>Bereich</th>
+<th>Kriterium</th>
+<th>Prüfung</th>
+</tr></thead><tbody><tr><td>Feature</td>
+<td>Roxygen-Doku mit Beispiel; Eintrag im pkgdown-Index; mindestens ein Offline-Test; <code>NEWS.md</code>-Eintrag</td>
+<td>Guard-Test „jeder Export hat einen Test“; <code>pkgdown</code>-Workflow</td>
+</tr><tr><td>Feature</td>
+<td>Argumente für UI-Nummern, Namen oder Query-Werte werden validiert bzw. escaped</td>
+<td>Unit-Tests je Funktion</td>
+</tr><tr><td>Qualität</td>
+<td>
+<code>R CMD check</code> ohne ERROR und WARNING; alle Offline-Tests grün</td>
+<td>Workflow <code>R-CMD-check</code> (macOS, Windows, Ubuntu release, oldrel)</td>
+</tr><tr><td>Doku</td>
+<td>README, NEWS, ROADMAP, Plan und Vignetten nennen dieselbe Version; Beispiele rufen nur exportierte Funktionen auf</td>
+<td>Tests „version consistency“ und „doc references“</td>
+</tr><tr><td>Release</td>
+<td>Tag = <code>DESCRIPTION</code>-Version; <code>check_pkgdown()</code> ohne Befund; Release-Notes aus <code>NEWS.md</code>
+</td>
+<td><code>RELEASE.md</code></td>
+</tr><tr><td>Verifikation</td>
+<td>Jede Funktion, die eine API-Annahme trifft (Body-Variante, Escaping, Endpunkt), hat einen Live-Test oder ist in <code>NEWS.md</code> bzw. der Doku als „nicht live verifiziert“ markiert</td>
+<td>Workflow <code>live-tests</code> (manuell und wöchentlich, braucht Secrets)</td>
+</tr><tr><td>Sicherheit</td>
+<td>Token und Passwort erscheinen nie in Ausgabe, Cache-Schlüsseln oder Fehlermeldungen; Zugangsdaten gehen nur an den konfigurierten Host; deaktivierte TLS-Prüfung warnt</td>
+<td>Tests; Workflow <code>security</code> (gitleaks, CodeQL)</td>
+</tr><tr><td>Abhängigkeiten</td>
+<td>Keine bekannte Schwachstelle in installierten oder minimal erlaubten Versionen</td>
+<td>
+<code>scripts/audit-deps.R</code> im Workflow <code>security</code>
+</td>
+</tr></tbody></table><p>Noch nicht automatisch prüfbar: Live-Verifikation ohne Test-Instanz. Dafür fehlen die Repository-Secrets für <code>live-tests</code> (Issue #26).</p>
+<hr></div>
 </div>
 <div class="section level2">
 <h2 id="id_12-consumer-integration">12. Consumer-Integration<a class="anchor" aria-label="anchor" href="#id_12-consumer-integration"></a></h2>
