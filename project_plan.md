@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-02 (Paketversion 0.7.0)  
+**Stand:** 2026-11-10 (Paketversion 0.7.1)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`, `DESCRIPTION`, `NEWS.md` und `ROADMAP.md`; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.  
 **Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt.
 
@@ -129,6 +129,7 @@
 | 0.5.2 | Titel/Beschreibung: Rohstring zuerst; aggregierte Varianten-Fehler |
 | 0.6.0 | Boards/Projekt-Settings (`od_list_boards()`, `od_query_board_issues()`), `od_get_iteration()` |
 | 0.7.0 | `od_resolve_iteration_ids()`, 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
+| 0.7.1 | `od_whoami()` mit Rückfall bei verweigertem `/users/me`; automatisches Paging für `count` über 100; HTML-Fehlerseiten gekürzt; Kommentar-Body wieder einfach; `scripts/diagnose-comments.R` |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (`R/batch.R`, `R/concurrent.R`, `R/streaming.R`, `R/cache.R`).
 

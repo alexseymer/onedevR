@@ -39,13 +39,15 @@ If your constraint is "I have R, I have Git, I need OneDev", `onedevr` is for yo
 
 ## Status
 
-**v0.7.0** — current release. Issue/build/PR workflows, boards, jobs, packages,
-repository helpers, tibbles by default, and Bearer + Basic Auth. This release
-adds iteration names wherever iteration ids are accepted, a hint on HTTP 406
-"Invalid query" errors, credential-safe caching, query-string escaping,
-masked secrets when printing a connection, and automated security and
-vulnerability monitoring (see [`SECURITY.md`](SECURITY.md)). See
-[`NEWS.md`](NEWS.md) for the full changelog.
+**v0.7.1** — current release. Issue/build/PR workflows, boards, jobs, packages,
+repository helpers, tibbles by default, and Bearer + Basic Auth. 0.7.0 added
+iteration names wherever iteration ids are accepted, credential-safe caching,
+query-string escaping, masked secrets when printing a connection, and
+automated security and vulnerability monitoring (see
+[`SECURITY.md`](SECURITY.md)). 0.7.1 adds `od_whoami()` (current user, with a
+fallback when `/users/me` is refused), automatic paging for `count` above 100,
+shorter error messages for HTML error pages, and a diagnosis script for the
+HTTP 500 on issue comments. See [`NEWS.md`](NEWS.md) for the full changelog.
 
 ## Install
 
