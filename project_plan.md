@@ -630,7 +630,7 @@ Iterationen haben interne numerische IDs. Namen (z. B. „Version 2.x“) werden
 | pkgdown-Site | Workflow `pkgdown` grün; `pkgdown::check_pkgdown()` ohne Befund; Seite unter https://alexseymer.github.io/onedevR/ erreichbar |
 | CRAN oder R-universe (optional) | `R CMD check --as-cran` ohne ERROR und WARNING; Namens-Check bestanden |
 
-- [x] GitHub Release v0.1.0 (weitere Releases bis v0.5.2; v0.7.0 als Tag, Release-Eintrag noch offen)
+- [x] GitHub Release v0.1.0 (weitere Releases bis v0.7.0, veröffentlicht 2026-11-06)
 - [x] pkgdown-Site: https://alexseymer.github.io/onedevR/
 - [ ] CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: `onedevr` verfügbar, Stand 2026-08-02)
 
