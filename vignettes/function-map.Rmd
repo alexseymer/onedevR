@@ -487,6 +487,7 @@ User and group functions manage authentication, permissions, and identities.
 ## User Management
 
 - **od_get_me()** — Get current authenticated user
+- **od_whoami()** — Login name of the current user; falls back to the configured `username` when `GET /users/me` is refused (HTTP 401/403/404)
   - Returns: Current user object
 
 - **od_get_user()** — Get user details by login

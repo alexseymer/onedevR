@@ -74,6 +74,7 @@ reference:
       - od_query_users
       - od_get_user
       - od_get_me
+      - od_whoami
       - od_resolve_user_id
       - od_get_user_emails
   - title: Packages

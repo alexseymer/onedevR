@@ -416,7 +416,7 @@ ONEDEV_ISSUE_STATE=Open
 | `ONEDEV_REPO_URL` | ✅ | Optional: Ableitung von `project_path` |
 | `ONEDEV_ISSUE_STATE` | ✅ | Default-State für `od_query_issues()` |
 | `ONEDEV_CURL_INSECURE` | ✅ | TLS-Verifikation deaktivieren (`1`/`true`) |
-| `ONEDEV_USERNAME` | ✅ | Basic Auth: Benutzername |
+| `ONEDEV_USERNAME` | ✅ | Basic Auth: Benutzername; mit `ONEDEV_AUTH=bearer` nur Login-Name für `od_whoami()`, wenn `GET /users/me` verweigert wird |
 | `ONEDEV_PASSWORD` | ✅ | Basic Auth: Passwort (alternativ Token) |
 | `ONEDEV_AUTH` | ✅ | `basic` erzwingt Basic Auth; sonst abgeleitet (Username gesetzt → Basic) |
 | `ONEDEV_RUN_LIVE_TESTS` | — | `1` aktiviert Integrationstests in CI |

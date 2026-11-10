@@ -2,6 +2,13 @@
 
 ## Fixes from the field log
 
+* New `od_whoami()` returns the login name of the current user. When
+  `GET /users/me` is refused (HTTP 401/403/404, as seen with some tokens), it
+  falls back to the connection's `username` (`ONEDEV_USERNAME`) and otherwise
+  explains what to set. `od_get_user_emails()` and the SSH-key helpers use the
+  same fallback when called without a `user`. Setting `ONEDEV_USERNAME` together
+  with `ONEDEV_AUTH=bearer` keeps token auth.
+
 * List helpers (`od_query_issues()`, `od_query_builds()`,
   `od_query_pull_requests()`, `od_query_projects()`, `od_query_users()`,
   `od_query_groups()`, `od_query_packages()`, `od_list_iterations()`) now page

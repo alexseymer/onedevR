@@ -48,6 +48,7 @@ Other users:
 \code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
 \code{\link[=od_query_groups]{od_query_groups()}},
 \code{\link[=od_remove_group_member]{od_remove_group_member()}},
-\code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
+\code{\link[=od_resolve_user_id]{od_resolve_user_id()}},
+\code{\link[=od_whoami]{od_whoami()}}
 }
 \concept{users}
