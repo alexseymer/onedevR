@@ -130,6 +130,9 @@ masking, credential-partitioned cache, origin check, `od_error` results,
 TLS warning (#19–#25), tests for every export, live-test workflow (#26),
 vulnerability and secret monitoring in CI
 
+GitHub Release v0.7.0 published 2026-11-06 —
+<https://github.com/alexseymer/onedevR/releases/tag/v0.7.0>
+
 Live verification of comment body variants and query escaping against a
 real OneDev instance (needs the `live-tests.yaml` secrets)
 

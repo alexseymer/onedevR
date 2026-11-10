@@ -22,7 +22,8 @@ od_query_groups(
 
 - count:
 
-  integer Maximum number of results (default `100`).
+  integer Maximum number of results (default `100`). OneDev returns at
+  most 100 per request; larger values are fetched in several requests.
 
 - offset:
 
@@ -62,7 +63,8 @@ Other users:
 [`od_list_user_ssh_keys()`](https://alexseymer.github.io/onedevR/reference/od_list_user_ssh_keys.md),
 [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md),
 [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md),
-[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
+[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md),
+[`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
 
 ## Examples
 

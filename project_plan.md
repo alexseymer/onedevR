@@ -151,7 +151,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.5.1 | Dogfood-Hardening: Build-/PR-Status-Keywords, Pagination, Query-DSL |
 | 0.5.2 | Titel/Beschreibung: Rohstring zuerst; aggregierte Varianten-Fehler |
 | 0.6.0 | Boards/Projekt-Settings ([`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md), [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)), [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md) |
-| 0.7.0 | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis, Kommentar-Body-Varianten; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
+| 0.7.0 | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache
@@ -454,7 +454,7 @@ ONEDEV_ISSUE_STATE=Open
 | `ONEDEV_REPO_URL` | ✅ | Optional: Ableitung von `project_path` |
 | `ONEDEV_ISSUE_STATE` | ✅ | Default-State für [`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md) |
 | `ONEDEV_CURL_INSECURE` | ✅ | TLS-Verifikation deaktivieren (`1`/`true`) |
-| `ONEDEV_USERNAME` | ✅ | Basic Auth: Benutzername |
+| `ONEDEV_USERNAME` | ✅ | Basic Auth: Benutzername; mit `ONEDEV_AUTH=bearer` nur Login-Name für [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md), wenn `GET /users/me` verweigert wird |
 | `ONEDEV_PASSWORD` | ✅ | Basic Auth: Passwort (alternativ Token) |
 | `ONEDEV_AUTH` | ✅ | `basic` erzwingt Basic Auth; sonst abgeleitet (Username gesetzt → Basic) |
 | `ONEDEV_RUN_LIVE_TESTS` | — | `1` aktiviert Integrationstests in CI |
@@ -569,12 +569,34 @@ gegen echte Instanz zu verifizieren (Live-Tests gated).
 
 ### Issue-Kommentare: `POST /issue-comments`
 
-Body-Varianten (`.od_request_with_variants()`):
-`list(issueId, content)`, dann `list(issue = list(id = ...), content)`.
-In der Praxis wurde wiederholt **HTTP 500** am Endpoint beobachtet
-(vermutlich serverseitig, Stand 0.5.1; mit 0.7.0 zweite Body-Form,
-serverseitig noch nicht verifiziert); Wirksamkeit der zweiten Form gegen
-eine echte Instanz noch zu verifizieren.
+Body: `list(issueId, content)`. Eine zweite Form mit verschachteltem
+`issue = list(id = ...)` lehnt OneDev mit **HTTP 400** ab
+(`Unrecognized field "issue"`, Feldprotokoll 2026-11-10) und wird nicht
+mehr gesendet. Am Endpoint wurde wiederholt **HTTP 500** („Interner
+Fehler“) beobachtet, vermutlich serverseitig (#256, \#258, \#259, \#303,
+\#308, \#310, \#311, \#313, \#322); Statuswechsel (`transition`)
+funktionieren dabei jeweils. Offen: ob der Kommentar trotz 500 angelegt
+wird, und ob Verweise im Text (`#NNN`, Commit-Hashes) den Fehler
+auslösen (alle bisher fehlgeschlagenen Texte enthielten Verweise, aber
+das ist nur eine Vermutung). Zur Eingrenzung:
+`scripts/diagnose-comments.R` auf einem Test-Ticket ausführen und das
+Serverlog (`logs/server.log`) zum Aufrufzeitpunkt prüfen. Vor einem
+Retry
+[`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
+ansehen.
+
+### Listen: `count` höchstens 100
+
+OneDev antwortet auf `count > 100` mit HTTP 406 „Count should not be
+greater than 100“. Die Listen-Helfer holen größere Mengen automatisch
+seitenweise (`.od_get_list()`, Seiten à 100 per `offset`).
+
+### Feldnamen in Queries sind instanzabhängig
+
+`"IsResolved" is true` liefert auf der Ziel-Instanz HTTP 406 „Invalid
+query“; das Feld ist dort nicht Teil der Query-DSL. Feldnamen mit
+`od_get_query_description("issue")` prüfen, für „erledigt“ den Status
+(`--state Closed`) verwenden.
 
 ### Issue-Query: HTTP 406 „Invalid query“
 
@@ -681,8 +703,8 @@ Maintainer & Org: persönliches Repo unter `alexseymer`
 | pkgdown-Site | Workflow `pkgdown` grün; [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html) ohne Befund; Seite unter <https://alexseymer.github.io/onedevR/> erreichbar |
 | CRAN oder R-universe (optional) | `R CMD check --as-cran` ohne ERROR und WARNING; Namens-Check bestanden |
 
-GitHub Release v0.1.0 (weitere Releases bis v0.5.2; v0.7.0 als Tag,
-Release-Eintrag noch offen)
+GitHub Release v0.1.0 (weitere Releases bis v0.7.0, veröffentlicht
+2026-11-06)
 
 pkgdown-Site: <https://alexseymer.github.io/onedevR/>
 
@@ -1011,8 +1033,8 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 ### Offene Punkte
 
 - CRAN/R-universe-Submission (siehe `ROADMAP.md`).
-- Verifikation der Body-Varianten (Kommentare, Iterations) gegen mehrere
-  OneDev-Versionen.
+- Verifikation der Body-Varianten (Iterations) gegen mehrere
+  OneDev-Versionen; Ursache des HTTP 500 am Kommentar-Endpoint.
 - Ursache der serverseitigen HTTP-500 bei `POST /issue-comments`.
 
 ------------------------------------------------------------------------

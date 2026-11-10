@@ -159,7 +159,10 @@ Issues are the core task/bug tracking resource in OneDev.
 - **od_add_issue_comment()** — Add a comment to an issue
   - `issue_number`: UI number
   - `content`: Comment text (Markdown)
-  - Tries two request-body shapes and reports all errors if both fail
+  - Sends `issueId` + `content`; HTTP 500 has been seen on some
+    instances, so check
+    [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
+    before retrying
   - Returns: Created comment object
 - **od_add_issue_iterations()** — Add iterations to an issue
   - `issue_number`: UI number
@@ -441,6 +444,9 @@ identities.
 ### User Management
 
 - **od_get_me()** — Get current authenticated user
+- **od_whoami()** — Login name of the current user; falls back to the
+  configured `username` when `GET /users/me` is refused (HTTP
+  401/403/404)
   - Returns: Current user object
 - **od_get_user()** — Get user details by login
   - `user`: Login name or ID

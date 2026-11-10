@@ -44,7 +44,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>onedevr — Plan für ein R-Paket (OneDev REST API Client)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.0/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
     </div>
 
 <div id="onedevr--plan-für-ein-r-paket-onedev-rest-api-client" class="section level1">
@@ -263,7 +263,7 @@
 </td>
 </tr><tr><td>0.7.0</td>
 <td>
-<code><a href="reference/od_resolve_iteration_ids.html">od_resolve_iteration_ids()</a></code>, 406-Hinweis, Kommentar-Body-Varianten; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, <code>od_error</code>, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring</td>
+<code><a href="reference/od_resolve_iteration_ids.html">od_resolve_iteration_ids()</a></code>, 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, <code>od_error</code>, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring</td>
 </tr></tbody></table><p>Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (<code>R/batch.R</code>, <code>R/concurrent.R</code>, <code>R/streaming.R</code>, <code>R/cache.R</code>).</p>
 </div>
 <div class="section level3">
@@ -586,7 +586,7 @@
 <td>TLS-Verifikation deaktivieren (<code>1</code>/<code>true</code>)</td>
 </tr><tr><td><code>ONEDEV_USERNAME</code></td>
 <td>✅</td>
-<td>Basic Auth: Benutzername</td>
+<td>Basic Auth: Benutzername; mit <code>ONEDEV_AUTH=bearer</code> nur Login-Name für <code><a href="reference/od_whoami.html">od_whoami()</a></code>, wenn <code>GET /users/me</code> verweigert wird</td>
 </tr><tr><td><code>ONEDEV_PASSWORD</code></td>
 <td>✅</td>
 <td>Basic Auth: Passwort (alternativ Token)</td>
@@ -691,7 +691,15 @@
 <div class="section level3">
 <h3 id="issue-kommentare-post-issue-comments">Issue-Kommentare: <code>POST /issue-comments</code>
 <a class="anchor" aria-label="anchor" href="#issue-kommentare-post-issue-comments"></a></h3>
-<p>Body-Varianten (<code>.od_request_with_variants()</code>): <code>list(issueId, content)</code>, dann <code>list(issue = list(id = ...), content)</code>. In der Praxis wurde wiederholt <strong>HTTP 500</strong> am Endpoint beobachtet (vermutlich serverseitig, Stand 0.5.1; mit 0.7.0 zweite Body-Form, serverseitig noch nicht verifiziert); Wirksamkeit der zweiten Form gegen eine echte Instanz noch zu verifizieren.</p>
+<p>Body: <code>list(issueId, content)</code>. Eine zweite Form mit verschachteltem <code>issue = list(id = ...)</code> lehnt OneDev mit <strong>HTTP 400</strong> ab (<code>Unrecognized field "issue"</code>, Feldprotokoll 2026-11-10) und wird nicht mehr gesendet. Am Endpoint wurde wiederholt <strong>HTTP 500</strong> („Interner Fehler“) beobachtet, vermutlich serverseitig (#256, #258, #259, #303, #308, #310, #311, #313, #322); Statuswechsel (<code>transition</code>) funktionieren dabei jeweils. Offen: ob der Kommentar trotz 500 angelegt wird, und ob Verweise im Text (<code>#NNN</code>, Commit-Hashes) den Fehler auslösen (alle bisher fehlgeschlagenen Texte enthielten Verweise, aber das ist nur eine Vermutung). Zur Eingrenzung: <code>scripts/diagnose-comments.R</code> auf einem Test-Ticket ausführen und das Serverlog (<code>logs/server.log</code>) zum Aufrufzeitpunkt prüfen. Vor einem Retry <code><a href="reference/od_get_issue_comments.html">od_get_issue_comments()</a></code> ansehen.</p>
+</div>
+<div class="section level3">
+<h3 id="listen-count-höchstens-100">Listen: <code>count</code> höchstens 100<a class="anchor" aria-label="anchor" href="#listen-count-h%C3%B6chstens-100"></a></h3>
+<p>OneDev antwortet auf <code>count &gt; 100</code> mit HTTP 406 „Count should not be greater than 100“. Die Listen-Helfer holen größere Mengen automatisch seitenweise (<code>.od_get_list()</code>, Seiten à 100 per <code>offset</code>).</p>
+</div>
+<div class="section level3">
+<h3 id="feldnamen-in-queries-sind-instanzabhängig">Feldnamen in Queries sind instanzabhängig<a class="anchor" aria-label="anchor" href="#feldnamen-in-queries-sind-instanzabh%C3%A4ngig"></a></h3>
+<p><code>"IsResolved" is true</code> liefert auf der Ziel-Instanz HTTP 406 „Invalid query“; das Feld ist dort nicht Teil der Query-DSL. Feldnamen mit <code>od_get_query_description("issue")</code> prüfen, für „erledigt“ den Status (<code>--state Closed</code>) verwenden.</p>
 </div>
 <div class="section level3">
 <h3 id="issue-query-http-406-invalid-query">Issue-Query: HTTP 406 „Invalid query“<a class="anchor" aria-label="anchor" href="#issue-query-http-406-invalid-query"></a></h3>
@@ -801,7 +809,7 @@
 </tr><tr><td>CRAN oder R-universe (optional)</td>
 <td>
 <code>R CMD check --as-cran</code> ohne ERROR und WARNING; Namens-Check bestanden</td>
-</tr></tbody></table><ul class="task-list"><li><label><input type="checkbox" checked>GitHub Release v0.1.0 (weitere Releases bis v0.5.2; v0.7.0 als Tag, Release-Eintrag noch offen)</label></li>
+</tr></tbody></table><ul class="task-list"><li><label><input type="checkbox" checked>GitHub Release v0.1.0 (weitere Releases bis v0.7.0, veröffentlicht 2026-11-06)</label></li>
 <li><label><input type="checkbox" checked>pkgdown-Site: <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a></label></li>
 <li><label><input type="checkbox">CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: <code>onedevr</code> verfügbar, Stand 2026-08-02)</label></li>
 </ul></div>
@@ -1206,7 +1214,7 @@
 <div class="section level3">
 <h3 id="offene-punkte">Offene Punkte<a class="anchor" aria-label="anchor" href="#offene-punkte"></a></h3>
 <ul><li>CRAN/R-universe-Submission (siehe <code>ROADMAP.md</code>).</li>
-<li>Verifikation der Body-Varianten (Kommentare, Iterations) gegen mehrere OneDev-Versionen.</li>
+<li>Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen; Ursache des HTTP 500 am Kommentar-Endpoint.</li>
 <li>Ursache der serverseitigen HTTP-500 bei <code>POST /issue-comments</code>.</li>
 </ul><hr></div>
 </div>

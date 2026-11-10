@@ -29,7 +29,8 @@ od_list_iterations(
 
 - count:
 
-  Maximum number of results (default `100`).
+  Maximum number of results (default `100`). OneDev returns at most 100
+  per request; larger values are fetched in several requests.
 
 - offset:
 

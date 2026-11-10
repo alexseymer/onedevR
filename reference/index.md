@@ -144,6 +144,9 @@ Resolve and inspect OneDev projects.
 
   Get the authenticated user (`/users/me`)
 
+- [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
+  : Login name of the current user
+
 - [`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
   : Resolve a OneDev login name to its numeric user id
 

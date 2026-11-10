@@ -1,6 +1,8 @@
 # Add a comment to an issue
 
-Posts to `POST /issue-comments` with `issueId` + `content`.
+Posts to `POST /issue-comments` with `issueId` + `content`. A body with
+a nested `issue` object is rejected by OneDev (HTTP 400, unrecognized
+field `issue`), so only this shape is sent.
 
 ## Usage
 
@@ -25,6 +27,13 @@ od_add_issue_comment(issue_number, content, conn = NULL)
 ## Value
 
 list Parsed API response.
+
+## Details
+
+HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
+instances. Before retrying, check with
+[`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
+whether the comment was created anyway, to avoid duplicates.
 
 ## See also
 

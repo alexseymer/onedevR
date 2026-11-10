@@ -76,7 +76,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Function Relationship Map &amp; API Navigation Guide</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.0/vignettes/function-map.Rmd" class="external-link"><code>vignettes/function-map.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/vignettes/function-map.Rmd" class="external-link"><code>vignettes/function-map.Rmd</code></a></small>
       <div class="d-none name"><code>function-map.Rmd</code></div>
     </div>
 
@@ -350,8 +350,9 @@ description
 <code>issue_number</code>: UI number</li>
 <li>
 <code>content</code>: Comment text (Markdown)</li>
-<li>Tries two request-body shapes and reports all errors if both
-fail</li>
+<li>Sends <code>issueId</code> + <code>content</code>; HTTP 500 has been
+seen on some instances, so check <code><a href="../reference/od_get_issue_comments.html">od_get_issue_comments()</a></code>
+before retrying</li>
 <li>Returns: Created comment object</li>
 </ul>
 </li>
@@ -977,7 +978,11 @@ identities.</p>
 </h3>
 <ul>
 <li>
-<strong>od_get_me()</strong> — Get current authenticated user
+<strong>od_get_me()</strong> — Get current authenticated user</li>
+<li>
+<strong>od_whoami()</strong> — Login name of the current user; falls
+back to the configured <code>username</code> when
+<code>GET /users/me</code> is refused (HTTP 401/403/404)
 <ul>
 <li>Returns: Current user object</li>
 </ul>

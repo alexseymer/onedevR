@@ -44,7 +44,8 @@ Other users:
 [`od_list_user_ssh_keys()`](https://alexseymer.github.io/onedevR/reference/od_list_user_ssh_keys.md),
 [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md),
 [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md),
-[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
+[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md),
+[`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
 
 ## Examples
 

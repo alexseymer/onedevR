@@ -48,7 +48,8 @@ Other users:
 [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md),
 [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md),
 [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md),
-[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md)
+[`od_resolve_user_id()`](https://alexseymer.github.io/onedevR/reference/od_resolve_user_id.md),
+[`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
 
 ## Examples
 
