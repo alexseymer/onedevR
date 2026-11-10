@@ -522,8 +522,13 @@ Body: `list(issueId, content)`. Eine zweite Form mit verschachteltem
 `issue = list(id = ...)` lehnt OneDev mit **HTTP 400** ab (`Unrecognized field
 "issue"`, Feldprotokoll 2026-11-10) und wird nicht mehr gesendet. Am Endpoint
 wurde wiederholt **HTTP 500** („Interner Fehler“) beobachtet, vermutlich
-serverseitig (#256, #258, #259, #303, #322). Offen: ob der Kommentar trotz 500
-angelegt wird; vor einem Retry daher `od_get_issue_comments()` prüfen.
+serverseitig (#256, #258, #259, #303, #308, #310, #311, #313, #322); Statuswechsel
+(`transition`) funktionieren dabei jeweils. Offen: ob der Kommentar trotz 500
+angelegt wird, und ob Verweise im Text (`#NNN`, Commit-Hashes) den Fehler
+auslösen (alle bisher fehlgeschlagenen Texte enthielten Verweise, aber das ist
+nur eine Vermutung). Zur Eingrenzung: `scripts/diagnose-comments.R` auf einem
+Test-Ticket ausführen und das Serverlog (`logs/server.log`) zum Aufrufzeitpunkt
+prüfen. Vor einem Retry `od_get_issue_comments()` ansehen.
 
 ### Listen: `count` höchstens 100
 
