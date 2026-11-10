@@ -4,7 +4,7 @@
 #'   [od_get_query_description()] with `kind = "pull_request"`). Default: `NULL`.
 #' @param status {character} Optional status keyword: `"open"`, `"merged"`, or `"discarded"`
 #'   (case-insensitive). Combined with `query` via `and`. Default: `NULL`.
-#' @param count {integer} Maximum number of results (default `100`).
+#' @param count {integer} Maximum number of results (default `100`). OneDev returns at most 100 per request; larger values are fetched in several requests.
 #' @param offset {integer} Result offset (default `0`).
 #' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
@@ -44,15 +44,13 @@ od_query_pull_requests <- function(
     }
   }
 
-  payload <- od_request(
-    method = "GET",
-    endpoint = "/pulls",
-    query = list(
-      query = if (nzchar(query)) query else NULL,
-      count = as.integer(count),
-      offset = as.integer(offset)
-    ),
-    conn = conn
+  payload <- .od_get_list(
+    "/pulls",
+    query = if (nzchar(query)) query else NULL,
+    count = count,
+    offset = offset,
+    conn = conn,
+    request = od_request
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }

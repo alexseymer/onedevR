@@ -24,7 +24,7 @@ od_list_projects(
 \arguments{
 \item{query}{{character} Raw OneDev project query string. Default: \code{NULL}.}
 
-\item{count}{{integer} Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}). OneDev returns at most 100 per request; larger values are fetched in several requests.}
 
 \item{offset}{{integer} Result offset (default \code{0}).}
 

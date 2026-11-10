@@ -182,7 +182,7 @@ Issues are the core task/bug tracking resource in OneDev.
 - **od_add_issue_comment()** — Add a comment to an issue
   - `issue_number`: UI number
   - `content`: Comment text (Markdown)
-  - Tries two request-body shapes and reports all errors if both fail
+  - Sends `issueId` + `content`; HTTP 500 has been seen on some instances, so check `od_get_issue_comments()` before retrying
   - Returns: Created comment object
 
 - **od_add_issue_iterations()** — Add iterations to an issue

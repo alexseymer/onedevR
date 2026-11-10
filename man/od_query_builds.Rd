@@ -23,7 +23,7 @@ with \code{kind = "build"}, or \verb{tod build get-query-description}). Example:
 \code{"running"}, \code{"waiting"}, or \code{"pending"} (enum spellings like
 \code{"SUCCESSFUL"} are accepted and mapped). Combined with \code{query} via \code{and}. Default: \code{NULL}.}
 
-\item{count}{{integer} Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}). OneDev returns at most 100 per request; larger values are fetched in several requests.}
 
 \item{offset}{{integer} Result offset (default \code{0}).}
 

@@ -17,7 +17,14 @@ od_add_issue_comment(issue_number, content, conn = NULL)
 {list} Parsed API response.
 }
 \description{
-Posts to \code{POST /issue-comments} with \code{issueId} + \code{content}.
+Posts to \code{POST /issue-comments} with \code{issueId} + \code{content}. A body with a
+nested \code{issue} object is rejected by OneDev (HTTP 400, unrecognized field
+\code{issue}), so only this shape is sent.
+}
+\details{
+HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
+instances. Before retrying, check with \code{\link[=od_get_issue_comments]{od_get_issue_comments()}} whether the
+comment was created anyway, to avoid duplicates.
 }
 \examples{
 \dontrun{

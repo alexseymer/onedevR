@@ -16,7 +16,7 @@ od_list_iterations(
 \item{project}{Optional project path or numeric id; defaults to the
 connection's project via \code{\link[=od_resolve_project_id]{od_resolve_project_id()}}.}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{Maximum number of results (default \code{100}). OneDev returns at most 100 per request; larger values are fetched in several requests.}
 
 \item{offset}{Result offset (default \code{0}).}
 

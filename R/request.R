@@ -76,6 +76,26 @@
   )
 }
 
+.od_clean_error_message <- function(msg, max_chars = 300L) {
+  msg <- as.character(msg)[1]
+  if (is.na(msg)) {
+    return("")
+  }
+  if (grepl("<\\s*(html|!doctype|body)", msg, ignore.case = TRUE)) {
+    m <- regmatches(msg, regexec("<title[^>]*>([^<]*)</title>", msg, ignore.case = TRUE))[[1]]
+    title <- if (length(m) == 2L) trimws(m[[2]]) else ""
+    msg <- if (nzchar(title)) {
+      paste0("HTML error page: ", title)
+    } else {
+      trimws(gsub("\\s+", " ", gsub("<[^>]+>", " ", msg)))
+    }
+  }
+  if (nchar(msg) > max_chars) {
+    msg <- paste0(substr(msg, 1L, max_chars), "...")
+  }
+  msg
+}
+
 .od_http_error <- function(response, payload) {
   status <- httr2::resp_status(response)
   msg <- ""
@@ -87,7 +107,14 @@
   } else if (is.character(payload) && length(payload) == 1L) {
     msg <- payload
   }
-  msg <- as.character(msg)[1]
+  msg <- .od_clean_error_message(msg)
+  if (status == 406L && grepl("Count should not be greater than", msg, fixed = TRUE)) {
+    msg <- paste0(
+      msg,
+      " (use the list helpers, which page automatically, or fetch further",
+      " pages with `offset` / od_paginate())"
+    )
+  }
   if (status == 406L && grepl("Invalid query", msg, fixed = TRUE)) {
     msg <- paste0(
       msg,
@@ -104,6 +131,53 @@
     ),
     call. = FALSE
   )
+}
+
+# OneDev rejects `count` values above 100 with HTTP 406.
+.od_max_count <- 100L
+
+#' GET a list endpoint, paging transparently when `count` exceeds the server limit
+#'
+#' Fetches `count` records starting at `offset` in pages of at most 100. A
+#' request for 100 or fewer records is a single call with the original `count`
+#' and `offset`. `request` is `od_request` by default; callers pass their own
+#' binding so tests can stub it.
+#'
+#' @param endpoint {character} List endpoint, e.g. `"/issues"`.
+#' @param query {character} Optional OneDev query string (`NULL` to omit).
+#' @param count {integer} Number of records wanted.
+#' @param offset {integer} Offset of the first record.
+#' @param conn {list} Connection list.
+#' @param request {function} Request function (default [od_request()]).
+#' @return {list} Concatenated records.
+#' @noRd
+.od_get_list <- function(endpoint, query = NULL, count = 100L, offset = 0L, conn = NULL, request = od_request) {
+  count <- as.integer(count)
+  offset <- as.integer(offset)
+  if (length(count) != 1L || is.na(count) || count < 1L) {
+    stop("`count` must be a positive integer.", call. = FALSE)
+  }
+  if (length(offset) != 1L || is.na(offset) || offset < 0L) {
+    stop("`offset` must be a non-negative integer.", call. = FALSE)
+  }
+  out <- list()
+  repeat {
+    n <- min(.od_max_count, count - length(out))
+    page <- request(
+      method = "GET",
+      endpoint = endpoint,
+      query = list(query = query, count = n, offset = offset + length(out)),
+      conn = conn
+    )
+    if (!is.list(page)) {
+      return(page)
+    }
+    out <- c(out, page)
+    if (length(page) < n || length(out) >= count) {
+      break
+    }
+  }
+  out
 }
 
 #' Low-level OneDev REST request

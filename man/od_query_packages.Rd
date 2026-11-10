@@ -16,7 +16,7 @@ od_query_packages(
 \item{query}{Optional package query string (e.g.
 \code{'"Type" is "Container Image"'}).}
 
-\item{count}{Maximum number of results (default \code{100}).}
+\item{count}{Maximum number of results (default \code{100}). OneDev returns at most 100 per request; larger values are fetched in several requests.}
 
 \item{offset}{Result offset (default \code{0}).}
 
