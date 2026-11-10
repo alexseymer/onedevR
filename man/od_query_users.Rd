@@ -15,7 +15,7 @@ od_query_users(
 \arguments{
 \item{query}{{character} Optional OneDev user query string. Default: \code{NULL}.}
 
-\item{count}{{integer} Maximum number of results (default \code{100}).}
+\item{count}{{integer} Maximum number of results (default \code{100}). OneDev returns at most 100 per request; larger values are fetched in several requests.}
 
 \item{offset}{{integer} Result offset (default \code{0}).}
 
@@ -48,6 +48,7 @@ Other users:
 \code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}},
 \code{\link[=od_query_groups]{od_query_groups()}},
 \code{\link[=od_remove_group_member]{od_remove_group_member()}},
-\code{\link[=od_resolve_user_id]{od_resolve_user_id()}}
+\code{\link[=od_resolve_user_id]{od_resolve_user_id()}},
+\code{\link[=od_whoami]{od_whoami()}}
 }
 \concept{users}

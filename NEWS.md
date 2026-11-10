@@ -1,3 +1,29 @@
+# onedevr (development)
+
+## Fixes from the field log
+
+* New `od_whoami()` returns the login name of the current user. When
+  `GET /users/me` is refused (HTTP 401/403/404, as seen with some tokens), it
+  falls back to the connection's `username` (`ONEDEV_USERNAME`) and otherwise
+  explains what to set. `od_get_user_emails()` and the SSH-key helpers use the
+  same fallback when called without a `user`. Setting `ONEDEV_USERNAME` together
+  with `ONEDEV_AUTH=bearer` keeps token auth.
+
+* List helpers (`od_query_issues()`, `od_query_builds()`,
+  `od_query_pull_requests()`, `od_query_projects()`, `od_query_users()`,
+  `od_query_groups()`, `od_query_packages()`, `od_list_iterations()`) now page
+  automatically when `count` exceeds 100. OneDev rejects larger values with
+  HTTP 406 "Count should not be greater than 100"; a request for more records
+  is now several requests.
+* HTTP error messages that contain an HTML page (for example the 500
+  "Interner Fehler" page) are reduced to the page title, and every message is
+  limited to 300 characters.
+* `od_add_issue_comment()` sends only `issueId` + `content` again. The second
+  body shape added in 0.7.0 (`issue = list(id = ...)`) is rejected by OneDev
+  with HTTP 400 (unrecognized field `issue`) and only made the error message
+  longer. HTTP 500 on this endpoint remains a server-side problem; the help
+  page now says to check `od_get_issue_comments()` before retrying.
+
 # onedevr 0.7.0
 
 ## Security and vulnerability monitoring

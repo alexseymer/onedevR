@@ -6,7 +6,7 @@
 #'
 #' @param project Optional project path or numeric id; defaults to the
 #'   connection's project via [od_resolve_project_id()].
-#' @param count Maximum number of results (default `100`).
+#' @param count Maximum number of results (default `100`). OneDev returns at most 100 per request; larger values are fetched in several requests.
 #' @param offset Result offset (default `0`).
 #' @param as_tibble If `TRUE` (default via `options(onedevr.as_tibble)`), return
 #'   a tibble via [od_as_tibble()].
@@ -27,14 +27,12 @@ od_list_iterations <- function(
 ) {
   conn <- .od_conn(conn)
   project_id <- od_resolve_project_id(project = project, conn = conn)
-  payload <- od_request(
-    method = "GET",
-    endpoint = paste0("/projects/", project_id, "/iterations"),
-    query = list(
-      count = as.integer(count),
-      offset = as.integer(offset)
-    ),
-    conn = conn
+  payload <- .od_get_list(
+    paste0("/projects/", project_id, "/iterations"),
+    count = count,
+    offset = offset,
+    conn = conn,
+    request = od_request
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }

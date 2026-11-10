@@ -83,7 +83,7 @@ od_query_issues(state = "Open")
 |----------|---------|---------|
 | `ONEDEV_HOST` | OneDev server URL | `https://onedev.example.com` |
 | `ONEDEV_API_TOKEN` | Bearer token (recommended) | `(token)` |
-| `ONEDEV_USERNAME` | For Basic Auth | `myuser` |
+| `ONEDEV_USERNAME` | For Basic Auth, or your login name for `od_whoami()` (add `ONEDEV_AUTH=bearer` to keep token auth) | `myuser` |
 | `ONEDEV_PASSWORD` | For Basic Auth | `mypass` |
 | `ONEDEV_PROJECT_PATH` | Default project | `group/project` |
 | `ONEDEV_PROJECT_ID` | Default project ID | `1` |

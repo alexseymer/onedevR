@@ -10,7 +10,7 @@
 #' @param state {character} Optional state filter (e.g. `"Open"`). Combined with `query`
 #'   via `and`. When both are empty, falls back to `conn$default_issue_state`
 #'   (`ONEDEV_ISSUE_STATE`). Default: `NULL`.
-#' @param count {integer} Maximum number of results (default `100`).
+#' @param count {integer} Maximum number of results (default `100`). OneDev returns at most 100 per request; larger values are fetched in several requests.
 #' @param offset {integer} Result offset (default `0`).
 #' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
 #'   a tibble via [od_as_tibble()]; if `FALSE`, the raw list payload / items. Default: `NULL`.
@@ -49,15 +49,13 @@ od_query_issues <- function(
     }
   }
 
-  payload <- od_request(
-    method = "GET",
-    endpoint = "/issues",
-    query = list(
-      query = if (nzchar(query)) query else NULL,
-      count = as.integer(count),
-      offset = as.integer(offset)
-    ),
-    conn = conn
+  payload <- .od_get_list(
+    "/issues",
+    query = if (nzchar(query)) query else NULL,
+    count = count,
+    offset = offset,
+    conn = conn,
+    request = od_request
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }
@@ -335,7 +333,13 @@ od_get_issue_comments <- function(
 
 #' Add a comment to an issue
 #'
-#' Posts to `POST /issue-comments` with `issueId` + `content`.
+#' Posts to `POST /issue-comments` with `issueId` + `content`. A body with a
+#' nested `issue` object is rejected by OneDev (HTTP 400, unrecognized field
+#' `issue`), so only this shape is sent.
+#'
+#' HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
+#' instances. Before retrying, check with [od_get_issue_comments()] whether the
+#' comment was created anyway, to avoid duplicates.
 #'
 #' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
 #' @param content {character} Comment body (Markdown).
@@ -351,13 +355,12 @@ od_get_issue_comments <- function(
 od_add_issue_comment <- function(issue_number, content, conn = NULL) {
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
-  content <- as.character(content)[1]
-  .od_request_with_variants(
+  od_request(
     method = "POST",
     endpoint = "/issue-comments",
-    body_variants = list(
-      list(issueId = issue_id, content = content),
-      list(issue = list(id = issue_id), content = content)
+    body = list(
+      issueId = issue_id,
+      content = as.character(content)[1]
     ),
     conn = conn
   )

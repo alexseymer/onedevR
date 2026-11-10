@@ -40,7 +40,7 @@ od_resolve_user_id <- function(user, conn = NULL) {
 #' Calls `GET /users`.
 #'
 #' @param query {character} Optional OneDev user query string. Default: `NULL`.
-#' @param count {integer} Maximum number of results (default `100`).
+#' @param count {integer} Maximum number of results (default `100`). OneDev returns at most 100 per request; larger values are fetched in several requests.
 #' @param offset {integer} Result offset (default `0`).
 #' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
@@ -62,15 +62,13 @@ od_query_users <- function(
 ) {
   conn <- .od_conn(conn)
   query <- .od_coerce_string(query)
-  payload <- od_request(
-    method = "GET",
-    endpoint = "/users",
-    query = list(
-      query = if (nzchar(query)) query else NULL,
-      count = as.integer(count),
-      offset = as.integer(offset)
-    ),
-    conn = conn
+  payload <- .od_get_list(
+    "/users",
+    query = if (nzchar(query)) query else NULL,
+    count = count,
+    offset = offset,
+    conn = conn,
+    request = od_request
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }
@@ -115,6 +113,77 @@ od_get_me <- function(conn = NULL) {
   od_request("GET", "/users/me", conn = conn)
 }
 
+#' Login name of the current user
+#'
+#' Returns the login name to use for "me", for example as the value of an
+#' `Assignee` field. It asks `GET /users/me`; if the server answers 401, 403 or
+#' 404 for that endpoint (some tokens cannot call it), it falls back to the
+#' `username` of the connection (`ONEDEV_USERNAME`). Other errors, such as
+#' network failures, are not hidden.
+#'
+#' A username does not change the auth mode when `auth` is set explicitly. To
+#' keep token (Bearer) auth and still provide a name, set
+#' `ONEDEV_AUTH=bearer` together with `ONEDEV_USERNAME`, or pass
+#' `auth = "bearer"` and `username` to [od_connection()].
+#'
+#' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
+#' @return {character} Login name.
+#' @endpoint GET /users/me
+#' @family users
+#' @examples
+#' \dontrun{
+#' od_create_issue("Fix it", fields = list(Assignee = od_whoami()))
+#' }
+#' @export
+od_whoami <- function(conn = NULL) {
+  conn <- .od_conn(conn)
+  failure <- NULL
+  me <- tryCatch(
+    od_get_me(conn = conn),
+    error = function(e) {
+      if (!grepl("HTTP 40[134]\\]", conditionMessage(e))) {
+        stop(e)
+      }
+      failure <<- conditionMessage(e)
+      NULL
+    }
+  )
+  name <- .od_coerce_string(me$name %||% "")
+  if (nzchar(name)) {
+    return(name)
+  }
+  configured <- .od_coerce_string(conn$username %||% "")
+  if (nzchar(configured)) {
+    return(configured)
+  }
+  stop(
+    "Could not determine the current user: ",
+    failure %||% "GET /users/me returned no login name",
+    ", and no username is configured. Set ONEDEV_USERNAME (add ONEDEV_AUTH=bearer",
+    " to keep token auth) or pass `username` to od_connection().",
+    call. = FALSE
+  )
+}
+
+#' Numeric user id of `user`, or of the current user when `user` is empty
+#'
+#' The current user is read from `GET /users/me`; when that is refused, the
+#' login name from [od_whoami()] is resolved instead. `get_me`, `whoami` and
+#' `resolve` are passed in so callers keep their own stubbing points in tests.
+#'
+#' @noRd
+.od_user_id_or_me <- function(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id) {
+  if (!is.null(user) && nzchar(as.character(user)[1])) {
+    return(resolve(user, conn = conn))
+  }
+  me <- tryCatch(get_me(conn = conn), error = function(e) NULL)
+  id <- as.character(me$id %||% "")[1]
+  if (nzchar(id)) {
+    return(id)
+  }
+  resolve(whoami(conn = conn), conn = conn)
+}
+
 #' Get email addresses for a user
 #'
 #' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user
@@ -133,12 +202,7 @@ od_get_me <- function(conn = NULL) {
 #' @export
 od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
-    me <- od_get_me(conn = conn)
-    as.character(me$id %||% "")[1]
-  } else {
-    od_resolve_user_id(user, conn = conn)
-  }
+  user_id <- .od_user_id_or_me(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
   if (!nzchar(user_id)) {
     stop("Could not determine user id for email lookup.", call. = FALSE)
   }
@@ -169,12 +233,7 @@ od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 #' @export
 od_list_user_ssh_keys <- function(user = NULL, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
-    me <- od_get_me(conn = conn)
-    as.character(me$id %||% "")[1]
-  } else {
-    od_resolve_user_id(user, conn = conn)
-  }
+  user_id <- .od_user_id_or_me(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
   if (!nzchar(user_id)) {
     stop("Could not determine user id for SSH key lookup.", call. = FALSE)
   }
@@ -207,12 +266,7 @@ od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) 
   content <- .od_coerce_string(content)
   .od_require(content, "content")
 
-  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
-    me <- od_get_me(conn = conn)
-    as.character(me$id %||% "")[1]
-  } else {
-    od_resolve_user_id(user, conn = conn)
-  }
+  user_id <- .od_user_id_or_me(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
   if (!nzchar(user_id)) {
     stop("Could not determine user id for SSH key registration.", call. = FALSE)
   }
@@ -250,12 +304,7 @@ od_delete_user_ssh_key <- function(ssh_key_id, user = NULL, conn = NULL) {
   ssh_key_id <- .od_coerce_string(ssh_key_id)
   .od_require(ssh_key_id, "ssh_key_id")
 
-  user_id <- if (is.null(user) || !nzchar(as.character(user)[1])) {
-    me <- od_get_me(conn = conn)
-    as.character(me$id %||% "")[1]
-  } else {
-    od_resolve_user_id(user, conn = conn)
-  }
+  user_id <- .od_user_id_or_me(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
   if (!nzchar(user_id)) {
     stop("Could not determine user id for SSH key deletion.", call. = FALSE)
   }
