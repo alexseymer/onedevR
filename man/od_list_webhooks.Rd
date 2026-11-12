@@ -18,6 +18,10 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 {tibble|list} A tibble of webhooks (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Retrieves all webhooks configured for a project.
 }
 \examples{

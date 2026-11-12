@@ -31,6 +31,10 @@ Default: \code{NULL}.}
 Otherwise: \code{invisible(NULL)}.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 A convenience wrapper around \code{\link[=od_stream_query_results]{od_stream_query_results()}} for batch processing.
 If no callback is provided, yields results as a list of chunks (useful with
 \code{lapply()} or for saving to disk). If a callback is provided, it is called

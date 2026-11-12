@@ -25,6 +25,10 @@ Each row/element should be a list with at least \code{title}.}
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Creates multiple issues in batch, optionally reporting progress. Each issue
 spec should be a list with \code{title} (required), and optional \code{description},
 \code{fields}, and \code{iteration_ids}. Uses \code{\link[=od_create_issue]{od_create_issue()}} internally.

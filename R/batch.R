@@ -1,5 +1,8 @@
 #' Create multiple issues efficiently
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Creates multiple issues in batch, optionally reporting progress. Each issue
 #' spec should be a list with `title` (required), and optional `description`,
 #' `fields`, and `iteration_ids`. Uses [od_create_issue()] internally.
@@ -127,6 +130,9 @@ od_batch_create_issues <- function(
 }
 
 #' Update multiple issues
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Updates multiple issues with selective field updates. Supports updating
 #' `title`, `description`, `fields`, and `state` individually.
@@ -280,6 +286,9 @@ od_batch_update_issues <- function(
 
 #' Link multiple issue-PR pairs
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Creates links between multiple issue-pull request pairs. Useful for
 #' establishing relationships between issues and PRs in batch.
 #'
@@ -379,6 +388,9 @@ od_batch_link_issues_prs <- function(
 }
 
 #' Transition multiple issues to a new state
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Changes the state of multiple issues atomically. Useful for bulk state
 #' transitions (e.g., closing related issues, reopening a batch).

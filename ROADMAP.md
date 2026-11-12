@@ -80,6 +80,11 @@ Estimate per plan: 1 week+.
 - [x] Field fixes and `od_whoami()` (v0.7.1): paging for `count` > 100,
   HTML error pages shortened, single comment body, `/users/me` fallback,
   `scripts/diagnose-comments.R`
+- [x] Scope narrowed (2026-11-12): public general-purpose client; unverified
+  areas (batch, parallel, streaming, caching, webhooks, SSH keys) marked
+  experimental
+- [ ] Live verification of the full surface, area by area, promoting
+  experimental functions once verified
 - [ ] Live verification of comment body variants and query escaping against a
   real OneDev instance (needs the `live-tests.yaml` secrets)
 - [ ] R-universe / CRAN when demand warrants it

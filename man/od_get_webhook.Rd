@@ -17,6 +17,10 @@ od_get_webhook(webhook_id, project = NULL, conn = NULL)
 {list} Parsed webhook object.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Retrieves details for a specific webhook.
 }
 \examples{

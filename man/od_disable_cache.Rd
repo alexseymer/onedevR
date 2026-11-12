@@ -10,6 +10,10 @@ od_disable_cache()
 invisible(\code{TRUE}).
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Disables cache and clears all cached data. Subsequent API requests will
 bypass the cache until \code{\link[=od_enable_cache]{od_enable_cache()}} is called again.
 }

@@ -113,6 +113,23 @@ fill in your host/token/project. [`.env.example`](.env.example) is the same
 variable list for non-R tooling. Live integration tests are gated behind
 `ONEDEV_RUN_LIVE_TESTS=1`.
 
+## Scope and maturity
+
+`onedevr` aims to be a general-purpose R client for the OneDev REST API.
+Functions differ in how well they are proven:
+
+- **Core** (issues, comments, iterations, boards, pull requests, projects,
+  connection): used in daily work against a real instance; bugs found there
+  are fixed and covered by regression tests.
+- **Experimental** (batch, parallel, streaming, caching, webhooks, SSH keys):
+  tested offline only, marked "Experimental" on their help pages; the
+  interface may change.
+- Everything else (builds, jobs, packages, repository, users, groups) is
+  tested offline and partly read-verified.
+
+Live verification of the whole surface is the next milestone (see
+[`ROADMAP.md`](ROADMAP.md)).
+
 ## What's in v0.7.x
 
 - Issues, boards, builds, PRs, jobs, packages, and repository (branches/tags/commits/files)

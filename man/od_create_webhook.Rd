@@ -20,6 +20,10 @@ Omit or pass \code{NULL} for all events. Default: \code{NULL}.}
 {list} Parsed webhook object with ID and configuration.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Creates a new webhook that will POST events to the specified URL.
 }
 \examples{

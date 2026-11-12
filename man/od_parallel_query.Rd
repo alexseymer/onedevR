@@ -19,11 +19,14 @@ Default: \code{NULL}.}
 If a query fails, an \code{od_error} object (see \code{inherits()}) is returned in its position.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Execute a list of query specifications in parallel using futures.
 Each query spec is a list containing a function name and its arguments.
 Useful for batch retrieving data from multiple endpoints without blocking.
-}
-\details{
+
 If \code{future} is not installed, falls back to sequential execution
 with a warning.
 }

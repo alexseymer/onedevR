@@ -2,6 +2,13 @@
 
 Fixes and a small helper from field use against a real OneDev instance.
 
+## Scope
+
+* Batch, parallel, streaming, caching, webhook and SSH-key functions are now
+  marked **Experimental** on their help pages and in the reference index:
+  they are tested offline only and their interface may change. No behaviour
+  changes.
+
 ## Fixes from the field log
 
 * New `od_whoami()` returns the login name of the current user. When

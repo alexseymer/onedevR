@@ -23,11 +23,14 @@ Default: \code{NULL}.}
 Failed items are \code{od_error} objects with a \code{message} field.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Execute a function across multiple items concurrently. The function is
 called once per item in the list/vector with that item and any additional
 arguments passed via \code{...}. Results maintain the same order as input items.
-}
-\details{
+
 If a single item fails, that position in the result list contains an
 \code{od_error} object (a list with \code{message}), while other items continue processing. If \code{future} is not installed,
 falls back to sequential execution.

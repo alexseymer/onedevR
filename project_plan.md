@@ -31,6 +31,8 @@
 
 ## 1. Executive Summary
 
+**Ziel (präzisiert 2026-11-12):** Öffentliches Allzweck-Paket für die OneDev-REST-API. Maßstab ist nachgewiesene Funktion: Der Kern (Issues, Kommentare, Iterationen, Boards, PRs, Projekte, Verbindung) ist im täglichen Einsatz gegen eine echte Instanz; Batch, Parallel, Streaming, Cache, Webhooks und SSH-Keys sind als **experimentell** markiert, bis sie live verifiziert sind. Der CLI-Wrapper `onedevr.cmd` bleibt außerhalb des Pakets im Consumer-Projekt.
+
 | Aspekt | Entscheidung |
 |--------|--------------|
 | **Paketname (CRAN)** | `onedevr` (lowercase, R-Konvention) |

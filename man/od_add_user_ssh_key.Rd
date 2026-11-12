@@ -19,6 +19,10 @@ od_add_user_ssh_key(content, name = NULL, user = NULL, conn = NULL)
 {list} Parsed SSH key object with ID and fingerprint.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Registers a new SSH public key for the authenticated or specified user.
 }
 \examples{

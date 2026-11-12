@@ -18,6 +18,9 @@
 
 #' Check if future package is available
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Helper function to verify that the `future` package is installed.
 #' If not available, suggests installation and can optionally fall back
 #' to sequential processing.
@@ -57,6 +60,9 @@ is_future_installed <- function(fallback = TRUE) {
 }
 
 #' Run multiple queries concurrently
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Execute a list of query specifications in parallel using futures.
 #' Each query spec is a list containing a function name and its arguments.
@@ -129,6 +135,9 @@ od_parallel_query <- function(queries = list(), conn = NULL) {
 }
 
 #' Apply a function to items in parallel
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Execute a function across multiple items concurrently. The function is
 #' called once per item in the list/vector with that item and any additional
@@ -211,6 +220,9 @@ od_map_parallel <- function(FUN, items = list(), ..., conn = NULL) {
 }
 
 #' Process a stream of items with concurrent workers
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Apply a function across a potentially large list of items using a
 #' configurable number of concurrent workers. Useful for bulk operations
