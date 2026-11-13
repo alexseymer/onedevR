@@ -18,6 +18,10 @@ od_get_cache_stats()
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Returns a summary of cache performance including hit rate, number of items,
 and total size in bytes.
 }

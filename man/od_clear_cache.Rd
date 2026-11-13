@@ -14,6 +14,10 @@ If \code{NULL} (default), clears all entries. Default: \code{NULL}.}
 {integer} Count of cleared items.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Removes cached entries, optionally filtered by a pattern. Useful for
 invalidating cache after mutations or resetting specific data.
 }

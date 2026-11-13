@@ -206,6 +206,9 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
 
 #' List webhooks for a project
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Retrieves all webhooks configured for a project.
 #'
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
@@ -233,6 +236,9 @@ od_list_webhooks <- function(project = NULL, as_tibble = NULL, conn = NULL) {
 
 #' Get a webhook by ID
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Retrieves details for a specific webhook.
 #'
 #' @param webhook_id {character|numeric} Numeric webhook ID.
@@ -259,6 +265,9 @@ od_get_webhook <- function(webhook_id, project = NULL, conn = NULL) {
 }
 
 #' Create a webhook for a project
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Creates a new webhook that will POST events to the specified URL.
 #'
@@ -295,6 +304,9 @@ od_create_webhook <- function(url, events = NULL, project = NULL, conn = NULL) {
 }
 
 #' Delete a webhook
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Removes a webhook from a project.
 #'

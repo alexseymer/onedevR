@@ -1,4 +1,13 @@
-# onedevr (development)
+# onedevr 0.7.1
+
+Fixes and a small helper from field use against a real OneDev instance.
+
+## Scope
+
+* Batch, parallel, streaming, caching, webhook and SSH-key functions are now
+  marked **Experimental** on their help pages and in the reference index:
+  they are tested offline only and their interface may change. No behaviour
+  changes.
 
 ## Fixes from the field log
 
@@ -8,7 +17,6 @@
   explains what to set. `od_get_user_emails()` and the SSH-key helpers use the
   same fallback when called without a `user`. Setting `ONEDEV_USERNAME` together
   with `ONEDEV_AUTH=bearer` keeps token auth.
-
 * List helpers (`od_query_issues()`, `od_query_builds()`,
   `od_query_pull_requests()`, `od_query_projects()`, `od_query_users()`,
   `od_query_groups()`, `od_query_packages()`, `od_list_iterations()`) now page
@@ -23,6 +31,9 @@
   with HTTP 400 (unrecognized field `issue`) and only made the error message
   longer. HTTP 500 on this endpoint remains a server-side problem; the help
   page now says to check `od_get_issue_comments()` before retrying.
+* New `scripts/diagnose-comments.R` posts probe comments to a scratch issue
+  and reports whether the call failed and whether the comment was created
+  anyway, to narrow down the HTTP 500 on `POST /issue-comments`.
 
 # onedevr 0.7.0
 

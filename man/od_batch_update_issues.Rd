@@ -37,6 +37,10 @@ Only specified keys are updated.
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Updates multiple issues with selective field updates. Supports updating
 \code{title}, \code{description}, \code{fields}, and \code{state} individually.
 }

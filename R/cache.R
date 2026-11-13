@@ -79,6 +79,9 @@
 
 #' Enable caching globally for all API requests
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Configures global cache settings for the onedevR package. Cache stores
 #' GET requests (idempotent operations) and automatically expires entries
 #' based on TTL. Cache is per-connection (different hosts have separate caches).
@@ -125,6 +128,9 @@ od_enable_cache <- function(ttl_seconds = 3600, max_size = 1000) {
 
 #' Disable caching globally
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Disables cache and clears all cached data. Subsequent API requests will
 #' bypass the cache until [od_enable_cache()] is called again.
 #'
@@ -144,6 +150,9 @@ od_disable_cache <- function() {
 }
 
 #' Clear cached data
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Removes cached entries, optionally filtered by a pattern. Useful for
 #' invalidating cache after mutations or resetting specific data.
@@ -202,6 +211,9 @@ od_clear_cache <- function(pattern = NULL) {
 }
 
 #' Get cache statistics
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Returns a summary of cache performance including hit rate, number of items,
 #' and total size in bytes.
@@ -269,6 +281,9 @@ od_get_cache_stats <- function() {
 }
 
 #' Execute code within a cache context
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Temporarily enables caching for a specific expression, then restores the
 #' previous cache state. Useful for caching a specific set of operations

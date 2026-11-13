@@ -103,13 +103,16 @@ reference:
       - od_get_query_description
       - od_download
       - od_request
-  - title: Groups, webhooks, and SSH keys
+  - title: Groups
     contents:
       - od_query_groups
       - od_get_group
       - od_list_group_members
       - od_add_group_member
       - od_remove_group_member
+  - title: "Experimental: webhooks and SSH keys"
+    desc: Not yet verified against a live OneDev server; interface and behaviour may change.
+    contents:
       - od_list_webhooks
       - od_get_webhook
       - od_create_webhook
@@ -124,8 +127,8 @@ reference:
       - od_promote_build
       - od_link_issue_to_pull_request
       - od_unlink_issue_from_pull_request
-  - title: Batch, parallel, and streaming
-    desc: Bulk issue operations, concurrent helpers, and streaming of long results or logs.
+  - title: "Experimental: batch, parallel, and streaming"
+    desc: Bulk issue operations, concurrent helpers, and streaming of long results or logs. Not yet verified against a live OneDev server.
     contents:
       - od_batch_create_issues
       - od_batch_update_issues
@@ -139,7 +142,8 @@ reference:
       - od_stream_build_log
       - od_write_log_file
       - is_future_installed
-  - title: Caching
+  - title: "Experimental: caching"
+    desc: Opt-in response cache. Not yet verified against a live OneDev server.
     contents:
       - od_enable_cache
       - od_disable_cache

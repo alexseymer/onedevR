@@ -51,6 +51,10 @@ Default: \code{NULL} (uses fetcher default).}
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Repeatedly calls a fetcher function (e.g., \code{\link[=od_query_issues]{od_query_issues()}}) to retrieve
 paginated results, calling a callback for each page/chunk. This is useful for
 processing large result sets that would be too large to load entirely into memory.

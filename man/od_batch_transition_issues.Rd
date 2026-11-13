@@ -30,6 +30,10 @@ od_batch_transition_issues(
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Changes the state of multiple issues atomically. Useful for bulk state
 transitions (e.g., closing related issues, reopening a batch).
 }

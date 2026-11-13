@@ -25,11 +25,14 @@ Default: \code{NULL}.}
 Failed items are \code{od_error} objects with a \code{message} field.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Apply a function across a potentially large list of items using a
 configurable number of concurrent workers. Useful for bulk operations
 with built-in rate limiting and worker pool management.
-}
-\details{
+
 If \code{future} is not installed, falls back to sequential execution.
 }
 \examples{

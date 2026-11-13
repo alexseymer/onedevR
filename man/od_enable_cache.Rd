@@ -17,6 +17,10 @@ recently used items when exceeded. Default: \code{1000}.}
 invisible(\code{TRUE}) to allow use in piping contexts.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Configures global cache settings for the onedevR package. Cache stores
 GET requests (idempotent operations) and automatically expires entries
 based on TTL. Cache is per-connection (different hosts have separate caches).

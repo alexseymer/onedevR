@@ -16,6 +16,10 @@ If \code{FALSE}, stops with an error. Default: \code{TRUE}.}
 and fallback is enabled.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Helper function to verify that the \code{future} package is installed.
 If not available, suggests installation and can optionally fall back
 to sequential processing.

@@ -34,6 +34,10 @@ id (debugging only). Default: \code{FALSE}.}
 {invisible(NULL)} Returns invisibly; operates via callback side effects.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Downloads the binary build log stream from OneDev and calls a callback function
 for each parsed line. This allows processing large build logs without loading
 the entire output into memory. Log lines are extracted from the streaming binary

@@ -34,6 +34,10 @@ id (debugging only). Default: \code{FALSE}.}
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Convenience wrapper around \code{\link[=od_stream_build_log]{od_stream_build_log()}} that writes the build log
 to a file line-by-line. Returns metadata about the operation.
 }

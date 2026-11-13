@@ -17,6 +17,10 @@ od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
 {list} Parsed API response (typically \code{NULL} on success).
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Removes an SSH public key from the authenticated or specified user.
 }
 \examples{

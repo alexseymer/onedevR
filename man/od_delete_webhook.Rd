@@ -17,6 +17,10 @@ od_delete_webhook(webhook_id, project = NULL, conn = NULL)
 {list} Parsed API response (typically \code{NULL} on success).
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Removes a webhook from a project.
 }
 \examples{

@@ -77,6 +77,14 @@ Estimate per plan: 1 week+.
   workflow (#26), vulnerability and secret monitoring in CI
 - [x] GitHub Release v0.7.0 published 2026-11-06 —
   https://github.com/alexseymer/onedevR/releases/tag/v0.7.0
+- [x] Field fixes and `od_whoami()` (v0.7.1): paging for `count` > 100,
+  HTML error pages shortened, single comment body, `/users/me` fallback,
+  `scripts/diagnose-comments.R`
+- [x] Scope narrowed (2026-11-12): public general-purpose client; unverified
+  areas (batch, parallel, streaming, caching, webhooks, SSH keys) marked
+  experimental
+- [ ] Live verification of the full surface, area by area, promoting
+  experimental functions once verified
 - [ ] Live verification of comment body variants and query escaping against a
   real OneDev instance (needs the `live-tests.yaml` secrets)
 - [ ] R-universe / CRAN when demand warrants it

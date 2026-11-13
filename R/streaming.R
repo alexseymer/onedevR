@@ -1,5 +1,8 @@
 #' Stream build log output with callback processing
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Downloads the binary build log stream from OneDev and calls a callback function
 #' for each parsed line. This allows processing large build logs without loading
 #' the entire output into memory. Log lines are extracted from the streaming binary
@@ -78,6 +81,9 @@ od_stream_build_log <- function(
 }
 
 #' Stream large query results with chunking
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Repeatedly calls a fetcher function (e.g., [od_query_issues()]) to retrieve
 #' paginated results, calling a callback for each page/chunk. This is useful for
@@ -228,6 +234,9 @@ od_stream_query_results <- function(
 
 #' Process results in fixed-size chunks
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' A convenience wrapper around [od_stream_query_results()] for batch processing.
 #' If no callback is provided, yields results as a list of chunks (useful with
 #' `lapply()` or for saving to disk). If a callback is provided, it is called
@@ -306,6 +315,9 @@ od_chunked_foreach <- function(
 }
 
 #' Write build log to a file
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Convenience wrapper around [od_stream_build_log()] that writes the build log
 #' to a file line-by-line. Returns metadata about the operation.

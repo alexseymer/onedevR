@@ -216,6 +216,9 @@ od_get_user_emails <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 
 #' List SSH keys for a user
 #'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
+#'
 #' Retrieves all SSH public keys registered for a user account.
 #'
 #' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user
@@ -246,6 +249,9 @@ od_list_user_ssh_keys <- function(user = NULL, as_tibble = NULL, conn = NULL) {
 }
 
 #' Add an SSH key to a user account
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Registers a new SSH public key for the authenticated or specified user.
 #'
@@ -285,6 +291,9 @@ od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) 
 }
 
 #' Delete an SSH key from a user account
+#'
+#' **Experimental:** not yet verified against a live OneDev server; the
+#' interface and behaviour may change.
 #'
 #' Removes an SSH public key from the authenticated or specified user.
 #'

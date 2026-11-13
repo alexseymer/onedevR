@@ -28,6 +28,10 @@ Each row represents one link to create.
 }
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Creates links between multiple issue-pull request pairs. Useful for
 establishing relationships between issues and PRs in batch.
 }

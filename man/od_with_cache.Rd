@@ -15,6 +15,10 @@ od_with_cache(expr, ttl_seconds = 3600)
 The value returned by \code{expr}.
 }
 \description{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+}
+\details{
 Temporarily enables caching for a specific expression, then restores the
 previous cache state. Useful for caching a specific set of operations
 without affecting the global cache state.
