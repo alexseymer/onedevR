@@ -75,3 +75,16 @@ test_that("an explicit bearer auth keeps token auth when a username is set", {
   expect_equal(cfg$auth, "bearer")
   expect_equal(cfg$username, "alex")
 })
+
+test_that("od_whoami falls back on the status of an od_http_error", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_whoami, "od_get_me", function(...) {
+    rlang::abort("denied", class = "od_http_error", status = 403L, call = NULL)
+  })
+  expect_equal(od_whoami(conn = list(username = "alex")), "alex")
+
+  mockery::stub(od_whoami, "od_get_me", function(...) {
+    rlang::abort("boom", class = "od_http_error", status = 500L, call = NULL)
+  })
+  expect_error(od_whoami(conn = list(username = "alex")), "boom")
+})

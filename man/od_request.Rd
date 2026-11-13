@@ -24,9 +24,21 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 Escape hatch for any \verb{/~api/...} endpoint. Prefer high-level \verb{od_*}
 helpers when they exist.
 }
+\section{Errors}{
+
+An HTTP status of 400 or above signals a condition of class \code{od_http_error}
+(also an \code{error}) with the fields \code{status}, \code{method} and \code{url}. Test it with
+\code{inherits(e, "od_http_error")} and branch on \code{e$status} instead of parsing
+the message.
+}
+
 \examples{
 \dontrun{
 od_request("GET", "/projects")
+tryCatch(
+  od_request("GET", "/issues/0"),
+  od_http_error = function(e) e$status
+)
 }
 }
 \seealso{

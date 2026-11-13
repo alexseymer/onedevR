@@ -1,3 +1,11 @@
+# onedevr (development)
+
+* HTTP errors from `od_request()` and the helpers built on it are now
+  conditions of class `od_http_error` (also an `error`) with the fields
+  `status`, `method` and `url`. The message text is unchanged. Use
+  `tryCatch(..., od_http_error = function(e) e$status)` instead of parsing
+  the message. `od_whoami()` uses the status when it is available.
+
 # onedevr 0.7.1
 
 Fixes and a small helper from field use against a real OneDev instance.
