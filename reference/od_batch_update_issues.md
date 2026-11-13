@@ -1,7 +1,7 @@
 # Update multiple issues
 
-Updates multiple issues with selective field updates. Supports updating
-`title`, `description`, `fields`, and `state` individually.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -55,6 +55,11 @@ list Named list with:
 - `errors`: List of errors encountered
 
 - `summary`: Character vector with status message
+
+## Details
+
+Updates multiple issues with selective field updates. Supports updating
+`title`, `description`, `fields`, and `state` individually.
 
 ## See also
 

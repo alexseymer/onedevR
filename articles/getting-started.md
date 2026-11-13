@@ -53,7 +53,7 @@ Verify installation:
 ``` r
 
 library(onedevr)
-packageVersion("onedevr")  # Should be 0.7.0 or later
+packageVersion("onedevr")  # Should be 0.7.1 or later
 ```
 
 ## Configuration

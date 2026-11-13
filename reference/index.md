@@ -203,7 +203,7 @@ escape hatch.
 - [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
   : Low-level OneDev REST request
 
-## Groups, webhooks, and SSH keys
+## Groups
 
 - [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md)
   : Query user groups
@@ -215,6 +215,12 @@ escape hatch.
   : Add a user to a group
 - [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md)
   : Remove a user from a group
+
+## Experimental: webhooks and SSH keys
+
+Not yet verified against a live OneDev server; interface and behaviour
+may change.
+
 - [`od_list_webhooks()`](https://alexseymer.github.io/onedevR/reference/od_list_webhooks.md)
   : List webhooks for a project
 - [`od_get_webhook()`](https://alexseymer.github.io/onedevR/reference/od_get_webhook.md)
@@ -243,10 +249,10 @@ escape hatch.
 - [`od_unlink_issue_from_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_unlink_issue_from_pull_request.md)
   : Remove a link between an issue and a pull request
 
-## Batch, parallel, and streaming
+## Experimental: batch, parallel, and streaming
 
 Bulk issue operations, concurrent helpers, and streaming of long results
-or logs.
+or logs. Not yet verified against a live OneDev server.
 
 - [`od_batch_create_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_create_issues.md)
   : Create multiple issues efficiently
@@ -273,7 +279,9 @@ or logs.
 - [`is_future_installed()`](https://alexseymer.github.io/onedevR/reference/is_future_installed.md)
   : Check if future package is available
 
-## Caching
+## Experimental: caching
+
+Opt-in response cache. Not yet verified against a live OneDev server.
 
 - [`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
   : Enable caching globally for all API requests

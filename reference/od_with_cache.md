@@ -1,8 +1,7 @@
 # Execute code within a cache context
 
-Temporarily enables caching for a specific expression, then restores the
-previous cache state. Useful for caching a specific set of operations
-without affecting the global cache state.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -23,6 +22,12 @@ od_with_cache(expr, ttl_seconds = 3600)
 ## Value
 
 The value returned by `expr`.
+
+## Details
+
+Temporarily enables caching for a specific expression, then restores the
+previous cache state. Useful for caching a specific set of operations
+without affecting the global cache state.
 
 ## See also
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,6 +110,9 @@
 <li><label><input type="checkbox" checked>Boards + project settings read path (v0.6.0): <code><a href="reference/od_list_boards.html">od_list_boards()</a></code>, <code><a href="reference/od_get_board.html">od_get_board()</a></code>, <code><a href="reference/od_query_board_issues.html">od_query_board_issues()</a></code>, <code><a href="reference/od_get_project_setting.html">od_get_project_setting()</a></code>, <code><a href="reference/od_get_iteration.html">od_get_iteration()</a></code></label></li>
 <li><label><input type="checkbox" checked>Review follow-up and security hardening (v0.7.0): iteration names (<code><a href="reference/od_resolve_iteration_ids.html">od_resolve_iteration_ids()</a></code>), 406 hint, comment body variants (#14–#16), query escaping, secret masking, credential-partitioned cache, origin check, <code>od_error</code> results, TLS warning (#19–#25), tests for every export, live-test workflow (#26), vulnerability and secret monitoring in CI</label></li>
 <li><label><input type="checkbox" checked>GitHub Release v0.7.0 published 2026-11-06 — <a href="https://github.com/alexseymer/onedevR/releases/tag/v0.7.0" class="external-link uri">https://github.com/alexseymer/onedevR/releases/tag/v0.7.0</a></label></li>
+<li><label><input type="checkbox" checked>Field fixes and <code><a href="reference/od_whoami.html">od_whoami()</a></code> (v0.7.1): paging for <code>count</code> &gt; 100, HTML error pages shortened, single comment body, <code>/users/me</code> fallback, <code>scripts/diagnose-comments.R</code></label></li>
+<li><label><input type="checkbox" checked>Scope narrowed (2026-11-12): public general-purpose client; unverified areas (batch, parallel, streaming, caching, webhooks, SSH keys) marked experimental</label></li>
+<li><label><input type="checkbox">Live verification of the full surface, area by area, promoting experimental functions once verified</label></li>
 <li><label><input type="checkbox">Live verification of comment body variants and query escaping against a real OneDev instance (needs the <code>live-tests.yaml</code> secrets)</label></li>
 <li><label><input type="checkbox">R-universe / CRAN when demand warrants it</label></li>
 </ul></div>

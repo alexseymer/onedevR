@@ -1,9 +1,7 @@
 # Apply a function to items in parallel
 
-Execute a function across multiple items concurrently. The function is
-called once per item in the list/vector with that item and any
-additional arguments passed via `...`. Results maintain the same order
-as input items.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -42,6 +40,11 @@ list Results from applying `FUN` to each item, in the same order. Failed
 items are `od_error` objects with a `message` field.
 
 ## Details
+
+Execute a function across multiple items concurrently. The function is
+called once per item in the list/vector with that item and any
+additional arguments passed via `...`. Results maintain the same order
+as input items.
 
 If a single item fails, that position in the result list contains an
 `od_error` object (a list with `message`), while other items continue

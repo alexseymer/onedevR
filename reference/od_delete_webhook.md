@@ -1,6 +1,7 @@
 # Delete a webhook
 
-Removes a webhook from a project.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -30,6 +31,10 @@ od_delete_webhook(webhook_id, project = NULL, conn = NULL)
 ## Value
 
 list Parsed API response (typically `NULL` on success).
+
+## Details
+
+Removes a webhook from a project.
 
 ## See also
 

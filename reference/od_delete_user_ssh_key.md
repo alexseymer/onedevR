@@ -1,6 +1,7 @@
 # Delete an SSH key from a user account
 
-Removes an SSH public key from the authenticated or specified user.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -30,6 +31,10 @@ od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
 ## Value
 
 list Parsed API response (typically `NULL` on success).
+
+## Details
+
+Removes an SSH public key from the authenticated or specified user.
 
 ## See also
 

@@ -1,5 +1,55 @@
 # Changelog
 
+## onedevr 0.7.1
+
+Fixes and a small helper from field use against a real OneDev instance.
+
+### Scope
+
+- Batch, parallel, streaming, caching, webhook and SSH-key functions are
+  now marked **Experimental** on their help pages and in the reference
+  index: they are tested offline only and their interface may change. No
+  behaviour changes.
+
+### Fixes from the field log
+
+- New
+  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
+  returns the login name of the current user. When `GET /users/me` is
+  refused (HTTP 401/403/404, as seen with some tokens), it falls back to
+  the connection’s `username` (`ONEDEV_USERNAME`) and otherwise explains
+  what to set.
+  [`od_get_user_emails()`](https://alexseymer.github.io/onedevR/reference/od_get_user_emails.md)
+  and the SSH-key helpers use the same fallback when called without a
+  `user`. Setting `ONEDEV_USERNAME` together with `ONEDEV_AUTH=bearer`
+  keeps token auth.
+- List helpers
+  ([`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md),
+  [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md),
+  [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md),
+  [`od_query_projects()`](https://alexseymer.github.io/onedevR/reference/od_query_projects.md),
+  [`od_query_users()`](https://alexseymer.github.io/onedevR/reference/od_query_users.md),
+  [`od_query_groups()`](https://alexseymer.github.io/onedevR/reference/od_query_groups.md),
+  [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md),
+  [`od_list_iterations()`](https://alexseymer.github.io/onedevR/reference/od_list_iterations.md))
+  now page automatically when `count` exceeds 100. OneDev rejects larger
+  values with HTTP 406 “Count should not be greater than 100”; a request
+  for more records is now several requests.
+- HTTP error messages that contain an HTML page (for example the 500
+  “Interner Fehler” page) are reduced to the page title, and every
+  message is limited to 300 characters.
+- [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  sends only `issueId` + `content` again. The second body shape added in
+  0.7.0 (`issue = list(id = ...)`) is rejected by OneDev with HTTP 400
+  (unrecognized field `issue`) and only made the error message longer.
+  HTTP 500 on this endpoint remains a server-side problem; the help page
+  now says to check
+  [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
+  before retrying.
+- New `scripts/diagnose-comments.R` posts probe comments to a scratch
+  issue and reports whether the call failed and whether the comment was
+  created anyway, to narrow down the HTTP 500 on `POST /issue-comments`.
+
 ## onedevr 0.7.0
 
 ### Security and vulnerability monitoring

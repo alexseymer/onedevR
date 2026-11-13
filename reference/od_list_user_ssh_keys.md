@@ -1,6 +1,7 @@
 # List SSH keys for a user
 
-Retrieves all SSH public keys registered for a user account.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -36,6 +37,10 @@ od_list_user_ssh_keys(user = NULL, as_tibble = NULL, conn = NULL)
 
 tibble\|list A tibble of SSH keys (default), or a list when
 `as_tibble = FALSE`.
+
+## Details
+
+Retrieves all SSH public keys registered for a user account.
 
 ## See also
 

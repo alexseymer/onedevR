@@ -1,9 +1,7 @@
 # Enable caching globally for all API requests
 
-Configures global cache settings for the onedevR package. Cache stores
-GET requests (idempotent operations) and automatically expires entries
-based on TTL. Cache is per-connection (different hosts have separate
-caches).
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -26,6 +24,13 @@ od_enable_cache(ttl_seconds = 3600, max_size = 1000)
 ## Value
 
 invisible(`TRUE`) to allow use in piping contexts.
+
+## Details
+
+Configures global cache settings for the onedevR package. Cache stores
+GET requests (idempotent operations) and automatically expires entries
+based on TTL. Cache is per-connection (different hosts have separate
+caches).
 
 ## See also
 

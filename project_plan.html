@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
 
 <div id="onedevr--plan-für-ein-r-paket-onedev-rest-api-client" class="section level1">
 
-<p><strong>Stand:</strong> 2026-11-02 (Paketversion 0.7.0)<br><strong>Status:</strong> Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die <strong>Spezifikation</strong> (Ziel, Konventionen, bekannte API-Quirks). <strong>Maßgeblich für den Ist-Stand sind</strong> <code>R/*.R</code>, <code>NAMESPACE</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code> und <code>ROADMAP.md</code>; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.<br><strong>Ziel:</strong> Eigenständiges R-Paket <code>onedevr</code> (Display-Name: <strong>onedevR</strong>), analog zu <a href="https://thinkr-open.github.io/gitlabr/" class="external-link">gitlabr</a>, das die OneDev-REST-API kapselt.</p>
+<p><strong>Stand:</strong> 2026-11-10 (Paketversion 0.7.1)<br><strong>Status:</strong> Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die <strong>Spezifikation</strong> (Ziel, Konventionen, bekannte API-Quirks). <strong>Maßgeblich für den Ist-Stand sind</strong> <code>R/*.R</code>, <code>NAMESPACE</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code> und <code>ROADMAP.md</code>; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.<br><strong>Ziel:</strong> Eigenständiges R-Paket <code>onedevr</code> (Display-Name: <strong>onedevR</strong>), analog zu <a href="https://thinkr-open.github.io/gitlabr/" class="external-link">gitlabr</a>, das die OneDev-REST-API kapselt.</p>
 <hr><div class="section level2">
 <h2 id="inhaltsverzeichnis">Inhaltsverzeichnis<a class="anchor" aria-label="anchor" href="#inhaltsverzeichnis"></a></h2>
 <ol style="list-style-type: decimal"><li><a href="#id_1-executive-summary">Executive Summary</a></li>
@@ -73,6 +73,7 @@
 </ol><hr></div>
 <div class="section level2">
 <h2 id="id_1-executive-summary">1. Executive Summary<a class="anchor" aria-label="anchor" href="#id_1-executive-summary"></a></h2>
+<p><strong>Ziel (präzisiert 2026-11-12):</strong> Öffentliches Allzweck-Paket für die OneDev-REST-API. Maßstab ist nachgewiesene Funktion: Der Kern (Issues, Kommentare, Iterationen, Boards, PRs, Projekte, Verbindung) ist im täglichen Einsatz gegen eine echte Instanz; Batch, Parallel, Streaming, Cache, Webhooks und SSH-Keys sind als <strong>experimentell</strong> markiert, bis sie live verifiziert sind. Der CLI-Wrapper <code>onedevr.cmd</code> bleibt außerhalb des Pakets im Consumer-Projekt.</p>
 <table class="table"><colgroup><col width="36%"><col width="63%"></colgroup><thead><tr><th>Aspekt</th>
 <th>Entscheidung</th>
 </tr></thead><tbody><tr><td><strong>Paketname (CRAN)</strong></td>
@@ -264,6 +265,10 @@
 </tr><tr><td>0.7.0</td>
 <td>
 <code><a href="reference/od_resolve_iteration_ids.html">od_resolve_iteration_ids()</a></code>, 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, <code>od_error</code>, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring</td>
+</tr><tr><td>0.7.1</td>
+<td>
+<code><a href="reference/od_whoami.html">od_whoami()</a></code> mit Rückfall bei verweigertem <code>/users/me</code>; automatisches Paging für <code>count</code> über 100; HTML-Fehlerseiten gekürzt; Kommentar-Body wieder einfach; <code>scripts/diagnose-comments.R</code>
+</td>
 </tr></tbody></table><p>Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (<code>R/batch.R</code>, <code>R/concurrent.R</code>, <code>R/streaming.R</code>, <code>R/cache.R</code>).</p>
 </div>
 <div class="section level3">

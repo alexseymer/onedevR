@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@
 <div class="section level2">
 <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a>
 </h2>
-<p><strong>v0.7.0</strong> — current release. Issue/build/PR workflows, boards, jobs, packages, repository helpers, tibbles by default, and Bearer + Basic Auth. This release adds iteration names wherever iteration ids are accepted, a hint on HTTP 406 “Invalid query” errors, credential-safe caching, query-string escaping, masked secrets when printing a connection, and automated security and vulnerability monitoring (see <a href="SECURITY.html"><code>SECURITY.md</code></a>). See <a href="NEWS.html"><code>NEWS.md</code></a> for the full changelog.</p>
+<p><strong>v0.7.1</strong> — current release. Issue/build/PR workflows, boards, jobs, packages, repository helpers, tibbles by default, and Bearer + Basic Auth. 0.7.0 added iteration names wherever iteration ids are accepted, credential-safe caching, query-string escaping, masked secrets when printing a connection, and automated security and vulnerability monitoring (see <a href="SECURITY.html"><code>SECURITY.md</code></a>). 0.7.1 adds <code><a href="reference/od_whoami.html">od_whoami()</a></code> (current user, with a fallback when <code>/users/me</code> is refused), automatic paging for <code>count</code> above 100, shorter error messages for HTML error pages, and a diagnosis script for the HTTP 500 on issue comments. See <a href="NEWS.html"><code>NEWS.md</code></a> for the full changelog.</p>
 </div>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
@@ -157,6 +157,19 @@
 <span><span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_query_projects.html">od_query_projects</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">20L</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span><span class="va">me</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_get_me.html">od_get_me</a></span><span class="op">(</span>conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
 <p>Copy <a href=".Renviron.example"><code>.Renviron.example</code></a> to <code>.Renviron</code> (gitignored) and fill in your host/token/project. <a href=".env.example"><code>.env.example</code></a> is the same variable list for non-R tooling. Live integration tests are gated behind <code>ONEDEV_RUN_LIVE_TESTS=1</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="scope-and-maturity">Scope and maturity<a class="anchor" aria-label="anchor" href="#scope-and-maturity"></a>
+</h2>
+<p><code>onedevr</code> aims to be a general-purpose R client for the OneDev REST API. Functions differ in how well they are proven:</p>
+<ul>
+<li>
+<strong>Core</strong> (issues, comments, iterations, boards, pull requests, projects, connection): used in daily work against a real instance; bugs found there are fixed and covered by regression tests.</li>
+<li>
+<strong>Experimental</strong> (batch, parallel, streaming, caching, webhooks, SSH keys): tested offline only, marked “Experimental” on their help pages; the interface may change.</li>
+<li>Everything else (builds, jobs, packages, repository, users, groups) is tested offline and partly read-verified.</li>
+</ul>
+<p>Live verification of the whole surface is the next milestone (see <a href="ROADMAP.html"><code>ROADMAP.md</code></a>).</p>
 </div>
 <div class="section level2">
 <h2 id="whats-in-v07x">What’s in v0.7.x<a class="anchor" aria-label="anchor" href="#whats-in-v07x"></a>

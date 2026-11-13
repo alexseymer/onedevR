@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-02 (Paketversion 0.7.0)  
+**Stand:** 2026-11-10 (Paketversion 0.7.1)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht.
 Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte
 API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`,
@@ -42,6 +42,14 @@ OneDev-REST-API kapselt.
 ------------------------------------------------------------------------
 
 ## 1. Executive Summary
+
+**Ziel (präzisiert 2026-11-12):** Öffentliches Allzweck-Paket für die
+OneDev-REST-API. Maßstab ist nachgewiesene Funktion: Der Kern (Issues,
+Kommentare, Iterationen, Boards, PRs, Projekte, Verbindung) ist im
+täglichen Einsatz gegen eine echte Instanz; Batch, Parallel, Streaming,
+Cache, Webhooks und SSH-Keys sind als **experimentell** markiert, bis
+sie live verifiziert sind. Der CLI-Wrapper `onedevr.cmd` bleibt
+außerhalb des Pakets im Consumer-Projekt.
 
 | Aspekt | Entscheidung |
 |----|----|
@@ -152,6 +160,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.5.2 | Titel/Beschreibung: Rohstring zuerst; aggregierte Varianten-Fehler |
 | 0.6.0 | Boards/Projekt-Settings ([`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md), [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)), [`od_get_iteration()`](https://alexseymer.github.io/onedevR/reference/od_get_iteration.md) |
 | 0.7.0 | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
+| 0.7.1 | [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md) mit Rückfall bei verweigertem `/users/me`; automatisches Paging für `count` über 100; HTML-Fehlerseiten gekürzt; Kommentar-Body wieder einfach; `scripts/diagnose-comments.R` |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache

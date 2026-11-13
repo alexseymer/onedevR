@@ -1,7 +1,7 @@
 # Clear cached data
 
-Removes cached entries, optionally filtered by a pattern. Useful for
-invalidating cache after mutations or resetting specific data.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -19,6 +19,11 @@ od_clear_cache(pattern = NULL)
 ## Value
 
 integer Count of cleared items.
+
+## Details
+
+Removes cached entries, optionally filtered by a pattern. Useful for
+invalidating cache after mutations or resetting specific data.
 
 ## See also
 

@@ -1,6 +1,7 @@
 # Create a webhook for a project
 
-Creates a new webhook that will POST events to the specified URL.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -36,6 +37,10 @@ od_create_webhook(url, events = NULL, project = NULL, conn = NULL)
 ## Value
 
 list Parsed webhook object with ID and configuration.
+
+## Details
+
+Creates a new webhook that will POST events to the specified URL.
 
 ## See also
 

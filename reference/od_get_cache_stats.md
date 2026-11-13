@@ -1,7 +1,7 @@
 # Get cache statistics
 
-Returns a summary of cache performance including hit rate, number of
-items, and total size in bytes.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -26,6 +26,11 @@ list Statistics with named elements:
 - `hits`: total cache hits
 
 - `misses`: total cache misses
+
+## Details
+
+Returns a summary of cache performance including hit rate, number of
+items, and total size in bytes.
 
 ## See also
 

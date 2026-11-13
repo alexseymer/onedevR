@@ -1,9 +1,7 @@
 # Disable caching globally
 
-Disables cache and clears all cached data. Subsequent API requests will
-bypass the cache until
-[`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
-is called again.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -14,6 +12,13 @@ od_disable_cache()
 ## Value
 
 invisible(`TRUE`).
+
+## Details
+
+Disables cache and clears all cached data. Subsequent API requests will
+bypass the cache until
+[`od_enable_cache()`](https://alexseymer.github.io/onedevR/reference/od_enable_cache.md)
+is called again.
 
 ## See also
 

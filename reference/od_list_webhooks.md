@@ -1,6 +1,7 @@
 # List webhooks for a project
 
-Retrieves all webhooks configured for a project.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -34,6 +35,10 @@ od_list_webhooks(project = NULL, as_tibble = NULL, conn = NULL)
 
 tibble\|list A tibble of webhooks (default), or a list when
 `as_tibble = FALSE`.
+
+## Details
+
+Retrieves all webhooks configured for a project.
 
 ## See also
 

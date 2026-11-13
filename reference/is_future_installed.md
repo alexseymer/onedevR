@@ -1,8 +1,7 @@
 # Check if future package is available
 
-Helper function to verify that the `future` package is installed. If not
-available, suggests installation and can optionally fall back to
-sequential processing.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -22,6 +21,12 @@ is_future_installed(fallback = TRUE)
 
 logical `TRUE` if `future` is installed, `FALSE` if not and fallback is
 enabled.
+
+## Details
+
+Helper function to verify that the `future` package is installed. If not
+available, suggests installation and can optionally fall back to
+sequential processing.
 
 ## Examples
 

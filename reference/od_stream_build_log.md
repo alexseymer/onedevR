@@ -1,10 +1,7 @@
 # Stream build log output with callback processing
 
-Downloads the binary build log stream from OneDev and calls a callback
-function for each parsed line. This allows processing large build logs
-without loading the entire output into memory. Log lines are extracted
-from the streaming binary protocol (see
-[`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md)).
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -56,6 +53,14 @@ od_stream_build_log(
 ## Value
 
 invisible(NULL) Returns invisibly; operates via callback side effects.
+
+## Details
+
+Downloads the binary build log stream from OneDev and calls a callback
+function for each parsed line. This allows processing large build logs
+without loading the entire output into memory. Log lines are extracted
+from the streaming binary protocol (see
+[`od_get_build_log()`](https://alexseymer.github.io/onedevR/reference/od_get_build_log.md)).
 
 ## See also
 

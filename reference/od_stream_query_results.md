@@ -1,10 +1,7 @@
 # Stream large query results with chunking
 
-Repeatedly calls a fetcher function (e.g.,
-[`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md))
-to retrieve paginated results, calling a callback for each page/chunk.
-This is useful for processing large result sets that would be too large
-to load entirely into memory.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -83,6 +80,14 @@ invisible(list) Invisibly returns a summary list with:
 - `page_count`: total number of pages fetched
 
 - `elapsed_time`: elapsed time in seconds
+
+## Details
+
+Repeatedly calls a fetcher function (e.g.,
+[`od_query_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_issues.md))
+to retrieve paginated results, calling a callback for each page/chunk.
+This is useful for processing large result sets that would be too large
+to load entirely into memory.
 
 ## See also
 

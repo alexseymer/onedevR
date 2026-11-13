@@ -1,9 +1,7 @@
 # Run multiple queries concurrently
 
-Execute a list of query specifications in parallel using futures. Each
-query spec is a list containing a function name and its arguments.
-Useful for batch retrieving data from multiple endpoints without
-blocking.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -37,6 +35,11 @@ query fails, an `od_error` object (see
 position.
 
 ## Details
+
+Execute a list of query specifications in parallel using futures. Each
+query spec is a list containing a function name and its arguments.
+Useful for batch retrieving data from multiple endpoints without
+blocking.
 
 If `future` is not installed, falls back to sequential execution with a
 warning.

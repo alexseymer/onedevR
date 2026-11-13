@@ -1,12 +1,7 @@
 # Process results in fixed-size chunks
 
-A convenience wrapper around
-[`od_stream_query_results()`](https://alexseymer.github.io/onedevR/reference/od_stream_query_results.md)
-for batch processing. If no callback is provided, yields results as a
-list of chunks (useful with
-[`lapply()`](https://rdrr.io/r/base/lapply.html) or for saving to disk).
-If a callback is provided, it is called for each chunk and the return
-value is `NULL`.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -55,6 +50,16 @@ od_chunked_foreach(
 
 list If `callback = NULL`: a list of chunks (each chunk is a tibble or
 list). Otherwise: `invisible(NULL)`.
+
+## Details
+
+A convenience wrapper around
+[`od_stream_query_results()`](https://alexseymer.github.io/onedevR/reference/od_stream_query_results.md)
+for batch processing. If no callback is provided, yields results as a
+list of chunks (useful with
+[`lapply()`](https://rdrr.io/r/base/lapply.html) or for saving to disk).
+If a callback is provided, it is called for each chunk and the return
+value is `NULL`.
 
 ## See also
 

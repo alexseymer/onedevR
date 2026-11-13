@@ -1,8 +1,7 @@
 # Process a stream of items with concurrent workers
 
-Apply a function across a potentially large list of items using a
-configurable number of concurrent workers. Useful for bulk operations
-with built-in rate limiting and worker pool management.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -44,6 +43,10 @@ list Combined results from all items, in the same order. Failed items
 are `od_error` objects with a `message` field.
 
 ## Details
+
+Apply a function across a potentially large list of items using a
+configurable number of concurrent workers. Useful for bulk operations
+with built-in rate limiting and worker pool management.
 
 If `future` is not installed, falls back to sequential execution.
 

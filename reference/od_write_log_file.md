@@ -1,9 +1,7 @@
 # Write build log to a file
 
-Convenience wrapper around
-[`od_stream_build_log()`](https://alexseymer.github.io/onedevR/reference/od_stream_build_log.md)
-that writes the build log to a file line-by-line. Returns metadata about
-the operation.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -55,6 +53,13 @@ invisible(list) Invisibly returns a summary list with:
 - `line_count`: number of lines written
 
 - `file_size`: file size in bytes
+
+## Details
+
+Convenience wrapper around
+[`od_stream_build_log()`](https://alexseymer.github.io/onedevR/reference/od_stream_build_log.md)
+that writes the build log to a file line-by-line. Returns metadata about
+the operation.
 
 ## See also
 

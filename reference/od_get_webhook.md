@@ -1,6 +1,7 @@
 # Get a webhook by ID
 
-Retrieves details for a specific webhook.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -30,6 +31,10 @@ od_get_webhook(webhook_id, project = NULL, conn = NULL)
 ## Value
 
 list Parsed webhook object.
+
+## Details
+
+Retrieves details for a specific webhook.
 
 ## See also
 

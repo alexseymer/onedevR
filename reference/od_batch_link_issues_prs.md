@@ -1,7 +1,7 @@
 # Link multiple issue-PR pairs
 
-Creates links between multiple issue-pull request pairs. Useful for
-establishing relationships between issues and PRs in batch.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -43,6 +43,11 @@ list Named list with:
 - `errors`: List of errors encountered
 
 - `summary`: Character vector with status message
+
+## Details
+
+Creates links between multiple issue-pull request pairs. Useful for
+establishing relationships between issues and PRs in batch.
 
 ## See also
 

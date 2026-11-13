@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,23 @@
       <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="onedevr-071">onedevr 0.7.1<a class="anchor" aria-label="anchor" href="#onedevr-071"></a></h2>
+<p>Fixes and a small helper from field use against a real OneDev instance.</p>
+<div class="section level3">
+<h3 id="scope-0-7-1">Scope<a class="anchor" aria-label="anchor" href="#scope-0-7-1"></a></h3>
+<ul><li>Batch, parallel, streaming, caching, webhook and SSH-key functions are now marked <strong>Experimental</strong> on their help pages and in the reference index: they are tested offline only and their interface may change. No behaviour changes.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-from-the-field-log-0-7-1">Fixes from the field log<a class="anchor" aria-label="anchor" href="#fixes-from-the-field-log-0-7-1"></a></h3>
+<ul><li>New <code><a href="../reference/od_whoami.html">od_whoami()</a></code> returns the login name of the current user. When <code>GET /users/me</code> is refused (HTTP 401/403/404, as seen with some tokens), it falls back to the connection’s <code>username</code> (<code>ONEDEV_USERNAME</code>) and otherwise explains what to set. <code><a href="../reference/od_get_user_emails.html">od_get_user_emails()</a></code> and the SSH-key helpers use the same fallback when called without a <code>user</code>. Setting <code>ONEDEV_USERNAME</code> together with <code>ONEDEV_AUTH=bearer</code> keeps token auth.</li>
+<li>List helpers (<code><a href="../reference/od_query_issues.html">od_query_issues()</a></code>, <code><a href="../reference/od_query_builds.html">od_query_builds()</a></code>, <code><a href="../reference/od_query_pull_requests.html">od_query_pull_requests()</a></code>, <code><a href="../reference/od_query_projects.html">od_query_projects()</a></code>, <code><a href="../reference/od_query_users.html">od_query_users()</a></code>, <code><a href="../reference/od_query_groups.html">od_query_groups()</a></code>, <code><a href="../reference/od_query_packages.html">od_query_packages()</a></code>, <code><a href="../reference/od_list_iterations.html">od_list_iterations()</a></code>) now page automatically when <code>count</code> exceeds 100. OneDev rejects larger values with HTTP 406 “Count should not be greater than 100”; a request for more records is now several requests.</li>
+<li>HTTP error messages that contain an HTML page (for example the 500 “Interner Fehler” page) are reduced to the page title, and every message is limited to 300 characters.</li>
+<li>
+<code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code> sends only <code>issueId</code> + <code>content</code> again. The second body shape added in 0.7.0 (<code>issue = list(id = ...)</code>) is rejected by OneDev with HTTP 400 (unrecognized field <code>issue</code>) and only made the error message longer. HTTP 500 on this endpoint remains a server-side problem; the help page now says to check <code><a href="../reference/od_get_issue_comments.html">od_get_issue_comments()</a></code> before retrying.</li>
+<li>New <code>scripts/diagnose-comments.R</code> posts probe comments to a scratch issue and reports whether the call failed and whether the comment was created anyway, to narrow down the HTTP 500 on <code>POST /issue-comments</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="onedevr-070">onedevr 0.7.0<a class="anchor" aria-label="anchor" href="#onedevr-070"></a></h2>
 <div class="section level3">

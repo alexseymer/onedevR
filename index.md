@@ -56,13 +56,18 @@ is for you.
 
 ## Status
 
-**v0.7.0** — current release. Issue/build/PR workflows, boards, jobs,
+**v0.7.1** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
-Auth. This release adds iteration names wherever iteration ids are
-accepted, a hint on HTTP 406 “Invalid query” errors, credential-safe
-caching, query-string escaping, masked secrets when printing a
-connection, and automated security and vulnerability monitoring (see
-[`SECURITY.md`](https://alexseymer.github.io/onedevR/SECURITY.md)). See
+Auth. 0.7.0 added iteration names wherever iteration ids are accepted,
+credential-safe caching, query-string escaping, masked secrets when
+printing a connection, and automated security and vulnerability
+monitoring (see
+[`SECURITY.md`](https://alexseymer.github.io/onedevR/SECURITY.md)).
+0.7.1 adds
+[`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
+(current user, with a fallback when `/users/me` is refused), automatic
+paging for `count` above 100, shorter error messages for HTML error
+pages, and a diagnosis script for the HTTP 500 on issue comments. See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
 changelog.
 
@@ -139,6 +144,23 @@ to `.Renviron` (gitignored) and fill in your host/token/project.
 [`.env.example`](https://alexseymer.github.io/onedevR/.env.example) is
 the same variable list for non-R tooling. Live integration tests are
 gated behind `ONEDEV_RUN_LIVE_TESTS=1`.
+
+## Scope and maturity
+
+`onedevr` aims to be a general-purpose R client for the OneDev REST API.
+Functions differ in how well they are proven:
+
+- **Core** (issues, comments, iterations, boards, pull requests,
+  projects, connection): used in daily work against a real instance;
+  bugs found there are fixed and covered by regression tests.
+- **Experimental** (batch, parallel, streaming, caching, webhooks, SSH
+  keys): tested offline only, marked “Experimental” on their help pages;
+  the interface may change.
+- Everything else (builds, jobs, packages, repository, users, groups) is
+  tested offline and partly read-verified.
+
+Live verification of the whole surface is the next milestone (see
+[`ROADMAP.md`](https://alexseymer.github.io/onedevR/ROADMAP.md)).
 
 ## What’s in v0.7.x
 

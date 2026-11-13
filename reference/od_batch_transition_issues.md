@@ -1,7 +1,7 @@
 # Transition multiple issues to a new state
 
-Changes the state of multiple issues atomically. Useful for bulk state
-transitions (e.g., closing related issues, reopening a batch).
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -48,6 +48,11 @@ list Named list with:
   found)
 
 - `summary`: Character vector with status message
+
+## Details
+
+Changes the state of multiple issues atomically. Useful for bulk state
+transitions (e.g., closing related issues, reopening a batch).
 
 ## See also
 

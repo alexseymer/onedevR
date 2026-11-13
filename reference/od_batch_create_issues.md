@@ -1,10 +1,7 @@
 # Create multiple issues efficiently
 
-Creates multiple issues in batch, optionally reporting progress. Each
-issue spec should be a list with `title` (required), and optional
-`description`, `fields`, and `iteration_ids`. Uses
-[`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
-internally.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 
@@ -44,6 +41,14 @@ list Named list with:
 - `errors`: List of errors encountered (empty if all succeeded)
 
 - `summary`: Character vector with status message
+
+## Details
+
+Creates multiple issues in batch, optionally reporting progress. Each
+issue spec should be a list with `title` (required), and optional
+`description`, `fields`, and `iteration_ids`. Uses
+[`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
+internally.
 
 ## See also
 
