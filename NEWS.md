@@ -1,5 +1,15 @@
 # onedevr (development)
 
+* CRAN readiness: `R CMD check --as-cran` now reports only environment and
+  "new submission" notes. The `tod` URL in `DESCRIPTION` is in angle
+  brackets, a dead link in the function map is fixed, and `CONTRIBUTING.md`,
+  `LIVE-TESTS.md` and `REFACTORING.md` are no longer part of the package
+  tarball.
+* New regression tests (`test-field-log.R`) for problems seen in real use:
+  non-ASCII request bodies, state names with spaces, merge-conflict and
+  unrecognized-field messages, transition errors, missing iterations and
+  unknown query fields.
+
 * HTTP errors from `od_request()` and the helpers built on it are now
   conditions of class `od_http_error` (also an `error`) with the fields
   `status`, `method` and `url`. The message text is unchanged. Use

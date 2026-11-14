@@ -16,5 +16,8 @@
 ^docs$
 ^pkgdown$
 ^SECURITY\.md$
+^CONTRIBUTING\.md$
+^LIVE-TESTS\.md$
+^REFACTORING\.md$
 ^scripts$
 ^inst/figures$

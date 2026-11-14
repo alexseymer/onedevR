@@ -87,4 +87,7 @@ Estimate per plan: 1 week+.
   experimental functions once verified
 - [ ] Live verification of comment body variants and query escaping against a
   real OneDev instance (needs the `live-tests.yaml` secrets)
+- [x] CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
+  environment notes, "New submission" and 403 answers of github.com to
+  automated URL checks; submission itself waits for live verification
 - [ ] R-universe / CRAN when demand warrants it
