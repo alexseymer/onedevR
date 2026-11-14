@@ -115,6 +115,33 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="design-principles-the-linux-principle">Design principles (the Linux principle)<a class="anchor" aria-label="anchor" href="#design-principles-the-linux-principle"></a></h2>
+<p>onedevr follows the Linux principle: <strong>small, focused, cooperating functions, developed openly and iteratively.</strong> The authoritative description (in German) is the section “Leitprinzip” in <a href="project_plan.html"><code>project_plan.md</code></a>. In short:</p>
+<p><strong>Design (Unix philosophy)</strong></p>
+<ol style="list-style-type: decimal"><li>
+<strong>One thing well.</strong> An <code>od_*</code> function maps to one OneDev operation. State its purpose in one sentence without “and”. Multi-step workflows belong to the caller.</li>
+<li>
+<strong>Compose.</strong> The object acted on (UI number, name, id) is the first argument; <code>conn</code> and options come last, so <code>145 |&gt; od_get_issue()</code> works. No hidden state beyond the explicit connection and the optional cache.</li>
+<li>
+<strong>Plain data is the interface.</strong> Return tibbles or plain lists. Custom classes only for the connection and for errors (<code>od_http_error</code>).</li>
+<li>
+<strong>Small is beautiful.</strong> The dependency budget is fixed (<code>digest</code>, <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>, <code>vctrs</code>). Anything beyond the core is experimental or belongs in its own package.</li>
+<li>
+<strong>No captive interface.</strong> Library code never prompts and never writes to stdout: data via return values, diagnostics via <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> and conditions.</li>
+<li>
+<strong>Fail loudly, fall back openly.</strong> Fallbacks are documented and report why they were used.</li>
+</ol><p><strong>Process (bazaar)</strong></p>
+<ol start="7" style="list-style-type: decimal"><li>
+<strong>Release early, release often.</strong> Ship field fixes as patch releases; every release has a <code>NEWS.md</code> section.</li>
+<li>
+<strong>Many eyeballs.</strong> Work in public through issues and pull requests; CI decides what merges.</li>
+<li>
+<strong>Users are co-developers.</strong> Report problems with a reproducible example (use the issue template); every field-log entry becomes a regression test in <code>tests/testthat/test-field-log.R</code>.</li>
+<li>
+<strong>Maturity levels.</strong> <em>Core</em> functions are verified against a live instance; <em>experimental</em> ones are marked as such until a live test promotes them.</li>
+</ol><p><code>tests/testthat/test-principles.R</code> enforces rules 2 to 5 mechanically. If it fails, change the code or change the rule on purpose (and its documentation), but do not weaken the test silently.</p>
+</div>
+<div class="section level2">
 <h2 id="making-changes">Making Changes<a class="anchor" aria-label="anchor" href="#making-changes"></a></h2>
 <div class="section level3">
 <h3 id="adding-a-new-function">Adding a New Function<a class="anchor" aria-label="anchor" href="#adding-a-new-function"></a></h3>

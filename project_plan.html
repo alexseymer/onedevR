@@ -98,13 +98,76 @@
 <td>Issues, Projekte, Iterations, Builds/Jobs, Pull Requests, Repository/Commits, Packages, Users/Groups, Artefakte, Streaming, Cache, Batch/Parallel</td>
 </tr><tr><td><strong>Nicht im Paket</strong></td>
 <td>App-spezifische Web-URL-Builder, Shiny-UI, domänenspezifische Issue-Titel</td>
-</tr></tbody></table><p><strong>Kernidee:</strong> Zwei Ebenen wie bei gitlabr:</p>
+</tr></tbody></table><div class="section level3">
+<h3 id="leitprinzip-das-linux-prinzip">Leitprinzip: das Linux-Prinzip<a class="anchor" aria-label="anchor" href="#leitprinzip-das-linux-prinzip"></a></h3>
+<p>Entwicklung und Design von onedevr folgen dem „Linux-Prinzip“:</p>
+<blockquote>
+<p><strong>Kleine, fokussierte, zusammenarbeitende Funktionen + offene, kollaborative und iterative Entwicklung.</strong></p>
+</blockquote>
+<p>Es ist eine Haltung, keine starre Methode: Einfachheit, Modularität, Transparenz und die Überzeugung, dass viele kompetente Köpfe gemeinsam bessere Software bauen als ein kleines, abgeschottetes Team. Das Prinzip hat zwei Teile, beide verbindlich.</p>
+<div class="section level4">
+<h4 id="a-design-unix-philosophie">A. Design (Unix-Philosophie)<a class="anchor" aria-label="anchor" href="#a-design-unix-philosophie"></a></h4>
+<table class="table"><colgroup><col width="23%"><col width="37%"><col width="39%"></colgroup><thead><tr><th>Unix-Regel</th>
+<th>Regel für onedevr</th>
+<th>Durchgesetzt durch</th>
+</tr></thead><tbody><tr><td>Ein Programm macht <em>eine</em> Sache gut</td>
+<td>Eine <code>od_*</code>-Funktion bildet <strong>eine</strong> OneDev-Operation ab (oder eine klar benannte Auflösung/Hilfe). Abläufe aus mehreren Schritten gehören dem Aufrufer und werden aus kleinen Funktionen zusammengesetzt. Der Zweck einer neuen Funktion lässt sich in einem Satz ohne „und“ sagen.</td>
+<td>Review (Definition of Done); Bereiche, die dagegen verstoßen, sind „experimentell“</td>
+</tr><tr><td>Programme sollen zusammenarbeiten (Pipes, Filter)</td>
+<td>Das Objekt, auf dem gearbeitet wird (UI-Nummer, Name, Id), ist das <strong>erste</strong> Argument; <code>conn</code> und Optionen stehen hinten. So funktioniert <code>145 \|&gt; od_get_issue()</code>. Kein versteckter Zustand außer der expliziten Verbindung und dem optionalen Cache.</td>
+<td>Test „compose“ in <code>test-principles.R</code>
+</td>
+</tr><tr><td>Text ist die universelle Schnittstelle</td>
+<td>Ergebnisse sind Tibbles oder einfache Listen in JSON-Form, keine eigenen Klassen. Ausnahmen sind die Verbindung (<code>od_connection</code>) und Fehlerbedingungen (<code>od_http_error</code>). <code>as_tibble = FALSE</code> liefert das rohe, geparste JSON; <code><a href="reference/od_request.html">od_request()</a></code> ist der Ausweg für alles andere.</td>
+<td>Test „plain data interface“</td>
+</tr><tr><td>Small is beautiful</td>
+<td>Festes Abhängigkeitsbudget: <code>digest</code>, <code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>, <code>vctrs</code>. Funktionen bleiben kurz. Neues außerhalb des Kerns ist experimentell oder gehört in ein eigenes Paket.</td>
+<td>Test „dependency budget“</td>
+</tr><tr><td>Prototyp so früh wie möglich</td>
+<td>Zuerst die einfachste Lösung, die gegen eine echte Instanz funktioniert; ungeprüftes ist als „experimentell“ gekennzeichnet, bis ein Live-Test es belegt.</td>
+<td>Definition of Done („Verifikation“)</td>
+</tr><tr><td>Portabilität vor Effizienz</td>
+<td>Reines R plus <code>httr2</code>: kein kompilierter Code, keine Systemabhängigkeiten; läuft auf Linux, macOS und Windows.</td>
+<td>CI-Matrix (4 Plattformen)</td>
+</tr><tr><td>Daten und Konfiguration als einfacher Text</td>
+<td>Konfiguration über Umgebungsvariablen und <code>.Renviron</code>; keine Binärformate.</td>
+<td>
+<code>.env.example</code>, <code><a href="reference/od_get_config.html">od_get_config()</a></code>
+</td>
+</tr><tr><td>Kein „captive user interface“</td>
+<td>Bibliothekscode fragt nie nach Eingaben und schreibt nie auf stdout. Daten laufen über Rückgabewerte, Diagnose über <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> und Bedingungen.</td>
+<td>Test „no captive interface“</td>
+</tr><tr><td>Jedes Programm ist ein Filter</td>
+<td>Eingabe rein, Ergebnis raus; Fehler schlagen laut fehl. Rückfälle (<code><a href="reference/od_whoami.html">od_whoami()</a></code>, Body-Varianten) sind dokumentiert und melden ihre Gründe.</td>
+<td>Review; Feldprotokoll-Tests</td>
+</tr></tbody></table></div>
+<div class="section level4">
+<h4 id="b-prozess-bazaar-modell">B. Prozess (Bazaar-Modell)<a class="anchor" aria-label="anchor" href="#b-prozess-bazaar-modell"></a></h4>
+<table class="table"><colgroup><col width="40%"><col width="59%"></colgroup><thead><tr><th>Linux-Regel</th>
+<th>Regel für onedevr</th>
+</tr></thead><tbody><tr><td>Release early, release often</td>
+<td>Kleine Releases statt großer: Feldkorrekturen erscheinen als Patch-Release, ohne auf andere Arbeiten zu warten. Jedes Release hat einen <code>NEWS.md</code>-Abschnitt, einen Tag und ein GitHub-Release (<code>RELEASE.md</code>).</td>
+</tr><tr><td>Given enough eyeballs, all bugs are shallow</td>
+<td>Alles geschieht öffentlich über Issues und Pull Requests; CI (4 Plattformen, pkgdown, Sicherheit) und Review entscheiden über den Merge. Beispiele sind so geschrieben, dass andere sie nachvollziehen können.</td>
+</tr><tr><td>Benutzer als Mit-Entwickler</td>
+<td>Fehlerberichte mit reproduzierbarem Beispiel (Issue-Vorlage); jeder Eintrag im Feldprotokoll wird zu einem Regressionstest (<code>test-field-log.R</code>).</td>
+</tr><tr><td>Offene Kommunikation</td>
+<td>Entscheidungen stehen im Plan, in der Roadmap und in Pull Requests, nicht in privaten Notizen. Sicherheitsmeldungen laufen nach <code>SECURITY.md</code>.</td>
+</tr><tr><td>Dezentrale Verantwortung, klare Maintainer</td>
+<td>Der Maintainer entscheidet zuletzt. Bereiche haben eigene Reife: <strong>Kern</strong> (live verifiziert) und <strong>experimentell</strong>. Ein Bereich wird erst Kern, wenn ein Live-Test ihn belegt.</td>
+</tr></tbody></table></div>
+<div class="section level4">
+<h4 id="stand-der-umsetzung">Stand der Umsetzung<a class="anchor" aria-label="anchor" href="#stand-der-umsetzung"></a></h4>
+<p>Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt schrieb mit <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> auf stdout und nutzt jetzt <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>. Bekannte Abweichungen, die bleiben, bis sie live verifiziert oder ausgelagert sind: Batch, Parallel, Streaming und Cache bündeln mehrere Schritte in einer Funktion (Regel „eine Sache“) und sind deshalb als experimentell markiert. Sie sind Kandidaten für ein eigenes Paket, falls sie nicht in den Kern aufsteigen.</p>
+<p><strong>Kernidee:</strong> Zwei Ebenen wie bei gitlabr:</p>
 <ul><li>
 <strong>Low-level:</strong> <code><a href="reference/od_request.html">od_request()</a></code> — beliebiger REST-Aufruf gegen <code>https://&lt;host&gt;/~api/...</code>
 </li>
 <li>
 <strong>High-level:</strong> <code><a href="reference/od_get_issue.html">od_get_issue()</a></code>, <code><a href="reference/od_create_issue.html">od_create_issue()</a></code>, <code><a href="reference/od_query_issues.html">od_query_issues()</a></code>, …</li>
 </ul><hr></div>
+</div>
+</div>
 <div class="section level2">
 <h2 id="id_2-motivation--referenzmodell-gitlabr--tod">2. Motivation &amp; Referenzmodell (gitlabr + tod)<a class="anchor" aria-label="anchor" href="#id_2-motivation--referenzmodell-gitlabr--tod"></a></h2>
 <p><strong>Zwei getrennte Referenzen:</strong></p>

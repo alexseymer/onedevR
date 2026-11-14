@@ -53,6 +53,7 @@
 <div id="release-checklist-for-onedevr" class="section level1">
 
 <p>Use this when cutting a GitHub Release (Phase 4+).</p>
+<p>Principle: release early, release often. A field fix ships as a patch release as soon as it is green; do not hold it back for unrelated work.</p>
 <ol style="list-style-type: decimal"><li>Ensure <code>main</code> is green on <code>R-CMD-check</code>, <code>pkgdown</code> and <code>security</code>, and that the release meets the Definition of Done in <code>project_plan.md</code> (section 11).</li>
 <li>Bump <code>Version</code> in <code>DESCRIPTION</code> (tag = <code>v</code> + version, e.g. <code>0.7.1</code> → <code>v0.7.1</code>) and make the first heading of <code>NEWS.md</code> <code># onedevr &lt;version&gt;</code>. README, ROADMAP and <code>project_plan.md</code> must name the same version; the version-consistency test checks README and NEWS.</li>
 <li>Run the local gates:</li>

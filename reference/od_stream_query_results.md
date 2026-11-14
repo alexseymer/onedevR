@@ -55,8 +55,9 @@ od_stream_query_results(
 
 - progress:
 
-  logical If `TRUE`, print progress messages with line count and elapsed
-  time (default `FALSE`). Default: `FALSE`.
+  logical If `TRUE`, report progress (line count and elapsed time) on
+  stderr via [`message()`](https://rdrr.io/r/base/message.html); stdout
+  stays free for data (default `FALSE`). Default: `FALSE`.
 
 - conn:
 

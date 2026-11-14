@@ -198,6 +198,19 @@
 <p>Tokens and passwords are masked when a connection is printed, credentials are only sent to the configured host, and the dependencies are audited against the <a href="https://osv.dev" class="external-link">OSV</a> database in CI. Report vulnerabilities privately as described in <a href="SECURITY.html"><code>SECURITY.md</code></a>.</p>
 </div>
 <div class="section level2">
+<h2 id="design-philosophy">Design philosophy<a class="anchor" aria-label="anchor" href="#design-philosophy"></a>
+</h2>
+<p>onedevr follows the Linux principle: <strong>small, focused, cooperating functions, developed openly and iteratively.</strong></p>
+<ul>
+<li>One <code>od_*</code> function does one OneDev operation. Multi-step workflows are the caller’s job, built from small pieces.</li>
+<li>The object you act on comes first, <code>conn</code> and options last, so pipelines work: <code>145 |&gt; od_get_issue()</code>.</li>
+<li>Results are tibbles or plain lists (JSON-shaped); <code><a href="reference/od_request.html">od_request()</a></code> is the escape hatch. Library code never prompts and never writes to stdout.</li>
+<li>A small, fixed dependency budget (<code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>, <code>vctrs</code>, <code>digest</code>) and no compiled code, so it runs wherever R runs.</li>
+<li>Release early, release often: small releases, all work in public, and every problem from real use becomes a regression test.</li>
+</ul>
+<p>The rules and how they are enforced are in <a href="CONTRIBUTING.html#design-principles-the-linux-principle"><code>CONTRIBUTING.md</code></a>.</p>
+</div>
+<div class="section level2">
 <h2 id="design-notes-worth-knowing-up-front">Design notes worth knowing up front<a class="anchor" aria-label="anchor" href="#design-notes-worth-knowing-up-front"></a>
 </h2>
 <ul>

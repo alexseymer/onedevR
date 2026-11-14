@@ -152,4 +152,8 @@ CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
 environment notes, “New submission” and 403 answers of github.com to
 automated URL checks; submission itself waits for live verification
 
+Principle review: decide for batch, parallel, streaming and caching
+whether they are promoted to core after live verification or moved to
+their own package (rule “one thing well”)
+
 R-universe / CRAN when demand warrants it
