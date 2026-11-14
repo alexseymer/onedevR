@@ -1065,4 +1065,5 @@ For detailed workflows and examples:
   — Build querying and promotion workflows
 
 For API reference: - `?od_query_issues()` and related function docs -
-OneDev server documentation: <https://onedev.io/api>
+OneDev REST API documentation: <https://docs.onedev.io/restful-api> (per
+instance: `https://<host>/~help/api`)
