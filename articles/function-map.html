@@ -85,11 +85,11 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The onedevR package provides <strong>86 functions</strong> organized
-across multiple OneDev resource types. This guide maps those functions
-to their relationships, workflows, and parameter patterns—helping you
-discover the right function for your task and understand how functions
-work together.</p>
+<p>The onedevR package provides <strong>more than 100 functions</strong>
+organized across multiple OneDev resource types. This guide maps those
+functions to their relationships, workflows, and parameter
+patterns—helping you discover the right function for your task and
+understand how functions work together.</p>
 <p><strong>Who is this for?</strong> - <strong>LLMs and AI
 systems</strong> generating onedevR code or explaining API patterns -
 <strong>API users</strong> exploring what functions are available -
@@ -104,9 +104,13 @@ See <a href="#builds-functions">Builds Functions</a> - Projects? → See
 See <a href="#user--group-functions">User &amp; Group Functions</a> -
 Repository? → See <a href="#repository-functions">Repository
 Functions</a></p>
-<p><strong>If you know your task:</strong> - “Report an issue” → See <a href="#report-an-issue">Report an Issue</a> - “Merge a PR” → See <a href="#merge-a-pull-request">Merge a Pull Request</a> - “Find builds” →
-See <a href="#query-builds">Query Builds</a> - “Manage permissions” →
-See <a href="#manage-group-permissions">Manage Group Permissions</a></p>
+<p><strong>If you know your task:</strong> the workflow vignettes walk
+through complete examples: <code><a href="../articles/issues-workflow.html">vignette("issues-workflow")</a></code>,
+<code><a href="../articles/pull-requests-workflow.html">vignette("pull-requests-workflow")</a></code> and
+<code><a href="../articles/builds-workflow.html">vignette("builds-workflow")</a></code>.</p>
+<p>Functions marked <strong>Experimental</strong> in their help page
+(batch, parallel, streaming, caching, webhooks, SSH keys) are not yet
+verified against a live server.</p>
 <hr>
 </div>
 </div>
@@ -1279,126 +1283,6 @@ skip resolution - You’re working with raw API responses</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="common-workflow-patterns">Common Workflow Patterns<a class="anchor" aria-label="anchor" href="#common-workflow-patterns"></a>
-</h2>
-<div class="section level3">
-<h3 id="report-an-issue">Report an Issue<a class="anchor" aria-label="anchor" href="#report-an-issue"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Create the issue</span></span>
-<span><span class="va">issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_create_issue.html">od_create_issue</a></span><span class="op">(</span></span>
-<span>  title <span class="op">=</span> <span class="st">"Bug in API client"</span>,</span>
-<span>  description <span class="op">=</span> <span class="st">"## Steps\n1. Call function\n2. See error"</span>,</span>
-<span>  fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>priority <span class="op">=</span> <span class="st">"High"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Get the issue number</span></span>
-<span><span class="va">issue_num</span> <span class="op">&lt;-</span> <span class="va">issue</span><span class="op">$</span><span class="va">number</span></span>
-<span></span>
-<span><span class="co"># 3. Add comment if needed</span></span>
-<span><span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="st">"Assigning to @alice"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Set fields</span></span>
-<span><span class="fu"><a href="../reference/od_issue_set_fields.html">od_issue_set_fields</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>assignee <span class="op">=</span> <span class="st">"alice"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 5. Add to iteration</span></span>
-<span><span class="fu"><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">456</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="merge-a-pull-request">Merge a Pull Request<a class="anchor" aria-label="anchor" href="#merge-a-pull-request"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Get PR details</span></span>
-<span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_pull_request.html">od_get_pull_request</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Check PR state</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">state</span> <span class="op">==</span> <span class="st">"Open"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># 3. Approve it</span></span>
-<span>  <span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="co"># 4. Merge it</span></span>
-<span>  <span class="fu"><a href="../reference/od_merge_pull_request.html">od_merge_pull_request</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="query-issues-link-to-pr">Query Issues &amp; Link to PR<a class="anchor" aria-label="anchor" href="#query-issues-link-to-pr"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Find issues needing PR</span></span>
-<span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span></span>
-<span>  query <span class="op">=</span> <span class="st">'"Fix Version" is empty'</span>,</span>
-<span>  state <span class="op">=</span> <span class="st">"Closed"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Link each to the PR</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">issue_num</span> <span class="kw">in</span> <span class="va">issues</span><span class="op">$</span><span class="va">number</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/od_link_issue_to_pull_request.html">od_link_issue_to_pull_request</a></span><span class="op">(</span><span class="va">issue_num</span>, <span class="fl">42</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="build-promote">Build &amp; Promote<a class="anchor" aria-label="anchor" href="#build-promote"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Query recent builds</span></span>
-<span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span></span>
-<span>  query <span class="op">=</span> <span class="st">'"Branch" is "main"'</span>,</span>
-<span>  count <span class="op">=</span> <span class="fl">10</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Get latest build</span></span>
-<span><span class="va">latest</span> <span class="op">&lt;-</span> <span class="va">builds</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">$</span><span class="va">number</span></span>
-<span></span>
-<span><span class="co"># 3. Check its log</span></span>
-<span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_build_log.html">od_get_build_log</a></span><span class="op">(</span><span class="va">latest</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">log</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Promote if good</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"SUCCESS"</span>, <span class="va">log</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/od_promote_build.html">od_promote_build</a></span><span class="op">(</span><span class="va">latest</span>, status <span class="op">=</span> <span class="st">"release"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="manage-group-permissions">Manage Group Permissions<a class="anchor" aria-label="anchor" href="#manage-group-permissions"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Create group</span></span>
-<span><span class="va">group_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_group.html">od_get_group</a></span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Add members</span></span>
-<span><span class="fu"><a href="../reference/od_add_group_member.html">od_add_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"alice"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_add_group_member.html">od_add_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"bob"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 3. List members</span></span>
-<span><span class="va">members</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_group_members.html">od_list_group_members</a></span><span class="op">(</span><span class="st">"developers"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">members</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Remove if needed</span></span>
-<span><span class="fu"><a href="../reference/od_remove_group_member.html">od_remove_group_member</a></span><span class="op">(</span><span class="st">"developers"</span>, <span class="st">"charlie"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="download-build-artifacts">Download Build Artifacts<a class="anchor" aria-label="anchor" href="#download-build-artifacts"></a>
-</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Query builds</span></span>
-<span><span class="va">builds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_builds.html">od_query_builds</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Get latest</span></span>
-<span><span class="va">build_num</span> <span class="op">&lt;-</span> <span class="va">builds</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">$</span><span class="va">number</span></span>
-<span></span>
-<span><span class="co"># 3. List artifacts</span></span>
-<span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span><span class="va">build_num</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">artifacts</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Download specific artifact</span></span>
-<span><span class="fu"><a href="../reference/od_download_build_artifact.html">od_download_build_artifact</a></span><span class="op">(</span></span>
-<span>  <span class="va">build_num</span>,</span>
-<span>  artifact_path <span class="op">=</span> <span class="st">"app/dist.tar.gz"</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"/tmp/app.tar.gz"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<hr>
-</div>
-</div>
-<div class="section level2">
 <h2 id="parameter-patterns-table">Parameter Patterns Table<a class="anchor" aria-label="anchor" href="#parameter-patterns-table"></a>
 </h2>
 <p>Common parameters across onedevR functions:</p>
@@ -1526,7 +1410,7 @@ skip resolution - You’re working with raw API responses</p>
 <div class="section level3">
 <h3 id="basic-syntax">Basic Syntax<a class="anchor" aria-label="anchor" href="#basic-syntax"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="st">"/issues"</span>,</span>
@@ -1568,7 +1452,7 @@ query string)</li>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GET request</span></span>
 <span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  <span class="st">"GET"</span>,</span>
@@ -1608,7 +1492,7 @@ query string)</li>
 </h3>
 <p><code><a href="../reference/od_request.html">od_request()</a></code> returns the parsed JSON response as an R
 list. For list/array endpoints, results are automatically wrapped:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query endpoints return wrapped response</span></span>
 <span><span class="va">response</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/issues"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="va">response</span><span class="op">$</span><span class="va">data</span>  <span class="co"># or response$items (endpoint-specific)</span></span>
@@ -1617,445 +1501,6 @@ list. For list/array endpoints, results are automatically wrapped:</p>
 <span><span class="va">issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/issues/123"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>Check OneDev’s API documentation (or
 <code>od_request("GET", "/doc")</code>) for exact response shapes.</p>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="for-llms-navigation-guide">For LLMs: Navigation Guide<a class="anchor" aria-label="anchor" href="#for-llms-navigation-guide"></a>
-</h2>
-<p>This section helps language models and AI systems understand how to
-recommend and use onedevR functions.</p>
-<div class="section level3">
-<h3 id="how-to-discover-functions-by-resource">How to Discover Functions by Resource<a class="anchor" aria-label="anchor" href="#how-to-discover-functions-by-resource"></a>
-</h3>
-<p><strong>Given a user task mentioning a resource:</strong></p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Issue</strong> → Use functions in <a href="#issues-functions">Issues Functions</a>
-<ul>
-<li>Keywords: “issue”, “bug”, “task”, “ticket”</li>
-<li>Common operations: query, get, create, update, comment, link</li>
-</ul>
-</li>
-<li>
-<strong>Pull Request</strong> → Use functions in <a href="#pull-requests-functions">Pull Requests Functions</a>
-<ul>
-<li>Keywords: “PR”, “pull request”, “merge request”, “code review”</li>
-<li>Common operations: query, get, create, approve, merge, comment</li>
-</ul>
-</li>
-<li>
-<strong>Build</strong> → Use functions in <a href="#builds-functions">Builds Functions</a>
-<ul>
-<li>Keywords: “build”, “CI”, “pipeline”, “job”, “artifact”</li>
-<li>Common operations: query, get, run, log, promote, artifact</li>
-</ul>
-</li>
-<li>
-<strong>Project</strong> → Use functions in <a href="#projects-functions">Projects Functions</a>
-<ul>
-<li>Keywords: “project”, “repository”, “repo”, “webhook”</li>
-<li>Common operations: get, list, webhook, clone-url</li>
-</ul>
-</li>
-<li>
-<strong>Repository</strong> → Use functions in <a href="#repository-functions">Repository Functions</a>
-<ul>
-<li>Keywords: “branch”, “tag”, “commit”, “file”, “git”</li>
-<li>Common operations: list, get, query commits, read file</li>
-</ul>
-</li>
-<li>
-<strong>User/Group</strong> → Use functions in <a href="#user--group-functions">User &amp; Group Functions</a>
-<ul>
-<li>Keywords: “user”, “group”, “permission”, “member”, “SSH”,
-“auth”</li>
-<li>Common operations: get, query, add member, SSH key</li>
-</ul>
-</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="how-to-match-functions-to-operations">How to Match Functions to Operations<a class="anchor" aria-label="anchor" href="#how-to-match-functions-to-operations"></a>
-</h3>
-<p><strong>Given an operation, find the right function:</strong></p>
-<table class="table">
-<colgroup>
-<col width="36%">
-<col width="30%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th>Operation</th>
-<th>Pattern</th>
-<th>Examples</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Search/filter</td>
-<td><code>od_query_*()</code></td>
-<td>
-<code><a href="../reference/od_query_issues.html">od_query_issues()</a></code>,
-<code><a href="../reference/od_query_pull_requests.html">od_query_pull_requests()</a></code>
-</td>
-</tr>
-<tr class="even">
-<td>Retrieve one</td>
-<td><code>od_get_*()</code></td>
-<td>
-<code><a href="../reference/od_get_issue.html">od_get_issue()</a></code>, <code><a href="../reference/od_get_project.html">od_get_project()</a></code>
-</td>
-</tr>
-<tr class="odd">
-<td>Retrieve many</td>
-<td><code>od_list_*()</code></td>
-<td>
-<code><a href="../reference/od_list_branches.html">od_list_branches()</a></code>,
-<code><a href="../reference/od_list_webhooks.html">od_list_webhooks()</a></code>
-</td>
-</tr>
-<tr class="even">
-<td>Create</td>
-<td><code>od_create_*()</code></td>
-<td>
-<code><a href="../reference/od_create_issue.html">od_create_issue()</a></code>,
-<code><a href="../reference/od_create_pull_request.html">od_create_pull_request()</a></code>
-</td>
-</tr>
-<tr class="odd">
-<td>Update field</td>
-<td><code>od_*_set_*()</code></td>
-<td>
-<code><a href="../reference/od_issue_set_title.html">od_issue_set_title()</a></code>,
-<code><a href="../reference/od_issue_set_fields.html">od_issue_set_fields()</a></code>
-</td>
-</tr>
-<tr class="even">
-<td>State change</td>
-<td><code>od_*_transition_*()</code></td>
-<td><code><a href="../reference/od_issue_transition_state.html">od_issue_transition_state()</a></code></td>
-</tr>
-<tr class="odd">
-<td>Add/attach</td>
-<td><code>od_add_*()</code></td>
-<td>
-<code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>,
-<code><a href="../reference/od_add_group_member.html">od_add_group_member()</a></code>
-</td>
-</tr>
-<tr class="even">
-<td>Link/connect</td>
-<td><code>od_link_*_to_*()</code></td>
-<td><code><a href="../reference/od_link_issue_to_pull_request.html">od_link_issue_to_pull_request()</a></code></td>
-</tr>
-<tr class="odd">
-<td>Approve</td>
-<td><code>od_approve_*()</code></td>
-<td><code><a href="../reference/od_approve_pull_request.html">od_approve_pull_request()</a></code></td>
-</tr>
-<tr class="even">
-<td>Merge</td>
-<td><code>od_merge_*()</code></td>
-<td><code><a href="../reference/od_merge_pull_request.html">od_merge_pull_request()</a></code></td>
-</tr>
-<tr class="odd">
-<td>Remove</td>
-<td>
-<code>od_remove_*()</code> or <code>od_delete_*()</code> or
-<code>od_unlink_*()</code>
-</td>
-<td>
-<code><a href="../reference/od_remove_group_member.html">od_remove_group_member()</a></code>,
-<code><a href="../reference/od_delete_webhook.html">od_delete_webhook()</a></code>
-</td>
-</tr>
-<tr class="even">
-<td>Download</td>
-<td><code>od_download_*()</code></td>
-<td><code><a href="../reference/od_download_build_artifact.html">od_download_build_artifact()</a></code></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="pattern-matching-finding-similar-functions">Pattern Matching: Finding Similar Functions<a class="anchor" aria-label="anchor" href="#pattern-matching-finding-similar-functions"></a>
-</h3>
-<p><strong>To find related functions:</strong></p>
-<ol style="list-style-type: decimal">
-<li>Look for shared prefixes:
-<ul>
-<li>
-<code>od_issue_*</code> → all issue-specific operations</li>
-<li>
-<code>od_*_comment*</code> → commenting across resources</li>
-<li>
-<code>od_query_*</code> → all query functions</li>
-<li>
-<code>od_*_pull_request*</code> → PR-related operations</li>
-</ul>
-</li>
-<li>Think about workflows:
-<ul>
-<li>Create → Get → Update → Transition</li>
-<li>Query → Get → Link → Comment</li>
-</ul>
-</li>
-<li>Use function metadata:
-<ul>
-<li>Look at <code>@family</code> in roxygen docs</li>
-<li>Check parameter patterns (table above)</li>
-<li>Review common workflows (section above)</li>
-</ul>
-</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="when-to-use-od_-vs-this-map">When to Use ?od_* vs This Map<a class="anchor" aria-label="anchor" href="#when-to-use-od_-vs-this-map"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="30%">
-<col width="38%">
-<col width="30%">
-</colgroup>
-<thead><tr class="header">
-<th>Situation</th>
-<th>Use This Map</th>
-<th>Use ?od_*</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Understanding API structure</td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr class="even">
-<td>Discovering which function to use</td>
-<td>Yes</td>
-<td>No (after choosing function)</td>
-</tr>
-<tr class="odd">
-<td>Learning typical workflows</td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-<tr class="even">
-<td>Parameter details for one function</td>
-<td>No</td>
-<td>Yes</td>
-</tr>
-<tr class="odd">
-<td>Full function documentation</td>
-<td>No</td>
-<td>Yes</td>
-</tr>
-<tr class="even">
-<td>Which functions fit together</td>
-<td>Yes</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="common-patterns-for-llms-generating-code">Common Patterns for LLMs Generating Code<a class="anchor" aria-label="anchor" href="#common-patterns-for-llms-generating-code"></a>
-</h3>
-<p>When generating code, follow these patterns:</p>
-<ol style="list-style-type: decimal">
-<li>
-<p><strong>Always include connection setup:</strong></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># If no conn provided, add this first</span></span>
-<span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_config.html">od_get_config</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co"># or</span></span>
-<span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span>host <span class="op">=</span> <span class="va">...</span>, token <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Prefer UI numbers, not internal IDs:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Good</span></span>
-<span><span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Only for debugging</span></span>
-<span><span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="fl">999</span>, use_internal_id <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Use as_tibble = TRUE (default) for easier data
-handling:</strong></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>  <span class="co"># Returns tibble</span></span>
-<span><span class="va">issues</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">priority</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Chain operations in workflows:</strong></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Better: create then immediately get details</span></span>
-<span><span class="va">new_issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_create_issue.html">od_create_issue</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Test"</span><span class="op">)</span></span>
-<span><span class="va">details</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="va">new_issue</span><span class="op">$</span><span class="va">number</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Use resolution functions only when
-necessary:</strong></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Almost never needed - high-level functions handle this</span></span>
-<span><span class="co"># Only use if you have both UI number and internal ID:</span></span>
-<span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_resolve_issue_id.html">od_resolve_issue_id</a></span><span class="op">(</span><span class="fl">145</span><span class="op">)</span></span></code></pre></div>
-</li>
-</ol>
-<hr>
-</div>
-</div>
-<div class="section level2">
-<h2 id="the-8020-functions-youll-use-these-most">The 80/20 Functions: You’ll Use These Most<a class="anchor" aria-label="anchor" href="#the-8020-functions-youll-use-these-most"></a>
-</h2>
-<p>These 20 functions handle 80% of typical onedevR workflows:</p>
-<div class="section level3">
-<h3 id="core-functions-must-know">Core Functions (Must Know)<a class="anchor" aria-label="anchor" href="#core-functions-must-know"></a>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th>Function</th>
-<th>Purpose</th>
-<th>Return</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><strong>od_query_issues()</strong></td>
-<td>Find issues</td>
-<td>tibble of issues</td>
-</tr>
-<tr class="even">
-<td><strong>od_get_issue()</strong></td>
-<td>Get issue details</td>
-<td>issue object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_create_issue()</strong></td>
-<td>Create new issue</td>
-<td>created issue</td>
-</tr>
-<tr class="even">
-<td><strong>od_issue_set_fields()</strong></td>
-<td>Update issue fields</td>
-<td>updated issue</td>
-</tr>
-<tr class="odd">
-<td><strong>od_issue_transition_state()</strong></td>
-<td>Change issue state</td>
-<td>updated issue</td>
-</tr>
-<tr class="even">
-<td><strong>od_add_issue_comment()</strong></td>
-<td>Add issue comment</td>
-<td>comment object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_query_pull_requests()</strong></td>
-<td>Find PRs</td>
-<td>tibble of PRs</td>
-</tr>
-<tr class="even">
-<td><strong>od_get_pull_request()</strong></td>
-<td>Get PR details</td>
-<td>PR object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_approve_pull_request()</strong></td>
-<td>Approve PR</td>
-<td>updated PR</td>
-</tr>
-<tr class="even">
-<td><strong>od_merge_pull_request()</strong></td>
-<td>Merge PR</td>
-<td>merged PR object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_query_builds()</strong></td>
-<td>Find builds</td>
-<td>tibble of builds</td>
-</tr>
-<tr class="even">
-<td><strong>od_get_build()</strong></td>
-<td>Get build details</td>
-<td>build object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_get_build_log()</strong></td>
-<td>Get build log</td>
-<td>log text</td>
-</tr>
-<tr class="even">
-<td><strong>od_promote_build()</strong></td>
-<td>Release/deploy build</td>
-<td>promotion result</td>
-</tr>
-<tr class="odd">
-<td><strong>od_query_projects()</strong></td>
-<td>Find projects</td>
-<td>tibble of projects</td>
-</tr>
-<tr class="even">
-<td><strong>od_get_project()</strong></td>
-<td>Get project details</td>
-<td>project object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_query_users()</strong></td>
-<td>Find users</td>
-<td>tibble of users</td>
-</tr>
-<tr class="even">
-<td><strong>od_get_connection()</strong></td>
-<td>Get current connection</td>
-<td>connection object</td>
-</tr>
-<tr class="odd">
-<td><strong>od_set_connection()</strong></td>
-<td>Set default connection</td>
-<td>(invisibly)</td>
-</tr>
-<tr class="even">
-<td><strong>od_request()</strong></td>
-<td>Low-level API call</td>
-<td>raw API response</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="setup-first-thing">Setup (First Thing)<a class="anchor" aria-label="anchor" href="#setup-first-thing"></a>
-</h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Option 1: Use environment variables</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_get_config.html">od_get_config</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Validates ONEDEV_* env vars</span></span>
-<span></span>
-<span><span class="co"># Option 2: Explicit connection</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
-<span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span></span>
-<span>  host <span class="op">=</span> <span class="st">"https://git.example.com"</span>,</span>
-<span>  token <span class="op">=</span> <span class="st">"token_here"</span>,</span>
-<span>  project_path <span class="op">=</span> <span class="st">"group/project"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/od_set_connection.html">od_set_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="typical-workflow">Typical Workflow<a class="anchor" aria-label="anchor" href="#typical-workflow"></a>
-</h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Query to find items</span></span>
-<span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, count <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Get details on specific item</span></span>
-<span><span class="va">details</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span><span class="va">issues</span><span class="op">$</span><span class="va">number</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 3. Update/transition</span></span>
-<span><span class="fu"><a href="../reference/od_issue_transition_state.html">od_issue_transition_state</a></span><span class="op">(</span><span class="va">issues</span><span class="op">$</span><span class="va">number</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"In Progress"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Add comments/links</span></span>
-<span><span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span><span class="va">issues</span><span class="op">$</span><span class="va">number</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"Working on this"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 5. Similar for PRs, builds, etc.</span></span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -2070,8 +1515,8 @@ necessary:</strong></p>
 2. Know the operation? → See Parameter Patterns Table
    Example: "How do I search?" → Use od_query_*()
 
-3. Know nothing? → See Common Workflow Patterns or 80/20 Functions
-   Example: "How do I merge a PR?" → Workflow section
+3. Know nothing? → See the workflow vignettes listed under "See Also"
+   Example: "How do I merge a PR?" → vignette("pull-requests-workflow")
 
 REMEMBER:
 - All functions use UI numbers (#145, !42, not internal IDs)
