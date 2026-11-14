@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest a new function or behaviour
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: operation
+    attributes:
+      label: The one operation
+      description: "Which single OneDev operation should it cover? One sentence without \"and\". Multi-step workflows are built from small functions."
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: API endpoint or tod command
+      description: The REST endpoint (see `https://<host>/~help/api`) or the `tod` command it corresponds to.
+  - type: textarea
+    id: example
+    attributes:
+      label: How you would call it
+      render: r

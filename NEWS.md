@@ -1,5 +1,17 @@
 # onedevr (development)
 
+* The Linux principle (small, focused, cooperating functions; open and
+  iterative development) is now the stated design and development principle:
+  see "Leitprinzip" in `project_plan.md`, "Design principles" in
+  `CONTRIBUTING.md` and the README. `test-principles.R` enforces the
+  mechanical rules: fixed dependency budget, object-first argument order,
+  `conn` on every function that talks to OneDev, no prompts and no stdout
+  output from library code, and plain data classes.
+* `od_stream_query_results(progress = TRUE)` reports progress on stderr via
+  `message()` instead of writing to stdout with `cat()`.
+* New pull-request and issue templates ask for the checks of the Definition of
+  Done and for a reproducible example.
+
 * Documentation shortened: `ai-examples` (1,515 -> about 240 lines) now keeps
   only patterns specific to onedevr (connections, UI numbers, project scope,
   queries and paging, return shapes, errors, escape hatch), and `function-map`

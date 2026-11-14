@@ -2,6 +2,9 @@
 
 Use this when cutting a GitHub Release (Phase 4+).
 
+Principle: release early, release often. A field fix ships as a patch release
+as soon as it is green; do not hold it back for unrelated work.
+
 1. Ensure `main` is green on `R-CMD-check`, `pkgdown` and `security`, and
    that the release meets the Definition of Done in `project_plan.md`
    (section 11).

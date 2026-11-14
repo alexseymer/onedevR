@@ -148,6 +148,25 @@ only sent to the configured host, and the dependencies are audited against the
 [OSV](https://osv.dev) database in CI. Report vulnerabilities privately as
 described in [`SECURITY.md`](SECURITY.md).
 
+## Design philosophy
+
+onedevr follows the Linux principle: **small, focused, cooperating functions,
+developed openly and iteratively.**
+
+- One `od_*` function does one OneDev operation. Multi-step workflows are the
+  caller's job, built from small pieces.
+- The object you act on comes first, `conn` and options last, so pipelines
+  work: `145 |> od_get_issue()`.
+- Results are tibbles or plain lists (JSON-shaped); `od_request()` is the
+  escape hatch. Library code never prompts and never writes to stdout.
+- A small, fixed dependency budget (`httr2`, `jsonlite`, `rlang`, `tibble`,
+  `vctrs`, `digest`) and no compiled code, so it runs wherever R runs.
+- Release early, release often: small releases, all work in public, and
+  every problem from real use becomes a regression test.
+
+The rules and how they are enforced are in
+[`CONTRIBUTING.md`](CONTRIBUTING.md#design-principles-the-linux-principle).
+
 ## Design notes worth knowing up front
 
 - **Issue / build / PR numbers are UI numbers, not internal IDs.** OneDev
