@@ -105,7 +105,10 @@ onedevr.</p>
 <span><span class="va">recently_closed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Closed"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Issue with specific fields</span></span>
-<span><span class="va">high_priority</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, Priority <span class="op">=</span> <span class="st">"High"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">high_priority</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span></span>
+<span>  state <span class="op">=</span> <span class="st">"Open"</span>,</span>
+<span>  query <span class="op">=</span> <span class="st">'"Priority" is "High"'</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="custom-query-syntax">Custom Query Syntax<a class="anchor" aria-label="anchor" href="#custom-query-syntax"></a>

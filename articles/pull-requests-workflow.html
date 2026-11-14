@@ -290,16 +290,10 @@ onedevr.</p>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Approve a PR</span></span>
-<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span></span>
-<span>  <span class="fl">5</span>,</span>
-<span>  message <span class="op">=</span> <span class="st">"Approved and verified in CI"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Approve with custom message</span></span>
-<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span></span>
-<span>  <span class="fl">5</span>,</span>
-<span>  message <span class="op">=</span> <span class="st">"LGTM! Security review complete. Ready to merge."</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># The approval itself carries no text; add a comment for the message</span></span>
+<span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"LGTM! Security review complete. Ready to merge."</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="request-changes">Request Changes<a class="anchor" aria-label="anchor" href="#request-changes"></a>
@@ -515,10 +509,7 @@ onedevr.</p>
 <span>    <span class="co"># Check if ready to merge</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">approvals</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span> <span class="va">pr</span><span class="op">$</span><span class="va">ci_passed</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Merging PR #"</span>, <span class="va">pr_num</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="../reference/od_merge_pull_request.html">od_merge_pull_request</a></span><span class="op">(</span></span>
-<span>        <span class="va">pr_num</span>,</span>
-<span>        commit_message <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (%s)"</span>, <span class="va">pr</span><span class="op">$</span><span class="va">title</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"#"</span>, <span class="va">pr_num</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/od_merge_pull_request.html">od_merge_pull_request</a></span><span class="op">(</span><span class="va">pr_num</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -580,9 +571,9 @@ onedevr.</p>
 <span>    <span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span></span>
 <span>      <span class="st">"deploy"</span>,</span>
 <span>      branch <span class="op">=</span> <span class="va">pr</span><span class="op">$</span><span class="va">source_branch</span>,</span>
-<span>      parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        ENVIRONMENT <span class="op">=</span> <span class="va">target_env</span>,</span>
-<span>        PR_NUMBER <span class="op">=</span> <span class="va">pr_num</span></span>
+<span>        PR_NUMBER <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">pr_num</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>

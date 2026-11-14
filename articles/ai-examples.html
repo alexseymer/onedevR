@@ -718,12 +718,13 @@ and the <strong>RIGHT way</strong> (with comments).</p>
 <span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># No project specified!</span></span>
 <span><span class="co"># ERROR: missing project path</span></span>
 <span></span>
-<span><span class="co"># Or passing empty string when NULL is clearer</span></span>
+<span><span class="co"># Or passing a project to a function that has no `project` argument</span></span>
 <span><span class="va">issue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_issue.html">od_get_issue</a></span><span class="op">(</span></span>
 <span>  <span class="fl">145</span>,</span>
-<span>  project <span class="op">=</span> <span class="st">""</span>,  <span class="co"># Wrong: should be NULL</span></span>
+<span>  project <span class="op">=</span> <span class="st">"group/my-project"</span>,  <span class="co"># Wrong: od_get_issue() uses the connection's project</span></span>
 <span>  conn <span class="op">=</span> <span class="va">conn</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co"># ERROR: unused argument (project = ...)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="right-14">RIGHT:<a class="anchor" aria-label="anchor" href="#right-14"></a>
@@ -734,11 +735,8 @@ and the <strong>RIGHT way</strong> (with comments).</p>
 <span><span class="co"># Functions that REQUIRE project (from od_set_connection or env var):</span></span>
 <span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span><span class="op">)</span>  <span class="co"># Uses project from connection</span></span>
 <span></span>
-<span><span class="co"># Functions that REQUIRE project EXPLICITLY:</span></span>
-<span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span></span>
-<span>  build_number <span class="op">=</span> <span class="fl">123</span>,</span>
-<span>  project <span class="op">=</span> <span class="st">"group/my-project"</span>  <span class="co"># Must provide project</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># Most functions take the project from the connection or the environment:</span></span>
+<span><span class="va">artifacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_build_artifacts.html">od_list_build_artifacts</a></span><span class="op">(</span>build_number <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># User/team level queries (no project needed):</span></span>
 <span><span class="va">users</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_users.html">od_query_users</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Works without project</span></span>
@@ -752,12 +750,16 @@ and the <strong>RIGHT way</strong> (with comments).</p>
 <span><span class="op">)</span></span>
 <span><span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># To override project for specific call:</span></span>
-<span><span class="co"># Some functions accept project parameter:</span></span>
-<span><span class="va">other_project_issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span></span>
-<span>  state <span class="op">=</span> <span class="st">"Open"</span>,</span>
-<span>  project <span class="op">=</span> <span class="st">"other/project"</span>  <span class="co"># Override default</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># To use another project for one call, pass a connection for it:</span></span>
+<span><span class="va">other_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_connection.html">od_connection</a></span><span class="op">(</span></span>
+<span>  host <span class="op">=</span> <span class="st">"https://example.com"</span>,</span>
+<span>  token <span class="op">=</span> <span class="st">"token"</span>,</span>
+<span>  project_path <span class="op">=</span> <span class="st">"other/project"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">other_project_issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_issues.html">od_query_issues</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"Open"</span>, conn <span class="op">=</span> <span class="va">other_conn</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># A few functions also take a `project` argument, e.g.:</span></span>
+<span><span class="va">other_iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_list_iterations.html">od_list_iterations</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"other/project"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 </div>

@@ -313,7 +313,8 @@ Builds are CI/CD pipeline executions.
 
 - **od_promote_build()** — Promote build (release/deploy)
   - `build_number`: Build number
-  - `promotion_name`: Promotion type
+  - `status`: Target promotion status name (e.g. `"staging"`,
+    `"production"`)
   - `use_internal_id`: Debugging flag
   - Returns: Promotion result
 
@@ -663,7 +664,7 @@ cat(log)
 
 # 4. Promote if good
 if (grepl("SUCCESS", log)) {
-  od_promote_build(latest, promotion_name = "release")
+  od_promote_build(latest, status = "release")
 }
 ```
 

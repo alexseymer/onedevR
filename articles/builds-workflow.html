@@ -302,7 +302,7 @@ simple “success/failure” strings.</p>
 <span><span class="fu"><a href="../reference/od_download_build_artifact.html">od_download_build_artifact</a></span><span class="op">(</span></span>
 <span>  build_number <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  artifact_path <span class="op">=</span> <span class="st">"dist/app.zip"</span>,</span>
-<span>  local_path <span class="op">=</span> <span class="st">"downloaded-app.zip"</span></span>
+<span>  path <span class="op">=</span> <span class="st">"downloaded-app.zip"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Download multiple artifacts</span></span>
@@ -330,9 +330,9 @@ simple “success/failure” strings.</p>
 <span><span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span></span>
 <span>  job_name <span class="op">=</span> <span class="st">"Deploy"</span>,</span>
 <span>  branch <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    ENVIRONMENT <span class="op">=</span> <span class="st">"staging"</span>,</span>
-<span>    VERBOSE <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    VERBOSE <span class="op">=</span> <span class="st">"true"</span>,</span>
 <span>    VERSION <span class="op">=</span> <span class="st">"1.0.0"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -344,11 +344,8 @@ simple “success/failure” strings.</p>
 <code class="sourceCode R"><span><span class="co"># Rebuild existing build</span></span>
 <span><span class="fu"><a href="../reference/od_rebuild_job.html">od_rebuild_job</a></span><span class="op">(</span>build_number <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># With additional parameters</span></span>
-<span><span class="fu"><a href="../reference/od_rebuild_job.html">od_rebuild_job</a></span><span class="op">(</span></span>
-<span>  build_number <span class="op">=</span> <span class="fl">123</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>FORCE_REBUILD <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># With a reason recorded on the new build</span></span>
+<span><span class="fu"><a href="../reference/od_rebuild_job.html">od_rebuild_job</a></span><span class="op">(</span>build_number <span class="op">=</span> <span class="fl">123</span>, reason <span class="op">=</span> <span class="st">"Retry after infrastructure fix"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="cancel-build">Cancel Build<a class="anchor" aria-label="anchor" href="#cancel-build"></a>

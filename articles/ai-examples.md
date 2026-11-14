@@ -635,12 +635,13 @@ issues <- od_query_issues(state = "Open")  # Now returns list
 iterations <- od_list_iterations()  # No project specified!
 # ERROR: missing project path
 
-# Or passing empty string when NULL is clearer
+# Or passing a project to a function that has no `project` argument
 issue <- od_get_issue(
   145,
-  project = "",  # Wrong: should be NULL
+  project = "group/my-project",  # Wrong: od_get_issue() uses the connection's project
   conn = conn
 )
+# ERROR: unused argument (project = ...)
 ```
 
 #### RIGHT:
@@ -652,11 +653,8 @@ issue <- od_get_issue(
 # Functions that REQUIRE project (from od_set_connection or env var):
 issues <- od_query_issues(state = "Open")  # Uses project from connection
 
-# Functions that REQUIRE project EXPLICITLY:
-artifacts <- od_list_build_artifacts(
-  build_number = 123,
-  project = "group/my-project"  # Must provide project
-)
+# Most functions take the project from the connection or the environment:
+artifacts <- od_list_build_artifacts(build_number = 123)
 
 # User/team level queries (no project needed):
 users <- od_query_users()  # Works without project
@@ -670,12 +668,16 @@ conn <- od_connection(
 )
 issues <- od_query_issues(state = "Open", conn = conn)
 
-# To override project for specific call:
-# Some functions accept project parameter:
-other_project_issues <- od_query_issues(
-  state = "Open",
-  project = "other/project"  # Override default
+# To use another project for one call, pass a connection for it:
+other_conn <- od_connection(
+  host = "https://example.com",
+  token = "token",
+  project_path = "other/project"
 )
+other_project_issues <- od_query_issues(state = "Open", conn = other_conn)
+
+# A few functions also take a `project` argument, e.g.:
+other_iterations <- od_list_iterations(project = "other/project")
 ```
 
 ------------------------------------------------------------------------

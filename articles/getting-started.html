@@ -367,7 +367,7 @@ match a state on the project’s board (e.g. <code>"Closed"</code> vs
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run a job</span></span>
-<span><span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span><span class="st">"CI"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>VERBOSE <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span><span class="st">"CI"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>VERBOSE <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Rebuild existing build</span></span>
 <span><span class="fu"><a href="../reference/od_rebuild_job.html">od_rebuild_job</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
@@ -411,7 +411,7 @@ match a state on the project’s board (e.g. <code>"Closed"</code> vs
 <span><span class="va">main</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_branch.html">od_get_branch</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Query commits</span></span>
-<span><span class="va">commits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_commits.html">od_query_commits</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"R/"</span>, count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">commits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_query_commits.html">od_query_commits</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">20L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get file contents</span></span>
 <span><span class="va">readme</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_get_file_text.html">od_get_file_text</a></span><span class="op">(</span><span class="st">"main"</span>, <span class="st">"README.md"</span><span class="op">)</span></span>
@@ -451,10 +451,11 @@ match a state on the project’s board (e.g. <code>"Closed"</code> vs
 <span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"/issues/"</span>, <span class="va">issue_id</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># POST example</span></span>
+<span><span class="co"># (the endpoint and body shape depend on your instance, see ~/help/api)</span></span>
 <span><span class="va">new_branch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"POST"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="st">"/repository/branches"</span>,</span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"feature/new"</span>, baseBranch <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
+<span>  body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"feature/new"</span>, baseBranch <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># See full endpoint reference at:</span></span>
