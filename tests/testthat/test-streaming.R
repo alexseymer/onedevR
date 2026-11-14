@@ -165,7 +165,8 @@ test_that("od_stream_query_results with progress reports status", {
     }
   })
 
-  expect_output(
+  # progress goes to stderr via message(), never to stdout
+  expect_message(
     od_stream_query_results(
       function(...) {},
       callback = function(...) {},

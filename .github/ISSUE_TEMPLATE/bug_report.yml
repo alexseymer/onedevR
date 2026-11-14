@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping. A small, reproducible example is the most useful part of a report.
+        Security problems: please do not file them here, see SECURITY.md.
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: "`packageVersion(\"onedevr\")`, your R version, and your OneDev version"
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: What you ran
+      description: The smallest call that shows the problem. Remove tokens and private data.
+      render: r
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: "The output or error. For HTTP errors include `e$status`, `e$method` and `e$url` (class `od_http_error`)."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true

@@ -44,6 +44,42 @@
 | **Umfang (Ist)** | Issues, Projekte, Iterations, Builds/Jobs, Pull Requests, Repository/Commits, Packages, Users/Groups, Artefakte, Streaming, Cache, Batch/Parallel |
 | **Nicht im Paket** | App-spezifische Web-URL-Builder, Shiny-UI, domänenspezifische Issue-Titel |
 
+### Leitprinzip: das Linux-Prinzip
+
+Entwicklung und Design von onedevr folgen dem „Linux-Prinzip“:
+
+> **Kleine, fokussierte, zusammenarbeitende Funktionen + offene, kollaborative und iterative Entwicklung.**
+
+Es ist eine Haltung, keine starre Methode: Einfachheit, Modularität, Transparenz und die Überzeugung, dass viele kompetente Köpfe gemeinsam bessere Software bauen als ein kleines, abgeschottetes Team. Das Prinzip hat zwei Teile, beide verbindlich.
+
+#### A. Design (Unix-Philosophie)
+
+| Unix-Regel | Regel für onedevr | Durchgesetzt durch |
+|------------|-------------------|--------------------|
+| Ein Programm macht *eine* Sache gut | Eine `od_*`-Funktion bildet **eine** OneDev-Operation ab (oder eine klar benannte Auflösung/Hilfe). Abläufe aus mehreren Schritten gehören dem Aufrufer und werden aus kleinen Funktionen zusammengesetzt. Der Zweck einer neuen Funktion lässt sich in einem Satz ohne „und“ sagen. | Review (Definition of Done); Bereiche, die dagegen verstoßen, sind „experimentell“ |
+| Programme sollen zusammenarbeiten (Pipes, Filter) | Das Objekt, auf dem gearbeitet wird (UI-Nummer, Name, Id), ist das **erste** Argument; `conn` und Optionen stehen hinten. So funktioniert `145 \|> od_get_issue()`. Kein versteckter Zustand außer der expliziten Verbindung und dem optionalen Cache. | Test „compose“ in `test-principles.R` |
+| Text ist die universelle Schnittstelle | Ergebnisse sind Tibbles oder einfache Listen in JSON-Form, keine eigenen Klassen. Ausnahmen sind die Verbindung (`od_connection`) und Fehlerbedingungen (`od_http_error`). `as_tibble = FALSE` liefert das rohe, geparste JSON; `od_request()` ist der Ausweg für alles andere. | Test „plain data interface“ |
+| Small is beautiful | Festes Abhängigkeitsbudget: `digest`, `httr2`, `jsonlite`, `rlang`, `tibble`, `vctrs`. Funktionen bleiben kurz. Neues außerhalb des Kerns ist experimentell oder gehört in ein eigenes Paket. | Test „dependency budget“ |
+| Prototyp so früh wie möglich | Zuerst die einfachste Lösung, die gegen eine echte Instanz funktioniert; ungeprüftes ist als „experimentell“ gekennzeichnet, bis ein Live-Test es belegt. | Definition of Done („Verifikation“) |
+| Portabilität vor Effizienz | Reines R plus `httr2`: kein kompilierter Code, keine Systemabhängigkeiten; läuft auf Linux, macOS und Windows. | CI-Matrix (4 Plattformen) |
+| Daten und Konfiguration als einfacher Text | Konfiguration über Umgebungsvariablen und `.Renviron`; keine Binärformate. | `.env.example`, `od_get_config()` |
+| Kein „captive user interface“ | Bibliothekscode fragt nie nach Eingaben und schreibt nie auf stdout. Daten laufen über Rückgabewerte, Diagnose über `message()` und Bedingungen. | Test „no captive interface“ |
+| Jedes Programm ist ein Filter | Eingabe rein, Ergebnis raus; Fehler schlagen laut fehl. Rückfälle (`od_whoami()`, Body-Varianten) sind dokumentiert und melden ihre Gründe. | Review; Feldprotokoll-Tests |
+
+#### B. Prozess (Bazaar-Modell)
+
+| Linux-Regel | Regel für onedevr |
+|-------------|-------------------|
+| Release early, release often | Kleine Releases statt großer: Feldkorrekturen erscheinen als Patch-Release, ohne auf andere Arbeiten zu warten. Jedes Release hat einen `NEWS.md`-Abschnitt, einen Tag und ein GitHub-Release (`RELEASE.md`). |
+| Given enough eyeballs, all bugs are shallow | Alles geschieht öffentlich über Issues und Pull Requests; CI (4 Plattformen, pkgdown, Sicherheit) und Review entscheiden über den Merge. Beispiele sind so geschrieben, dass andere sie nachvollziehen können. |
+| Benutzer als Mit-Entwickler | Fehlerberichte mit reproduzierbarem Beispiel (Issue-Vorlage); jeder Eintrag im Feldprotokoll wird zu einem Regressionstest (`test-field-log.R`). |
+| Offene Kommunikation | Entscheidungen stehen im Plan, in der Roadmap und in Pull Requests, nicht in privaten Notizen. Sicherheitsmeldungen laufen nach `SECURITY.md`. |
+| Dezentrale Verantwortung, klare Maintainer | Der Maintainer entscheidet zuletzt. Bereiche haben eigene Reife: **Kern** (live verifiziert) und **experimentell**. Ein Bereich wird erst Kern, wenn ein Live-Test ihn belegt. |
+
+#### Stand der Umsetzung
+
+Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt schrieb mit `cat()` auf stdout und nutzt jetzt `message()`. Bekannte Abweichungen, die bleiben, bis sie live verifiziert oder ausgelagert sind: Batch, Parallel, Streaming und Cache bündeln mehrere Schritte in einer Funktion (Regel „eine Sache“) und sind deshalb als experimentell markiert. Sie sind Kandidaten für ein eigenes Paket, falls sie nicht in den Kern aufsteigen.
+
 **Kernidee:** Zwei Ebenen wie bei gitlabr:
 
 - **Low-level:** `od_request()` — beliebiger REST-Aufruf gegen `https://<host>/~api/...`
