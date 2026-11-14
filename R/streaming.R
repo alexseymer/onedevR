@@ -101,7 +101,7 @@ od_stream_build_log <- function(
 #' @param max_pages {integer} Safety cap on number of pages (default `100`). Default: `100L`.
 #' @param as_tibble {logical} If `TRUE` (default), return results as tibbles to the callback.
 #'   Default: `NULL` (uses fetcher default).
-#' @param progress {logical} If `TRUE`, print progress messages with line count and elapsed time
+#' @param progress {logical} If `TRUE`, report progress (line count and elapsed time) on stderr via `message()`; stdout stays free for data
 #'   (default `FALSE`). Default: `FALSE`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param ... Additional arguments forwarded to `fetcher_fn` (e.g. `state = "Open"`, `query = ...`).
@@ -205,8 +205,8 @@ od_stream_query_results <- function(
 
     if (isTRUE(progress)) {
       elapsed <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
-      cat(sprintf(
-        "Page %d: %d items (total: %d, elapsed: %.1fs)\n",
+      message(sprintf(
+        "Page %d: %d items (total: %d, elapsed: %.1fs)",
         page, n_chunk, total_count, elapsed
       ))
     }

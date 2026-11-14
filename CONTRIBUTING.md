@@ -66,6 +66,46 @@ onedevR/
 └── README.md              # Project overview
 ```
 
+## Design principles (the Linux principle)
+
+onedevr follows the Linux principle: **small, focused, cooperating functions,
+developed openly and iteratively.** The authoritative description (in German)
+is the section "Leitprinzip" in [`project_plan.md`](project_plan.md). In short:
+
+**Design (Unix philosophy)**
+
+1. **One thing well.** An `od_*` function maps to one OneDev operation. State
+   its purpose in one sentence without "and". Multi-step workflows belong to
+   the caller.
+2. **Compose.** The object acted on (UI number, name, id) is the first
+   argument; `conn` and options come last, so `145 |> od_get_issue()` works.
+   No hidden state beyond the explicit connection and the optional cache.
+3. **Plain data is the interface.** Return tibbles or plain lists. Custom
+   classes only for the connection and for errors (`od_http_error`).
+4. **Small is beautiful.** The dependency budget is fixed (`digest`, `httr2`,
+   `jsonlite`, `rlang`, `tibble`, `vctrs`). Anything beyond the core is
+   experimental or belongs in its own package.
+5. **No captive interface.** Library code never prompts and never writes to
+   stdout: data via return values, diagnostics via `message()` and conditions.
+6. **Fail loudly, fall back openly.** Fallbacks are documented and report why
+   they were used.
+
+**Process (bazaar)**
+
+7. **Release early, release often.** Ship field fixes as patch releases; every
+   release has a `NEWS.md` section.
+8. **Many eyeballs.** Work in public through issues and pull requests; CI
+   decides what merges.
+9. **Users are co-developers.** Report problems with a reproducible example
+   (use the issue template); every field-log entry becomes a regression test
+   in `tests/testthat/test-field-log.R`.
+10. **Maturity levels.** *Core* functions are verified against a live instance;
+    *experimental* ones are marked as such until a live test promotes them.
+
+`tests/testthat/test-principles.R` enforces rules 2 to 5 mechanically. If it
+fails, change the code or change the rule on purpose (and its documentation),
+but do not weaken the test silently.
+
 ## Making Changes
 
 ### Adding a New Function

@@ -35,7 +35,7 @@ Extra arguments are passed via \code{...}.}
 \item{as_tibble}{{logical} If \code{TRUE} (default), return results as tibbles to the callback.
 Default: \code{NULL} (uses fetcher default).}
 
-\item{progress}{{logical} If \code{TRUE}, print progress messages with line count and elapsed time
+\item{progress}{{logical} If \code{TRUE}, report progress (line count and elapsed time) on stderr via \code{message()}; stdout stays free for data
 (default \code{FALSE}). Default: \code{FALSE}.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
