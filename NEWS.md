@@ -1,3 +1,17 @@
+# onedevr (development)
+
+* HTTP errors from `od_request()` and the helpers built on it are now
+  conditions of class `od_http_error` (also an `error`) with the fields
+  `status`, `method` and `url`. The message text is unchanged. Use
+  `tryCatch(..., od_http_error = function(e) e$status)` instead of parsing
+  the message. `od_whoami()` uses the status when it is available.
+* Documentation examples that called functions with arguments that do not
+  exist are fixed (`od_run_job(parameters =)` is `params`,
+  `od_download_build_artifact(local_path =)` is `path`,
+  `od_promote_build(promotion_name =)` is `status`, `od_request(data =)` is
+  `body`, and others). A new test parses the code blocks of the README and
+  vignettes and fails on unknown or surplus arguments.
+
 # onedevr 0.7.1
 
 Fixes and a small helper from field use against a real OneDev instance.

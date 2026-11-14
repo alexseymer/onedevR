@@ -96,7 +96,10 @@
   msg
 }
 
-.od_http_error <- function(response, payload) {
+# Signals an `od_http_error` condition (also an `error`): the message is the
+# usual "OneDev API request failed [HTTP n]: ..." text, and the fields
+# `status`, `method` and `url` let callers react without parsing the text.
+.od_http_error <- function(response, payload, method = NULL) {
   status <- httr2::resp_status(response)
   msg <- ""
   if (is.list(payload)) {
@@ -123,13 +126,17 @@
       " od_get_query_description(\"issue\"))"
     )
   }
-  stop(
+  rlang::abort(
     sprintf(
       "OneDev API request failed [HTTP %d]%s",
       status,
       if (nzchar(msg)) paste0(": ", msg) else ""
     ),
-    call. = FALSE
+    class = "od_http_error",
+    status = status,
+    method = method,
+    url = tryCatch(httr2::resp_url(response), error = function(e) NA_character_),
+    call = NULL
   )
 }
 
@@ -192,10 +199,21 @@
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #'
 #' @return {list} Parsed JSON payload, or `NULL` for empty bodies.
+#'
+#' @section Errors:
+#' An HTTP status of 400 or above signals a condition of class `od_http_error`
+#' (also an `error`) with the fields `status`, `method` and `url`. Test it with
+#' `inherits(e, "od_http_error")` and branch on `e$status` instead of parsing
+#' the message.
+#'
 #' @family utilities
 #' @examples
 #' \dontrun{
 #' od_request("GET", "/projects")
+#' tryCatch(
+#'   od_request("GET", "/issues/0"),
+#'   od_http_error = function(e) e$status
+#' )
 #' }
 #' @export
 od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL) {
@@ -233,7 +251,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   response <- httr2::req_perform(req)
   payload <- .od_parse_response_body(response)
   if (httr2::resp_status(response) >= 400L) {
-    .od_http_error(response, payload)
+    .od_http_error(response, payload, method = method)
   }
 
   if (use_cache) {
@@ -284,7 +302,7 @@ od_request <- function(method = "GET", endpoint, query = NULL, body = NULL, conn
   response <- httr2::req_perform(req)
   if (httr2::resp_status(response) >= 400L) {
     payload <- .od_parse_response_body(response)
-    .od_http_error(response, payload)
+    .od_http_error(response, payload, method = method)
   }
 
   httr2::resp_body_raw(response)

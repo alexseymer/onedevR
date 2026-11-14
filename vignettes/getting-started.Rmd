@@ -241,7 +241,7 @@ od_download_build_artifact(123, "dist/app.zip", "app-123.zip")
 
 ```r
 # Run a job
-od_run_job("CI", branch = "main", parameters = list(VERBOSE = TRUE))
+od_run_job("CI", branch = "main", params = list(VERBOSE = "true"))
 
 # Rebuild existing build
 od_rebuild_job(123)
@@ -284,7 +284,7 @@ branches <- od_list_branches()
 main <- od_get_branch("main")
 
 # Query commits
-commits <- od_query_commits(path = "R/", count = 20L)
+commits <- od_query_commits(count = 20L)
 
 # Get file contents
 readme <- od_get_file_text("main", "README.md")
@@ -325,10 +325,11 @@ issue_id <- od_resolve_issue_id(145)
 raw <- od_request("GET", paste0("/issues/", issue_id))
 
 # POST example
+# (the endpoint and body shape depend on your instance, see ~/help/api)
 new_branch <- od_request(
   method = "POST",
   endpoint = "/repository/branches",
-  data = list(name = "feature/new", baseBranch = "main")
+  body = list(name = "feature/new", baseBranch = "main")
 )
 
 # See full endpoint reference at:

@@ -141,7 +141,12 @@ od_whoami <- function(conn = NULL) {
   me <- tryCatch(
     od_get_me(conn = conn),
     error = function(e) {
-      if (!grepl("HTTP 40[134]\\]", conditionMessage(e))) {
+      refused <- if (inherits(e, "od_http_error")) {
+        e$status %in% c(401L, 403L, 404L)
+      } else {
+        grepl("HTTP 40[134]\\]", conditionMessage(e))
+      }
+      if (!refused) {
         stop(e)
       }
       failure <<- conditionMessage(e)
