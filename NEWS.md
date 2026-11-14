@@ -1,5 +1,10 @@
 # onedevr (development)
 
+* Documentation shortened: `ai-examples` (1,515 -> about 240 lines) now keeps
+  only patterns specific to onedevr (connections, UI numbers, project scope,
+  queries and paging, return shapes, errors, escape hatch), and `function-map`
+  (1,101 -> about 790 lines) drops the workflow examples that the workflow
+  vignettes already cover. Every remaining example is checked by the tests.
 * CRAN readiness: `R CMD check --as-cran` now reports only environment and
   "new submission" notes. The `tod` URL in `DESCRIPTION` is in angle
   brackets, a dead link in the function map is fixed, and `CONTRIBUTING.md`,
