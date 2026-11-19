@@ -203,11 +203,15 @@ Things worth knowing:
   Fehler") are shortened to the page title.
 - Some write endpoints accept more than one body shape. onedevr tries the known
   ones and reports every failure together, so the real cause is visible.
-- **Comments:** `POST /issue-comments` has returned HTTP 500 on some instances.
-  Before retrying, check whether the comment was created anyway, to avoid
-  duplicates:
+- **Comments:** `POST /issue-comments` has returned HTTP 500 on some instances,
+  there together with HTTP 403 on `GET /users/me`. That points to a token
+  without a user identity: pass the author explicitly with `user =` (a login
+  name or id; `od_whoami()` returns yours). Before retrying, check whether the
+  comment was created anyway, to avoid duplicates:
 
 ```r
+od_add_issue_comment(145, "Merged to main", user = od_whoami())
+
 tryCatch(
   od_add_issue_comment(145, "Merged to main"),
   od_http_error = function(e) {

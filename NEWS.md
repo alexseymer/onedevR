@@ -1,5 +1,13 @@
 # onedevr (development)
 
+* `od_add_issue_comment()` has a new optional `user` argument (login name or
+  numeric id) that is sent as `userId`, the author field of the documented
+  request body (OneDev 17.2 REST API help). Field logs show HTTP 500 on every
+  comment together with HTTP 403 on `GET /users/me`, which suggests a token
+  without a user identity; naming the author explicitly may fix that. Without
+  `user` nothing changes. `scripts/diagnose-comments.R` gained a probe that
+  sends the author, so one run shows whether this is the cause.
+
 * The Linux principle (small, focused, cooperating functions; open and
   iterative development) is now the stated design and development principle:
   see "Leitprinzip" in `project_plan.md`, "Design principles" in

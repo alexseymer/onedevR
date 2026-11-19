@@ -4,12 +4,16 @@
 \alias{od_add_issue_comment}
 \title{Add a comment to an issue}
 \usage{
-od_add_issue_comment(issue_number, content, conn = NULL)
+od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
 }
 \arguments{
 \item{issue_number}{{character|numeric} UI number (\code{145} or \code{"#145"}).}
 
 \item{content}{{character} Comment body (Markdown).}
+
+\item{user}{{character|numeric} Optional author: login name or numeric user
+id, sent as \code{userId}. Use \code{\link[=od_whoami]{od_whoami()}} for the current user. Default:
+\code{NULL} (the server decides).}
 
 \item{conn}{{list} Connection list. Default: \code{NULL}.}
 }
@@ -22,13 +26,21 @@ nested \code{issue} object is rejected by OneDev (HTTP 400, unrecognized field
 \code{issue}), so only this shape is sent.
 }
 \details{
-HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
-instances. Before retrying, check with \code{\link[=od_get_issue_comments]{od_get_issue_comments()}} whether the
-comment was created anyway, to avoid duplicates.
+The documented request body (OneDev REST API help,
+\code{IssueComment.CREATE_BODY}) also has an optional \code{userId}, the author of the
+comment. By default it is not sent and the server uses the authenticated
+user. HTTP 500 ("Interner Fehler") has been reported for this endpoint on
+some instances, together with HTTP 403 on \code{GET /users/me}, which suggests a
+token without a user identity. If you see that, pass \code{user} so the author is
+explicit.
+
+Before retrying after an error, check with \code{\link[=od_get_issue_comments]{od_get_issue_comments()}} whether
+the comment was created anyway, to avoid duplicates.
 }
 \examples{
 \dontrun{
 od_add_issue_comment(145, "Looks good")
+od_add_issue_comment(145, "Looks good", user = od_whoami())
 }
 }
 \seealso{

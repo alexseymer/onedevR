@@ -565,7 +565,7 @@ serverseitig (#256, #258, #259, #303, #308, #310, #311, #313, #322); Statuswechs
 (`transition`) funktionieren dabei jeweils. Offen: ob der Kommentar trotz 500
 angelegt wird, und ob Verweise im Text (`#NNN`, Commit-Hashes) den Fehler
 auslösen (alle bisher fehlgeschlagenen Texte enthielten Verweise, aber das ist
-nur eine Vermutung). Zur Eingrenzung: `scripts/diagnose-comments.R` auf einem
+nur eine Vermutung). Neuer Ansatz (Hersteller-API-Hilfe, `IssueComment.CREATE_BODY`): der Body kennt zusätzlich `userId` (Autor); `GET /users/me` liefert auf der Ziel-Instanz HTTP 403, was auf ein Token ohne Benutzeridentität deutet. `od_add_issue_comment(user =)` sendet den Autor explizit. Zur Eingrenzung: `scripts/diagnose-comments.R` auf einem
 Test-Ticket ausführen und das Serverlog (`logs/server.log`) zum Aufrufzeitpunkt
 prüfen. Vor einem Retry `od_get_issue_comments()` ansehen.
 
