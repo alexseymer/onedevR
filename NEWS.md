@@ -1,5 +1,8 @@
 # onedevr (development)
 
+* The getting-started vignette no longer contains an executable chunk, so
+  `R CMD check` cannot run it when it tangles the vignette code (it failed
+  without `ONEDEV_HOST`).
 * `od_add_issue_comment()` has a new optional `user` argument (login name or
   numeric id) that is sent as `userId`, the author field of the documented
   request body (OneDev 17.2 REST API help). Field logs show HTTP 500 on every
