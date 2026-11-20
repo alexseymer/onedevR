@@ -347,10 +347,10 @@ od_get_issue_comments <- function(
 #' The documented request body (OneDev REST API help,
 #' `IssueComment.CREATE_BODY`) also has an optional `userId`, the author of the
 #' comment. By default it is not sent and the server uses the authenticated
-#' user. HTTP 500 ("Interner Fehler") has been reported for this endpoint on
-#' some instances, together with HTTP 403 on `GET /users/me`, which suggests a
-#' token without a user identity. If you see that, pass `user` so the author is
-#' explicit.
+#' user. A request without `userId` returned HTTP 500 on a live instance, so by
+#' default the current user from [od_whoami()] is sent. If the current user
+#' cannot be determined (for example a token without an identity), no
+#' `userId` is sent. Pass `user` to name the author explicitly.
 #'
 #' Before retrying after an error, check with [od_get_issue_comments()] whether
 #' the comment was created anyway, to avoid duplicates.
@@ -358,8 +358,8 @@ od_get_issue_comments <- function(
 #' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
 #' @param content {character} Comment body (Markdown).
 #' @param user {character|numeric} Optional author: login name or numeric user
-#'   id, sent as `userId`. Use [od_whoami()] for the current user. Default:
-#'   `NULL` (the server decides).
+#'   id, sent as `userId`. Default: `NULL`, which uses the current user from
+#'   [od_whoami()].
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
 #' @endpoint POST /issue-comments
@@ -377,6 +377,11 @@ od_add_issue_comment <- function(issue_number, content, user = NULL, conn = NULL
     issueId = issue_id,
     content = as.character(content)[1]
   )
+  if (is.null(user) || !nzchar(as.character(user)[1])) {
+    # Without an author OneDev answers HTTP 500 (verified live), so default to
+    # the current user. If that cannot be determined, send no userId.
+    user <- tryCatch(od_whoami(conn = conn), error = function(e) NULL)
+  }
   if (!is.null(user) && nzchar(as.character(user)[1])) {
     body$userId <- as.integer(od_resolve_user_id(user, conn = conn))
   }
