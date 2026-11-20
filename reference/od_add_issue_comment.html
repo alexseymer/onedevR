@@ -63,7 +63,7 @@ nested <code>issue</code> object is rejected by OneDev (HTTP 400, unrecognized f
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">od_add_issue_comment</span><span class="op">(</span><span class="va">issue_number</span>, <span class="va">content</span>, conn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">od_add_issue_comment</span><span class="op">(</span><span class="va">issue_number</span>, <span class="va">content</span>, user <span class="op">=</span> <span class="cn">NULL</span>, conn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,6 +78,12 @@ nested <code>issue</code> object is rejected by OneDev (HTTP 400, unrecognized f
 <dd><p>character Comment body (Markdown).</p></dd>
 
 
+<dt id="arg-user">user<a class="anchor" aria-label="anchor" href="#arg-user"></a></dt>
+<dd><p>character|numeric Optional author: login name or numeric user
+id, sent as <code>userId</code>. Use <code><a href="od_whoami.html">od_whoami()</a></code> for the current user. Default:
+<code>NULL</code> (the server decides).</p></dd>
+
+
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
 <dd><p>list Connection list. Default: <code>NULL</code>.</p></dd>
 
@@ -88,9 +94,15 @@ nested <code>issue</code> object is rejected by OneDev (HTTP 400, unrecognized f
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
-instances. Before retrying, check with <code><a href="od_get_issue_comments.html">od_get_issue_comments()</a></code> whether the
-comment was created anyway, to avoid duplicates.</p>
+    <p>The documented request body (OneDev REST API help,
+<code>IssueComment.CREATE_BODY</code>) also has an optional <code>userId</code>, the author of the
+comment. By default it is not sent and the server uses the authenticated
+user. HTTP 500 ("Interner Fehler") has been reported for this endpoint on
+some instances, together with HTTP 403 on <code>GET /users/me</code>, which suggests a
+token without a user identity. If you see that, pass <code>user</code> so the author is
+explicit.</p>
+<p>Before retrying after an error, check with <code><a href="od_get_issue_comments.html">od_get_issue_comments()</a></code> whether
+the comment was created anyway, to avoid duplicates.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -121,6 +133,7 @@ comment was created anyway, to avoid duplicates.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">od_add_issue_comment</span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Looks good"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">od_add_issue_comment</span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Looks good"</span>, user <span class="op">=</span> <span class="fu"><a href="od_whoami.html">od_whoami</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

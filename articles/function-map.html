@@ -358,9 +358,13 @@ description
 <code>issue_number</code>: UI number</li>
 <li>
 <code>content</code>: Comment text (Markdown)</li>
-<li>Sends <code>issueId</code> + <code>content</code>; HTTP 500 has been
-seen on some instances, so check <code><a href="../reference/od_get_issue_comments.html">od_get_issue_comments()</a></code>
-before retrying</li>
+<li>
+<code>user</code>: Optional author (login name or id), sent as
+<code>userId</code>; use it when HTTP 500 and a 403 on
+<code>/users/me</code> point to a token without a user identity</li>
+<li>Sends <code>issueId</code> + <code>content</code> (+
+<code>userId</code>); check <code><a href="../reference/od_get_issue_comments.html">od_get_issue_comments()</a></code> before
+retrying after an error</li>
 <li>Returns: Created comment object</li>
 </ul>
 </li>

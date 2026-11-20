@@ -26,7 +26,7 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 - body:
 
   list Request body; JSON-encoded with
-  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html).
+  [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html).
   Default: `NULL`.
 
 - conn:

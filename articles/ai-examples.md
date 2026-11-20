@@ -221,10 +221,16 @@ Things worth knowing:
   the known ones and reports every failure together, so the real cause
   is visible.
 - **Comments:** `POST /issue-comments` has returned HTTP 500 on some
-  instances. Before retrying, check whether the comment was created
+  instances, there together with HTTP 403 on `GET /users/me`. That
+  points to a token without a user identity: pass the author explicitly
+  with `user =` (a login name or id;
+  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
+  returns yours). Before retrying, check whether the comment was created
   anyway, to avoid duplicates:
 
 ``` r
+
+od_add_issue_comment(145, "Merged to main", user = od_whoami())
 
 tryCatch(
   od_add_issue_comment(145, "Merged to main"),

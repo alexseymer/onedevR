@@ -164,10 +164,12 @@ Issues are the core task/bug tracking resource in OneDev.
 - **od_add_issue_comment()** — Add a comment to an issue
   - `issue_number`: UI number
   - `content`: Comment text (Markdown)
-  - Sends `issueId` + `content`; HTTP 500 has been seen on some
-    instances, so check
+  - `user`: Optional author (login name or id), sent as `userId`; use it
+    when HTTP 500 and a 403 on `/users/me` point to a token without a
+    user identity
+  - Sends `issueId` + `content` (+ `userId`); check
     [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
-    before retrying
+    before retrying after an error
   - Returns: Created comment object
 - **od_add_issue_iterations()** — Add iterations to an issue
   - `issue_number`: UI number

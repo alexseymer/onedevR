@@ -267,11 +267,16 @@ the known ones and reports every failure together, so the real cause is
 visible.</li>
 <li>
 <strong>Comments:</strong> <code>POST /issue-comments</code> has
-returned HTTP 500 on some instances. Before retrying, check whether the
-comment was created anyway, to avoid duplicates:</li>
+returned HTTP 500 on some instances, there together with HTTP 403 on
+<code>GET /users/me</code>. That points to a token without a user
+identity: pass the author explicitly with <code>user =</code> (a login
+name or id; <code><a href="../reference/od_whoami.html">od_whoami()</a></code> returns yours). Before retrying,
+check whether the comment was created anyway, to avoid duplicates:</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Merged to main"</span>, user <span class="op">=</span> <span class="fu"><a href="../reference/od_whoami.html">od_whoami</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/od_add_issue_comment.html">od_add_issue_comment</a></span><span class="op">(</span><span class="fl">145</span>, <span class="st">"Merged to main"</span><span class="op">)</span>,</span>
 <span>  od_http_error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">e</span><span class="op">$</span><span class="va">status</span> <span class="op">==</span> <span class="fl">500</span><span class="op">)</span> <span class="op">{</span></span>
