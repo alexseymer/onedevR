@@ -17,8 +17,8 @@ recently used items when exceeded. Default: \code{1000}.}
 invisible(\code{TRUE}) to allow use in piping contexts.
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Experimental:} a live test against a real OneDev server passes; the
+interface and behaviour may still change.
 }
 \details{
 Configures global cache settings for the onedevR package. Cache stores

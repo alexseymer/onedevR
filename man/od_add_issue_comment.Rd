@@ -12,8 +12,8 @@ od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
 \item{content}{{character} Comment body (Markdown).}
 
 \item{user}{{character|numeric} Optional author: login name or numeric user
-id, sent as \code{userId}. Use \code{\link[=od_whoami]{od_whoami()}} for the current user. Default:
-\code{NULL} (the server decides).}
+id, sent as \code{userId}. Default: \code{NULL}, which uses the current user from
+\code{\link[=od_whoami]{od_whoami()}}.}
 
 \item{conn}{{list} Connection list. Default: \code{NULL}.}
 }
@@ -29,10 +29,10 @@ nested \code{issue} object is rejected by OneDev (HTTP 400, unrecognized field
 The documented request body (OneDev REST API help,
 \code{IssueComment.CREATE_BODY}) also has an optional \code{userId}, the author of the
 comment. By default it is not sent and the server uses the authenticated
-user. HTTP 500 ("Interner Fehler") has been reported for this endpoint on
-some instances, together with HTTP 403 on \code{GET /users/me}, which suggests a
-token without a user identity. If you see that, pass \code{user} so the author is
-explicit.
+user. A request without \code{userId} returned HTTP 500 on a live instance, so by
+default the current user from \code{\link[=od_whoami]{od_whoami()}} is sent. If the current user
+cannot be determined (for example a token without an identity), no
+\code{userId} is sent. Pass \code{user} to name the author explicitly.
 
 Before retrying after an error, check with \code{\link[=od_get_issue_comments]{od_get_issue_comments()}} whether
 the comment was created anyway, to avoid duplicates.

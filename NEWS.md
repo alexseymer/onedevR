@@ -1,5 +1,9 @@
 # onedevr (development)
 
+* Batch, parallel, streaming and cache stay in the package and remain
+  experimental. Four of them now have passing live tests and say so in their
+  help pages; the others are not yet verified against a live server.
+
 * `od_add_issue_comment()` sends the current user (from `od_whoami()`) as
   `userId` when `user` is not given. A comment without an author returned HTTP
   500 on a live instance. If the current user cannot be determined, no

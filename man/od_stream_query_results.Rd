@@ -51,8 +51,8 @@ Default: \code{NULL} (uses fetcher default).}
 }
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Experimental:} a live test against a real OneDev server passes; the
+interface and behaviour may still change.
 }
 \details{
 Repeatedly calls a fetcher function (e.g., \code{\link[=od_query_issues]{od_query_issues()}}) to retrieve

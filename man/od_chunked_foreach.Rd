@@ -31,8 +31,8 @@ Default: \code{NULL}.}
 Otherwise: \code{invisible(NULL)}.
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Experimental:} a live test against a real OneDev server passes; the
+interface and behaviour may still change.
 }
 \details{
 A convenience wrapper around \code{\link[=od_stream_query_results]{od_stream_query_results()}} for batch processing.

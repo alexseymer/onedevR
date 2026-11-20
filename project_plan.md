@@ -78,7 +78,7 @@ Es ist eine Haltung, keine starre Methode: Einfachheit, Modularität, Transparen
 
 #### Stand der Umsetzung
 
-Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt schrieb mit `cat()` auf stdout und nutzt jetzt `message()`. Bekannte Abweichungen, die bleiben, bis sie live verifiziert oder ausgelagert sind: Batch, Parallel, Streaming und Cache bündeln mehrere Schritte in einer Funktion (Regel „eine Sache“) und sind deshalb als experimentell markiert. Sie sind Kandidaten für ein eigenes Paket, falls sie nicht in den Kern aufsteigen.
+Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt schrieb mit `cat()` auf stdout und nutzt jetzt `message()`. Bekannte Abweichungen, die bleiben, bis sie live verifiziert sind: Batch, Parallel, Streaming und Cache bündeln mehrere Schritte in einer Funktion (Regel „eine Sache“) und sind deshalb als experimentell markiert. Entscheidung (2026-11-20): Sie bleiben im Kern, ohne eigenes Repository. Vier Funktionen haben einen bestandenen Live-Test (`od_batch_create_issues`, `od_stream_query_results`, `od_chunked_foreach`, `od_enable_cache`); die Markierung bleibt, bis die Schnittstellen stabil sind.
 
 **Kernidee:** Zwei Ebenen wie bei gitlabr:
 
