@@ -257,18 +257,15 @@ test_that("od_batch_create_issues live", {
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
 
-  result <- tryCatch(
-    od_batch_create_issues(
-      list(
-        list(title = "Live Test Issue 1", description = "Test via od_batch_create_issues"),
-        list(title = "Live Test Issue 2", description = "Another test issue")
-      ),
-      progress = FALSE
+  result <- od_batch_create_issues(
+    list(
+      list(title = "Live Test Issue 1", description = "Test via od_batch_create_issues"),
+      list(title = "Live Test Issue 2", description = "Another test issue")
     ),
-    error = function(e) NULL
+    progress = FALSE
   )
 
-  # Batch create might fail due to permissions
-  skip_if(is.null(result), "Batch issue creation not available")
-  expect_true(result$count >= 0)
+  expect_length(result$errors, 0)
+  expect_length(result$created, 2)
+  expect_length(result$numbers, 2)
 })
