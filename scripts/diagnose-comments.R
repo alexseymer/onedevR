@@ -15,6 +15,8 @@
 #   all probes fail, comments created -> the comment is saved, the response fails
 #                                      (e.g. a notification step); not a data loss
 #   only issue_ref / commit_ref fail -> references in the text trigger the error
+#   with_user works, the others fail -> the token has no user identity; pass
+#                                      `user = od_whoami()` to od_add_issue_comment()
 #   only some probes fail            -> the text matters; compare the failing ones
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -37,10 +39,12 @@ if (file.exists("DESCRIPTION") && requireNamespace("pkgload", quietly = TRUE)) {
 }
 
 probes <- list(
-  plain = "onedevr diagnostic: plain text",
-  markdown = "onedevr diagnostic: **bold** and `code`",
-  issue_ref = sprintf("onedevr diagnostic: reference to #%s", issue),
-  commit_ref = "onedevr diagnostic: commit 0123456789abcdef0123456789abcdef01234567"
+  plain = list(text = "onedevr diagnostic: plain text"),
+  markdown = list(text = "onedevr diagnostic: **bold** and `code`"),
+  issue_ref = list(text = sprintf("onedevr diagnostic: reference to #%s", issue)),
+  commit_ref = list(text = "onedevr diagnostic: commit 0123456789abcdef0123456789abcdef01234567"),
+  # sends userId (the author) explicitly; needs a username or a working /users/me
+  with_user = list(text = "onedevr diagnostic: explicit author", user = TRUE)
 )
 
 count_comments <- function() length(od_get_issue_comments(issue, as_tibble = FALSE))
@@ -49,9 +53,14 @@ cat(sprintf("Issue %s: %d comments before\n\n", issue, count_comments()))
 cat(sprintf("%-11s %-5s %-9s %s\n", "probe", "post", "created", "message"))
 for (name in names(probes)) {
   before <- count_comments()
+  probe <- probes[[name]]
   result <- tryCatch(
     {
-      od_add_issue_comment(issue, probes[[name]])
+      if (isTRUE(probe$user)) {
+        od_add_issue_comment(issue, probe$text, user = od_whoami())
+      } else {
+        od_add_issue_comment(issue, probe$text)
+      }
       "ok"
     },
     error = function(e) conditionMessage(e)

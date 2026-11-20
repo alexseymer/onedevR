@@ -337,12 +337,22 @@ od_get_issue_comments <- function(
 #' nested `issue` object is rejected by OneDev (HTTP 400, unrecognized field
 #' `issue`), so only this shape is sent.
 #'
-#' HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
-#' instances. Before retrying, check with [od_get_issue_comments()] whether the
-#' comment was created anyway, to avoid duplicates.
+#' The documented request body (OneDev REST API help,
+#' `IssueComment.CREATE_BODY`) also has an optional `userId`, the author of the
+#' comment. By default it is not sent and the server uses the authenticated
+#' user. HTTP 500 ("Interner Fehler") has been reported for this endpoint on
+#' some instances, together with HTTP 403 on `GET /users/me`, which suggests a
+#' token without a user identity. If you see that, pass `user` so the author is
+#' explicit.
+#'
+#' Before retrying after an error, check with [od_get_issue_comments()] whether
+#' the comment was created anyway, to avoid duplicates.
 #'
 #' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
 #' @param content {character} Comment body (Markdown).
+#' @param user {character|numeric} Optional author: login name or numeric user
+#'   id, sent as `userId`. Use [od_whoami()] for the current user. Default:
+#'   `NULL` (the server decides).
 #' @param conn {list} Connection list. Default: `NULL`.
 #' @return {list} Parsed API response.
 #' @endpoint POST /issue-comments
@@ -350,18 +360,23 @@ od_get_issue_comments <- function(
 #' @examples
 #' \dontrun{
 #' od_add_issue_comment(145, "Looks good")
+#' od_add_issue_comment(145, "Looks good", user = od_whoami())
 #' }
 #' @export
-od_add_issue_comment <- function(issue_number, content, conn = NULL) {
+od_add_issue_comment <- function(issue_number, content, user = NULL, conn = NULL) {
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
+  body <- list(
+    issueId = issue_id,
+    content = as.character(content)[1]
+  )
+  if (!is.null(user) && nzchar(as.character(user)[1])) {
+    body$userId <- as.integer(od_resolve_user_id(user, conn = conn))
+  }
   od_request(
     method = "POST",
     endpoint = "/issue-comments",
-    body = list(
-      issueId = issue_id,
-      content = as.character(content)[1]
-    ),
+    body = body,
     conn = conn
   )
 }

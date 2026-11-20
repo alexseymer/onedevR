@@ -36,7 +36,7 @@ This vignette covers basic setup and common tasks. For detailed workflows, see:
 
 **Tibbles by Default:** List and query functions return tibbles for easy piping and data manipulation:
 
-```{r}
+```r
 library(onedevr)
 
 issues <- od_query_issues(state = "Open")

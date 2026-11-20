@@ -190,6 +190,31 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
   expect_equal(od_add_issue_comment(145, "note", conn = list())$id, 9)
 })
 
+test_that("od_add_issue_comment sends userId only when a user is given", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
+  sent <- NULL
+  mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
+    sent <<- body
+    list(id = 9)
+  })
+
+  od_add_issue_comment(145, "note", conn = list())
+  expect_null(sent$userId)
+
+  mockery::stub(od_add_issue_comment, "od_resolve_user_id", function(user, ...) {
+    expect_equal(user, "alex")
+    "42"
+  })
+  od_add_issue_comment(145, "note", user = "alex", conn = list())
+  expect_equal(sent$userId, 42L)
+  expect_equal(sent$issueId, 283L)
+  expect_equal(sent$content, "note")
+
+  od_add_issue_comment(145, "note", user = NULL, conn = list())
+  expect_null(sent$userId)
+})
+
 test_that("od_link_issue_to_pull_request creates correct endpoint", {
   skip_if_not_installed("mockery")
   mockery::stub(od_link_issue_to_pull_request, "od_resolve_issue_id", function(...) "283")
