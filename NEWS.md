@@ -1,5 +1,9 @@
 # onedevr (development)
 
+* `od_add_issue_comment()` sends the current user (from `od_whoami()`) as
+  `userId` when `user` is not given. A comment without an author returned HTTP
+  500 on a live instance. If the current user cannot be determined, no
+  `userId` is sent, as before.
 * `od_create_issue()` returns the created issue as documented. OneDev answers
   the create request with the internal id only, so the function now fetches
   the issue; before, `od_batch_create_issues()` reported every created issue
