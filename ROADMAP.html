@@ -118,7 +118,7 @@
 <li><label><input type="checkbox">Live verification of the full surface, area by area, promoting experimental functions once verified</label></li>
 <li><label><input type="checkbox">Live verification of comment body variants and query escaping against a real OneDev instance (needs the <code>live-tests.yaml</code> secrets)</label></li>
 <li><label><input type="checkbox" checked>CRAN pre-check (2026-11-14): <code>R CMD check --as-cran</code> leaves only environment notes, “New submission” and 403 answers of github.com to automated URL checks; submission itself waits for live verification</label></li>
-<li><label><input type="checkbox">Principle review: decide for batch, parallel, streaming and caching whether they are promoted to core after live verification or moved to their own package (rule “one thing well”)</label></li>
+<li><label><input type="checkbox" checked>Principle review (2026-11-20): batch, parallel, streaming and caching stay in core, marked experimental. No second repository for now. Four functions have passing live tests (<code>od_batch_create_issues</code>, <code>od_stream_query_results</code>, <code>od_chunked_foreach</code>, <code>od_enable_cache</code>); the experimental marker stays until the interfaces settle.</label></li>
 <li><label><input type="checkbox">R-universe / CRAN when demand warrants it</label></li>
 </ul></div>
 </div>

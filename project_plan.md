@@ -103,11 +103,14 @@ hat zwei Teile, beide verbindlich.
 Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt
 schrieb mit [`cat()`](https://rdrr.io/r/base/cat.html) auf stdout und
 nutzt jetzt [`message()`](https://rdrr.io/r/base/message.html). Bekannte
-Abweichungen, die bleiben, bis sie live verifiziert oder ausgelagert
-sind: Batch, Parallel, Streaming und Cache bündeln mehrere Schritte in
-einer Funktion (Regel „eine Sache“) und sind deshalb als experimentell
-markiert. Sie sind Kandidaten für ein eigenes Paket, falls sie nicht in
-den Kern aufsteigen.
+Abweichungen, die bleiben, bis sie live verifiziert sind: Batch,
+Parallel, Streaming und Cache bündeln mehrere Schritte in einer Funktion
+(Regel „eine Sache“) und sind deshalb als experimentell markiert.
+Entscheidung (2026-11-20): Sie bleiben im Kern, ohne eigenes Repository.
+Vier Funktionen haben einen bestandenen Live-Test
+(`od_batch_create_issues`, `od_stream_query_results`,
+`od_chunked_foreach`, `od_enable_cache`); die Markierung bleibt, bis die
+Schnittstellen stabil sind.
 
 **Kernidee:** Zwei Ebenen wie bei gitlabr:
 

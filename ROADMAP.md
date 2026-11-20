@@ -152,8 +152,10 @@ CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
 environment notes, “New submission” and 403 answers of github.com to
 automated URL checks; submission itself waits for live verification
 
-Principle review: decide for batch, parallel, streaming and caching
-whether they are promoted to core after live verification or moved to
-their own package (rule “one thing well”)
+Principle review (2026-11-20): batch, parallel, streaming and caching
+stay in core, marked experimental. No second repository for now. Four
+functions have passing live tests (`od_batch_create_issues`,
+`od_stream_query_results`, `od_chunked_foreach`, `od_enable_cache`); the
+experimental marker stays until the interfaces settle.
 
 R-universe / CRAN when demand warrants it

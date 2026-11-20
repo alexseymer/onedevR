@@ -1,7 +1,7 @@
 # Stream large query results with chunking
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Experimental:** a live test against a real OneDev server passes; the
+interface and behaviour may still change.
 
 ## Usage
 
