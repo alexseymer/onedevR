@@ -168,12 +168,19 @@ od_create_issue <- function(
     base_b$iterationIds <- ids
   }
 
-  .od_request_with_variants(
+  created <- .od_request_with_variants(
     method = "POST",
     endpoint = "/issues",
     body_variants = list(base_a, base_b),
     conn = conn
   )
+  # OneDev answers the create POST with the new issue's internal id, not the
+  # issue object. Fetch the issue so the result has the documented shape
+  # (`$number` is the UI number).
+  if (is.atomic(created) && length(created) == 1L && !is.na(created)) {
+    created <- od_get_issue(created, conn = conn, use_internal_id = TRUE)
+  }
+  created
 }
 
 #' Set an issue title

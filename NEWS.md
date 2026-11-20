@@ -1,5 +1,10 @@
 # onedevr (development)
 
+* `od_create_issue()` returns the created issue as documented. OneDev answers
+  the create request with the internal id only, so the function now fetches
+  the issue; before, `od_batch_create_issues()` reported every created issue
+  as an error (`$ operator is invalid for atomic vectors`). Found by the live
+  write test against a real instance.
 * The getting-started vignette no longer contains an executable chunk, so
   `R CMD check` cannot run it when it tangles the vignette code (it failed
   without `ONEDEV_HOST`).
