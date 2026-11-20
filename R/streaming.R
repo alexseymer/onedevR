@@ -82,8 +82,8 @@ od_stream_build_log <- function(
 
 #' Stream large query results with chunking
 #'
-#' **Experimental:** not yet verified against a live OneDev server; the
-#' interface and behaviour may change.
+#' **Experimental:** a live test against a real OneDev server passes; the
+#' interface and behaviour may still change.
 #'
 #' Repeatedly calls a fetcher function (e.g., [od_query_issues()]) to retrieve
 #' paginated results, calling a callback for each page/chunk. This is useful for
@@ -234,8 +234,8 @@ od_stream_query_results <- function(
 
 #' Process results in fixed-size chunks
 #'
-#' **Experimental:** not yet verified against a live OneDev server; the
-#' interface and behaviour may change.
+#' **Experimental:** a live test against a real OneDev server passes; the
+#' interface and behaviour may still change.
 #'
 #' A convenience wrapper around [od_stream_query_results()] for batch processing.
 #' If no callback is provided, yields results as a list of chunks (useful with
