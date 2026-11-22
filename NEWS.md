@@ -1,4 +1,10 @@
-# onedevr (development)
+# onedevr 0.7.2
+
+* Live check on 2026-11-22: all 18 live tests pass (2 skipped: the test
+  project has no `README.md`, and the instance does not offer build log
+  streaming). `scripts/diagnose-comments.R` posted all five probe comments
+  without HTTP 500, so the comment author default below fixes the field
+  error.
 
 * Batch, parallel, streaming and cache stay in the package and remain
   experimental. Four of them now have passing live tests and say so in their

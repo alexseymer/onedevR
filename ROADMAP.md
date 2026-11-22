@@ -85,8 +85,11 @@ Estimate per plan: 1 week+.
   experimental
 - [ ] Live verification of the full surface, area by area, promoting
   experimental functions once verified
-- [ ] Live verification of comment body variants and query escaping against a
-  real OneDev instance (needs the `live-tests.yaml` secrets)
+- [x] Live verification of comment posting (2026-11-22, v0.7.2): all five
+  probes of `scripts/diagnose-comments.R` succeed once the author is sent;
+  all 18 live tests pass locally against the target instance
+- [ ] Live verification of query escaping and iteration body variants
+- [ ] Repository secrets for `live-tests.yaml` (weekly runs fail without them)
 - [x] CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
   environment notes, "New submission" and 403 answers of github.com to
   automated URL checks; submission itself waits for live verification
