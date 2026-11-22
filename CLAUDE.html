@@ -87,7 +87,8 @@
 </ul></div>
 <div class="section level2">
 <h2 id="personas-in-this-project">Personas in this project<a class="anchor" aria-label="anchor" href="#personas-in-this-project"></a></h2>
-<p>No <code>.agents/personas/</code> overrides yet. Cursor: roxygen docs, offline tests, mechanical refactors. agy: review before a release and of API-shape decisions that are not backed by <code>tod</code> or the OneDev REST help.</p>
+<p><code>.agents/personas/agy-reviewer.md</code> overrides the global persona (<code>ask-agy</code> looks in the repo first): coverage checklist, before/after scenario per changed function, self-check with quoted lines, and the onedevr-specific checks. Cursor: roxygen docs, offline tests, mechanical refactors. agy: review before a release and of API-shape decisions that are not backed by <code>tod</code> or the OneDev REST help.</p>
+<p>Prepare agy reviews with <code>scripts/review-prep.sh &lt;from&gt; [&lt;to&gt;]</code>. It uses the <code>ocr</code> CLI (Open Code Review, <code>npm i -g @alibaba-group/open-code-review</code>) in delegation mode, which needs no LLM and no key, and prints the reviewable files, the rules per file and the diffs as one Markdown bundle. Give that bundle to agy in a single call.</p>
 </div>
 </div>
 
