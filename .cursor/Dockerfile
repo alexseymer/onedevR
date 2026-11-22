@@ -11,7 +11,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8
 
 # git/sudo are mandatory for Cursor Cloud custom images; the rest are
-# common system libs for compiling/checking R packages.
+# common system libs for compiling/checking R packages (libuv for fs; libgit2
+# for gert; fontconfig/freetype/harfbuzz/fribidi/png/jpeg/tiff for textshaping
+# and ragg, which devtools and pkgdown pull in).
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       git \
@@ -21,12 +23,25 @@ RUN apt-get update \
       libcurl4-openssl-dev \
       libssl-dev \
       libxml2-dev \
+      libuv1-dev \
+      libgit2-dev \
+      libicu-dev \
+      libfontconfig1-dev \
+      libfreetype-dev \
+      libharfbuzz-dev \
+      libfribidi-dev \
+      libpng-dev \
+      libjpeg-dev \
+      libtiff-dev \
       pandoc \
  && rm -rf /var/lib/apt/lists/*
 
 # Dual repos: keep rocker's P3M binary mirror for installs, add CRAN for
-# tools that probe packages.rds (e.g. R CMD check / pkgdown).
-RUN echo 'options(repos = c(P3M = "https://p3m.dev/cran/__linux__/noble/latest", CRAN = "https://cloud.r-project.org"))' \
+# tools that probe packages.rds (e.g. R CMD check / pkgdown). The P3M URL
+# follows the base image's Ubuntu release: binaries built for another release
+# link against missing system libraries (e.g. libxml2.so.2 on 26.04).
+RUN . /etc/os-release \
+ && echo "options(repos = c(P3M = \"https://p3m.dev/cran/__linux__/${VERSION_CODENAME}/latest\", CRAN = \"https://cloud.r-project.org\"))" \
       >>"${R_HOME}/etc/Rprofile.site"
 
 # Runtime + dev/test toolchain used by onedevr
@@ -46,7 +61,8 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
       rmarkdown \
       pkgload \
       pkgdown \
+      future \
  && rm -rf /tmp/downloaded_packages \
- && strip /usr/local/lib/R/site-library/*/libs/*.so 2>/dev/null || true
+ && (strip /usr/local/lib/R/site-library/*/libs/*.so 2>/dev/null || true)
 
 RUN Rscript -e 'stopifnot(getRversion() >= "4.2.0"); cat("R", as.character(getRversion()), "OK\n")'
