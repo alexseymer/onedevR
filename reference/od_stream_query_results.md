@@ -1,7 +1,7 @@
 # Stream large query results with chunking
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Experimental:** a live test against a real OneDev server passes; the
+interface and behaviour may still change.
 
 ## Usage
 
@@ -55,8 +55,9 @@ od_stream_query_results(
 
 - progress:
 
-  logical If `TRUE`, print progress messages with line count and elapsed
-  time (default `FALSE`). Default: `FALSE`.
+  logical If `TRUE`, report progress (line count and elapsed time) on
+  stderr via [`message()`](https://rdrr.io/r/base/message.html); stdout
+  stays free for data (default `FALSE`). Default: `FALSE`.
 
 - conn:
 

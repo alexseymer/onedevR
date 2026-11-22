@@ -1,5 +1,98 @@
 # Changelog
 
+## onedevr 0.7.2
+
+- Live check on 2026-11-22: all 18 live tests pass (2 skipped: the test
+  project has no `README.md`, and the instance does not offer build log
+  streaming). `scripts/diagnose-comments.R` posted all five probe
+  comments without HTTP 500, so the comment author default below fixes
+  the field error.
+
+- Batch, parallel, streaming and cache stay in the package and remain
+  experimental. Four of them now have passing live tests and say so in
+  their help pages; the others are not yet verified against a live
+  server.
+
+- [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  sends the current user (from
+  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md))
+  as `userId` when `user` is not given. A comment without an author
+  returned HTTP 500 on a live instance. If the current user cannot be
+  determined, no `userId` is sent, as before.
+
+- [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
+  returns the created issue as documented. OneDev answers the create
+  request with the internal id only, so the function now fetches the
+  issue; before,
+  [`od_batch_create_issues()`](https://alexseymer.github.io/onedevR/reference/od_batch_create_issues.md)
+  reported every created issue as an error
+  (`$ operator is invalid for atomic vectors`). Found by the live write
+  test against a real instance.
+
+- The getting-started vignette no longer contains an executable chunk,
+  so `R CMD check` cannot run it when it tangles the vignette code (it
+  failed without `ONEDEV_HOST`).
+
+- [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  has a new optional `user` argument (login name or numeric id) that is
+  sent as `userId`, the author field of the documented request body
+  (OneDev 17.2 REST API help). Field logs show HTTP 500 on every comment
+  together with HTTP 403 on `GET /users/me`, which suggests a token
+  without a user identity; naming the author explicitly may fix that.
+  Without `user` nothing changes. `scripts/diagnose-comments.R` gained a
+  probe that sends the author, so one run shows whether this is the
+  cause.
+
+- The Linux principle (small, focused, cooperating functions; open and
+  iterative development) is now the stated design and development
+  principle: see “Leitprinzip” in `project_plan.md`, “Design principles”
+  in `CONTRIBUTING.md` and the README. `test-principles.R` enforces the
+  mechanical rules: fixed dependency budget, object-first argument
+  order, `conn` on every function that talks to OneDev, no prompts and
+  no stdout output from library code, and plain data classes.
+
+- `od_stream_query_results(progress = TRUE)` reports progress on stderr
+  via [`message()`](https://rdrr.io/r/base/message.html) instead of
+  writing to stdout with [`cat()`](https://rdrr.io/r/base/cat.html).
+
+- New pull-request and issue templates ask for the checks of the
+  Definition of Done and for a reproducible example.
+
+- Documentation shortened: `ai-examples` (1,515 -\> about 240 lines) now
+  keeps only patterns specific to onedevr (connections, UI numbers,
+  project scope, queries and paging, return shapes, errors, escape
+  hatch), and `function-map` (1,101 -\> about 790 lines) drops the
+  workflow examples that the workflow vignettes already cover. Every
+  remaining example is checked by the tests.
+
+- CRAN readiness: `R CMD check --as-cran` now reports only environment
+  and “new submission” notes. The `tod` URL in `DESCRIPTION` is in angle
+  brackets, a dead link in the function map is fixed, and
+  `CONTRIBUTING.md`, `LIVE-TESTS.md` and `REFACTORING.md` are no longer
+  part of the package tarball.
+
+- New regression tests (`test-field-log.R`) for problems seen in real
+  use: non-ASCII request bodies, state names with spaces, merge-conflict
+  and unrecognized-field messages, transition errors, missing iterations
+  and unknown query fields.
+
+- HTTP errors from
+  [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  and the helpers built on it are now conditions of class
+  `od_http_error` (also an `error`) with the fields `status`, `method`
+  and `url`. The message text is unchanged. Use
+  `tryCatch(..., od_http_error = function(e) e$status)` instead of
+  parsing the message.
+  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
+  uses the status when it is available.
+
+- Documentation examples that called functions with arguments that do
+  not exist are fixed (`od_run_job(parameters =)` is `params`,
+  `od_download_build_artifact(local_path =)` is `path`,
+  `od_promote_build(promotion_name =)` is `status`, `od_request(data =)`
+  is `body`, and others). A new test parses the code blocks of the
+  README and vignettes and fails on unknown or surplus arguments.
+
 ## onedevr 0.7.1
 
 Fixes and a small helper from field use against a real OneDev instance.

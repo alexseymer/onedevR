@@ -41,6 +41,13 @@ od_request(method = "GET", endpoint, query = NULL, body = NULL, conn = NULL)
 
 list Parsed JSON payload, or `NULL` for empty bodies.
 
+## Errors
+
+An HTTP status of 400 or above signals a condition of class
+`od_http_error` (also an `error`) with the fields `status`, `method` and
+`url`. Test it with `inherits(e, "od_http_error")` and branch on
+`e$status` instead of parsing the message.
+
 ## See also
 
 Other utilities:
@@ -54,5 +61,9 @@ Other utilities:
 ``` r
 if (FALSE) { # \dontrun{
 od_request("GET", "/projects")
+tryCatch(
+  od_request("GET", "/issues/0"),
+  od_http_error = function(e) e$status
+)
 } # }
 ```

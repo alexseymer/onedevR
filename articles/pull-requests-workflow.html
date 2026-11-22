@@ -15,6 +15,10 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Pull Requests Workflow - Review and Merge">
+<!-- PostHog EU (official cloud) --><script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property get_session_property createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('phc_vtDCjpmCpyvqumXPRm82xEVTrYiTsootwKpXtea4duY9',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',person_profiles:'identified_only',capture_pageview:true,capture_pageleave:true});
+</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -24,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +80,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Pull Requests Workflow - Review and Merge</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.1/vignettes/pull-requests-workflow.Rmd" class="external-link"><code>vignettes/pull-requests-workflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/vignettes/pull-requests-workflow.Rmd" class="external-link"><code>vignettes/pull-requests-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>pull-requests-workflow.Rmd</code></div>
     </div>
 
@@ -290,16 +294,10 @@ onedevr.</p>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Approve a PR</span></span>
-<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span></span>
-<span>  <span class="fl">5</span>,</span>
-<span>  message <span class="op">=</span> <span class="st">"Approved and verified in CI"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Approve with custom message</span></span>
-<span><span class="fu"><a href="../reference/od_approve_pull_request.html">od_approve_pull_request</a></span><span class="op">(</span></span>
-<span>  <span class="fl">5</span>,</span>
-<span>  message <span class="op">=</span> <span class="st">"LGTM! Security review complete. Ready to merge."</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># The approval itself carries no text; add a comment for the message</span></span>
+<span><span class="fu"><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"LGTM! Security review complete. Ready to merge."</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="request-changes">Request Changes<a class="anchor" aria-label="anchor" href="#request-changes"></a>
@@ -515,10 +513,7 @@ onedevr.</p>
 <span>    <span class="co"># Check if ready to merge</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">approvals</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span> <span class="va">pr</span><span class="op">$</span><span class="va">ci_passed</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Merging PR #"</span>, <span class="va">pr_num</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="../reference/od_merge_pull_request.html">od_merge_pull_request</a></span><span class="op">(</span></span>
-<span>        <span class="va">pr_num</span>,</span>
-<span>        commit_message <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (%s)"</span>, <span class="va">pr</span><span class="op">$</span><span class="va">title</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"#"</span>, <span class="va">pr_num</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/od_merge_pull_request.html">od_merge_pull_request</a></span><span class="op">(</span><span class="va">pr_num</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -580,9 +575,9 @@ onedevr.</p>
 <span>    <span class="fu"><a href="../reference/od_run_job.html">od_run_job</a></span><span class="op">(</span></span>
 <span>      <span class="st">"deploy"</span>,</span>
 <span>      branch <span class="op">=</span> <span class="va">pr</span><span class="op">$</span><span class="va">source_branch</span>,</span>
-<span>      parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        ENVIRONMENT <span class="op">=</span> <span class="va">target_env</span>,</span>
-<span>        PR_NUMBER <span class="op">=</span> <span class="va">pr_num</span></span>
+<span>        PR_NUMBER <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">pr_num</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>

@@ -56,7 +56,7 @@ is for you.
 
 ## Status
 
-**v0.7.1** — current release. Issue/build/PR workflows, boards, jobs,
+**v0.7.2** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
 Auth. 0.7.0 added iteration names wherever iteration ids are accepted,
 credential-safe caching, query-string escaping, masked secrets when
@@ -67,7 +67,11 @@ monitoring (see
 [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
 (current user, with a fallback when `/users/me` is refused), automatic
 paging for `count` above 100, shorter error messages for HTML error
-pages, and a diagnosis script for the HTTP 500 on issue comments. See
+pages, and a diagnosis script for the HTTP 500 on issue comments. 0.7.2
+fixes that HTTP 500 by sending the current user as comment author, and
+makes
+[`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
+return the created issue. See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
 changelog.
 
@@ -193,6 +197,28 @@ credentials are only sent to the configured host, and the dependencies
 are audited against the [OSV](https://osv.dev) database in CI. Report
 vulnerabilities privately as described in
 [`SECURITY.md`](https://alexseymer.github.io/onedevR/SECURITY.md).
+
+## Design philosophy
+
+onedevr follows the Linux principle: **small, focused, cooperating
+functions, developed openly and iteratively.**
+
+- One `od_*` function does one OneDev operation. Multi-step workflows
+  are the caller’s job, built from small pieces.
+- The object you act on comes first, `conn` and options last, so
+  pipelines work: `145 |> od_get_issue()`.
+- Results are tibbles or plain lists (JSON-shaped);
+  [`od_request()`](https://alexseymer.github.io/onedevR/reference/od_request.md)
+  is the escape hatch. Library code never prompts and never writes to
+  stdout.
+- A small, fixed dependency budget (`httr2`, `jsonlite`, `rlang`,
+  `tibble`, `vctrs`, `digest`) and no compiled code, so it runs wherever
+  R runs.
+- Release early, release often: small releases, all work in public, and
+  every problem from real use becomes a regression test.
+
+The rules and how they are enforced are in
+[`CONTRIBUTING.md`](https://alexseymer.github.io/onedevR/CONTRIBUTING.html#design-principles-the-linux-principle).
 
 ## Design notes worth knowing up front
 
