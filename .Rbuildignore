@@ -6,6 +6,7 @@
 ^\.env\.example$
 ^\.Renviron\.example$
 ^AGENTS\.md$
+^CLAUDE\.md$
 ^project_plan\.md$
 ^ROADMAP\.md$
 ^RELEASE\.md$
