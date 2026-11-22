@@ -7,7 +7,7 @@ field `issue`), so only this shape is sent.
 ## Usage
 
 ``` r
-od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
+od_add_issue_comment(issue_number, content, conn = NULL)
 ```
 
 ## Arguments
@@ -20,12 +20,6 @@ od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
 
   character Comment body (Markdown).
 
-- user:
-
-  character\|numeric Optional author: login name or numeric user id,
-  sent as `userId`. Default: `NULL`, which uses the current user from
-  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md).
-
 - conn:
 
   list Connection list. Default: `NULL`.
@@ -36,17 +30,8 @@ list Parsed API response.
 
 ## Details
 
-The documented request body (OneDev REST API help,
-`IssueComment.CREATE_BODY`) also has an optional `userId`, the author of
-the comment. By default it is not sent and the server uses the
-authenticated user. A request without `userId` returned HTTP 500 on a
-live instance, so by default the current user from
-[`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)
-is sent. If the current user cannot be determined (for example a token
-without an identity), no `userId` is sent. Pass `user` to name the
-author explicitly.
-
-Before retrying after an error, check with
+HTTP 500 ("Interner Fehler") has been reported for this endpoint on some
+instances. Before retrying, check with
 [`od_get_issue_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_comments.md)
 whether the comment was created anyway, to avoid duplicates.
 
@@ -79,6 +64,5 @@ Other issues:
 ``` r
 if (FALSE) { # \dontrun{
 od_add_issue_comment(145, "Looks good")
-od_add_issue_comment(145, "Looks good", user = od_whoami())
 } # }
 ```

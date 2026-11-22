@@ -214,10 +214,16 @@ bot_comments <- comments %>%
 ``` r
 
 # Approve a PR
-od_approve_pull_request(5)
+od_approve_pull_request(
+  5,
+  message = "Approved and verified in CI"
+)
 
-# The approval itself carries no text; add a comment for the message
-od_add_pull_request_comment(5, "LGTM! Security review complete. Ready to merge.")
+# Approve with custom message
+od_approve_pull_request(
+  5,
+  message = "LGTM! Security review complete. Ready to merge."
+)
 ```
 
 ### Request Changes
@@ -439,7 +445,10 @@ auto_merge_ready <- function() {
     # Check if ready to merge
     if (pr$approvals >= 2 && pr$ci_passed) {
       cat("Merging PR #", pr_num, "\n")
-      od_merge_pull_request(pr_num)
+      od_merge_pull_request(
+        pr_num,
+        commit_message = sprintf("%s (%s)", pr$title, paste0("#", pr_num))
+      )
     }
   }
 }
@@ -502,9 +511,9 @@ deploy_on_approval <- function(pr_num, target_env = "staging") {
     od_run_job(
       "deploy",
       branch = pr$source_branch,
-      params = list(
+      parameters = list(
         ENVIRONMENT = target_env,
-        PR_NUMBER = as.character(pr_num)
+        PR_NUMBER = pr_num
       )
     )
 

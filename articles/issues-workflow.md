@@ -23,10 +23,7 @@ open_issues <- od_query_issues(state = "Open")
 recently_closed <- od_query_issues(state = "Closed")
 
 # Issue with specific fields
-high_priority <- od_query_issues(
-  state = "Open",
-  query = '"Priority" is "High"'
-)
+high_priority <- od_query_issues(state = "Open", Priority = "High")
 ```
 
 ### Custom Query Syntax

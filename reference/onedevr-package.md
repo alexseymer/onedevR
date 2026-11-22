@@ -5,7 +5,7 @@ request helpers and high-level convenience functions for issues, boards,
 projects, builds, packages, repositories, and pull requests. Designed
 for self-hosted OneDev instances. Modeled on gitlabr for the R API
 shape; OneDev conventions follow the tod CLI
-(<https://github.com/theonedev/tod>).
+(https://github.com/theonedev/tod).
 
 ## See also
 

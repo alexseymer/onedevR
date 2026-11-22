@@ -204,7 +204,7 @@ artifacts %>%
 od_download_build_artifact(
   build_number = 123,
   artifact_path = "dist/app.zip",
-  path = "downloaded-app.zip"
+  local_path = "downloaded-app.zip"
 )
 
 # Download multiple artifacts
@@ -231,9 +231,9 @@ od_run_job(
 od_run_job(
   job_name = "Deploy",
   branch = "main",
-  params = list(
+  parameters = list(
     ENVIRONMENT = "staging",
-    VERBOSE = "true",
+    VERBOSE = TRUE,
     VERSION = "1.0.0"
   )
 )
@@ -246,8 +246,11 @@ od_run_job(
 # Rebuild existing build
 od_rebuild_job(build_number = 123)
 
-# With a reason recorded on the new build
-od_rebuild_job(build_number = 123, reason = "Retry after infrastructure fix")
+# With additional parameters
+od_rebuild_job(
+  build_number = 123,
+  parameters = list(FORCE_REBUILD = TRUE)
+)
 ```
 
 ### Cancel Build

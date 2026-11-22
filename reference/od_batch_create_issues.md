@@ -1,7 +1,7 @@
 # Create multiple issues efficiently
 
-**Experimental:** a live test against a real OneDev server passes; the
-interface and behaviour may still change.
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 ## Usage
 

@@ -15,13 +15,9 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="onedevR — R client for the OneDev REST API">
-<meta name="description" content="R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, boards, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (&lt;https://github.com/theonedev/tod&gt;).">
-<meta property="og:description" content="R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, boards, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (&lt;https://github.com/theonedev/tod&gt;).">
+<meta name="description" content="R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, boards, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (https://github.com/theonedev/tod).">
+<meta property="og:description" content="R client for the OneDev project management REST API. Provides low-level request helpers and high-level convenience functions for issues, boards, projects, builds, packages, repositories, and pull requests. Designed for self-hosted OneDev instances. Modeled on gitlabr for the R API shape; OneDev conventions follow the tod CLI (https://github.com/theonedev/tod).">
 <meta property="og:image" content="https://alexseymer.github.io/onedevR/logo.png">
-<!-- PostHog EU (official cloud) --><script>
-  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property get_session_property createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-  posthog.init('phc_vtDCjpmCpyvqumXPRm82xEVTrYiTsootwKpXtea4duY9',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',person_profiles:'identified_only',capture_pageview:true,capture_pageleave:true});
-</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -196,19 +192,6 @@
 <h2 id="security">Security<a class="anchor" aria-label="anchor" href="#security"></a>
 </h2>
 <p>Tokens and passwords are masked when a connection is printed, credentials are only sent to the configured host, and the dependencies are audited against the <a href="https://osv.dev" class="external-link">OSV</a> database in CI. Report vulnerabilities privately as described in <a href="SECURITY.html"><code>SECURITY.md</code></a>.</p>
-</div>
-<div class="section level2">
-<h2 id="design-philosophy">Design philosophy<a class="anchor" aria-label="anchor" href="#design-philosophy"></a>
-</h2>
-<p>onedevr follows the Linux principle: <strong>small, focused, cooperating functions, developed openly and iteratively.</strong></p>
-<ul>
-<li>One <code>od_*</code> function does one OneDev operation. Multi-step workflows are the caller’s job, built from small pieces.</li>
-<li>The object you act on comes first, <code>conn</code> and options last, so pipelines work: <code>145 |&gt; od_get_issue()</code>.</li>
-<li>Results are tibbles or plain lists (JSON-shaped); <code><a href="reference/od_request.html">od_request()</a></code> is the escape hatch. Library code never prompts and never writes to stdout.</li>
-<li>A small, fixed dependency budget (<code>httr2</code>, <code>jsonlite</code>, <code>rlang</code>, <code>tibble</code>, <code>vctrs</code>, <code>digest</code>) and no compiled code, so it runs wherever R runs.</li>
-<li>Release early, release often: small releases, all work in public, and every problem from real use becomes a regression test.</li>
-</ul>
-<p>The rules and how they are enforced are in <a href="CONTRIBUTING.html#design-principles-the-linux-principle"><code>CONTRIBUTING.md</code></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="design-notes-worth-knowing-up-front">Design notes worth knowing up front<a class="anchor" aria-label="anchor" href="#design-notes-worth-knowing-up-front"></a>
