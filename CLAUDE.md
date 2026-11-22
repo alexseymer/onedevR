@@ -62,6 +62,15 @@ same names. Comment debugging: `scripts/diagnose-comments.R`.
 
 ## Personas in this project
 
-No `.agents/personas/` overrides yet. Cursor: roxygen docs, offline tests,
-mechanical refactors. agy: review before a release and of API-shape decisions
-that are not backed by `tod` or the OneDev REST help.
+`.agents/personas/agy-reviewer.md` overrides the global persona (`ask-agy`
+looks in the repo first): coverage checklist, before/after scenario per
+changed function, self-check with quoted lines, and the onedevr-specific
+checks. Cursor: roxygen docs, offline tests, mechanical refactors. agy: review
+before a release and of API-shape decisions that are not backed by `tod` or
+the OneDev REST help.
+
+Prepare agy reviews with `scripts/review-prep.sh <from> [<to>]`. It uses the
+`ocr` CLI (Open Code Review, `npm i -g @alibaba-group/open-code-review`) in
+delegation mode, which needs no LLM and no key, and prints the reviewable
+files, the rules per file and the diffs as one Markdown bundle. Give that
+bundle to agy in a single call.
