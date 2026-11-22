@@ -264,6 +264,11 @@ test_that("od_batch_create_issues live", {
     ),
     progress = FALSE
   )
+  # Close what the test created, also when an expectation below fails, so the
+  # weekly CI run does not leave open issues behind.
+  withr::defer(for (n in result$numbers) {
+    tryCatch(od_issue_transition_state(n, "Closed"), error = function(e) NULL)
+  })
 
   expect_length(result$errors, 0)
   expect_length(result$created, 2)
