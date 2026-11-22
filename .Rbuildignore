@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^\.github$
 ^\.cursor$
+^\.agents$
 ^\.env
 ^\.env\.example$
 ^\.Renviron\.example$
