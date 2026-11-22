@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-10 (Paketversion 0.7.1)  
+**Stand:** 2026-11-22 (Paketversion 0.7.2)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`, `DESCRIPTION`, `NEWS.md` und `ROADMAP.md`; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.  
 **Ziel:** Eigenständiges R-Paket `onedevr` (Display-Name: **onedevR**), analog zu [gitlabr](https://thinkr-open.github.io/gitlabr/), das die OneDev-REST-API kapselt.
 
@@ -168,6 +168,7 @@ Verstöße, die gefunden und behoben wurden: Der Streaming-Fortschritt schrieb m
 | 0.6.0 | Boards/Projekt-Settings (`od_list_boards()`, `od_query_board_issues()`), `od_get_iteration()` |
 | 0.7.0 | `od_resolve_iteration_ids()`, 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
 | 0.7.1 | `od_whoami()` mit Rückfall bei verweigertem `/users/me`; automatisches Paging für `count` über 100; HTML-Fehlerseiten gekürzt; Kommentar-Body wieder einfach; `scripts/diagnose-comments.R` |
+| 0.7.2 | Kommentar-Autor standardmäßig der aktuelle User (behebt HTTP 500, live bestätigt 2026-11-22); `od_create_issue()` liefert das angelegte Issue; Batch, Parallel, Streaming, Cache bleiben experimentell im Kern |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (`R/batch.R`, `R/concurrent.R`, `R/streaming.R`, `R/cache.R`).
 
@@ -568,6 +569,8 @@ auslösen (alle bisher fehlgeschlagenen Texte enthielten Verweise, aber das ist
 nur eine Vermutung). Neuer Ansatz (Hersteller-API-Hilfe, `IssueComment.CREATE_BODY`): der Body kennt zusätzlich `userId` (Autor); `GET /users/me` liefert auf der Ziel-Instanz HTTP 403, was auf ein Token ohne Benutzeridentität deutet. `od_add_issue_comment(user =)` sendet den Autor explizit. Zur Eingrenzung: `scripts/diagnose-comments.R` auf einem
 Test-Ticket ausführen und das Serverlog (`logs/server.log`) zum Aufrufzeitpunkt
 prüfen. Vor einem Retry `od_get_issue_comments()` ansehen.
+
+**Gelöst (0.7.2, live bestätigt 2026-11-22):** Seit `od_add_issue_comment()` ohne `user` den aktuellen User als `userId` sendet, legt die Ziel-Instanz alle fünf Proben aus `scripts/diagnose-comments.R` an (einfacher Text, Markdown, Issue- und Commit-Verweis, expliziter Autor), ohne HTTP 500. Der fehlende Autor war die Ursache.
 
 ### Listen: `count` höchstens 100
 
@@ -984,8 +987,8 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 ### Offene Punkte
 
 - CRAN/R-universe-Submission (siehe `ROADMAP.md`).
-- Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen; Ursache des HTTP 500 am Kommentar-Endpoint.
-- Ursache der serverseitigen HTTP-500 bei `POST /issue-comments`.
+- Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen.
+- Repository-Secrets für den Workflow `live-tests` fehlen; die wöchentlichen Läufe brechen deshalb ab.
 
 ---
 
