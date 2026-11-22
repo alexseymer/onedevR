@@ -33,9 +33,21 @@ Rscript -e 'devtools::check(args = "--no-manual")' # full check
 Rscript -e 'pkgdown::check_pkgdown()'              # every export in _pkgdown.yml
 ```
 
+On the devbox, R is not installed on the host; run these in the dev image
+built from `.cursor/Dockerfile`:
+
+```sh
+docker build -f .cursor/Dockerfile -t onedevr-dev .cursor
+docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/work -w /work \
+  -e HOME=/tmp onedevr-dev Rscript -e 'devtools::test()'
+```
+
 Live tests: `ONEDEV_RUN_LIVE_TESTS=1` plus `ONEDEV_HOST` and a token in
-`.Renviron` (gitignored; see `.env.example` and `LIVE-TESTS.md`). Never print
-or commit those values. Comment debugging: `scripts/diagnose-comments.R`.
+`.Renviron` (gitignored; see `.env.example` and `LIVE-TESTS.md`). R reads the
+mounted `.Renviron` in the container; pass `-e ONEDEV_RUN_LIVE_TESTS=1`.
+Writing tests also need `ONEDEV_LIVE_ALLOW_WRITES=1`. Never print or commit
+those values. The `live-tests.yaml` workflow uses repository secrets of the
+same names. Comment debugging: `scripts/diagnose-comments.R`.
 
 ## Conventions
 
