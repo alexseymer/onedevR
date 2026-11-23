@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,22 @@
       <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.3" id="onedevr-073">onedevr 0.7.3<a class="anchor" aria-label="anchor" href="#onedevr-073"></a></h2>
+<p>Fixes from an agy review of 0.7.2, each checked by hand against the code.</p>
+<ul><li>
+<code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>: the argument order is <code>(issue_number, content, conn, user)</code> again, as in 0.7.1. 0.7.2 had put <code>user</code> before <code>conn</code>, so <code>od_add_issue_comment(145, "x", conn)</code> treated the connection as the author. Pass <code>user</code> by name. If you called it with <code>user</code> as the third positional argument in 0.7.2, name it (<code>user = "alice"</code>).</li>
+<li>
+<code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code> finds the default author with one request (<code>GET /users/me</code>) instead of two. If that is refused it falls back to the login name, as before. If the current user cannot be determined or resolved, no <code>userId</code> is sent, as before. An explicit <code>user</code> that cannot be resolved is an error, and <code>user = NA</code> or a vector is rejected with a clear message.</li>
+<li>
+<code><a href="../reference/od_create_issue.html">od_create_issue()</a></code> no longer loses the id when fetching the new issue fails (timeout, 5xx). The issue exists then, so it warns and returns <code>list(id = &lt;internal id&gt;)</code>; a retry would have created a duplicate. A create answer that is not a numeric id (for example <code>""</code>) is returned as is instead of being fetched, which used to request <code>GET /issues/</code>.</li>
+<li>
+<code><a href="../reference/od_batch_create_issues.html">od_batch_create_issues()</a></code>: <code>numbers</code> stays aligned with <code>created</code>. A created issue without a number is <code>NA</code> instead of being dropped, which shifted every later number by one.</li>
+<li>
+<code>scripts/diagnose-comments.R</code>: the text probes post without an author again (raw <code><a href="../reference/od_request.html">od_request()</a></code>), so the script can show whether the missing author is the cause. <code>with_user</code> uses <code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>. Run live on 2026-11-23: all four text probes without author fail with HTTP 500 and create nothing, while <code>with_user</code> succeeds. That confirms the missing author as the cause.</li>
+<li>Tests: the create path where OneDev answers with the internal id, the fetch failure, positional <code>conn</code>, <code>user</code> validation, an unresolvable author and a partially failed batch.</li>
+<li>New <code>scripts/review-prep.sh</code> and a repo-level agy reviewer persona (<code>.agents/personas/agy-reviewer.md</code>) for repeatable reviews; no package code.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.2" id="onedevr-072">onedevr 0.7.2<a class="anchor" aria-label="anchor" href="#onedevr-072"></a></h2>
 <ul><li><p>Live check on 2026-11-22: all 18 live tests pass (2 skipped: the test project has no <code>README.md</code>, and the instance does not offer build log streaming). <code>scripts/diagnose-comments.R</code> posted all five probe comments without HTTP 500, so the comment author default below fixes the field error.</p></li>

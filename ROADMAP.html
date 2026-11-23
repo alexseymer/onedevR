@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,6 +117,7 @@
 <li><label><input type="checkbox" checked>Scope narrowed (2026-11-12): public general-purpose client; unverified areas (batch, parallel, streaming, caching, webhooks, SSH keys) marked experimental</label></li>
 <li><label><input type="checkbox">Live verification of the full surface, area by area, promoting experimental functions once verified</label></li>
 <li><label><input type="checkbox" checked>Live verification of comment posting (2026-11-22, v0.7.2): all five probes of <code>scripts/diagnose-comments.R</code> succeed once the author is sent; all 18 live tests pass locally against the target instance</label></li>
+<li><label><input type="checkbox" checked>Review fixes (v0.7.3): argument order of <code><a href="reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>, author lookup, <code><a href="reference/od_create_issue.html">od_create_issue()</a></code> keeps the id when the fetch fails, batch <code>numbers</code> aligned; repo-level agy persona and <code>scripts/review-prep.sh</code></label></li>
 <li><label><input type="checkbox">Live verification of query escaping and iteration body variants</label></li>
 <li><label><input type="checkbox">Repository secrets for <code>live-tests.yaml</code> (weekly runs fail without them)</label></li>
 <li><label><input type="checkbox" checked>CRAN pre-check (2026-11-14): <code>R CMD check --as-cran</code> leaves only environment notes, “New submission” and 403 answers of github.com to automated URL checks; submission itself waits for live verification</label></li>

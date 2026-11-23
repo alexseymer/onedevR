@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-22 (Paketversion 0.7.2)  
+**Stand:** 2026-11-22 (Paketversion 0.7.3)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht.
 Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte
 API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`,
@@ -212,6 +212,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.7.0 | [`od_resolve_iteration_ids()`](https://alexseymer.github.io/onedevR/reference/od_resolve_iteration_ids.md), 406-Hinweis; Sicherheits-Härtung (Query-Escaping, Secret-Maskierung, Cache nach Zugangsdaten getrennt, Origin-Prüfung, `od_error`, TLS-Warnung); Tests für alle Exporte; Live-Test-Workflow; Schwachstellen- und Secret-Monitoring |
 | 0.7.1 | [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md) mit Rückfall bei verweigertem `/users/me`; automatisches Paging für `count` über 100; HTML-Fehlerseiten gekürzt; Kommentar-Body wieder einfach; `scripts/diagnose-comments.R` |
 | 0.7.2 | Kommentar-Autor standardmäßig der aktuelle User (behebt HTTP 500, live bestätigt 2026-11-22); [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md) liefert das angelegte Issue; Batch, Parallel, Streaming, Cache bleiben experimentell im Kern |
+| 0.7.3 | Fixes aus agy-Review: `od_add_issue_comment(issue_number, content, conn, user)` wieder in der Reihenfolge von 0.7.1; Autor mit einer statt zwei Anfragen; [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md) behält die Id, wenn das Nachladen fehlschlägt; Batch-`numbers` bleiben ausgerichtet |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache

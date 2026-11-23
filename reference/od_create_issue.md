@@ -46,7 +46,9 @@ od_create_issue(
 
 ## Value
 
-list Parsed created issue.
+list Parsed created issue. If the issue was created but fetching it
+failed, a warning is raised and the result is `list(id = <internal id>)`
+without `number`; do not retry the creation in that case.
 
 ## Details
 

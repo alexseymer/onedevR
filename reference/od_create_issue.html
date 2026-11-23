@@ -12,7 +12,7 @@ project = list(id = ...)) via the internal request-variants helper."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,9 @@ project = list(id = ...)) via the internal request-variants helper."><meta prope
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>list Parsed created issue.</p>
+    <p>list Parsed created issue. If the issue was created but fetching it
+failed, a warning is raised and the result is <code>list(id = &lt;internal id&gt;)</code>
+without <code>number</code>; do not retry the creation in that case.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

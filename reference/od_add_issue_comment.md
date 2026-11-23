@@ -7,7 +7,7 @@ field `issue`), so only this shape is sent.
 ## Usage
 
 ``` r
-od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
+od_add_issue_comment(issue_number, content, conn = NULL, user = NULL)
 ```
 
 ## Arguments
@@ -20,15 +20,18 @@ od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
 
   character Comment body (Markdown).
 
-- user:
-
-  character\|numeric Optional author: login name or numeric user id,
-  sent as `userId`. Default: `NULL`, which uses the current user from
-  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md).
-
 - conn:
 
   list Connection list. Default: `NULL`.
+
+- user:
+
+  character\|numeric Optional author: login name or numeric user id,
+  sent as `userId`. Default: `NULL`, which uses the current user (id
+  from `GET /users/me`, else the login name from
+  [`od_whoami()`](https://alexseymer.github.io/onedevR/reference/od_whoami.md)).
+  If the current user cannot be determined, no `userId` is sent. A
+  `user` that is given but cannot be resolved is an error.
 
 ## Value
 
@@ -79,6 +82,6 @@ Other issues:
 ``` r
 if (FALSE) { # \dontrun{
 od_add_issue_comment(145, "Looks good")
-od_add_issue_comment(145, "Looks good", user = od_whoami())
+od_add_issue_comment(145, "Looks good", user = "alice")
 } # }
 ```

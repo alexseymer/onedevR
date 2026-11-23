@@ -36,7 +36,8 @@ list Named list with:
 - `created`: List of created issue lists (each with `id`, `number`,
   `title`, etc.)
 
-- `numbers`: Numeric vector of created issue numbers
+- `numbers`: Numeric vector of created issue numbers, aligned with
+  `created` (`NA` where OneDev returned no number)
 
 - `errors`: List of errors encountered (empty if all succeeded)
 

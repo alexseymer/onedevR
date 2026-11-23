@@ -56,7 +56,7 @@ is for you.
 
 ## Status
 
-**v0.7.2** — current release. Issue/build/PR workflows, boards, jobs,
+**v0.7.3** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
 Auth. 0.7.0 added iteration names wherever iteration ids are accepted,
 credential-safe caching, query-string escaping, masked secrets when
@@ -71,7 +71,10 @@ pages, and a diagnosis script for the HTTP 500 on issue comments. 0.7.2
 fixes that HTTP 500 by sending the current user as comment author, and
 makes
 [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md)
-return the created issue. See
+return the created issue. 0.7.3 restores the argument order of
+[`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md),
+keeps the id when fetching a newly created issue fails, and keeps batch
+`numbers` aligned. See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
 changelog.
 
