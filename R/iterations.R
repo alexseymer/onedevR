@@ -101,9 +101,10 @@ od_get_iteration <- function(
 
 #' Set iterations on an existing issue
 #'
-#' Calls `POST /issues/{id}/iterations`. Tries known body shapes (raw id list
-#' and `{iterationIds: [...]}`) via the variants helper - see
-#' `project_plan.md` sec 10.
+#' Calls `POST /issues/{id}/iterations` with the iteration ids as a JSON array.
+#' OneDev replaces the issue's iterations with this list. The object form
+#' `{iterationIds: [...]}` is rejected with HTTP 400 (verified live, see
+#' `project_plan.md` sec 10).
 #'
 #' @param issue_number UI number (`145` or `"#145"`).
 #' @param iteration_ids Iteration ids or names (see [od_resolve_iteration_ids()]).
@@ -123,13 +124,10 @@ od_add_issue_iterations <- function(issue_number, iteration_ids, conn = NULL) {
   ids <- as.list(od_resolve_iteration_ids(iteration_ids, conn = conn))
   issue_id <- od_resolve_issue_id(issue_number, conn = conn)
 
-  .od_request_with_variants(
+  od_request(
     method = "POST",
     endpoint = paste0("/issues/", issue_id, "/iterations"),
-    body_variants = list(
-      ids,
-      list(iterationIds = ids)
-    ),
+    body = ids,
     conn = conn
   )
 }

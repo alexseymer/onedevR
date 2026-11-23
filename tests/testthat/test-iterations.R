@@ -18,25 +18,34 @@ test_that("od_list_iterations GETs project iterations with paging", {
   expect_equal(result$id, 17L)
 })
 
-test_that("od_add_issue_iterations tries body variants", {
+test_that("od_add_issue_iterations posts the ids as a JSON array", {
   skip_if_not_installed("mockery")
   mockery::stub(od_add_issue_iterations, "od_resolve_issue_id", function(...) "283")
+  sent <- NULL
   mockery::stub(
     od_add_issue_iterations,
-    ".od_request_with_variants",
-    function(method, endpoint, body_variants, conn = NULL) {
+    "od_request",
+    function(method, endpoint, body = NULL, conn = NULL, ...) {
       expect_equal(method, "POST")
       expect_equal(endpoint, "/issues/283/iterations")
-      expect_equal(body_variants[[1]], list(17L))
-      expect_equal(body_variants[[2]], list(iterationIds = list(17L)))
+      sent <<- body
       list(ok = TRUE)
     }
   )
 
-  expect_equal(
-    od_add_issue_iterations(145, c(17L), conn = list())$ok,
-    TRUE
-  )
+  expect_equal(od_add_issue_iterations(145, c(17L, 18L), conn = list())$ok, TRUE)
+  expect_equal(sent, list(17L, 18L))
+  # A single id must stay an array, not become a bare number.
+  od_add_issue_iterations(145, 17L, conn = list())
+  expect_equal(as.character(jsonlite::toJSON(sent, auto_unbox = TRUE)), "[17]")
+})
+
+test_that("od_add_issue_iterations reports the one request error without variant noise", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_add_issue_iterations, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_add_issue_iterations, "od_request", function(...) stop("HTTP 400 bad id"))
+  err <- expect_error(od_add_issue_iterations(145, 17L, conn = list()), "HTTP 400 bad id")
+  expect_false(grepl("All request body variants", conditionMessage(err)))
 })
 
 test_that("od_add_issue_iterations rejects empty ids", {

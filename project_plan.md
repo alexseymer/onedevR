@@ -546,16 +546,21 @@ Some OneDev builds accept the object form and persist the JSON literal as the
 title/description. Prefer the raw string first so the stored value is the plain
 text.
 
-### Iterations POST: mehrere Body-Formen (zu verifizieren)
+### Iterations POST: Body ist ein JSON-Array (verifiziert 2026-11-23)
 
-```r
-# Probe verschiedener Payloads gegen die Ziel-Installation:
-for (body in list(c(17L), list(17L), list(iterationIds = list(17L)))) {
-  od_request("POST", "/issues/{issue_id}/iterations", body = body, conn = conn)
-}
-```
+`POST /issues/{id}/iterations` erwartet die Iteration-Ids als Array und
+ersetzt damit die Iterationen des Tickets. Gegen die Ziel-Instanz geprüft:
 
-→ Umgesetzt: `od_add_issue_iterations()` nutzt den Varianten-Helper (`list(ids)`, `list(iterationIds = ids)`); gegen echte Instanz zu verifizieren (Live-Tests gated).
+| Body | Ergebnis |
+|------|----------|
+| `[17]` (`list(17L)`) | funktioniert |
+| `{"iterationIds": [17]}` | HTTP 400 (`Cannot deserialize ... ArrayList<Long> from Object value`) |
+
+→ Umgesetzt: `od_add_issue_iterations()` sendet nur das Array, ohne Varianten-Helper.
+`od_create_issue(iteration_ids =)` setzt `iterationIds` im Create-Body und
+wurde ebenfalls live geprüft. Eine Iteration lässt sich per `POST /iterations`
+(`projectId`, `name`, `description`) anlegen und per `DELETE /iterations/{id}`
+löschen; das Paket bietet dafür keine Funktion, der Live-Test nutzt `od_request()`.
 
 ### Issue-Kommentare: `POST /issue-comments`
 
@@ -988,7 +993,7 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 ### Offene Punkte
 
 - CRAN/R-universe-Submission (siehe `ROADMAP.md`).
-- Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen; das Testprojekt hat noch keine Iterations.
+- Verifikation der Iterations- und Kommentar-Bodies gegen weitere OneDev-Versionen (bisher nur eine Ziel-Instanz).
 - Repository-Secrets für den Workflow `live-tests` fehlen; die wöchentlichen Läufe brechen deshalb ab.
 
 ---
