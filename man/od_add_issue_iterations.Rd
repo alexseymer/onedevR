@@ -17,9 +17,10 @@ od_add_issue_iterations(issue_number, iteration_ids, conn = NULL)
 Parsed API response.
 }
 \description{
-Calls \code{POST /issues/{id}/iterations}. Tries known body shapes (raw id list
-and \verb{\{iterationIds: [...]\}}) via the variants helper - see
-\code{project_plan.md} sec 10.
+Calls \code{POST /issues/{id}/iterations} with the iteration ids as a JSON array.
+OneDev replaces the issue's iterations with this list. The object form
+\verb{\{iterationIds: [...]\}} is rejected with HTTP 400 (verified live, see
+\code{project_plan.md} sec 10).
 }
 \examples{
 \dontrun{

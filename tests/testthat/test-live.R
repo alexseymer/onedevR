@@ -307,3 +307,47 @@ test_that("query escaping live: quotes, backslash, parentheses and umlauts round
   )
   expect_true(issue$number %in% found$number)
 })
+
+test_that("iterations live: names resolve, ids attach to an issue, both entry points work", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  # Creates a scratch iteration and two issues; the test removes them again.
+  skip_if(Sys.getenv("ONEDEV_LIVE_ALLOW_WRITES") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  name <- paste0("onedevr-live-", format(Sys.time(), "%Y%m%d%H%M%S"))
+  od_request("POST", "/iterations", body = list(
+    projectId = as.integer(od_resolve_project_id()),
+    name = name,
+    description = "onedevr live test; deleted automatically"
+  ))
+  found <- Filter(function(x) identical(x$name, name), od_list_iterations(as_tibble = FALSE))
+  skip_if(length(found) < 1L, "Scratch iteration was not created")
+  id <- as.integer(found[[1]]$id)
+  # Deferred calls run last-in first-out: the issues are closed before the
+  # iteration is deleted.
+  withr::defer(tryCatch(od_request("DELETE", paste0("/iterations/", id)), error = function(e) NULL))
+
+  iterations_of <- function(issue) {
+    its <- od_request("GET", paste0("/issues/", od_resolve_issue_id(issue$number), "/iterations"))
+    vapply(its, function(x) as.integer(x$id), integer(1))
+  }
+  new_issue <- function(..., env = parent.frame()) {
+    issue <- od_create_issue(title = "onedevr iteration live test", description = "Closed automatically.", ...)
+    withr::defer(tryCatch(od_issue_transition_state(issue$number, "Closed"), error = function(e) NULL), envir = env)
+    issue
+  }
+
+  expect_equal(od_resolve_iteration_ids(name), id)
+  expect_equal(od_get_iteration(id)$name, name)
+
+  # POST /issues/{id}/iterations takes a JSON array; the object form is
+  # rejected with HTTP 400.
+  plain <- new_issue()
+  expect_length(iterations_of(plain), 0L)
+  od_add_issue_iterations(plain$number, name)
+  expect_equal(iterations_of(plain), id)
+
+  with_iteration <- new_issue(iteration_ids = name)
+  expect_equal(iterations_of(with_iteration), id)
+})

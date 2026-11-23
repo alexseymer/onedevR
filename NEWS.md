@@ -1,5 +1,12 @@
 # onedevr (development)
 
+* `od_add_issue_iterations()` sends the iteration ids as a JSON array only. A
+  live run (2026-11-23) showed that OneDev accepts `[id, ...]` and rejects the
+  object form `{iterationIds: [...]}` with HTTP 400, so that second variant is
+  removed. A failing call now reports the one request error instead of both
+  variants, one of which was misleading. Success behaves as before. A new live
+  test creates a scratch iteration, attaches it with `od_add_issue_iterations()`
+  and with `od_create_issue(iteration_ids = )`, and removes everything again.
 * Query escaping is verified against a live OneDev instance (2026-11-23).
   `.od_quote_query_value()` escapes `"` and `\`, and OneDev reads the result
   as one literal: an issue titled `onedevr live "quoted" back\slash (paren) ä`
