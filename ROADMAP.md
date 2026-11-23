@@ -160,10 +160,14 @@ Live verification of query escaping (2026-11-23): quotes, backslash,
 parentheses and umlauts round-trip, an injected `state` value matches
 nothing; two live tests in `test-live.R`
 
-Live verification of the iteration body variants (the test project has
-no iterations yet)
+Live verification of the iteration body variants (2026-11-23): the raw
+id array works, `{iterationIds: [...]}` is rejected with HTTP 400 and
+was removed; a live test covers
+[`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+and `od_create_issue(iteration_ids =)`
 
-Repository secrets for `live-tests.yaml` (weekly runs fail without them)
+Repository secrets for `live-tests.yaml` (2026-11-22): the weekly run
+passes
 
 CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
 environment notes, “New submission” and 403 answers of github.com to

@@ -755,13 +755,16 @@
 </tr></tbody></table><p>Some OneDev builds accept the object form and persist the JSON literal as the title/description. Prefer the raw string first so the stored value is the plain text.</p>
 </div>
 <div class="section level3">
-<h3 id="iterations-post-mehrere-body-formen-zu-verifizieren">Iterations POST: mehrere Body-Formen (zu verifizieren)<a class="anchor" aria-label="anchor" href="#iterations-post-mehrere-body-formen-zu-verifizieren"></a></h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Probe verschiedener Payloads gegen die Ziel-Installation:</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">body</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17L</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">17L</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iterationIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">17L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="reference/od_request.html">od_request</a></span><span class="op">(</span><span class="st">"POST"</span>, <span class="st">"/issues/{issue_id}/iterations"</span>, body <span class="op">=</span> <span class="va">body</span>, conn <span class="op">=</span> <span class="va">conn</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>→ Umgesetzt: <code><a href="reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code> nutzt den Varianten-Helper (<code>list(ids)</code>, <code>list(iterationIds = ids)</code>); gegen echte Instanz zu verifizieren (Live-Tests gated).</p>
+<h3 id="iterations-post-body-ist-ein-json-array-verifiziert-2026-11-23">Iterations POST: Body ist ein JSON-Array (verifiziert 2026-11-23)<a class="anchor" aria-label="anchor" href="#iterations-post-body-ist-ein-json-array-verifiziert-2026-11-23"></a></h3>
+<p><code>POST /issues/{id}/iterations</code> erwartet die Iteration-Ids als Array und ersetzt damit die Iterationen des Tickets. Gegen die Ziel-Instanz geprüft:</p>
+<table class="table"><colgroup><col width="37%"><col width="62%"></colgroup><thead><tr><th>Body</th>
+<th>Ergebnis</th>
+</tr></thead><tbody><tr><td>
+<code>[17]</code> (<code>list(17L)</code>)</td>
+<td>funktioniert</td>
+</tr><tr><td><code>{"iterationIds": [17]}</code></td>
+<td>HTTP 400 (<code>Cannot deserialize ... ArrayList&lt;Long&gt; from Object value</code>)</td>
+</tr></tbody></table><p>→ Umgesetzt: <code><a href="reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code> sendet nur das Array, ohne Varianten-Helper. <code>od_create_issue(iteration_ids =)</code> setzt <code>iterationIds</code> im Create-Body und wurde ebenfalls live geprüft. Eine Iteration lässt sich per <code>POST /iterations</code> (<code>projectId</code>, <code>name</code>, <code>description</code>) anlegen und per <code>DELETE /iterations/{id}</code> löschen; das Paket bietet dafür keine Funktion, der Live-Test nutzt <code><a href="reference/od_request.html">od_request()</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="issue-kommentare-post-issue-comments">Issue-Kommentare: <code>POST /issue-comments</code>
@@ -792,11 +795,11 @@
 <div class="section level3">
 <h3 id="custom-fields-sind-installationsabhängig">Custom Fields sind installationsabhängig<a class="anchor" aria-label="anchor" href="#custom-fields-sind-installationsabh%C3%A4ngig"></a></h3>
 <p>Beispiel-Response <code>GET /issues/{id}/fields</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="dt">"Assignee"</span><span class="fu">:</span> <span class="st">"developer"</span><span class="fu">,</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="dt">"Type"</span><span class="fu">:</span> <span class="st">"Task"</span><span class="fu">,</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="dt">"Priority"</span><span class="fu">:</span> <span class="st">"Normal"</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="dt">"Assignee"</span><span class="fu">:</span> <span class="st">"developer"</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="dt">"Type"</span><span class="fu">:</span> <span class="st">"Task"</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="dt">"Priority"</span><span class="fu">:</span> <span class="st">"Normal"</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>Feldnamen und erlaubte Werte variieren pro OneDev-Installation und Issue-Schema. onedevr dokumentiert <code>fields</code> als named list ohne festes Schema.</p>
 </div>
 <div class="section level3">
@@ -947,7 +950,7 @@
 <h2 id="id_12-consumer-integration">12. Consumer-Integration<a class="anchor" aria-label="anchor" href="#id_12-consumer-integration"></a></h2>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a></h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GitHub (bis CRAN)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span>
 <span></span>
@@ -956,7 +959,7 @@
 </div>
 <div class="section level3">
 <h3 id="minimales-setup">Minimales Setup<a class="anchor" aria-label="anchor" href="#minimales-setup"></a></h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexseymer.github.io/onedevR/">onedevr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span></span>
@@ -969,7 +972,7 @@
 </div>
 <div class="section level3">
 <h3 id="explizite-connection-empfohlen-für-skripte">Explizite Connection (empfohlen für Skripte)<a class="anchor" aria-label="anchor" href="#explizite-connection-empfohlen-f%C3%BCr-skripte"></a></h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/od_connection.html">od_connection</a></span><span class="op">(</span></span>
 <span>  host <span class="op">=</span> <span class="st">"https://git.example.test"</span>,</span>
 <span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ONEDEV_API_TOKEN"</span><span class="op">)</span>,</span>
@@ -980,7 +983,7 @@
 </div>
 <div class="section level3">
 <h3 id="roxygen-re-export-optional-für-shiny-pakete">Roxygen-Re-Export (optional, für Shiny-Pakete)<a class="anchor" aria-label="anchor" href="#roxygen-re-export-optional-f%C3%BCr-shiny-pakete"></a></h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' @importFrom onedevr od_get_issue od_create_issue</span></span>
 <span><span class="cn">NULL</span></span></code></pre></div>
 </div>
@@ -1000,7 +1003,7 @@
 <h2 id="id_13-paket-skeleton">13. Paket-Skeleton<a class="anchor" aria-label="anchor" href="#id_13-paket-skeleton"></a></h2>
 <div class="section level3">
 <h3 id="quick-start-ziel-readme">Quick Start (Ziel-README)<a class="anchor" aria-label="anchor" href="#quick-start-ziel-readme"></a></h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"onedevr"</span><span class="op">)</span>  <span class="co"># oder remotes::install_github("alexseymer/onedevR")</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span></span>
@@ -1045,7 +1048,7 @@
 </tr></tbody></table></div>
 <div class="section level3">
 <h3 id="beispiel-config-test">Beispiel: Config-Test<a class="anchor" aria-label="anchor" href="#beispiel-config-test"></a></h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"od_get_config reads ONEDEV env vars and derives project path"</span>, <span class="op">{</span></span>
 <span>  <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_envvar.html" class="external-link">local_envvar</a></span><span class="op">(</span></span>
 <span>    ONEDEV_HOST <span class="op">=</span> <span class="st">"https://git.example.test/"</span>,</span>
@@ -1070,7 +1073,7 @@
 </div>
 <div class="section level3">
 <h3 id="beispiel-ui-nummer-auflösung-mockery">Beispiel: UI-Nummer-Auflösung (mockery)<a class="anchor" aria-label="anchor" href="#beispiel-ui-nummer-aufl%C3%B6sung-mockery"></a></h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"od_resolve_issue_id uses UI number query with project path"</span>, <span class="op">{</span></span>
 <span>  <span class="fu">skip_if_not_installed</span><span class="op">(</span><span class="st">"mockery"</span><span class="op">)</span></span>
 <span>  <span class="fu">mockery</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mockery/man/stub.html" class="external-link">stub</a></span><span class="op">(</span><span class="va">od_resolve_issue_id</span>, <span class="st">"od_resolve_project_path"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">conn</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1087,7 +1090,7 @@
 </div>
 <div class="section level3">
 <h3 id="integrationstests-gated">Integrationstests (gated)<a class="anchor" aria-label="anchor" href="#integrationstests-gated"></a></h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"od_get_issue live"</span>, <span class="op">{</span></span>
 <span>  <span class="fu">skip_if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ONEDEV_RUN_LIVE_TESTS"</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"1"</span><span class="op">)</span></span>
 <span>  <span class="fu">skip_if_not</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ONEDEV_API_TOKEN"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -1097,15 +1100,15 @@
 </div>
 <div class="section level3">
 <h3 id="ci-entwurf-ist-githubworkflowsr-cmd-checkyaml-pkgdownyaml">CI (Entwurf; Ist: <code>.github/workflows/R-CMD-check.yaml</code>, <code>pkgdown.yaml</code>)<a class="anchor" aria-label="anchor" href="#ci-entwurf-ist-githubworkflowsr-cmd-checkyaml-pkgdownyaml"></a></h3>
-<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># .github/workflows/R-CMD-check.yaml</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">,</span><span class="at"> pull_request</span><span class="kw">]</span></span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="at">  </span><span class="fu">R-CMD-check</span><span class="kw">:</span></span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
-<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> r-lib/actions/setup-r@v2</span></span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> R CMD check .</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># .github/workflows/R-CMD-check.yaml</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">,</span><span class="at"> pull_request</span><span class="kw">]</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="at">  </span><span class="fu">R-CMD-check</span><span class="kw">:</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> r-lib/actions/setup-r@v2</span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> R CMD check .</span></span></code></pre></div>
 <p>Optional: separater Job <code>live-tests</code> mit Repository-Secrets (<code>ONEDEV_HOST</code>, <code>ONEDEV_API_TOKEN</code>, <code>ONEDEV_PROJECT_PATH</code>).</p>
 <hr></div>
 </div>
@@ -1144,7 +1147,7 @@
 <td>upload/download</td>
 </tr></tbody></table><div class="section level3">
 <h3 id="low-level-escape-hatch">Low-level Escape Hatch<a class="anchor" aria-label="anchor" href="#low-level-escape-hatch"></a></h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="st">"/projects/42/iterations"</span>,</span>
@@ -1290,7 +1293,7 @@
 <div class="section level3">
 <h3 id="offene-punkte">Offene Punkte<a class="anchor" aria-label="anchor" href="#offene-punkte"></a></h3>
 <ul><li>CRAN/R-universe-Submission (siehe <code>ROADMAP.md</code>).</li>
-<li>Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen; das Testprojekt hat noch keine Iterations.</li>
+<li>Verifikation der Iterations- und Kommentar-Bodies gegen weitere OneDev-Versionen (bisher nur eine Ziel-Instanz).</li>
 <li>Repository-Secrets für den Workflow <code>live-tests</code> fehlen; die wöchentlichen Läufe brechen deshalb ab.</li>
 </ul><hr></div>
 </div>

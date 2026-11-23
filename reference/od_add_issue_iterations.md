@@ -1,8 +1,9 @@
 # Set iterations on an existing issue
 
-Calls `POST /issues/{id}/iterations`. Tries known body shapes (raw id
-list and `{iterationIds: [...]}`) via the variants helper - see
-`project_plan.md` sec 10.
+Calls `POST /issues/{id}/iterations` with the iteration ids as a JSON
+array. OneDev replaces the issue's iterations with this list. The object
+form `{iterationIds: [...]}` is rejected with HTTP 400 (verified live,
+see `project_plan.md` sec 10).
 
 ## Usage
 
