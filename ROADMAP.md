@@ -156,7 +156,12 @@ author lookup,
 keeps the id when the fetch fails, batch `numbers` aligned; repo-level
 agy persona and `scripts/review-prep.sh`
 
-Live verification of query escaping and iteration body variants
+Live verification of query escaping (2026-11-23): quotes, backslash,
+parentheses and umlauts round-trip, an injected `state` value matches
+nothing; two live tests in `test-live.R`
+
+Live verification of the iteration body variants (the test project has
+no iterations yet)
 
 Repository secrets for `live-tests.yaml` (weekly runs fail without them)
 

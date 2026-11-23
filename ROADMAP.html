@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Roadmap</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.3/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
     </div>
 
 <div id="roadmap" class="section level1">
@@ -118,7 +118,8 @@
 <li><label><input type="checkbox">Live verification of the full surface, area by area, promoting experimental functions once verified</label></li>
 <li><label><input type="checkbox" checked>Live verification of comment posting (2026-11-22, v0.7.2): all five probes of <code>scripts/diagnose-comments.R</code> succeed once the author is sent; all 18 live tests pass locally against the target instance</label></li>
 <li><label><input type="checkbox" checked>Review fixes (v0.7.3): argument order of <code><a href="reference/od_add_issue_comment.html">od_add_issue_comment()</a></code>, author lookup, <code><a href="reference/od_create_issue.html">od_create_issue()</a></code> keeps the id when the fetch fails, batch <code>numbers</code> aligned; repo-level agy persona and <code>scripts/review-prep.sh</code></label></li>
-<li><label><input type="checkbox">Live verification of query escaping and iteration body variants</label></li>
+<li><label><input type="checkbox" checked>Live verification of query escaping (2026-11-23): quotes, backslash, parentheses and umlauts round-trip, an injected <code>state</code> value matches nothing; two live tests in <code>test-live.R</code></label></li>
+<li><label><input type="checkbox">Live verification of the iteration body variants (the test project has no iterations yet)</label></li>
 <li><label><input type="checkbox">Repository secrets for <code>live-tests.yaml</code> (weekly runs fail without them)</label></li>
 <li><label><input type="checkbox" checked>CRAN pre-check (2026-11-14): <code>R CMD check --as-cran</code> leaves only environment notes, “New submission” and 403 answers of github.com to automated URL checks; submission itself waits for live verification</label></li>
 <li><label><input type="checkbox" checked>Principle review (2026-11-20): batch, parallel, streaming and caching stay in core, marked experimental. No second repository for now. Four functions have passing live tests (<code>od_batch_create_issues</code>, <code>od_stream_query_results</code>, <code>od_chunked_foreach</code>, <code>od_enable_cache</code>); the experimental marker stays until the interfaces settle.</label></li>
