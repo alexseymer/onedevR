@@ -1,3 +1,12 @@
+# onedevr (development)
+
+* Query escaping is verified against a live OneDev instance (2026-11-23).
+  `.od_quote_query_value()` escapes `"` and `\`, and OneDev reads the result
+  as one literal: an issue titled `onedevr live "quoted" back\slash (paren) ä`
+  round-trips and is found with `"Title" contains <escaped title>`. A `state`
+  of `Open" or "State" is "Closed` matches nothing, while the same text sent
+  unescaped returns closed issues. Two new live tests keep this checked.
+
 # onedevr 0.7.3
 
 Fixes from an agy review of 0.7.2, each checked by hand against the code.

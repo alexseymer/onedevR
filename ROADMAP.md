@@ -91,7 +91,11 @@ Estimate per plan: 1 week+.
 - [x] Review fixes (v0.7.3): argument order of `od_add_issue_comment()`,
   author lookup, `od_create_issue()` keeps the id when the fetch fails, batch
   `numbers` aligned; repo-level agy persona and `scripts/review-prep.sh`
-- [ ] Live verification of query escaping and iteration body variants
+- [x] Live verification of query escaping (2026-11-23): quotes, backslash,
+  parentheses and umlauts round-trip, an injected `state` value matches
+  nothing; two live tests in `test-live.R`
+- [ ] Live verification of the iteration body variants (the test project has no
+  iterations yet)
 - [ ] Repository secrets for `live-tests.yaml` (weekly runs fail without them)
 - [x] CRAN pre-check (2026-11-14): `R CMD check --as-cran` leaves only
   environment notes, "New submission" and 403 answers of github.com to

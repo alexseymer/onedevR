@@ -274,3 +274,36 @@ test_that("od_batch_create_issues live", {
   expect_length(result$created, 2)
   expect_length(result$numbers, 2)
 })
+
+test_that("query escaping live: a state value cannot add a second clause", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  closed <- od_query_issues(state = "Closed", count = 1L)
+  skip_if(nrow(closed) < 1L, "No closed issue to show a leak")
+
+  # Unescaped, this value would read `"State" is "Open" or "State" is "Closed"`
+  # and return closed issues. Escaped, it is one literal that matches no state.
+  injected <- od_query_issues(state = 'Open" or "State" is "Closed', count = 20L)
+  expect_equal(nrow(injected), 0L)
+})
+
+test_that("query escaping live: quotes, backslash, parentheses and umlauts round-trip", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  # Creates a real issue; it is closed again at the end of the test.
+  skip_if(Sys.getenv("ONEDEV_LIVE_ALLOW_WRITES") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  title <- r"(onedevr live "quoted" back\slash (paren) ä)"
+  issue <- od_create_issue(title = title, description = "Query escaping test; closed automatically.")
+  withr::defer(tryCatch(od_issue_transition_state(issue$number, "Closed"), error = function(e) NULL))
+  expect_identical(issue$title, title)
+
+  found <- od_query_issues(
+    query = paste0('"Title" contains ', .od_quote_query_value(title)),
+    count = 5L
+  )
+  expect_true(issue$number %in% found$number)
+})

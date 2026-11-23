@@ -988,7 +988,7 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 ### Offene Punkte
 
 - CRAN/R-universe-Submission (siehe `ROADMAP.md`).
-- Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen.
+- Verifikation der Body-Varianten (Iterations) gegen mehrere OneDev-Versionen; das Testprojekt hat noch keine Iterations.
 - Repository-Secrets für den Workflow `live-tests` fehlen; die wöchentlichen Läufe brechen deshalb ab.
 
 ---
