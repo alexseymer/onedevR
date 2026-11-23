@@ -15,7 +15,8 @@
 #'
 #' @return {list} Named list with:
 #'   - `created`: List of created issue lists (each with `id`, `number`, `title`, etc.)
-#'   - `numbers`: Numeric vector of created issue numbers
+#'   - `numbers`: Numeric vector of created issue numbers, aligned with `created`
+#'     (`NA` where OneDev returned no number)
 #'   - `errors`: List of errors encountered (empty if all succeeded)
 #'   - `summary`: Character vector with status message
 #'
@@ -102,7 +103,9 @@ od_batch_create_issues <- function(
           conn = conn
         )
         created[[length(created) + 1]] <- created_issue
-        numbers <- c(numbers, created_issue$number)
+        # NA (not dropped) when OneDev gave no number, so `numbers` stays
+        # aligned with `created`.
+        numbers <- c(numbers, as.numeric(created_issue$number %||% NA_real_)[1])
       },
       error = function(e) {
         errors[[length(errors) + 1]] <<- list(

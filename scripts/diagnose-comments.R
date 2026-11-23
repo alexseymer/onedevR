@@ -15,8 +15,11 @@
 #   all probes fail, comments created -> the comment is saved, the response fails
 #                                      (e.g. a notification step); not a data loss
 #   only issue_ref / commit_ref fail -> references in the text trigger the error
-#   with_user works, the others fail -> the token has no user identity; pass
-#                                      `user = od_whoami()` to od_add_issue_comment()
+#   with_user works, the others fail -> the token has no user identity; the
+#                                      others are posted without an author on
+#                                      purpose (raw od_request, no userId),
+#                                      while od_add_issue_comment() sends the
+#                                      current user by default
 #   only some probes fail            -> the text matters; compare the failing ones
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -43,7 +46,8 @@ probes <- list(
   markdown = list(text = "onedevr diagnostic: **bold** and `code`"),
   issue_ref = list(text = sprintf("onedevr diagnostic: reference to #%s", issue)),
   commit_ref = list(text = "onedevr diagnostic: commit 0123456789abcdef0123456789abcdef01234567"),
-  # sends userId (the author) explicitly; needs a username or a working /users/me
+  # od_add_issue_comment() sends userId (the current user by default); the other
+  # probes post without an author on purpose, to show whether that is the cause
   with_user = list(text = "onedevr diagnostic: explicit author", user = TRUE)
 )
 
@@ -57,9 +61,12 @@ for (name in names(probes)) {
   result <- tryCatch(
     {
       if (isTRUE(probe$user)) {
-        od_add_issue_comment(issue, probe$text, user = od_whoami())
-      } else {
         od_add_issue_comment(issue, probe$text)
+      } else {
+        od_request(
+          "POST", "/issue-comments",
+          body = list(issueId = as.integer(od_resolve_issue_id(issue)), content = probe$text)
+        )
       }
       "ok"
     },

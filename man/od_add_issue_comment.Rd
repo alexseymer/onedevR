@@ -4,18 +4,20 @@
 \alias{od_add_issue_comment}
 \title{Add a comment to an issue}
 \usage{
-od_add_issue_comment(issue_number, content, user = NULL, conn = NULL)
+od_add_issue_comment(issue_number, content, conn = NULL, user = NULL)
 }
 \arguments{
 \item{issue_number}{{character|numeric} UI number (\code{145} or \code{"#145"}).}
 
 \item{content}{{character} Comment body (Markdown).}
 
-\item{user}{{character|numeric} Optional author: login name or numeric user
-id, sent as \code{userId}. Default: \code{NULL}, which uses the current user from
-\code{\link[=od_whoami]{od_whoami()}}.}
-
 \item{conn}{{list} Connection list. Default: \code{NULL}.}
+
+\item{user}{{character|numeric} Optional author: login name or numeric user
+id, sent as \code{userId}. Default: \code{NULL}, which uses the current user (id from
+\code{GET /users/me}, else the login name from \code{\link[=od_whoami]{od_whoami()}}). If the current
+user cannot be determined, no \code{userId} is sent. A \code{user} that is given but
+cannot be resolved is an error.}
 }
 \value{
 {list} Parsed API response.
@@ -40,7 +42,7 @@ the comment was created anyway, to avoid duplicates.
 \examples{
 \dontrun{
 od_add_issue_comment(145, "Looks good")
-od_add_issue_comment(145, "Looks good", user = od_whoami())
+od_add_issue_comment(145, "Looks good", user = "alice")
 }
 }
 \seealso{

@@ -19,7 +19,8 @@ Each row/element should be a list with at least \code{title}.}
 {list} Named list with:
 \itemize{
 \item \code{created}: List of created issue lists (each with \code{id}, \code{number}, \code{title}, etc.)
-\item \code{numbers}: Numeric vector of created issue numbers
+\item \code{numbers}: Numeric vector of created issue numbers, aligned with \code{created}
+(\code{NA} where OneDev returned no number)
 \item \code{errors}: List of errors encountered (empty if all succeeded)
 \item \code{summary}: Character vector with status message
 }
