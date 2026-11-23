@@ -128,7 +128,9 @@ od_get_issue_fields <- function(issue_number, conn = NULL, use_internal_id = FAL
 #' @param iteration_ids {numeric|character} Optional iteration ids or names (see
 #'   [od_resolve_iteration_ids()]); sent as `iterationIds` in the create body. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
-#' @return {list} Parsed created issue.
+#' @return {list} Parsed created issue. If the issue was created but fetching it
+#'   failed, a warning is raised and the result is `list(id = <internal id>)`
+#'   without `number`; do not retry the creation in that case.
 #' @endpoint POST /issues
 #' @family issues
 #' @examples
@@ -176,9 +178,23 @@ od_create_issue <- function(
   )
   # OneDev answers the create POST with the new issue's internal id, not the
   # issue object. Fetch the issue so the result has the documented shape
-  # (`$number` is the UI number).
-  if (is.atomic(created) && length(created) == 1L && !is.na(created)) {
-    created <- od_get_issue(created, conn = conn, use_internal_id = TRUE)
+  # (`$number` is the UI number). The issue exists at this point: if the fetch
+  # fails, warn and return the id, so a caller does not retry and create a
+  # duplicate.
+  if (is.atomic(created) && length(created) == 1L && !is.na(created) &&
+      grepl("^[0-9]+$", as.character(created))) {
+    id <- as.character(created)
+    created <- tryCatch(
+      od_get_issue(id, conn = conn, use_internal_id = TRUE),
+      error = function(e) {
+        warning(
+          "Issue created with internal id ", id, ", but fetching it failed: ",
+          conditionMessage(e), ". Do not retry the creation.",
+          call. = FALSE
+        )
+        list(id = as.integer(id))
+      }
+    )
   }
   created
 }
@@ -357,33 +373,43 @@ od_get_issue_comments <- function(
 #'
 #' @param issue_number {character|numeric} UI number (`145` or `"#145"`).
 #' @param content {character} Comment body (Markdown).
-#' @param user {character|numeric} Optional author: login name or numeric user
-#'   id, sent as `userId`. Default: `NULL`, which uses the current user from
-#'   [od_whoami()].
 #' @param conn {list} Connection list. Default: `NULL`.
+#' @param user {character|numeric} Optional author: login name or numeric user
+#'   id, sent as `userId`. Default: `NULL`, which uses the current user (id from
+#'   `GET /users/me`, else the login name from [od_whoami()]). If the current
+#'   user cannot be determined, no `userId` is sent. A `user` that is given but
+#'   cannot be resolved is an error.
 #' @return {list} Parsed API response.
 #' @endpoint POST /issue-comments
 #' @family issues
 #' @examples
 #' \dontrun{
 #' od_add_issue_comment(145, "Looks good")
-#' od_add_issue_comment(145, "Looks good", user = od_whoami())
+#' od_add_issue_comment(145, "Looks good", user = "alice")
 #' }
 #' @export
-od_add_issue_comment <- function(issue_number, content, user = NULL, conn = NULL) {
+od_add_issue_comment <- function(issue_number, content, conn = NULL, user = NULL) {
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
   body <- list(
     issueId = issue_id,
     content = as.character(content)[1]
   )
-  if (is.null(user) || !nzchar(as.character(user)[1])) {
+  if (!is.null(user) && (!is.atomic(user) || length(user) != 1L || is.na(user))) {
+    stop("`user` must be a login name or a numeric user id.", call. = FALSE)
+  }
+  if (is.null(user) || !nzchar(as.character(user))) {
     # Without an author OneDev answers HTTP 500 (verified live), so default to
     # the current user. If that cannot be determined, send no userId.
-    user <- tryCatch(od_whoami(conn = conn), error = function(e) NULL)
+    user_id <- tryCatch(
+      .od_user_id_or_me(NULL, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id),
+      error = function(e) NULL
+    )
+  } else {
+    user_id <- od_resolve_user_id(user, conn = conn)
   }
-  if (!is.null(user) && nzchar(as.character(user)[1])) {
-    body$userId <- as.integer(od_resolve_user_id(user, conn = conn))
+  if (!is.null(user_id) && nzchar(as.character(user_id)[1])) {
+    body$userId <- as.integer(user_id)
   }
   od_request(
     method = "POST",

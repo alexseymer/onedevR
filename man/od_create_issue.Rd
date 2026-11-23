@@ -25,7 +25,9 @@ od_create_issue(
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-{list} Parsed created issue.
+{list} Parsed created issue. If the issue was created but fetching it
+failed, a warning is raised and the result is \verb{list(id = <internal id>)}
+without \code{number}; do not retry the creation in that case.
 }
 \description{
 Tries both common create body shapes (\code{projectId} scalar and

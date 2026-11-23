@@ -90,6 +90,45 @@ test_that("od_create_issue includes iterationIds when given", {
   expect_equal(created$number, 11)
 })
 
+test_that("od_create_issue fetches the issue when OneDev answers with the internal id", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_create_issue, "od_resolve_project_id", function(...) "20")
+  mockery::stub(od_create_issue, ".od_request_with_variants", function(...) 101L)
+  fetched <- NULL
+  mockery::stub(od_create_issue, "od_get_issue", function(issue_number, conn = NULL, use_internal_id = FALSE) {
+    fetched <<- list(id = issue_number, internal = use_internal_id)
+    list(id = 101, number = 12, title = "API test")
+  })
+
+  created <- od_create_issue(title = "API test", conn = list())
+  expect_equal(fetched, list(id = "101", internal = TRUE))
+  expect_equal(created$number, 12)
+  expect_equal(created$title, "API test")
+})
+
+test_that("od_create_issue warns and returns the id when fetching the created issue fails", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_create_issue, "od_resolve_project_id", function(...) "20")
+  mockery::stub(od_create_issue, ".od_request_with_variants", function(...) 101L)
+  mockery::stub(od_create_issue, "od_get_issue", function(...) stop("HTTP 504"))
+
+  expect_warning(
+    created <- od_create_issue(title = "API test", conn = list()),
+    "internal id 101.*HTTP 504.*Do not retry"
+  )
+  expect_equal(created, list(id = 101L))
+})
+
+test_that("od_create_issue does not fetch for a response that is not an internal id", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_create_issue, "od_resolve_project_id", function(...) "20")
+  mockery::stub(od_create_issue, "od_get_issue", function(...) stop("must not be called"))
+  for (answer in list("", "abc", NA_character_)) {
+    mockery::stub(od_create_issue, ".od_request_with_variants", function(...) answer)
+    expect_identical(od_create_issue(title = "API test", conn = list()), answer)
+  }
+})
+
 test_that("od_get_issue_fields resolves UI number then GETs fields", {
   skip_if_not_installed("mockery")
   mockery::stub(od_get_issue_fields, "od_resolve_issue_id", function(issue_number, conn = NULL) {
@@ -179,6 +218,7 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
     "hi"
   )
   mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(od_add_issue_comment, "od_get_me", function(conn = NULL) stop("HTTP 403"))
   mockery::stub(od_add_issue_comment, "od_whoami", function(conn = NULL) stop("no identity"))
   mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
     expect_equal(method, "POST")
@@ -191,43 +231,113 @@ test_that("od_get_issue_comments and od_add_issue_comment", {
   expect_equal(od_add_issue_comment(145, "note", conn = list())$id, 9)
 })
 
-test_that("od_add_issue_comment defaults the author to the current user", {
-  skip_if_not_installed("mockery")
-  mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
-  mockery::stub(od_add_issue_comment, "od_whoami", function(conn = NULL) "alex")
-  mockery::stub(od_add_issue_comment, "od_resolve_user_id", function(user, ...) {
-    if (user == "alex") "42" else "7"
+# Helper: a stubbed copy of od_add_issue_comment (`$f`) that records the request
+# body (`$sent`) and the number of lookups made to find the author (`$lookups`).
+# mockery::stub() changes the function in the calling frame, so the copy is
+# built here and returned.
+.comment_stubs <- function(get_me = function(conn = NULL) list(id = 42, name = "alex"),
+                           whoami = function(conn = NULL) "alex",
+                           resolve = function(user, ...) if (user == "alex") "42" else "7") {
+  env <- new.env(parent = emptyenv())
+  env$sent <- NULL
+  env$lookups <- 0L
+  f <- od_add_issue_comment
+  mockery::stub(f, "od_resolve_issue_id", function(...) "283")
+  mockery::stub(f, "od_get_me", function(...) {
+    env$lookups <- env$lookups + 1L
+    get_me(...)
   })
-  sent <- NULL
-  mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
-    sent <<- body
+  mockery::stub(f, "od_whoami", function(...) {
+    env$lookups <- env$lookups + 1L
+    whoami(...)
+  })
+  mockery::stub(f, "od_resolve_user_id", function(...) {
+    env$lookups <- env$lookups + 1L
+    resolve(...)
+  })
+  mockery::stub(f, "od_request", function(method, endpoint, body = NULL, ...) {
+    env$sent <- body
     list(id = 9)
   })
+  env$f <- f
+  env
+}
 
-  od_add_issue_comment(145, "note", conn = list())
-  expect_equal(sent$userId, 42L)
-  expect_equal(sent$issueId, 283L)
-  expect_equal(sent$content, "note")
+test_that("od_add_issue_comment defaults the author to the current user with one lookup", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs()
 
-  od_add_issue_comment(145, "note", user = "bob", conn = list())
-  expect_equal(sent$userId, 7L)
+  env$f(145, "note", conn = list())
+  expect_equal(env$sent$userId, 42L)
+  expect_equal(env$sent$issueId, 283L)
+  expect_equal(env$sent$content, "note")
+  expect_equal(env$lookups, 1L)  # GET /users/me only, no second id lookup
 
-  od_add_issue_comment(145, "note", user = NULL, conn = list())
-  expect_equal(sent$userId, 42L)
+  env$f(145, "note", user = NULL, conn = list())
+  expect_equal(env$sent$userId, 42L)
+})
+
+test_that("od_add_issue_comment falls back to the login name when /users/me is refused", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs(get_me = function(conn = NULL) stop("HTTP 403"))
+  env$f(145, "note", conn = list())
+  expect_equal(env$sent$userId, 42L)
+})
+
+test_that("od_add_issue_comment sends an explicit user", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs()
+  env$f(145, "note", user = "bob", conn = list())
+  expect_equal(env$sent$userId, 7L)
+  env$f(145, "note", user = 7, conn = list())
+  expect_equal(env$sent$userId, 7L)
+})
+
+test_that("od_add_issue_comment takes conn as the third positional argument", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs()
+  # Argument order of 0.7.1: (issue_number, content, conn). The connection must
+  # not be mistaken for the author.
+  conn <- list(host = "https://onedev.example.org", token = "x")
+  env$f(145, "note", conn)
+  expect_equal(env$sent$userId, 42L)
 })
 
 test_that("od_add_issue_comment sends no userId when the current user is unknown", {
   skip_if_not_installed("mockery")
-  mockery::stub(od_add_issue_comment, "od_resolve_issue_id", function(...) "283")
-  mockery::stub(od_add_issue_comment, "od_whoami", function(conn = NULL) stop("no identity"))
-  sent <- NULL
-  mockery::stub(od_add_issue_comment, "od_request", function(method, endpoint, body = NULL, ...) {
-    sent <<- body
-    list(id = 9)
-  })
+  env <- .comment_stubs(
+    get_me = function(conn = NULL) stop("HTTP 403"),
+    whoami = function(conn = NULL) stop("no identity")
+  )
+  env$f(145, "note", conn = list())
+  expect_null(env$sent$userId)
+  expect_equal(env$sent$issueId, 283L)
+})
 
-  od_add_issue_comment(145, "note", conn = list())
-  expect_null(sent$userId)
+test_that("od_add_issue_comment sends no userId when the default author cannot be resolved", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs(
+    get_me = function(conn = NULL) stop("HTTP 403"),
+    resolve = function(user, ...) stop("HTTP 403 on /users/ids")
+  )
+  env$f(145, "note", conn = list())
+  expect_null(env$sent$userId)
+})
+
+test_that("od_add_issue_comment fails for an explicit user that cannot be resolved", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs(resolve = function(user, ...) stop("no such user"))
+  expect_error(env$f(145, "note", user = "ghost", conn = list()), "no such user")
+  expect_null(env$sent)
+})
+
+test_that("od_add_issue_comment rejects an invalid user", {
+  skip_if_not_installed("mockery")
+  env <- .comment_stubs()
+  expect_error(env$f(145, "note", user = NA, conn = list()), "`user` must be")
+  expect_error(env$f(145, "note", user = c("a", "b"), conn = list()), "`user` must be")
+  expect_error(env$f(145, "note", user = list(1), conn = list()), "`user` must be")
+  expect_null(env$sent)
 })
 
 test_that("od_link_issue_to_pull_request creates correct endpoint", {

@@ -1,3 +1,36 @@
+# onedevr 0.7.3
+
+Fixes from an agy review of 0.7.2, each checked by hand against the code.
+
+* `od_add_issue_comment()`: the argument order is `(issue_number, content,
+  conn, user)` again, as in 0.7.1. 0.7.2 had put `user` before `conn`, so
+  `od_add_issue_comment(145, "x", conn)` treated the connection as the author.
+  Pass `user` by name. If you called it with `user` as the third positional
+  argument in 0.7.2, name it (`user = "alice"`).
+* `od_add_issue_comment()` finds the default author with one request
+  (`GET /users/me`) instead of two. If that is refused it falls back to the
+  login name, as before. If the current user cannot be determined or resolved,
+  no `userId` is sent, as before. An explicit `user` that cannot be resolved is
+  an error, and `user = NA` or a vector is rejected with a clear message.
+* `od_create_issue()` no longer loses the id when fetching the new issue fails
+  (timeout, 5xx). The issue exists then, so it warns and returns
+  `list(id = <internal id>)`; a retry would have created a duplicate. A create
+  answer that is not a numeric id (for example `""`) is returned as is instead of
+  being fetched, which used to request `GET /issues/`.
+* `od_batch_create_issues()`: `numbers` stays aligned with `created`. A created
+  issue without a number is `NA` instead of being dropped, which shifted every
+  later number by one.
+* `scripts/diagnose-comments.R`: the text probes post without an author again
+  (raw `od_request()`), so the script can show whether the missing author is the
+  cause. `with_user` uses `od_add_issue_comment()`. Run live on 2026-11-23: all
+  four text probes without author fail with HTTP 500 and create nothing, while
+  `with_user` succeeds. That confirms the missing author as the cause.
+* Tests: the create path where OneDev answers with the internal id, the fetch
+  failure, positional `conn`, `user` validation, an unresolvable author and a
+  partially failed batch.
+* New `scripts/review-prep.sh` and a repo-level agy reviewer persona
+  (`.agents/personas/agy-reviewer.md`) for repeatable reviews; no package code.
+
 # onedevr 0.7.2
 
 * Live check on 2026-11-22: all 18 live tests pass (2 skipped: the test

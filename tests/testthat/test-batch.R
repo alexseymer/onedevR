@@ -381,3 +381,33 @@ test_that("od_batch_transition_issues strips hash from issue numbers", {
 
   expect_equal(captured$numbers, c("10", "15", "20"))
 })
+
+test_that("od_batch_create_issues keeps numbers aligned with created", {
+  skip_if_not_installed("mockery")
+  n <- 0L
+  mockery::stub(od_batch_create_issues, "od_create_issue", function(title, ...) {
+    n <<- n + 1L
+    if (n == 1L) list(id = 1L) else list(id = 2L, number = 202)
+  })
+
+  result <- od_batch_create_issues(list(list(title = "A"), list(title = "B")), progress = FALSE, conn = list())
+  expect_length(result$created, 2)
+  expect_equal(result$numbers, c(NA_real_, 202))
+})
+
+test_that("od_batch_create_issues reports the input index of a failed item", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_batch_create_issues, "od_create_issue", function(title, ...) {
+    if (title == "B") stop("HTTP 500") else list(id = 1L, number = if (title == "A") 11 else 13)
+  })
+
+  result <- od_batch_create_issues(
+    list(list(title = "A"), list(title = "B"), list(title = "C")),
+    progress = FALSE, conn = list()
+  )
+  expect_equal(result$numbers, c(11, 13))
+  expect_length(result$errors, 1)
+  expect_equal(result$errors[[1]]$issue_index, 2)
+  expect_equal(result$errors[[1]]$title, "B")
+  expect_match(result$errors[[1]]$error, "HTTP 500")
+})
