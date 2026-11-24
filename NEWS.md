@@ -1,4 +1,7 @@
-# onedevr (development)
+# onedevr 0.7.4
+
+Live verification against a OneDev instance (2026-11-23): query escaping and the
+iteration body, plus a simpler `od_add_issue_iterations()`.
 
 * `od_add_issue_iterations()` sends the iteration ids as a JSON array only. A
   live run (2026-11-23) showed that OneDev accepts `[id, ...]` and rejects the
