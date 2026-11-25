@@ -149,6 +149,11 @@ Live verification of comment posting (2026-11-22, v0.7.2): all five
 probes of `scripts/diagnose-comments.R` succeed once the author is sent;
 all 18 live tests pass locally against the target instance
 
+Live verification release (v0.7.4): query escaping and iteration body
+verified,
+[`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+sends only the array
+
 Review fixes (v0.7.3): argument order of
 [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md),
 author lookup,

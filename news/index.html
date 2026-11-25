@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,13 @@
       <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.4" id="onedevr-074">onedevr 0.7.4<a class="anchor" aria-label="anchor" href="#onedevr-074"></a></h2>
+<p>Live verification against a OneDev instance (2026-11-23): query escaping and the iteration body, plus a simpler <code><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code>.</p>
+<ul><li>
+<code><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code> sends the iteration ids as a JSON array only. A live run (2026-11-23) showed that OneDev accepts <code>[id, ...]</code> and rejects the object form <code>{iterationIds: [...]}</code> with HTTP 400, so that second variant is removed. A failing call now reports the one request error instead of both variants, one of which was misleading. Success behaves as before. A new live test creates a scratch iteration, attaches it with <code><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code> and with <code>od_create_issue(iteration_ids = )</code>, and removes everything again.</li>
+<li>Query escaping is verified against a live OneDev instance (2026-11-23). <code>.od_quote_query_value()</code> escapes <code>"</code> and <code>\</code>, and OneDev reads the result as one literal: an issue titled <code>onedevr live "quoted" back\slash (paren) ä</code> round-trips and is found with <code>"Title" contains &lt;escaped title&gt;</code>. A <code>state</code> of <code>Open" or "State" is "Closed</code> matches nothing, while the same text sent unescaped returns closed issues. Two new live tests keep this checked.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.3" id="onedevr-073">onedevr 0.7.3<a class="anchor" aria-label="anchor" href="#onedevr-073"></a></h2>
 <p>Fixes from an agy review of 0.7.2, each checked by hand against the code.</p>

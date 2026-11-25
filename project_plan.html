@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
 
 <div id="onedevr--plan-für-ein-r-paket-onedev-rest-api-client" class="section level1">
 
-<p><strong>Stand:</strong> 2026-11-22 (Paketversion 0.7.3)<br><strong>Status:</strong> Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die <strong>Spezifikation</strong> (Ziel, Konventionen, bekannte API-Quirks). <strong>Maßgeblich für den Ist-Stand sind</strong> <code>R/*.R</code>, <code>NAMESPACE</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code> und <code>ROADMAP.md</code>; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.<br><strong>Ziel:</strong> Eigenständiges R-Paket <code>onedevr</code> (Display-Name: <strong>onedevR</strong>), analog zu <a href="https://thinkr-open.github.io/gitlabr/" class="external-link">gitlabr</a>, das die OneDev-REST-API kapselt.</p>
+<p><strong>Stand:</strong> 2026-11-24 (Paketversion 0.7.4)<br><strong>Status:</strong> Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht. Dieses Dokument ist die <strong>Spezifikation</strong> (Ziel, Konventionen, bekannte API-Quirks). <strong>Maßgeblich für den Ist-Stand sind</strong> <code>R/*.R</code>, <code>NAMESPACE</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code> und <code>ROADMAP.md</code>; Test- und CI-Beispiele in §13–§14 sind Entwurfsvorlagen und können abweichen.<br><strong>Ziel:</strong> Eigenständiges R-Paket <code>onedevr</code> (Display-Name: <strong>onedevR</strong>), analog zu <a href="https://thinkr-open.github.io/gitlabr/" class="external-link">gitlabr</a>, das die OneDev-REST-API kapselt.</p>
 <hr><div class="section level2">
 <h2 id="inhaltsverzeichnis">Inhaltsverzeichnis<a class="anchor" aria-label="anchor" href="#inhaltsverzeichnis"></a></h2>
 <ol style="list-style-type: decimal"><li><a href="#id_1-executive-summary">Executive Summary</a></li>
@@ -339,6 +339,8 @@
 <td>Kommentar-Autor standardmäßig der aktuelle User (behebt HTTP 500, live bestätigt 2026-11-22); <code><a href="reference/od_create_issue.html">od_create_issue()</a></code> liefert das angelegte Issue; Batch, Parallel, Streaming, Cache bleiben experimentell im Kern</td>
 </tr><tr><td>0.7.3</td>
 <td>Fixes aus agy-Review: <code>od_add_issue_comment(issue_number, content, conn, user)</code> wieder in der Reihenfolge von 0.7.1; Autor mit einer statt zwei Anfragen; <code><a href="reference/od_create_issue.html">od_create_issue()</a></code> behält die Id, wenn das Nachladen fehlschlägt; Batch-<code>numbers</code> bleiben ausgerichtet</td>
+</tr><tr><td>0.7.4</td>
+<td>Live verifiziert: Query-Escaping und Iterations-Body (nur Array); <code><a href="reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code> ohne tote Variante; Live-Tests für beides</td>
 </tr></tbody></table><p>Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer, Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache (<code>R/batch.R</code>, <code>R/concurrent.R</code>, <code>R/streaming.R</code>, <code>R/cache.R</code>).</p>
 </div>
 <div class="section level3">

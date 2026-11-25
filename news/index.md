@@ -1,5 +1,30 @@
 # Changelog
 
+## onedevr 0.7.4
+
+Live verification against a OneDev instance (2026-11-23): query escaping
+and the iteration body, plus a simpler
+[`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md).
+
+- [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+  sends the iteration ids as a JSON array only. A live run (2026-11-23)
+  showed that OneDev accepts `[id, ...]` and rejects the object form
+  `{iterationIds: [...]}` with HTTP 400, so that second variant is
+  removed. A failing call now reports the one request error instead of
+  both variants, one of which was misleading. Success behaves as before.
+  A new live test creates a scratch iteration, attaches it with
+  [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)
+  and with `od_create_issue(iteration_ids = )`, and removes everything
+  again.
+- Query escaping is verified against a live OneDev instance
+  (2026-11-23). `.od_quote_query_value()` escapes `"` and `\`, and
+  OneDev reads the result as one literal: an issue titled
+  `onedevr live "quoted" back\slash (paren) ä` round-trips and is found
+  with `"Title" contains <escaped title>`. A `state` of
+  `Open" or "State" is "Closed` matches nothing, while the same text
+  sent unescaped returns closed issues. Two new live tests keep this
+  checked.
+
 ## onedevr 0.7.3
 
 Fixes from an agy review of 0.7.2, each checked by hand against the
