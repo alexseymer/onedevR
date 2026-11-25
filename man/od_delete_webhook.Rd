@@ -17,10 +17,15 @@ od_delete_webhook(webhook_id, project = NULL, conn = NULL)
 {list} Parsed API response (typically \code{NULL} on success).
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{DELETE /projects/{projectId}/webhooks/{webhookId}} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
 }
 \details{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+
 Removes a webhook from a project.
 }
 \examples{

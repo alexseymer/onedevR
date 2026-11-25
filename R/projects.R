@@ -206,17 +206,22 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
 
 #' List webhooks for a project
 #'
-#' **Experimental:** not yet verified against a live OneDev server; the
-#' interface and behaviour may change.
+#' **Experimental:** the setting is verified, the fields of a webhook entry are
+#' not (the project used for verification has none); the interface and behaviour
+#' may change.
 #'
-#' Retrieves all webhooks configured for a project.
+#' Reads the `webHooks` list of the project setting (`GET /projects/{id}/setting`,
+#' see [od_get_project_setting()]). OneDev has no REST resource for webhooks, so
+#' [od_get_webhook()], [od_create_webhook()] and [od_delete_webhook()] have no
+#' endpoint to call on the instance used for verification.
 #'
 #' @param project {character|numeric} Project path or numeric id; defaults to the connection project. Default: `NULL`.
 #' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
 #'   a tibble via [od_as_tibble()]. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
-#' @return {tibble|list} A tibble of webhooks (default), or a list when `as_tibble = FALSE`.
-#' @endpoint GET /projects/{projectId}/webhooks
+#' @return {tibble|list} A tibble of webhooks (default), or a list when `as_tibble = FALSE`;
+#'   empty when the project has none.
+#' @endpoint GET /projects/{projectId}/setting
 #' @family projects
 #' @examples
 #' \dontrun{
@@ -225,16 +230,16 @@ od_get_project_clone_url <- function(project = NULL, conn = NULL) {
 #' @export
 od_list_webhooks <- function(project = NULL, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
-  project_id <- od_resolve_project_id(project = project, conn = conn)
-  payload <- od_request(
-    "GET",
-    paste0("/projects/", project_id, "/webhooks"),
-    conn = conn
-  )
-  od_as_tibble(payload, as_tibble = as_tibble)
+  setting <- od_get_project_setting(project = project, conn = conn)
+  od_as_tibble(setting$webHooks %||% list(), as_tibble = as_tibble)
 }
 
 #' Get a webhook by ID
+#'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `GET /projects/{projectId}/webhooks/{webhookId}` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
 #'
 #' **Experimental:** not yet verified against a live OneDev server; the
 #' interface and behaviour may change.
@@ -257,14 +262,20 @@ od_get_webhook <- function(webhook_id, project = NULL, conn = NULL) {
   webhook_id <- .od_coerce_string(webhook_id)
   .od_require(webhook_id, "webhook_id")
   project_id <- od_resolve_project_id(project = project, conn = conn)
-  od_request(
+  .od_request_unlisted(
     "GET",
     paste0("/projects/", project_id, "/webhooks/", webhook_id),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }
 
 #' Create a webhook for a project
+#'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `POST /projects/{projectId}/webhooks` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
 #'
 #' **Experimental:** not yet verified against a live OneDev server; the
 #' interface and behaviour may change.
@@ -295,15 +306,21 @@ od_create_webhook <- function(url, events = NULL, project = NULL, conn = NULL) {
     body$events <- as.character(events)
   }
 
-  od_request(
+  .od_request_unlisted(
     method = "POST",
     endpoint = paste0("/projects/", project_id, "/webhooks"),
     body = body,
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }
 
 #' Delete a webhook
+#'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `DELETE /projects/{projectId}/webhooks/{webhookId}` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
 #'
 #' **Experimental:** not yet verified against a live OneDev server; the
 #' interface and behaviour may change.
@@ -326,9 +343,10 @@ od_delete_webhook <- function(webhook_id, project = NULL, conn = NULL) {
   webhook_id <- .od_coerce_string(webhook_id)
   .od_require(webhook_id, "webhook_id")
   project_id <- od_resolve_project_id(project = project, conn = conn)
-  od_request(
+  .od_request_unlisted(
     method = "DELETE",
     endpoint = paste0("/projects/", project_id, "/webhooks/", webhook_id),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }

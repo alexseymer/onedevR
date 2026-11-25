@@ -17,6 +17,12 @@ od_link_issue_to_pull_request(issue_number, pull_request_number, conn = NULL)
 {list} Parsed API response.
 }
 \description{
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{POST /issues/{issueId}/pull-requests} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
+}
+\details{
 Creates a link between an issue and a pull request, indicating the PR is
 related to or closes the issue.
 }

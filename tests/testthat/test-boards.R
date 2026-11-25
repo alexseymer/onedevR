@@ -36,9 +36,53 @@ test_that("od_list_boards empty boardSpecs yields empty tibble", {
   mockery::stub(od_list_boards, "od_get_project_setting", function(...) {
     list(issueSetting = list())
   })
+  mockery::stub(od_list_boards, ".od_inherited_board_specs", function(...) list())
   boards <- od_list_boards(conn = list())
   expect_s3_class(boards, "tbl_df")
   expect_equal(nrow(boards), 0)
+})
+
+test_that("od_list_boards uses the global boards when the project defines none", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_list_boards, "od_get_project_setting", function(...) {
+    list(issueSetting = list(boardSpecs = list()))
+  })
+  mockery::stub(od_list_boards, ".od_inherited_board_specs", function(...) {
+    list(list(name = "State", baseQuery = "all"))
+  })
+  boards <- od_list_boards(conn = list())
+  expect_equal(boards$name, "State")
+  expect_equal(od_list_boards(as_tibble = FALSE, conn = list())[[1]]$baseQuery, "all")
+})
+
+test_that("od_list_boards does not read the global setting when the project has boards", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_list_boards, "od_get_project_setting", function(...) {
+    list(issueSetting = list(boardSpecs = sample_boards()))
+  })
+  mockery::stub(od_list_boards, ".od_inherited_board_specs", function(...) stop("must not be called"))
+  expect_equal(od_list_boards(conn = list())$name, c("Development", "Support"))
+})
+
+test_that(".od_inherited_board_specs reads /settings/issue and tolerates a refusal", {
+  seen <- NULL
+  ok <- function(method, endpoint, conn = NULL) {
+    seen <<- paste(method, endpoint)
+    list(boardSpecs = list(list(name = "State")), stateSpecs = list())
+  }
+  expect_equal(.od_inherited_board_specs(list(), request = ok)[[1]]$name, "State")
+  expect_equal(seen, "GET /settings/issue")
+  denied <- function(...) stop("HTTP 403")
+  expect_equal(.od_inherited_board_specs(list(), request = denied), list())
+  none <- function(...) list(stateSpecs = list())
+  expect_equal(.od_inherited_board_specs(list(), request = none), list())
+})
+
+test_that("od_get_board finds a global board through od_list_boards", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_get_board, "od_list_boards", function(...) list(list(name = "State", baseQuery = "all")))
+  expect_equal(od_get_board("State", conn = list())$baseQuery, "all")
+  expect_error(od_get_board("Other", conn = list()), "project or global issue settings")
 })
 
 test_that("od_get_board finds by name and errors on miss", {

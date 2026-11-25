@@ -1,5 +1,10 @@
 #' Set or update a commit status
 #'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `POST /repositories/{projectId}/commits/{commitHash}/statuses` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
+#'
 #' Sets the status of a commit (e.g., from a CI system) for visibility in the web UI.
 #'
 #' @param commit_hash Commit SHA.
@@ -51,15 +56,21 @@ od_set_commit_status <- function(
     body$targetUrl <- as.character(target_url)[1]
   }
 
-  od_request(
+  .od_request_unlisted(
     method = "POST",
     endpoint = paste0("/repositories/", project_id, "/commits/", commit_hash, "/statuses"),
     body = body,
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }
 
 #' Get commit statuses
+#'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `GET /repositories/{projectId}/commits/{commitHash}/statuses` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
 #'
 #' Retrieves all statuses set on a commit from various systems.
 #'
@@ -87,10 +98,11 @@ od_get_commit_statuses <- function(
   .od_require(commit_hash, "commit_hash")
 
   project_id <- od_resolve_project_id(project = project, conn = conn)
-  payload <- od_request(
+  payload <- .od_request_unlisted(
     method = "GET",
     endpoint = paste0("/repositories/", project_id, "/commits/", commit_hash, "/statuses"),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }

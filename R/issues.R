@@ -421,6 +421,11 @@ od_add_issue_comment <- function(issue_number, content, conn = NULL, user = NULL
 
 #' Link an issue to a pull request
 #'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `POST /issues/{issueId}/pull-requests` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
+#'
 #' Creates a link between an issue and a pull request, indicating the PR is
 #' related to or closes the issue.
 #'
@@ -443,11 +448,12 @@ od_link_issue_to_pull_request <- function(
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
   pr_id <- as.integer(od_resolve_pull_request_id(pull_request_number, conn = conn))
-  od_request(
+  .od_request_unlisted(
     method = "POST",
     endpoint = paste0("/issues/", issue_id, "/pull-requests"),
     body = list(pullRequestId = pr_id),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }
 
@@ -461,7 +467,7 @@ od_link_issue_to_pull_request <- function(
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `issue_number` as the internal REST id. Default: `FALSE`.
 #' @return {tibble|list} A tibble of linked pull requests (default), or a list when `as_tibble = FALSE`.
-#' @endpoint GET /issues/{issueId}/pull-requests
+#' @endpoint GET /issues/{issueId}/pulls
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -483,13 +489,18 @@ od_get_issue_pull_requests <- function(
   )
   payload <- od_request(
     "GET",
-    paste0("/issues/", issue_id, "/pull-requests"),
+    paste0("/issues/", issue_id, "/pulls"),
     conn = conn
   )
   od_as_tibble(payload, as_tibble = as_tibble)
 }
 
 #' Remove a link between an issue and a pull request
+#'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `DELETE /issues/{issueId}/pull-requests/{prId}` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
 #'
 #' Removes the link between an issue and a pull request.
 #'
@@ -512,9 +523,10 @@ od_unlink_issue_from_pull_request <- function(
   conn <- .od_conn(conn)
   issue_id <- as.integer(od_resolve_issue_id(issue_number, conn = conn))
   pr_id <- as.integer(od_resolve_pull_request_id(pull_request_number, conn = conn))
-  od_request(
+  .od_request_unlisted(
     method = "DELETE",
     endpoint = paste0("/issues/", issue_id, "/pull-requests/", pr_id),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }

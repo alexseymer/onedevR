@@ -15,14 +15,19 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-{tibble|list} A tibble of webhooks (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of webhooks (default), or a list when \code{as_tibble = FALSE};
+empty when the project has none.
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Experimental:} the setting is verified, the fields of a webhook entry are
+not (the project used for verification has none); the interface and behaviour
+may change.
 }
 \details{
-Retrieves all webhooks configured for a project.
+Reads the \code{webHooks} list of the project setting (\code{GET /projects/{id}/setting},
+see \code{\link[=od_get_project_setting]{od_get_project_setting()}}). OneDev has no REST resource for webhooks, so
+\code{\link[=od_get_webhook]{od_get_webhook()}}, \code{\link[=od_create_webhook]{od_create_webhook()}} and \code{\link[=od_delete_webhook]{od_delete_webhook()}} have no
+endpoint to call on the instance used for verification.
 }
 \examples{
 \dontrun{

@@ -1,3 +1,41 @@
+# onedevr 0.7.5
+
+Endpoints compared with the REST API description of a live OneDev instance
+(`/~api/help`, 2026-11-25). Eight read functions failed against the live server
+because they called endpoints that do not exist or do not work that way.
+
+* `od_get_file()` and `od_get_file_text()` read `GET /repositories/{id}/files`
+  with the query parameters `revision` and `file`. The path-based URL answered
+  HTTP 405. Checked live: the text of a file is as long as its `size`.
+* `od_get_group()` and `od_list_group_members()` resolve the group name with
+  `GET /groups/ids/{name}` and use the id (a numeric id is accepted as well). The
+  name in the path answered HTTP 404. `od_list_group_members()` returns the
+  memberships (`id`, `userId`, `groupId`), which is what OneDev has; use
+  `od_get_user()` for user details.
+* `od_add_group_member()` and `od_remove_group_member()` create and delete a
+  membership with `POST /memberships` and `DELETE /memberships/{id}`.
+  `od_remove_group_member()` fails if the user is not a member. Not verified
+  live (they change permissions), so they stay experimental.
+* `od_get_issue_pull_requests()` calls `GET /issues/{id}/pulls`.
+  `od_get_pull_request_issues()` calls `GET /pulls/{id}/fixed-issue-ids` and
+  returns a tibble with the column `id` (internal issue ids), as the issues a pull
+  request fixes. Both answered HTTP 404 before.
+* `od_delete_user_ssh_key(ssh_key_id)` calls `DELETE /ssh-keys/{id}`. SSH key ids
+  are global, so the `user` argument is gone; the old URL did not exist.
+* `od_list_boards()` uses the global boards (`GET /settings/issue`) when the
+  project defines none, as OneDev does; before, a project without its own boards
+  showed none although the UI shows one. `od_get_board()` and
+  `od_query_board_issues()` find them too.
+* `od_list_webhooks()` reads `webHooks` from the project setting.
+* Not offered by the verified instance: `od_get_webhook()`,
+  `od_create_webhook()`, `od_delete_webhook()`, `od_set_commit_status()`,
+  `od_get_commit_statuses()`, `od_promote_build()`,
+  `od_link_issue_to_pull_request()`, `od_unlink_issue_from_pull_request()` and
+  `od_batch_link_issues_prs()`. Their help pages say so, and an HTTP 404 or 405
+  now carries a hint that the endpoint may not exist in your OneDev version.
+* New `scripts/check-api-endpoints.R` compares every documented endpoint with
+  `/~api/help` of a live instance (read-only). Four live tests cover the fixes.
+
 # onedevr 0.7.4
 
 Live verification against a OneDev instance (2026-11-23): query escaping and the

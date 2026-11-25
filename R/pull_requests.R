@@ -331,17 +331,20 @@ od_discard_pull_request <- function(pull_request_number, conn = NULL) {
   )
 }
 
-#' Get issues linked to a pull request
+#' Get the issues a pull request fixes
 #'
-#' Retrieves all issues that are linked to a specific pull request.
+#' Calls `GET /pulls/{requestId}/fixed-issue-ids`: the ids of the issues that
+#' the pull request fixes (for example through `fixes #12` in a commit message).
+#' The result holds internal issue ids, not UI numbers; use
+#' `od_get_issue(id, use_internal_id = TRUE)` for details.
 #'
 #' @param pull_request_number {character|numeric} UI pull request number (`42` or `"#42"`).
 #' @param as_tibble {logical} If `TRUE` (default via `options(onedevr.as_tibble)`), return
-#'   a tibble via [od_as_tibble()]. Default: `NULL`.
+#'   a tibble with the column `id`. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @param use_internal_id {logical} If `TRUE`, treat `pull_request_number` as the internal REST id. Default: `FALSE`.
-#' @return {tibble|list} A tibble of linked issues (default), or a list when `as_tibble = FALSE`.
-#' @endpoint GET /pulls/{pullRequestId}/issues
+#' @return {tibble|list} A tibble with the column `id` (default), or a list of ids when `as_tibble = FALSE`.
+#' @endpoint GET /pulls/{requestId}/fixed-issue-ids
 #' @family pull requests
 #' @examples
 #' \dontrun{
@@ -363,8 +366,12 @@ od_get_pull_request_issues <- function(
   )
   payload <- od_request(
     "GET",
-    paste0("/pulls/", pr_id, "/issues"),
+    paste0("/pulls/", pr_id, "/fixed-issue-ids"),
     conn = conn
   )
-  od_as_tibble(payload, as_tibble = as_tibble)
+  ids <- as.list(as.integer(unlist(payload, use.names = FALSE)))
+  if (!.od_as_tibble_default(as_tibble)) {
+    return(ids)
+  }
+  tibble::tibble(id = as.integer(unlist(ids, use.names = FALSE)))
 }

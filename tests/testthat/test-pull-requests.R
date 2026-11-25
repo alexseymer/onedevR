@@ -126,15 +126,27 @@ test_that("PR review actions hit approve/request/merge/discard endpoints", {
   expect_true(od_discard_pull_request(42, conn = list())$ok)
 })
 
-test_that("od_get_pull_request_issues retrieves linked issues", {
+test_that("od_get_pull_request_issues returns the ids of the issues the PR fixes", {
   skip_if_not_installed("mockery")
   mockery::stub(od_get_pull_request_issues, "od_resolve_pull_request_id", function(...) "900")
   mockery::stub(od_get_pull_request_issues, "od_request", function(method, endpoint, ...) {
     expect_equal(method, "GET")
-    expect_equal(endpoint, "/pulls/900/issues")
-    list(list(number = 145, title = "Fix issue"), list(number = 146, title = "Bug"))
+    expect_equal(endpoint, "/pulls/900/fixed-issue-ids")
+    list(145L, 146L)
   })
-  issues <- od_get_pull_request_issues(42, as_tibble = FALSE, conn = list())
-  expect_equal(length(issues), 2)
-  expect_equal(issues[[1]]$number, 145)
+  ids <- od_get_pull_request_issues(42, as_tibble = FALSE, conn = list())
+  expect_equal(ids, list(145L, 146L))
+  tbl <- od_get_pull_request_issues(42, as_tibble = TRUE, conn = list())
+  expect_s3_class(tbl, "tbl_df")
+  expect_equal(tbl$id, c(145L, 146L))
+})
+
+test_that("od_get_pull_request_issues returns an empty result when no issue is fixed", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_get_pull_request_issues, "od_resolve_pull_request_id", function(...) "900")
+  mockery::stub(od_get_pull_request_issues, "od_request", function(...) list())
+  expect_equal(od_get_pull_request_issues(42, as_tibble = FALSE, conn = list()), list())
+  tbl <- od_get_pull_request_issues(42, as_tibble = TRUE, conn = list())
+  expect_equal(nrow(tbl), 0L)
+  expect_named(tbl, "id")
 })

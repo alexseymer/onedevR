@@ -19,7 +19,8 @@ od_get_file(revision, path, project = NULL, conn = NULL)
 Parsed file payload (list; includes \code{base64Content}).
 }
 \description{
-Calls \code{GET /repositories/{projectId}/files/{revision}/{path...}}.
+Calls \code{GET /repositories/{projectId}/files} with the query parameters
+\code{revision} and \code{file}.
 }
 \examples{
 \dontrun{

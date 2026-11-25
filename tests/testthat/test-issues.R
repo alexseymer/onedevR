@@ -359,7 +359,7 @@ test_that("od_get_issue_pull_requests retrieves linked PRs", {
   mockery::stub(od_get_issue_pull_requests, "od_resolve_issue_id", function(...) "283")
   mockery::stub(od_get_issue_pull_requests, "od_request", function(method, endpoint, ...) {
     expect_equal(method, "GET")
-    expect_equal(endpoint, "/issues/283/pull-requests")
+    expect_equal(endpoint, "/issues/283/pulls")
     list(list(number = 42, title = "Fix issue"), list(number = 43, title = "Update"))
   })
   prs <- od_get_issue_pull_requests(145, as_tibble = FALSE, conn = list())

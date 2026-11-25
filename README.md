@@ -39,7 +39,7 @@ If your constraint is "I have R, I have Git, I need OneDev", `onedevr` is for yo
 
 ## Status
 
-**v0.7.4** — current release. Issue/build/PR workflows, boards, jobs, packages,
+**v0.7.5** — current release. Issue/build/PR workflows, boards, jobs, packages,
 repository helpers, tibbles by default, and Bearer + Basic Auth. 0.7.0 added
 iteration names wherever iteration ids are accepted, credential-safe caching,
 query-string escaping, masked secrets when printing a connection, and
@@ -52,8 +52,10 @@ user as comment author, and makes `od_create_issue()` return the created issue.
 0.7.3 restores the argument order of `od_add_issue_comment()`, keeps the id when
 fetching a newly created issue fails, and keeps batch `numbers` aligned. 0.7.4
 verifies query escaping and the iteration body against a live instance and
-sends iteration ids as a plain array. See [`NEWS.md`](NEWS.md) for the full
-changelog.
+sends iteration ids as a plain array. 0.7.5 fixes eight read functions (files,
+groups, issue and pull request links, boards) that called endpoints the server
+does not have, and marks the ones that OneDev does not offer. See
+[`NEWS.md`](NEWS.md) for the full changelog.
 
 ## Install
 

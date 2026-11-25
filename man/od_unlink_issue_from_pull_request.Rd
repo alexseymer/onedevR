@@ -21,6 +21,12 @@ od_unlink_issue_from_pull_request(
 {list} Parsed API response.
 }
 \description{
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{DELETE /issues/{issueId}/pull-requests/{prId}} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
+}
+\details{
 Removes the link between an issue and a pull request.
 }
 \examples{
