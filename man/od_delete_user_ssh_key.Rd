@@ -2,14 +2,12 @@
 % Please edit documentation in R/users.R
 \name{od_delete_user_ssh_key}
 \alias{od_delete_user_ssh_key}
-\title{Delete an SSH key from a user account}
+\title{Delete an SSH key}
 \usage{
-od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
+od_delete_user_ssh_key(ssh_key_id, conn = NULL)
 }
 \arguments{
 \item{ssh_key_id}{{character|numeric} Numeric SSH key ID.}
-
-\item{user}{{character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: \code{NULL}.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
@@ -17,11 +15,13 @@ od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
 {list} Parsed API response (typically \code{NULL} on success).
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Experimental:} not yet verified against a live OneDev server (it deletes a
+credential); the interface and behaviour may change.
 }
 \details{
-Removes an SSH public key from the authenticated or specified user.
+Removes an SSH public key with \code{DELETE /ssh-keys/{id}}. SSH key ids are global,
+so no user is needed; list a user's keys with \code{\link[=od_list_user_ssh_keys]{od_list_user_ssh_keys()}} to find
+the id.
 }
 \examples{
 \dontrun{

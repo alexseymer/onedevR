@@ -144,7 +144,7 @@ test_that("repository branches and commits live", {
   expect_s3_class(commits, "tbl_df")
 })
 
-test_that("build status keyword and file text live", {
+test_that("build status keyword live", {
   skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
   skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
   skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
@@ -158,10 +158,6 @@ test_that("build status keyword and file text live", {
   desc <- tryCatch(od_get_query_description("build"), error = function(e) NULL)
   skip_if(is.null(desc), "query description endpoint unavailable")
   expect_true(grepl("successful|buildQuery", desc))
-
-  txt <- tryCatch(od_get_file_text("main", "README.md"), error = function(e) NULL)
-  skip_if(is.null(txt), "README.md missing on default branch")
-  expect_true(nzchar(txt))
 })
 
 test_that("od_stream_query_results live", {
@@ -350,4 +346,70 @@ test_that("iterations live: names resolve, ids attach to an issue, both entry po
 
   with_iteration <- new_issue(iteration_ids = name)
   expect_equal(iterations_of(with_iteration), id)
+})
+
+test_that("endpoints fixed in 0.7.5 live: files, groups, boards and issue/PR links", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  # Files: revision and file travel as query parameters of GET .../files.
+  branch <- od_get_default_branch()
+  branch <- if (is.character(branch)) branch[[1]] else branch$name %||% branch[[1]]
+  entries <- od_request(
+    "GET",
+    paste0("/repositories/", od_resolve_project_id(), "/directories/", utils::URLencode(as.character(branch), reserved = TRUE))
+  )
+  files <- Filter(function(x) isTRUE(x$isFile), entries)
+  skip_if(length(files) < 1L, "No file at the root of the default branch")
+  file <- od_get_file(branch, files[[1]]$path)
+  expect_equal(file$path, files[[1]]$path)
+  expect_equal(nchar(od_get_file_text(branch, files[[1]]$path), type = "bytes"), file$size)
+})
+
+test_that("groups live: name or id resolves, memberships have userId and groupId", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  groups <- od_query_groups(count = 5L, as_tibble = FALSE)
+  skip_if(length(groups) < 1L, "No group on the instance")
+  group <- od_get_group(groups[[1]]$name)
+  expect_equal(group$name, groups[[1]]$name)
+  expect_equal(od_get_group(group$id)$name, group$name)
+
+  members <- od_list_group_members(group$id)
+  expect_s3_class(members, "tbl_df")
+  if (nrow(members)) {
+    expect_true(all(c("id", "userId", "groupId") %in% names(members)))
+    expect_true(all(members$groupId == group$id))
+  }
+})
+
+test_that("boards live: a project without own boards uses the global ones", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  boards <- od_list_boards(as_tibble = FALSE)
+  skip_if(length(boards) < 1L, "Neither the project nor the global setting defines a board")
+  name <- boards[[1]]$name
+  expect_equal(od_get_board(name)$name, name)
+  expect_s3_class(od_query_board_issues(name, count = 5L), "tbl_df")
+})
+
+test_that("issue and pull request links live: pulls and fixed-issue-ids answer", {
+  skip_if(Sys.getenv("ONEDEV_RUN_LIVE_TESTS") != "1")
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_API_TOKEN")))
+  skip_if_not(nzchar(Sys.getenv("ONEDEV_HOST")))
+
+  issues <- od_query_issues(count = 1L)
+  skip_if(nrow(issues) < 1L, "No issues available in project")
+  expect_no_error(od_get_issue_pull_requests(issues$number[[1]], as_tibble = FALSE))
+
+  pulls <- od_query_pull_requests(count = 1L)
+  skip_if(nrow(pulls) < 1L, "No pull requests available in project")
+  fixed <- od_get_pull_request_issues(pulls$number[[1]])
+  expect_s3_class(fixed, "tbl_df")
+  expect_named(fixed, "id")
 })

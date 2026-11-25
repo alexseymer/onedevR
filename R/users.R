@@ -295,37 +295,32 @@ od_add_user_ssh_key <- function(content, name = NULL, user = NULL, conn = NULL) 
   )
 }
 
-#' Delete an SSH key from a user account
+#' Delete an SSH key
 #'
-#' **Experimental:** not yet verified against a live OneDev server; the
-#' interface and behaviour may change.
+#' **Experimental:** not yet verified against a live OneDev server (it deletes a
+#' credential); the interface and behaviour may change.
 #'
-#' Removes an SSH public key from the authenticated or specified user.
+#' Removes an SSH public key with `DELETE /ssh-keys/{id}`. SSH key ids are global,
+#' so no user is needed; list a user's keys with [od_list_user_ssh_keys()] to find
+#' the id.
 #'
 #' @param ssh_key_id {character|numeric} Numeric SSH key ID.
-#' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()]. Default: `NULL`.
 #' @return {list} Parsed API response (typically `NULL` on success).
-#' @endpoint DELETE /users/{userId}/ssh-keys/{sshKeyId}
+#' @endpoint DELETE /ssh-keys/{sshKeyId}
 #' @family users
 #' @examples
 #' \dontrun{
 #' od_delete_user_ssh_key(1)
 #' }
 #' @export
-od_delete_user_ssh_key <- function(ssh_key_id, user = NULL, conn = NULL) {
+od_delete_user_ssh_key <- function(ssh_key_id, conn = NULL) {
   conn <- .od_conn(conn)
   ssh_key_id <- .od_coerce_string(ssh_key_id)
   .od_require(ssh_key_id, "ssh_key_id")
-
-  user_id <- .od_user_id_or_me(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
-  if (!nzchar(user_id)) {
-    stop("Could not determine user id for SSH key deletion.", call. = FALSE)
-  }
-
   od_request(
     method = "DELETE",
-    endpoint = paste0("/users/", user_id, "/ssh-keys/", ssh_key_id),
+    endpoint = paste0("/ssh-keys/", ssh_key_id),
     conn = conn
   )
 }

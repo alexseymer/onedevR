@@ -18,13 +18,16 @@ specs. Default: \code{NULL}.}
 Default: \code{NULL}.}
 }
 \value{
-{tibble|list} Board specs (default tibble), or an empty tibble/list
-when none are configured.
+{tibble|list} Board specs (default tibble) of the project, else the
+global ones; an empty tibble/list when none are configured.
 }
 \description{
 Boards are not a separate REST resource; they live in project settings as
-\code{issueSetting$boardSpecs} (see \code{\link[=od_get_project_setting]{od_get_project_setting()}}). This helper
-extracts that list.
+\code{issueSetting$boardSpecs} (see \code{\link[=od_get_project_setting]{od_get_project_setting()}}). A project that
+defines no boards of its own uses the global ones, which are read from
+\code{GET /settings/issue} (verified live: the project setting is empty while the
+global setting holds the board shown in the UI). If the token may not read the
+global setting, the result stays empty.
 }
 \examples{
 \dontrun{

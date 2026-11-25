@@ -33,6 +33,12 @@ od_set_commit_status(
 Parsed commit status object (list).
 }
 \description{
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{POST /repositories/{projectId}/commits/{commitHash}/statuses} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
+}
+\details{
 Sets the status of a commit (e.g., from a CI system) for visibility in the web UI.
 }
 \examples{

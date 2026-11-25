@@ -2,7 +2,7 @@
 % Please edit documentation in R/pull_requests.R
 \name{od_get_pull_request_issues}
 \alias{od_get_pull_request_issues}
-\title{Get issues linked to a pull request}
+\title{Get the issues a pull request fixes}
 \usage{
 od_get_pull_request_issues(
   pull_request_number,
@@ -15,17 +15,20 @@ od_get_pull_request_issues(
 \item{pull_request_number}{{character|numeric} UI pull request number (\code{42} or \code{"#42"}).}
 
 \item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
-a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
+a tibble with the column \code{id}. Default: \code{NULL}.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 
 \item{use_internal_id}{{logical} If \code{TRUE}, treat \code{pull_request_number} as the internal REST id. Default: \code{FALSE}.}
 }
 \value{
-{tibble|list} A tibble of linked issues (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble with the column \code{id} (default), or a list of ids when \code{as_tibble = FALSE}.
 }
 \description{
-Retrieves all issues that are linked to a specific pull request.
+Calls \code{GET /pulls/{requestId}/fixed-issue-ids}: the ids of the issues that
+the pull request fixes (for example through \code{fixes #12} in a commit message).
+The result holds internal issue ids, not UI numbers; use
+\code{od_get_issue(id, use_internal_id = TRUE)} for details.
 }
 \examples{
 \dontrun{

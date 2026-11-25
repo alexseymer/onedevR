@@ -253,6 +253,11 @@ od_get_build_log <- function(
 
 #' Promote a build to a new status/environment
 #'
+#' **Availability:** the OneDev instance used to verify this package does not list
+#' `POST /builds/{buildId}/promotions` in its REST API description (`/~api/help`), so this
+#' function can fail with HTTP 404 or 405 on other instances too. It is not verified
+#' against a live server; such a failure carries a hint.
+#'
 #' Transitions a build to a new promotion status (e.g., "staging", "production").
 #'
 #' @param build_number UI build number (`100` or `"#100"`).
@@ -283,10 +288,11 @@ od_promote_build <- function(
   status <- .od_coerce_string(status)
   .od_require(status, "status")
 
-  od_request(
+  .od_request_unlisted(
     method = "POST",
     endpoint = paste0("/builds/", build_id, "/promotions"),
     body = list(status = status),
-    conn = conn
+    conn = conn,
+    request = od_request
   )
 }

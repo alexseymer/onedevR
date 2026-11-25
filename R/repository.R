@@ -4,17 +4,6 @@
   c("PARENTS", "AUTHOR", "COMMITTER", "COMMIT_DATE", "SUBJECT", "BODY")
 }
 
-#' Encode path segments for repository file/directory URLs
-#' @noRd
-.od_repo_path_encode <- function(parts) {
-  parts <- as.character(unlist(parts, use.names = FALSE))
-  parts <- parts[nzchar(parts)]
-  paste(
-    vapply(parts, utils::URLencode, character(1), reserved = TRUE),
-    collapse = "/"
-  )
-}
-
 #' Attach repeated `field` query params for commit endpoints
 #' @noRd
 .od_repo_commit_query <- function(query = NULL, count = NULL, fields = NULL) {
@@ -225,13 +214,15 @@ od_get_commit <- function(
 
 #' Get a file at a revision
 #'
-#' Calls `GET /repositories/{projectId}/files/{revision}/{path...}`.
+#' Calls `GET /repositories/{projectId}/files` with the query parameters
+#' `revision` and `file`.
 #'
 #' @param revision Branch, tag, or commit.
 #' @param path File path within the repository.
 #' @param project Project path or id; defaults to the connection project.
 #' @param conn Connection list from [od_get_config()] / [od_connection()].
 #' @return Parsed file payload (list; includes `base64Content`).
+#' @endpoint GET /repositories/{projectId}/files
 #' @family repository
 #' @examples
 #' \dontrun{
@@ -247,12 +238,10 @@ od_get_file <- function(revision, path, project = NULL, conn = NULL) {
     stop("`revision` and `path` are required.", call. = FALSE)
   }
   project_id <- od_resolve_project_id(project = project, conn = conn)
-  encoded <- .od_repo_path_encode(
-    c(revision, strsplit(path, "/", fixed = TRUE)[[1]])
-  )
   od_request(
     "GET",
-    paste0("/repositories/", project_id, "/files/", encoded),
+    paste0("/repositories/", project_id, "/files"),
+    query = list(revision = revision, file = path),
     conn = conn
   )
 }

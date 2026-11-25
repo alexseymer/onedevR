@@ -20,10 +20,15 @@ Omit or pass \code{NULL} for all events. Default: \code{NULL}.}
 {list} Parsed webhook object with ID and configuration.
 }
 \description{
-\strong{Experimental:} not yet verified against a live OneDev server; the
-interface and behaviour may change.
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{POST /projects/{projectId}/webhooks} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
 }
 \details{
+\strong{Experimental:} not yet verified against a live OneDev server; the
+interface and behaviour may change.
+
 Creates a new webhook that will POST events to the specified URL.
 }
 \examples{

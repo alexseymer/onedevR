@@ -2,12 +2,12 @@
 % Please edit documentation in R/groups.R
 \name{od_list_group_members}
 \alias{od_list_group_members}
-\title{List group members}
+\title{List group memberships}
 \usage{
 od_list_group_members(group_name, as_tibble = NULL, conn = NULL)
 }
 \arguments{
-\item{group_name}{{character} Name of the group.}
+\item{group_name}{{character|numeric} Group name or numeric group id.}
 
 \item{as_tibble}{{logical} If \code{TRUE} (default via \code{options(onedevr.as_tibble)}), return
 a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
@@ -15,10 +15,12 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-{tibble|list} A tibble of group members (default), or a list when \code{as_tibble = FALSE}.
+{tibble|list} A tibble of memberships (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
-Retrieves all members of a user group.
+Retrieves the memberships of a user group with
+\code{GET /groups/{groupId}/memberships}. Each row has the membership \code{id}, the
+\code{userId} and the \code{groupId}; use \code{\link[=od_get_user]{od_get_user()}} for user details.
 }
 \examples{
 \dontrun{

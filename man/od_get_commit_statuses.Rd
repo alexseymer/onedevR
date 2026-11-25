@@ -25,6 +25,12 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}.}
 A tibble of commit statuses (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{GET /repositories/{projectId}/commits/{commitHash}/statuses} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
+}
+\details{
 Retrieves all statuses set on a commit from various systems.
 }
 \examples{

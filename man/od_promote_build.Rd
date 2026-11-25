@@ -19,6 +19,12 @@ od_promote_build(build_number, status, conn = NULL, use_internal_id = FALSE)
 Parsed API response.
 }
 \description{
+\strong{Availability:} the OneDev instance used to verify this package does not list
+\code{POST /builds/{buildId}/promotions} in its REST API description (\verb{/~api/help}), so this
+function can fail with HTTP 404 or 405 on other instances too. It is not verified
+against a live server; such a failure carries a hint.
+}
+\details{
 Transitions a build to a new promotion status (e.g., "staging", "production").
 }
 \examples{

@@ -7,17 +7,23 @@
 od_remove_group_member(group_name, user, conn = NULL)
 }
 \arguments{
-\item{group_name}{{character} Name of the group.}
+\item{group_name}{{character|numeric} Group name or numeric group id.}
 
 \item{user}{{character|numeric} Login name or numeric user id.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-{list} Parsed API response.
+{list} Parsed API response (typically \code{NULL} on success).
 }
 \description{
-Removes a user from the specified group's membership.
+\strong{Experimental:} not yet verified against a live OneDev server (it changes
+who has which permissions); the interface and behaviour may change.
+}
+\details{
+Finds the membership of \code{user} in the group with
+\code{GET /groups/{groupId}/memberships} and deletes it with
+\code{DELETE /memberships/{membershipId}}. Fails if the user is not a member.
 }
 \examples{
 \dontrun{

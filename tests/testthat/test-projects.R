@@ -60,20 +60,26 @@ test_that("od_get_project_setting GETs /projects/{id}/setting", {
   expect_true(is.list(setting$issueSetting))
 })
 
-test_that("od_list_webhooks retrieves project webhooks", {
+test_that("od_list_webhooks reads webHooks from the project setting", {
   skip_if_not_installed("mockery")
-  mockery::stub(od_list_webhooks, "od_resolve_project_id", function(...) "20")
-  mockery::stub(od_list_webhooks, "od_request", function(method, endpoint, ...) {
-    expect_equal(method, "GET")
-    expect_equal(endpoint, "/projects/20/webhooks")
-    list(
-      list(id = 1, url = "https://example.com/webhook1"),
-      list(id = 2, url = "https://example.com/webhook2")
-    )
+  mockery::stub(od_list_webhooks, "od_get_project_setting", function(project = NULL, conn = NULL) {
+    list(webHooks = list(
+      list(postUrl = "https://example.com/webhook1"),
+      list(postUrl = "https://example.com/webhook2")
+    ))
   })
   webhooks <- od_list_webhooks(conn = list())
   expect_equal(nrow(webhooks), 2)
-  expect_equal(webhooks$url[[1]], "https://example.com/webhook1")
+  expect_equal(webhooks$postUrl[[1]], "https://example.com/webhook1")
+  expect_length(od_list_webhooks(as_tibble = FALSE, conn = list()), 2)
+})
+
+test_that("od_list_webhooks is empty when the project has no webhooks", {
+  skip_if_not_installed("mockery")
+  mockery::stub(od_list_webhooks, "od_get_project_setting", function(...) list(webHooks = list()))
+  expect_equal(nrow(od_list_webhooks(conn = list())), 0L)
+  mockery::stub(od_list_webhooks, "od_get_project_setting", function(...) list())
+  expect_equal(od_list_webhooks(as_tibble = FALSE, conn = list()), list())
 })
 
 test_that("od_get_webhook retrieves a specific webhook", {

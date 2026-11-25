@@ -7,15 +7,16 @@
 od_get_group(name, conn = NULL)
 }
 \arguments{
-\item{name}{{character} Group name.}
+\item{name}{{character|numeric} Group name or numeric group id.}
 
 \item{conn}{{list} Connection list from \code{\link[=od_get_config]{od_get_config()}} / \code{\link[=od_connection]{od_connection()}}. Default: \code{NULL}.}
 }
 \value{
-{list} Parsed group object.
+{list} Parsed group object (\code{id}, \code{name}, \code{description}, ...).
 }
 \description{
-Retrieves details for a specific user group.
+Retrieves details for a specific user group. The name is resolved to the
+group id with \code{GET /groups/ids/{name}} first; a numeric id is used as is.
 }
 \examples{
 \dontrun{

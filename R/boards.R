@@ -1,8 +1,24 @@
+#' Global issue boards, which a project inherits when it defines none
+#'
+#' Reads `GET /settings/issue` (`boardSpecs`). Needs permission to read the
+#' global issue setting; without it the result is an empty list.
+#'
+#' @noRd
+.od_inherited_board_specs <- function(conn = NULL, request = od_request) {
+  tryCatch(
+    request("GET", "/settings/issue", conn = conn)$boardSpecs %||% list(),
+    error = function(e) list()
+  )
+}
+
 #' List issue boards for a OneDev project
 #'
 #' Boards are not a separate REST resource; they live in project settings as
-#' `issueSetting$boardSpecs` (see [od_get_project_setting()]). This helper
-#' extracts that list.
+#' `issueSetting$boardSpecs` (see [od_get_project_setting()]). A project that
+#' defines no boards of its own uses the global ones, which are read from
+#' `GET /settings/issue` (verified live: the project setting is empty while the
+#' global setting holds the board shown in the UI). If the token may not read the
+#' global setting, the result stays empty.
 #'
 #' @param project {character|numeric} Project path or numeric id; defaults to
 #'   the connection project. Default: `NULL`.
@@ -11,8 +27,8 @@
 #'   specs. Default: `NULL`.
 #' @param conn {list} Connection list from [od_get_config()] / [od_connection()].
 #'   Default: `NULL`.
-#' @return {tibble|list} Board specs (default tibble), or an empty tibble/list
-#'   when none are configured.
+#' @return {tibble|list} Board specs (default tibble) of the project, else the
+#'   global ones; an empty tibble/list when none are configured.
 #' @family issues
 #' @examples
 #' \dontrun{
@@ -23,8 +39,8 @@ od_list_boards <- function(project = NULL, as_tibble = NULL, conn = NULL) {
   conn <- .od_conn(conn)
   setting <- od_get_project_setting(project = project, conn = conn)
   specs <- setting$issueSetting$boardSpecs
-  if (is.null(specs)) {
-    specs <- list()
+  if (!length(specs)) {
+    specs <- .od_inherited_board_specs(conn, request = od_request)
   }
   od_as_tibble(specs, as_tibble = as_tibble)
 }
@@ -62,7 +78,7 @@ od_get_board <- function(name, project = NULL, conn = NULL) {
   idx <- which(names_vec == name)
   if (!length(idx)) {
     stop(
-      paste0("OneDev board '", name, "' was not found in project settings."),
+      paste0("OneDev board '", name, "' was not found in the project or global issue settings."),
       call. = FALSE
     )
   }

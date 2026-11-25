@@ -74,14 +74,14 @@ test_that("od_add_user_ssh_key sends key content and optional name", {
   expect_equal(key$id, 1)
 })
 
-test_that("od_delete_user_ssh_key sends DELETE request", {
+test_that("od_delete_user_ssh_key deletes the key by its global id", {
   skip_if_not_installed("mockery")
-  mockery::stub(od_delete_user_ssh_key, "od_get_me", function(...) list(id = "1"))
   mockery::stub(od_delete_user_ssh_key, "od_request", function(method, endpoint, ...) {
     expect_equal(method, "DELETE")
-    expect_equal(endpoint, "/users/1/ssh-keys/1")
+    expect_equal(endpoint, "/ssh-keys/1")
     NULL
   })
   result <- od_delete_user_ssh_key(1, conn = list())
   expect_null(result)
+  expect_error(od_delete_user_ssh_key("", conn = list()), "ssh_key_id")
 })

@@ -140,6 +140,38 @@
   )
 }
 
+#' Request an endpoint that not every OneDev version offers
+#'
+#' Calls `request` (`od_request` by default). If OneDev answers HTTP 404 or 405,
+#' the error keeps its class and `status` and gets a hint: the endpoint is not in
+#' the REST API description (`/~api/help`) of the instance used to verify this
+#' package, so it may not exist in the reader's OneDev version.
+#'
+#' @noRd
+.od_request_unlisted <- function(method, endpoint, ..., conn = NULL, request = od_request) {
+  tryCatch(
+    request(method, endpoint, ..., conn = conn),
+    od_http_error = function(e) {
+      if (!isTRUE(e$status %in% c(404L, 405L))) {
+        stop(e)
+      }
+      rlang::abort(
+        paste0(
+          conditionMessage(e),
+          " (hint: ", toupper(method), " ", endpoint, " is not in the REST API",
+          " description of the OneDev instance this package was verified against,",
+          " so your OneDev version may not offer it; check /~api/help on your server)"
+        ),
+        class = "od_http_error",
+        status = e$status,
+        method = e$method,
+        url = e$url,
+        call = NULL
+      )
+    }
+  )
+}
+
 # OneDev rejects `count` values above 100 with HTTP 406.
 .od_max_count <- 100L
 
