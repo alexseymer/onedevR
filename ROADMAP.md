@@ -88,6 +88,8 @@ Estimate per plan: 1 week+.
 - [x] Live verification of comment posting (2026-11-22, v0.7.2): all five
   probes of `scripts/diagnose-comments.R` succeed once the author is sent;
   all 18 live tests pass locally against the target instance
+- [x] Live verification release (v0.7.4): query escaping and iteration body
+  verified, `od_add_issue_iterations()` sends only the array
 - [x] Review fixes (v0.7.3): argument order of `od_add_issue_comment()`,
   author lookup, `od_create_issue()` keeps the id when the fetch fails, batch
   `numbers` aligned; repo-level agy persona and `scripts/review-prep.sh`
