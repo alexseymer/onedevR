@@ -149,6 +149,10 @@ Live verification of comment posting (2026-11-22, v0.7.2): all five
 probes of `scripts/diagnose-comments.R` succeed once the author is sent;
 all 18 live tests pass locally against the target instance
 
+Endpoint audit against `/~api/help` (v0.7.5, 2026-11-25): eight read
+functions fixed (files, groups, issue and PR links, boards), nine marked
+as not offered by the verified instance; `scripts/check-api-endpoints.R`
+
 Live verification release (v0.7.4): query escaping and iteration body
 verified,
 [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md)

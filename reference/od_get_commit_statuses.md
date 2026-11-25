@@ -1,6 +1,10 @@
 # Get commit statuses
 
-Retrieves all statuses set on a commit from various systems.
+**Availability:** the OneDev instance used to verify this package does
+not list `GET /repositories/{projectId}/commits/{commitHash}/statuses`
+in its REST API description (`/~api/help`), so this function can fail
+with HTTP 404 or 405 on other instances too. It is not verified against
+a live server; such a failure carries a hint.
 
 ## Usage
 
@@ -40,6 +44,10 @@ od_get_commit_statuses(
 
 A tibble of commit statuses (default), or a list when
 `as_tibble = FALSE`.
+
+## Details
+
+Retrieves all statuses set on a commit from various systems.
 
 ## See also
 

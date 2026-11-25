@@ -1,6 +1,8 @@
 # Remove a user from a group
 
-Removes a user from the specified group's membership.
+**Experimental:** not yet verified against a live OneDev server (it
+changes who has which permissions); the interface and behaviour may
+change.
 
 ## Usage
 
@@ -12,7 +14,7 @@ od_remove_group_member(group_name, user, conn = NULL)
 
 - group_name:
 
-  character Name of the group.
+  character\|numeric Group name or numeric group id.
 
 - user:
 
@@ -28,7 +30,13 @@ od_remove_group_member(group_name, user, conn = NULL)
 
 ## Value
 
-list Parsed API response.
+list Parsed API response (typically `NULL` on success).
+
+## Details
+
+Finds the membership of `user` in the group with
+`GET /groups/{groupId}/memberships` and deletes it with
+`DELETE /memberships/{membershipId}`. Fails if the user is not a member.
 
 ## See also
 

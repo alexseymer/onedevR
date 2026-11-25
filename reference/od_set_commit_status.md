@@ -1,7 +1,10 @@
 # Set or update a commit status
 
-Sets the status of a commit (e.g., from a CI system) for visibility in
-the web UI.
+**Availability:** the OneDev instance used to verify this package does
+not list `POST /repositories/{projectId}/commits/{commitHash}/statuses`
+in its REST API description (`/~api/help`), so this function can fail
+with HTTP 404 or 405 on other instances too. It is not verified against
+a live server; such a failure carries a hint.
 
 ## Usage
 
@@ -54,6 +57,11 @@ od_set_commit_status(
 ## Value
 
 Parsed commit status object (list).
+
+## Details
+
+Sets the status of a commit (e.g., from a CI system) for visibility in
+the web UI.
 
 ## See also
 

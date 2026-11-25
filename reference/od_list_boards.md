@@ -3,7 +3,10 @@
 Boards are not a separate REST resource; they live in project settings
 as `issueSetting$boardSpecs` (see
 [`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md)).
-This helper extracts that list.
+A project that defines no boards of its own uses the global ones, which
+are read from `GET /settings/issue` (verified live: the project setting
+is empty while the global setting holds the board shown in the UI). If
+the token may not read the global setting, the result stays empty.
 
 ## Usage
 
@@ -35,8 +38,8 @@ od_list_boards(project = NULL, as_tibble = NULL, conn = NULL)
 
 ## Value
 
-tibble\|list Board specs (default tibble), or an empty tibble/list when
-none are configured.
+tibble\|list Board specs (default tibble) of the project, else the
+global ones; an empty tibble/list when none are configured.
 
 ## See also
 

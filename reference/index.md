@@ -95,7 +95,7 @@ List, review, and write pull requests.
 - [`od_get_pull_request_comments()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_comments.md)
   : Get comments on a pull request
 - [`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md)
-  : Get issues linked to a pull request
+  : Get the issues a pull request fixes
 - [`od_get_pull_request_reviews()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_reviews.md)
   : Get reviews on a pull request
 - [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md)
@@ -210,7 +210,7 @@ escape hatch.
 - [`od_get_group()`](https://alexseymer.github.io/onedevR/reference/od_get_group.md)
   : Get a user group by name
 - [`od_list_group_members()`](https://alexseymer.github.io/onedevR/reference/od_list_group_members.md)
-  : List group members
+  : List group memberships
 - [`od_add_group_member()`](https://alexseymer.github.io/onedevR/reference/od_add_group_member.md)
   : Add a user to a group
 - [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md)
@@ -234,7 +234,7 @@ may change.
 - [`od_add_user_ssh_key()`](https://alexseymer.github.io/onedevR/reference/od_add_user_ssh_key.md)
   : Add an SSH key to a user account
 - [`od_delete_user_ssh_key()`](https://alexseymer.github.io/onedevR/reference/od_delete_user_ssh_key.md)
-  : Delete an SSH key from a user account
+  : Delete an SSH key
 
 ## Commit statuses, build promotion, and issue/PR links
 

@@ -1,6 +1,10 @@
-# List group members
+# List group memberships
 
-Retrieves all members of a user group.
+Retrieves the memberships of a user group with
+`GET /groups/{groupId}/memberships`. Each row has the membership `id`,
+the `userId` and the `groupId`; use
+[`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md)
+for user details.
 
 ## Usage
 
@@ -12,7 +16,7 @@ od_list_group_members(group_name, as_tibble = NULL, conn = NULL)
 
 - group_name:
 
-  character Name of the group.
+  character\|numeric Group name or numeric group id.
 
 - as_tibble:
 
@@ -31,7 +35,7 @@ od_list_group_members(group_name, as_tibble = NULL, conn = NULL)
 
 ## Value
 
-tibble\|list A tibble of group members (default), or a list when
+tibble\|list A tibble of memberships (default), or a list when
 `as_tibble = FALSE`.
 
 ## See also

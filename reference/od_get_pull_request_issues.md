@@ -1,6 +1,9 @@
-# Get issues linked to a pull request
+# Get the issues a pull request fixes
 
-Retrieves all issues that are linked to a specific pull request.
+Calls `GET /pulls/{requestId}/fixed-issue-ids`: the ids of the issues
+that the pull request fixes (for example through `fixes #12` in a commit
+message). The result holds internal issue ids, not UI numbers; use
+`od_get_issue(id, use_internal_id = TRUE)` for details.
 
 ## Usage
 
@@ -22,9 +25,7 @@ od_get_pull_request_issues(
 - as_tibble:
 
   logical If `TRUE` (default via `options(onedevr.as_tibble)`), return a
-  tibble via
-  [`od_as_tibble()`](https://alexseymer.github.io/onedevR/reference/od_as_tibble.md).
-  Default: `NULL`.
+  tibble with the column `id`. Default: `NULL`.
 
 - conn:
 
@@ -41,8 +42,8 @@ od_get_pull_request_issues(
 
 ## Value
 
-tibble\|list A tibble of linked issues (default), or a list when
-`as_tibble = FALSE`.
+tibble\|list A tibble with the column `id` (default), or a list of ids
+when `as_tibble = FALSE`.
 
 ## See also
 

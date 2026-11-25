@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-24 (Paketversion 0.7.4)  
+**Stand:** 2026-11-25 (Paketversion 0.7.5)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht.
 Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte
 API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`,
@@ -214,6 +214,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.7.2 | Kommentar-Autor standardmäßig der aktuelle User (behebt HTTP 500, live bestätigt 2026-11-22); [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md) liefert das angelegte Issue; Batch, Parallel, Streaming, Cache bleiben experimentell im Kern |
 | 0.7.3 | Fixes aus agy-Review: `od_add_issue_comment(issue_number, content, conn, user)` wieder in der Reihenfolge von 0.7.1; Autor mit einer statt zwei Anfragen; [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md) behält die Id, wenn das Nachladen fehlschlägt; Batch-`numbers` bleiben ausgerichtet |
 | 0.7.4 | Live verifiziert: Query-Escaping und Iterations-Body (nur Array); [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md) ohne tote Variante; Live-Tests für beides |
+| 0.7.5 | Endpunkt-Abgleich mit `/~api/help`: Dateien, Gruppen, Issue-/PR-Verknüpfung, SSH-Löschen und Boards korrigiert; nicht angebotene Endpunkte gekennzeichnet; `scripts/check-api-endpoints.R` |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache
@@ -662,6 +663,39 @@ ohne `user` den aktuellen User als `userId` sendet, legt die
 Ziel-Instanz alle fünf Proben aus `scripts/diagnose-comments.R` an
 (einfacher Text, Markdown, Issue- und Commit-Verweis, expliziter Autor),
 ohne HTTP 500. Der fehlende Autor war die Ursache.
+
+### Endpunkte der Instanz: Abgleich mit `/~api/help` (2026-11-25)
+
+Die Instanz beschreibt ihre REST-API maschinenlesbar unter `/~api/help`
+(JSON; je Ressource und Methode eine eigene Hilfe-URL mit Parametern und
+Schemas). `scripts/check-api-endpoints.R` vergleicht damit alle
+`@endpoint`-Angaben des Pakets. Ergebnis der ersten Prüfung gegen die
+Ziel-Instanz (308 Endpunkte):
+
+| Funktion | Vorher | Instanz (jetzt umgesetzt) |
+|----|----|----|
+| [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md) | `GET /repositories/{id}/files/{Pfad}` (HTTP 405) | `GET /repositories/{id}/files?revision=&file=` |
+| [`od_get_group()`](https://alexseymer.github.io/onedevR/reference/od_get_group.md), [`od_list_group_members()`](https://alexseymer.github.io/onedevR/reference/od_list_group_members.md) | Name im Pfad (404) | `GET /groups/ids/{name}`, dann `/groups/{id}` und `/groups/{id}/memberships` |
+| [`od_add_group_member()`](https://alexseymer.github.io/onedevR/reference/od_add_group_member.md), [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md) | `/groups/{name}/members` | `POST /memberships`, `DELETE /memberships/{id}` |
+| [`od_get_issue_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_pull_requests.md) | `/issues/{id}/pull-requests` (404) | `GET /issues/{id}/pulls` |
+| [`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md) | `/pulls/{id}/issues` (404) | `GET /pulls/{id}/fixed-issue-ids` (nur Ids) |
+| [`od_delete_user_ssh_key()`](https://alexseymer.github.io/onedevR/reference/od_delete_user_ssh_key.md) | `/users/{id}/ssh-keys/{key}` | `DELETE /ssh-keys/{id}` (Ids sind global) |
+| [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md) | nur Projekt-Einstellung (leer) | zusätzlich `GET /settings/issue` (geerbte Boards) |
+| [`od_list_webhooks()`](https://alexseymer.github.io/onedevR/reference/od_list_webhooks.md) | `/projects/{id}/webhooks` (404) | `webHooks` der Projekt-Einstellung |
+
+Auf der Ziel-Instanz nicht vorhanden (kein Endpunkt in `/~api/help`):
+Webhooks anlegen, holen, löschen; Commit-Status setzen und lesen;
+`POST /builds/{id}/promotions`; Issue und Pull Request verknüpfen
+(`POST /issues/{id}/pull-requests`). Die Funktionen bleiben, ein HTTP
+404 oder 405 trägt einen Hinweis, und ihre Hilfe-Seiten nennen die
+Einschränkung („Availability“). Andere OneDev-Versionen können die
+Endpunkte anbieten.
+
+Gelesen wird die Beschreibung mit `GET /~api/help` (Ressourcen), dann
+der `help`-URL je Ressource und je Methode. Das Testprojekt der
+Verifikation hat keine eigenen Boards, Tags, Webhooks, PR-Kommentare
+oder Artefakte; Funktionen dafür sind nur auf Fehlerfreiheit, nicht auf
+Feldinhalte geprüft.
 
 ### Listen: `count` höchstens 100
 

@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Function Relationship Map &amp; API Navigation Guide</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.4/vignettes/function-map.Rmd" class="external-link"><code>vignettes/function-map.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/vignettes/function-map.Rmd" class="external-link"><code>vignettes/function-map.Rmd</code></a></small>
       <div class="d-none name"><code>function-map.Rmd</code></div>
     </div>
 
@@ -473,14 +473,15 @@ comments
 </ul>
 </li>
 <li>
-<strong>od_get_pull_request_issues()</strong> — Get issues linked to
-PR
+<strong>od_get_pull_request_issues()</strong> — Get the issues a PR
+fixes
 <ul>
 <li>
 <code>pull_request_number</code>: UI number</li>
 <li>
 <code>as_tibble</code>: Return format</li>
-<li>Returns: tibble/list of linked issues</li>
+<li>Returns: tibble with the column <code>id</code> (internal issue
+ids), or a list</li>
 </ul>
 </li>
 </ul>
@@ -1066,9 +1067,7 @@ back to the configured <code>username</code> when
 <strong>od_delete_user_ssh_key()</strong> — Remove SSH key
 <ul>
 <li>
-<code>ssh_key_id</code>: Key ID</li>
-<li>
-<code>user</code>: Optional user (default: current user)</li>
+<code>ssh_key_id</code>: Key ID (global)</li>
 <li>Returns: Deletion confirmation</li>
 </ul>
 </li>
@@ -1096,18 +1095,19 @@ back to the configured <code>username</code> when
 <strong>od_get_group()</strong> — Get group details
 <ul>
 <li>
-<code>name</code>: Group name</li>
+<code>name</code>: Group name or numeric id</li>
 <li>Returns: Group object</li>
 </ul>
 </li>
 <li>
-<strong>od_list_group_members()</strong> — List group members
+<strong>od_list_group_members()</strong> — List group memberships
 <ul>
 <li>
-<code>group_name</code>: Group name</li>
+<code>group_name</code>: Group name or numeric id</li>
 <li>
 <code>as_tibble</code>: Return format</li>
-<li>Returns: tibble/list of members</li>
+<li>Returns: tibble/list of memberships (<code>id</code>,
+<code>userId</code>, <code>groupId</code>)</li>
 </ul>
 </li>
 <li>
@@ -1117,7 +1117,7 @@ back to the configured <code>username</code> when
 <code>group_name</code>: Group name</li>
 <li>
 <code>user</code>: User login or ID</li>
-<li>Returns: Updated group</li>
+<li>Returns: Id of the membership</li>
 </ul>
 </li>
 <li>
@@ -1470,13 +1470,10 @@ query string)</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># POST request (create resource)</span></span>
-<span><span class="va">new_hook</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
+<span><span class="va">new_comment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  <span class="st">"POST"</span>,</span>
-<span>  <span class="st">"/projects/1/webhooks"</span>,</span>
-<span>  body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    url <span class="op">=</span> <span class="st">"https://example.com/webhook"</span>,</span>
-<span>    events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"issues"</span>, <span class="st">"pr"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"/issue-comments"</span>,</span>
+<span>  body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>issueId <span class="op">=</span> <span class="fl">123L</span>, content <span class="op">=</span> <span class="st">"Hello"</span><span class="op">)</span>,</span>
 <span>  conn <span class="op">=</span> <span class="va">conn</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1491,7 +1488,7 @@ query string)</li>
 <span><span class="co"># DELETE request</span></span>
 <span><span class="fu"><a href="../reference/od_request.html">od_request</a></span><span class="op">(</span></span>
 <span>  <span class="st">"DELETE"</span>,</span>
-<span>  <span class="st">"/webhooks/456"</span>,</span>
+<span>  <span class="st">"/memberships/456"</span>,</span>
 <span>  conn <span class="op">=</span> <span class="va">conn</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>

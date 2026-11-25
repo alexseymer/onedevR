@@ -1,7 +1,10 @@
 # Get a webhook by ID
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Availability:** the OneDev instance used to verify this package does
+not list `GET /projects/{projectId}/webhooks/{webhookId}` in its REST
+API description (`/~api/help`), so this function can fail with HTTP 404
+or 405 on other instances too. It is not verified against a live server;
+such a failure carries a hint.
 
 ## Usage
 
@@ -33,6 +36,9 @@ od_get_webhook(webhook_id, project = NULL, conn = NULL)
 list Parsed webhook object.
 
 ## Details
+
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 Retrieves details for a specific webhook.
 

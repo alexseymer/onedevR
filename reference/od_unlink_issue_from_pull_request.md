@@ -1,6 +1,10 @@
 # Remove a link between an issue and a pull request
 
-Removes the link between an issue and a pull request.
+**Availability:** the OneDev instance used to verify this package does
+not list `DELETE /issues/{issueId}/pull-requests/{prId}` in its REST API
+description (`/~api/help`), so this function can fail with HTTP 404 or
+405 on other instances too. It is not verified against a live server;
+such a failure carries a hint.
 
 ## Usage
 
@@ -33,6 +37,10 @@ od_unlink_issue_from_pull_request(
 ## Value
 
 list Parsed API response.
+
+## Details
+
+Removes the link between an issue and a pull request.
 
 ## See also
 

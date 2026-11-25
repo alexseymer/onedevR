@@ -1,7 +1,10 @@
 # Delete a webhook
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Availability:** the OneDev instance used to verify this package does
+not list `DELETE /projects/{projectId}/webhooks/{webhookId}` in its REST
+API description (`/~api/help`), so this function can fail with HTTP 404
+or 405 on other instances too. It is not verified against a live server;
+such a failure carries a hint.
 
 ## Usage
 
@@ -33,6 +36,9 @@ od_delete_webhook(webhook_id, project = NULL, conn = NULL)
 list Parsed API response (typically `NULL` on success).
 
 ## Details
+
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 Removes a webhook from a project.
 

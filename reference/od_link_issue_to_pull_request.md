@@ -1,7 +1,10 @@
 # Link an issue to a pull request
 
-Creates a link between an issue and a pull request, indicating the PR is
-related to or closes the issue.
+**Availability:** the OneDev instance used to verify this package does
+not list `POST /issues/{issueId}/pull-requests` in its REST API
+description (`/~api/help`), so this function can fail with HTTP 404 or
+405 on other instances too. It is not verified against a live server;
+such a failure carries a hint.
 
 ## Usage
 
@@ -30,6 +33,11 @@ od_link_issue_to_pull_request(issue_number, pull_request_number, conn = NULL)
 ## Value
 
 list Parsed API response.
+
+## Details
+
+Creates a link between an issue and a pull request, indicating the PR is
+related to or closes the issue.
 
 ## See also
 

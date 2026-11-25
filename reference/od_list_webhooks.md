@@ -1,7 +1,8 @@
 # List webhooks for a project
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Experimental:** the setting is verified, the fields of a webhook entry
+are not (the project used for verification has none); the interface and
+behaviour may change.
 
 ## Usage
 
@@ -34,11 +35,19 @@ od_list_webhooks(project = NULL, as_tibble = NULL, conn = NULL)
 ## Value
 
 tibble\|list A tibble of webhooks (default), or a list when
-`as_tibble = FALSE`.
+`as_tibble = FALSE`; empty when the project has none.
 
 ## Details
 
-Retrieves all webhooks configured for a project.
+Reads the `webHooks` list of the project setting
+(`GET /projects/{id}/setting`, see
+[`od_get_project_setting()`](https://alexseymer.github.io/onedevR/reference/od_get_project_setting.md)).
+OneDev has no REST resource for webhooks, so
+[`od_get_webhook()`](https://alexseymer.github.io/onedevR/reference/od_get_webhook.md),
+[`od_create_webhook()`](https://alexseymer.github.io/onedevR/reference/od_create_webhook.md)
+and
+[`od_delete_webhook()`](https://alexseymer.github.io/onedevR/reference/od_delete_webhook.md)
+have no endpoint to call on the instance used for verification.
 
 ## See also
 

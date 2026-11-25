@@ -1,6 +1,8 @@
 # Get a user group by name
 
-Retrieves details for a specific user group.
+Retrieves details for a specific user group. The name is resolved to the
+group id with `GET /groups/ids/{name}` first; a numeric id is used as
+is.
 
 ## Usage
 
@@ -12,7 +14,7 @@ od_get_group(name, conn = NULL)
 
 - name:
 
-  character Group name.
+  character\|numeric Group name or numeric group id.
 
 - conn:
 
@@ -24,7 +26,7 @@ od_get_group(name, conn = NULL)
 
 ## Value
 
-list Parsed group object.
+list Parsed group object (`id`, `name`, `description`, ...).
 
 ## See also
 

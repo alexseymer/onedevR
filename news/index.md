@@ -1,5 +1,73 @@
 # Changelog
 
+## onedevr 0.7.5
+
+Endpoints compared with the REST API description of a live OneDev
+instance (`/~api/help`, 2026-11-25). Eight read functions failed against
+the live server because they called endpoints that do not exist or do
+not work that way.
+
+- [`od_get_file()`](https://alexseymer.github.io/onedevR/reference/od_get_file.md)
+  and
+  [`od_get_file_text()`](https://alexseymer.github.io/onedevR/reference/od_get_file_text.md)
+  read `GET /repositories/{id}/files` with the query parameters
+  `revision` and `file`. The path-based URL answered HTTP 405. Checked
+  live: the text of a file is as long as its `size`.
+- [`od_get_group()`](https://alexseymer.github.io/onedevR/reference/od_get_group.md)
+  and
+  [`od_list_group_members()`](https://alexseymer.github.io/onedevR/reference/od_list_group_members.md)
+  resolve the group name with `GET /groups/ids/{name}` and use the id (a
+  numeric id is accepted as well). The name in the path answered
+  HTTP 404.
+  [`od_list_group_members()`](https://alexseymer.github.io/onedevR/reference/od_list_group_members.md)
+  returns the memberships (`id`, `userId`, `groupId`), which is what
+  OneDev has; use
+  [`od_get_user()`](https://alexseymer.github.io/onedevR/reference/od_get_user.md)
+  for user details.
+- [`od_add_group_member()`](https://alexseymer.github.io/onedevR/reference/od_add_group_member.md)
+  and
+  [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md)
+  create and delete a membership with `POST /memberships` and
+  `DELETE /memberships/{id}`.
+  [`od_remove_group_member()`](https://alexseymer.github.io/onedevR/reference/od_remove_group_member.md)
+  fails if the user is not a member. Not verified live (they change
+  permissions), so they stay experimental.
+- [`od_get_issue_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_pull_requests.md)
+  calls `GET /issues/{id}/pulls`.
+  [`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md)
+  calls `GET /pulls/{id}/fixed-issue-ids` and returns a tibble with the
+  column `id` (internal issue ids), as the issues a pull request fixes.
+  Both answered HTTP 404 before.
+- `od_delete_user_ssh_key(ssh_key_id)` calls `DELETE /ssh-keys/{id}`.
+  SSH key ids are global, so the `user` argument is gone; the old URL
+  did not exist.
+- [`od_list_boards()`](https://alexseymer.github.io/onedevR/reference/od_list_boards.md)
+  uses the global boards (`GET /settings/issue`) when the project
+  defines none, as OneDev does; before, a project without its own boards
+  showed none although the UI shows one.
+  [`od_get_board()`](https://alexseymer.github.io/onedevR/reference/od_get_board.md)
+  and
+  [`od_query_board_issues()`](https://alexseymer.github.io/onedevR/reference/od_query_board_issues.md)
+  find them too.
+- [`od_list_webhooks()`](https://alexseymer.github.io/onedevR/reference/od_list_webhooks.md)
+  reads `webHooks` from the project setting.
+- Not offered by the verified instance:
+  [`od_get_webhook()`](https://alexseymer.github.io/onedevR/reference/od_get_webhook.md),
+  [`od_create_webhook()`](https://alexseymer.github.io/onedevR/reference/od_create_webhook.md),
+  [`od_delete_webhook()`](https://alexseymer.github.io/onedevR/reference/od_delete_webhook.md),
+  [`od_set_commit_status()`](https://alexseymer.github.io/onedevR/reference/od_set_commit_status.md),
+  [`od_get_commit_statuses()`](https://alexseymer.github.io/onedevR/reference/od_get_commit_statuses.md),
+  [`od_promote_build()`](https://alexseymer.github.io/onedevR/reference/od_promote_build.md),
+  [`od_link_issue_to_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_link_issue_to_pull_request.md),
+  [`od_unlink_issue_from_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_unlink_issue_from_pull_request.md)
+  and
+  [`od_batch_link_issues_prs()`](https://alexseymer.github.io/onedevR/reference/od_batch_link_issues_prs.md).
+  Their help pages say so, and an HTTP 404 or 405 now carries a hint
+  that the endpoint may not exist in your OneDev version.
+- New `scripts/check-api-endpoints.R` compares every documented endpoint
+  with `/~api/help` of a live instance (read-only). Four live tests
+  cover the fixes.
+
 ## onedevr 0.7.4
 
 Live verification against a OneDev instance (2026-11-23): query escaping

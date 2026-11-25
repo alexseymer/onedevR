@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,9 +47,29 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.4/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.5" id="onedevr-075">onedevr 0.7.5<a class="anchor" aria-label="anchor" href="#onedevr-075"></a></h2>
+<p>Endpoints compared with the REST API description of a live OneDev instance (<code>/~api/help</code>, 2026-11-25). Eight read functions failed against the live server because they called endpoints that do not exist or do not work that way.</p>
+<ul><li>
+<code><a href="../reference/od_get_file.html">od_get_file()</a></code> and <code><a href="../reference/od_get_file_text.html">od_get_file_text()</a></code> read <code>GET /repositories/{id}/files</code> with the query parameters <code>revision</code> and <code>file</code>. The path-based URL answered HTTP 405. Checked live: the text of a file is as long as its <code>size</code>.</li>
+<li>
+<code><a href="../reference/od_get_group.html">od_get_group()</a></code> and <code><a href="../reference/od_list_group_members.html">od_list_group_members()</a></code> resolve the group name with <code>GET /groups/ids/{name}</code> and use the id (a numeric id is accepted as well). The name in the path answered HTTP 404. <code><a href="../reference/od_list_group_members.html">od_list_group_members()</a></code> returns the memberships (<code>id</code>, <code>userId</code>, <code>groupId</code>), which is what OneDev has; use <code><a href="../reference/od_get_user.html">od_get_user()</a></code> for user details.</li>
+<li>
+<code><a href="../reference/od_add_group_member.html">od_add_group_member()</a></code> and <code><a href="../reference/od_remove_group_member.html">od_remove_group_member()</a></code> create and delete a membership with <code>POST /memberships</code> and <code>DELETE /memberships/{id}</code>. <code><a href="../reference/od_remove_group_member.html">od_remove_group_member()</a></code> fails if the user is not a member. Not verified live (they change permissions), so they stay experimental.</li>
+<li>
+<code><a href="../reference/od_get_issue_pull_requests.html">od_get_issue_pull_requests()</a></code> calls <code>GET /issues/{id}/pulls</code>. <code><a href="../reference/od_get_pull_request_issues.html">od_get_pull_request_issues()</a></code> calls <code>GET /pulls/{id}/fixed-issue-ids</code> and returns a tibble with the column <code>id</code> (internal issue ids), as the issues a pull request fixes. Both answered HTTP 404 before.</li>
+<li>
+<code>od_delete_user_ssh_key(ssh_key_id)</code> calls <code>DELETE /ssh-keys/{id}</code>. SSH key ids are global, so the <code>user</code> argument is gone; the old URL did not exist.</li>
+<li>
+<code><a href="../reference/od_list_boards.html">od_list_boards()</a></code> uses the global boards (<code>GET /settings/issue</code>) when the project defines none, as OneDev does; before, a project without its own boards showed none although the UI shows one. <code><a href="../reference/od_get_board.html">od_get_board()</a></code> and <code><a href="../reference/od_query_board_issues.html">od_query_board_issues()</a></code> find them too.</li>
+<li>
+<code><a href="../reference/od_list_webhooks.html">od_list_webhooks()</a></code> reads <code>webHooks</code> from the project setting.</li>
+<li>Not offered by the verified instance: <code><a href="../reference/od_get_webhook.html">od_get_webhook()</a></code>, <code><a href="../reference/od_create_webhook.html">od_create_webhook()</a></code>, <code><a href="../reference/od_delete_webhook.html">od_delete_webhook()</a></code>, <code><a href="../reference/od_set_commit_status.html">od_set_commit_status()</a></code>, <code><a href="../reference/od_get_commit_statuses.html">od_get_commit_statuses()</a></code>, <code><a href="../reference/od_promote_build.html">od_promote_build()</a></code>, <code><a href="../reference/od_link_issue_to_pull_request.html">od_link_issue_to_pull_request()</a></code>, <code><a href="../reference/od_unlink_issue_from_pull_request.html">od_unlink_issue_from_pull_request()</a></code> and <code><a href="../reference/od_batch_link_issues_prs.html">od_batch_link_issues_prs()</a></code>. Their help pages say so, and an HTTP 404 or 405 now carries a hint that the endpoint may not exist in your OneDev version.</li>
+<li>New <code>scripts/check-api-endpoints.R</code> compares every documented endpoint with <code>/~api/help</code> of a live instance (read-only). Four live tests cover the fixes.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.4" id="onedevr-074">onedevr 0.7.4<a class="anchor" aria-label="anchor" href="#onedevr-074"></a></h2>
 <p>Live verification against a OneDev instance (2026-11-23): query escaping and the iteration body, plus a simpler <code><a href="../reference/od_add_issue_iterations.html">od_add_issue_iterations()</a></code>.</p>

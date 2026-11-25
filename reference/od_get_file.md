@@ -1,6 +1,7 @@
 # Get a file at a revision
 
-Calls `GET /repositories/{projectId}/files/{revision}/{path...}`.
+Calls `GET /repositories/{projectId}/files` with the query parameters
+`revision` and `file`.
 
 ## Usage
 

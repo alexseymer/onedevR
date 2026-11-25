@@ -1,7 +1,10 @@
 # Promote a build to a new status/environment
 
-Transitions a build to a new promotion status (e.g., "staging",
-"production").
+**Availability:** the OneDev instance used to verify this package does
+not list `POST /builds/{buildId}/promotions` in its REST API description
+(`/~api/help`), so this function can fail with HTTP 404 or 405 on other
+instances too. It is not verified against a live server; such a failure
+carries a hint.
 
 ## Usage
 
@@ -33,6 +36,11 @@ od_promote_build(build_number, status, conn = NULL, use_internal_id = FALSE)
 ## Value
 
 Parsed API response.
+
+## Details
+
+Transitions a build to a new promotion status (e.g., "staging",
+"production").
 
 ## See also
 

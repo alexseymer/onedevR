@@ -1,7 +1,10 @@
 # Create a webhook for a project
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Availability:** the OneDev instance used to verify this package does
+not list `POST /projects/{projectId}/webhooks` in its REST API
+description (`/~api/help`), so this function can fail with HTTP 404 or
+405 on other instances too. It is not verified against a live server;
+such a failure carries a hint.
 
 ## Usage
 
@@ -39,6 +42,9 @@ od_create_webhook(url, events = NULL, project = NULL, conn = NULL)
 list Parsed webhook object with ID and configuration.
 
 ## Details
+
+**Experimental:** not yet verified against a live OneDev server; the
+interface and behaviour may change.
 
 Creates a new webhook that will POST events to the specified URL.
 

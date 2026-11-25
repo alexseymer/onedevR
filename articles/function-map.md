@@ -217,10 +217,10 @@ Pull Requests (PRs) are code review and merge requests.
   - `pull_request_number`: UI number
   - `as_tibble`: Return format
   - Returns: tibble/list of reviews
-- **od_get_pull_request_issues()** — Get issues linked to PR
+- **od_get_pull_request_issues()** — Get the issues a PR fixes
   - `pull_request_number`: UI number
   - `as_tibble`: Return format
-  - Returns: tibble/list of linked issues
+  - Returns: tibble with the column `id` (internal issue ids), or a list
 
 ### Create Functions
 
@@ -483,8 +483,7 @@ identities.
   - `user`: Optional user (default: current user)
   - Returns: Created key object
 - **od_delete_user_ssh_key()** — Remove SSH key
-  - `ssh_key_id`: Key ID
-  - `user`: Optional user (default: current user)
+  - `ssh_key_id`: Key ID (global)
   - Returns: Deletion confirmation
 
 ### Group Management
@@ -496,16 +495,16 @@ identities.
   - `as_tibble`: Return format
   - Returns: tibble/list of groups
 - **od_get_group()** — Get group details
-  - `name`: Group name
+  - `name`: Group name or numeric id
   - Returns: Group object
-- **od_list_group_members()** — List group members
-  - `group_name`: Group name
+- **od_list_group_members()** — List group memberships
+  - `group_name`: Group name or numeric id
   - `as_tibble`: Return format
-  - Returns: tibble/list of members
+  - Returns: tibble/list of memberships (`id`, `userId`, `groupId`)
 - **od_add_group_member()** — Add user to group
   - `group_name`: Group name
   - `user`: User login or ID
-  - Returns: Updated group
+  - Returns: Id of the membership
 - **od_remove_group_member()** — Remove user from group
   - `group_name`: Group name
   - `user`: User login or ID
@@ -664,13 +663,10 @@ issues <- od_request(
 )
 
 # POST request (create resource)
-new_hook <- od_request(
+new_comment <- od_request(
   "POST",
-  "/projects/1/webhooks",
-  body = list(
-    url = "https://example.com/webhook",
-    events = list("issues", "pr")
-  ),
+  "/issue-comments",
+  body = list(issueId = 123L, content = "Hello"),
   conn = conn
 )
 
@@ -685,7 +681,7 @@ od_request(
 # DELETE request
 od_request(
   "DELETE",
-  "/webhooks/456",
+  "/memberships/456",
   conn = conn
 )
 ```

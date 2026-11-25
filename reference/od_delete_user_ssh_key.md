@@ -1,12 +1,12 @@
-# Delete an SSH key from a user account
+# Delete an SSH key
 
-**Experimental:** not yet verified against a live OneDev server; the
-interface and behaviour may change.
+**Experimental:** not yet verified against a live OneDev server (it
+deletes a credential); the interface and behaviour may change.
 
 ## Usage
 
 ``` r
-od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
+od_delete_user_ssh_key(ssh_key_id, conn = NULL)
 ```
 
 ## Arguments
@@ -14,11 +14,6 @@ od_delete_user_ssh_key(ssh_key_id, user = NULL, conn = NULL)
 - ssh_key_id:
 
   character\|numeric Numeric SSH key ID.
-
-- user:
-
-  character\|numeric Login name or numeric user id. Defaults to the
-  authenticated user. Default: `NULL`.
 
 - conn:
 
@@ -34,7 +29,10 @@ list Parsed API response (typically `NULL` on success).
 
 ## Details
 
-Removes an SSH public key from the authenticated or specified user.
+Removes an SSH public key with `DELETE /ssh-keys/{id}`. SSH key ids are
+global, so no user is needed; list a user's keys with
+[`od_list_user_ssh_keys()`](https://alexseymer.github.io/onedevR/reference/od_list_user_ssh_keys.md)
+to find the id.
 
 ## See also
 

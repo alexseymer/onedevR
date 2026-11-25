@@ -1,6 +1,8 @@
 # Add a user to a group
 
-Adds a user to the specified group's membership.
+**Experimental:** not yet verified against a live OneDev server (it
+changes who has which permissions); the interface and behaviour may
+change.
 
 ## Usage
 
@@ -12,7 +14,7 @@ od_add_group_member(group_name, user, conn = NULL)
 
 - group_name:
 
-  character Name of the group.
+  character\|numeric Group name or numeric group id.
 
 - user:
 
@@ -28,7 +30,11 @@ od_add_group_member(group_name, user, conn = NULL)
 
 ## Value
 
-list Parsed API response.
+numeric Id of the created membership.
+
+## Details
+
+Creates a membership with `POST /memberships` (`userId`, `groupId`).
 
 ## See also
 
