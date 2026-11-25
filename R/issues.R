@@ -395,19 +395,9 @@ od_add_issue_comment <- function(issue_number, content, conn = NULL, user = NULL
     issueId = issue_id,
     content = as.character(content)[1]
   )
-  if (!is.null(user) && (!is.atomic(user) || length(user) != 1L || is.na(user))) {
-    stop("`user` must be a login name or a numeric user id.", call. = FALSE)
-  }
-  if (is.null(user) || !nzchar(as.character(user))) {
-    # Without an author OneDev answers HTTP 500 (verified live), so default to
-    # the current user. If that cannot be determined, send no userId.
-    user_id <- tryCatch(
-      .od_user_id_or_me(NULL, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id),
-      error = function(e) NULL
-    )
-  } else {
-    user_id <- od_resolve_user_id(user, conn = conn)
-  }
+  # Without an author OneDev answers HTTP 500 (verified live), so default to
+  # the current user. If that cannot be determined, send no userId.
+  user_id <- .od_comment_user_id(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
   if (!is.null(user_id) && nzchar(as.character(user_id)[1])) {
     body$userId <- as.integer(user_id)
   }

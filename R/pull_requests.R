@@ -1,5 +1,10 @@
 #' Query OneDev pull requests
 #'
+#' Not limited to the connection project: this returns the matching pull requests
+#' of the whole instance. To scope it to one project, add
+#' `'"Target Project" is "group/name"'` (or `"Source Project"`) to `query`. The
+#' field `"Project"` is rejected with HTTP 500 for pull requests (verified live).
+#'
 #' @param query {character} Raw OneDev pull-request query string (see
 #'   [od_get_query_description()] with `kind = "pull_request"`). Default: `NULL`.
 #' @param status {character} Optional status keyword: `"open"`, `"merged"`, or `"discarded"`
@@ -212,11 +217,17 @@ od_create_pull_request <- function(
 
 #' Add a comment to a pull request
 #'
-#' Posts to `POST /pull-request-comments` with `requestId` + `content`.
+#' Posts to `POST /pull-request-comments` with `requestId`, `content` and
+#' `userId`. Without an author OneDev answers HTTP 500 (verified live, as for
+#' issue comments), so the current user is sent by default.
 #'
 #' @param pull_request_number {character|numeric} UI number.
 #' @param content {character} Comment body (Markdown).
 #' @param conn {list} Connection list. Default: `NULL`.
+#' @param user {character|numeric} Optional author: login name or numeric user
+#'   id, sent as `userId`. Default: `NULL`, which uses the current user. If the
+#'   current user cannot be determined, no `userId` is sent. A `user` that is
+#'   given but cannot be resolved is an error.
 #' @return {list} Parsed API response.
 #' @endpoint POST /pull-request-comments
 #' @family pull requests
@@ -225,16 +236,21 @@ od_create_pull_request <- function(
 #' od_add_pull_request_comment(1, "LGTM")
 #' }
 #' @export
-od_add_pull_request_comment <- function(pull_request_number, content, conn = NULL) {
+od_add_pull_request_comment <- function(pull_request_number, content, conn = NULL, user = NULL) {
   conn <- .od_conn(conn)
   request_id <- as.integer(od_resolve_pull_request_id(pull_request_number, conn = conn))
+  body <- list(
+    requestId = request_id,
+    content = as.character(content)[1]
+  )
+  user_id <- .od_comment_user_id(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id)
+  if (!is.null(user_id) && nzchar(as.character(user_id)[1])) {
+    body$userId <- as.integer(user_id)
+  }
   od_request(
     method = "POST",
     endpoint = "/pull-request-comments",
-    body = list(
-      requestId = request_id,
-      content = as.character(content)[1]
-    ),
+    body = body,
     conn = conn
   )
 }

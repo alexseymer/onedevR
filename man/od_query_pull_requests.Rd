@@ -33,7 +33,10 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 {tibble|list} A tibble of pull requests (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
-Query OneDev pull requests
+Not limited to the connection project: this returns the matching pull requests
+of the whole instance. To scope it to one project, add
+\code{'"Target Project" is "group/name"'} (or \code{"Source Project"}) to \code{query}. The
+field \code{"Project"} is rejected with HTTP 500 for pull requests (verified live).
 }
 \examples{
 \dontrun{

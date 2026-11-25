@@ -36,7 +36,9 @@ a tibble via \code{\link[=od_as_tibble]{od_as_tibble()}}. Default: \code{NULL}.}
 {tibble|list} A tibble of builds (default), or a list when \code{as_tibble = FALSE}.
 }
 \description{
-Query OneDev builds
+Not limited to the connection project: this returns the matching builds of the
+whole instance. To scope it to one project, add
+\code{'"Project" is "group/name"'} to \code{query} (verified live).
 }
 \examples{
 \dontrun{

@@ -43,6 +43,10 @@
 
 #' Query OneDev builds
 #'
+#' Not limited to the connection project: this returns the matching builds of the
+#' whole instance. To scope it to one project, add
+#' `'"Project" is "group/name"'` to `query` (verified live).
+#'
 #' @param query {character} Raw OneDev build query string (see [od_get_query_description()]
 #'   with `kind = "build"`, or `tod build get-query-description`). Example:
 #'   `'"Number" is "group/project#100"'`. Default: `NULL`.
