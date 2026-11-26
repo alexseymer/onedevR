@@ -31,6 +31,11 @@ A tibble of packages (default), or a list when \code{as_tibble = FALSE}.
 \description{
 Calls \code{GET /packages}.
 }
+\details{
+Not limited to the connection project: this returns the matching packages of the
+whole instance. To scope it to one project, add \code{'"Project" is "group/name"'}
+to \code{query} (verified live).
+}
 \examples{
 \dontrun{
 od_query_packages(count = 20L)

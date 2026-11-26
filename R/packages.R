@@ -2,6 +2,10 @@
 #'
 #' Calls `GET /packages`.
 #'
+#' Not limited to the connection project: this returns the matching packages of the
+#' whole instance. To scope it to one project, add `'"Project" is "group/name"'`
+#' to `query` (verified live).
+#'
 #' @param query Optional package query string (e.g.
 #'   `'"Type" is "Container Image"'`).
 #' @param count Maximum number of results (default `100`). OneDev returns at most 100 per request; larger values are fetched in several requests.

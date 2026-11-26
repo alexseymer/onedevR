@@ -4,7 +4,12 @@
 \alias{od_add_pull_request_comment}
 \title{Add a comment to a pull request}
 \usage{
-od_add_pull_request_comment(pull_request_number, content, conn = NULL)
+od_add_pull_request_comment(
+  pull_request_number,
+  content,
+  conn = NULL,
+  user = NULL
+)
 }
 \arguments{
 \item{pull_request_number}{{character|numeric} UI number.}
@@ -12,12 +17,19 @@ od_add_pull_request_comment(pull_request_number, content, conn = NULL)
 \item{content}{{character} Comment body (Markdown).}
 
 \item{conn}{{list} Connection list. Default: \code{NULL}.}
+
+\item{user}{{character|numeric} Optional author: login name or numeric user
+id, sent as \code{userId}. Default: \code{NULL}, which uses the current user. If the
+current user cannot be determined, no \code{userId} is sent. A \code{user} that is
+given but cannot be resolved is an error.}
 }
 \value{
 {list} Parsed API response.
 }
 \description{
-Posts to \code{POST /pull-request-comments} with \code{requestId} + \code{content}.
+Posts to \code{POST /pull-request-comments} with \code{requestId}, \code{content} and
+\code{userId}. Without an author OneDev answers HTTP 500 (verified live, as for
+issue comments), so the current user is sent by default.
 }
 \examples{
 \dontrun{

@@ -88,6 +88,8 @@ Estimate per plan: 1 week+.
 - [x] Live verification of comment posting (2026-11-22, v0.7.2): all five
   probes of `scripts/diagnose-comments.R` succeed once the author is sent;
   all 18 live tests pass locally against the target instance
+- [x] Probe pull request in a test project (v0.7.6, 2026-11-25): found the
+  missing author on pull request comments; issue/PR links verified with data
 - [x] Endpoint audit against `/~api/help` (v0.7.5, 2026-11-25): eight read
   functions fixed (files, groups, issue and PR links, boards), nine marked as
   not offered by the verified instance; `scripts/check-api-endpoints.R`

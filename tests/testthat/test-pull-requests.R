@@ -82,16 +82,65 @@ test_that("od_create_pull_request posts expected body", {
   expect_equal(created$number, 9)
 })
 
-test_that("od_add_pull_request_comment posts to pull-request-comments", {
-  skip_if_not_installed("mockery")
-  mockery::stub(od_add_pull_request_comment, "od_resolve_pull_request_id", function(...) "900")
-  mockery::stub(od_add_pull_request_comment, "od_request", function(method, endpoint, body = NULL, ...) {
+# Helper: a stubbed copy of od_add_pull_request_comment (`$f`) that records the
+# request body (`$sent`). mockery::stub() changes the function in the calling
+# frame, so the copy is built here and returned.
+.pr_comment_stubs <- function(get_me = function(conn = NULL) list(id = 42, name = "alex"),
+                              whoami = function(conn = NULL) "alex",
+                              resolve = function(user, ...) if (user == "alex") "42" else "7") {
+  env <- new.env(parent = emptyenv())
+  env$sent <- NULL
+  f <- od_add_pull_request_comment
+  mockery::stub(f, "od_resolve_pull_request_id", function(...) "900")
+  mockery::stub(f, "od_get_me", function(...) get_me(...))
+  mockery::stub(f, "od_whoami", function(...) whoami(...))
+  mockery::stub(f, "od_resolve_user_id", function(...) resolve(...))
+  mockery::stub(f, "od_request", function(method, endpoint, body = NULL, ...) {
+    expect_equal(method, "POST")
     expect_equal(endpoint, "/pull-request-comments")
-    expect_equal(body$requestId, 900L)
-    expect_equal(body$content, "looks good")
+    env$sent <- body
     list(id = 3)
   })
-  expect_equal(od_add_pull_request_comment(42, "looks good", conn = list())$id, 3)
+  env$f <- f
+  env
+}
+
+test_that("od_add_pull_request_comment sends the current user as author", {
+  skip_if_not_installed("mockery")
+  env <- .pr_comment_stubs()
+  expect_equal(env$f(42, "looks good", conn = list())$id, 3)
+  # Without userId OneDev answers HTTP 500 (verified live)
+  expect_equal(env$sent$requestId, 900L)
+  expect_equal(env$sent$content, "looks good")
+  expect_equal(env$sent$userId, 42L)
+})
+
+test_that("od_add_pull_request_comment sends an explicit user and takes conn as third argument", {
+  skip_if_not_installed("mockery")
+  env <- .pr_comment_stubs()
+  env$f(42, "x", user = "bob", conn = list())
+  expect_equal(env$sent$userId, 7L)
+  env$f(42, "x", list(host = "https://onedev.example.org"))
+  expect_equal(env$sent$userId, 42L)
+})
+
+test_that("od_add_pull_request_comment sends no userId when the current user is unknown", {
+  skip_if_not_installed("mockery")
+  env <- .pr_comment_stubs(
+    get_me = function(conn = NULL) stop("HTTP 403"),
+    whoami = function(conn = NULL) stop("no identity")
+  )
+  env$f(42, "x", conn = list())
+  expect_null(env$sent$userId)
+  expect_equal(env$sent$requestId, 900L)
+})
+
+test_that("od_add_pull_request_comment rejects an invalid user and fails for an unknown explicit user", {
+  skip_if_not_installed("mockery")
+  env <- .pr_comment_stubs(resolve = function(user, ...) stop("no such user"))
+  expect_error(env$f(42, "x", user = NA, conn = list()), "`user` must be")
+  expect_error(env$f(42, "x", user = "ghost", conn = list()), "no such user")
+  expect_null(env$sent)
 })
 
 test_that("PR review actions hit approve/request/merge/discard endpoints", {

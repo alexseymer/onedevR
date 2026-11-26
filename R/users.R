@@ -189,6 +189,28 @@ od_whoami <- function(conn = NULL) {
   resolve(whoami(conn = conn), conn = conn)
 }
 
+#' Id of the author to send with a new comment
+#'
+#' `user` `NULL` or `""` means the current user (one `GET /users/me`, else the
+#' login name from `od_whoami()`); if that cannot be determined or resolved the
+#' result is `NULL` and the comment is sent without `userId`, as before. A given
+#' `user` that cannot be resolved is an error. `get_me`, `whoami` and `resolve`
+#' are passed in so callers keep their own stubbing points in tests.
+#'
+#' @noRd
+.od_comment_user_id <- function(user, conn, get_me = od_get_me, whoami = od_whoami, resolve = od_resolve_user_id) {
+  if (!is.null(user) && (!is.atomic(user) || length(user) != 1L || is.na(user))) {
+    stop("`user` must be a login name or a numeric user id.", call. = FALSE)
+  }
+  if (is.null(user) || !nzchar(as.character(user))) {
+    return(tryCatch(
+      .od_user_id_or_me(NULL, conn, get_me = get_me, whoami = whoami, resolve = resolve),
+      error = function(e) NULL
+    ))
+  }
+  resolve(user, conn = conn)
+}
+
 #' Get email addresses for a user
 #'
 #' @param user {character|numeric} Login name or numeric user id. Defaults to the authenticated user
