@@ -1,5 +1,39 @@
 # Changelog
 
+## onedevr 0.7.6
+
+Found by an end-to-end run against a live instance (a probe pull request
+in a test project, discarded afterwards).
+
+- [`od_add_pull_request_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_pull_request_comment.md)
+  sends the current user as `userId`, as
+  [`od_add_issue_comment()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_comment.md)
+  does. Without an author OneDev answers HTTP 500 for pull request
+  comments too. It has the same `user` argument after `conn`, with the
+  same rules: an unresolvable default author sends no `userId`, an
+  unresolvable explicit `user` is an error, `user = NA` is rejected.
+- Verified live with data for the first time:
+  [`od_get_pull_request_issues()`](https://alexseymer.github.io/onedevR/reference/od_get_pull_request_issues.md)
+  returns the id of the issue named in `Fixes #N` of a commit message on
+  the pull request, and
+  [`od_get_issue_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_get_issue_pull_requests.md)
+  returns the pull request for that issue.
+  [`od_approve_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_approve_pull_request.md)
+  on one’s own pull request is answered with HTTP 406 (“You are not
+  reviewer of this pull request”); add yourself as a reviewer
+  (`reviewer_ids` of
+  [`od_create_pull_request()`](https://alexseymer.github.io/onedevR/reference/od_create_pull_request.md))
+  first.
+- Help pages of
+  [`od_query_builds()`](https://alexseymer.github.io/onedevR/reference/od_query_builds.md),
+  [`od_query_pull_requests()`](https://alexseymer.github.io/onedevR/reference/od_query_pull_requests.md)
+  and
+  [`od_query_packages()`](https://alexseymer.github.io/onedevR/reference/od_query_packages.md)
+  say that the queries cover the whole instance and how to scope them to
+  one project, checked live: `"Project" is "group/name"` for builds and
+  packages, `"Target Project" is "group/name"` (or `"Source Project"`)
+  for pull requests; `"Project"` is rejected there with HTTP 500.
+
 ## onedevr 0.7.5
 
 Endpoints compared with the REST API description of a live OneDev

@@ -10,7 +10,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onedevr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,9 +47,17 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.5/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/alexseymer/onedevR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.6" id="onedevr-076">onedevr 0.7.6<a class="anchor" aria-label="anchor" href="#onedevr-076"></a></h2>
+<p>Found by an end-to-end run against a live instance (a probe pull request in a test project, discarded afterwards).</p>
+<ul><li>
+<code><a href="../reference/od_add_pull_request_comment.html">od_add_pull_request_comment()</a></code> sends the current user as <code>userId</code>, as <code><a href="../reference/od_add_issue_comment.html">od_add_issue_comment()</a></code> does. Without an author OneDev answers HTTP 500 for pull request comments too. It has the same <code>user</code> argument after <code>conn</code>, with the same rules: an unresolvable default author sends no <code>userId</code>, an unresolvable explicit <code>user</code> is an error, <code>user = NA</code> is rejected.</li>
+<li>Verified live with data for the first time: <code><a href="../reference/od_get_pull_request_issues.html">od_get_pull_request_issues()</a></code> returns the id of the issue named in <code>Fixes #N</code> of a commit message on the pull request, and <code><a href="../reference/od_get_issue_pull_requests.html">od_get_issue_pull_requests()</a></code> returns the pull request for that issue. <code><a href="../reference/od_approve_pull_request.html">od_approve_pull_request()</a></code> on one’s own pull request is answered with HTTP 406 (“You are not reviewer of this pull request”); add yourself as a reviewer (<code>reviewer_ids</code> of <code><a href="../reference/od_create_pull_request.html">od_create_pull_request()</a></code>) first.</li>
+<li>Help pages of <code><a href="../reference/od_query_builds.html">od_query_builds()</a></code>, <code><a href="../reference/od_query_pull_requests.html">od_query_pull_requests()</a></code> and <code><a href="../reference/od_query_packages.html">od_query_packages()</a></code> say that the queries cover the whole instance and how to scope them to one project, checked live: <code>"Project" is "group/name"</code> for builds and packages, <code>"Target Project" is "group/name"</code> (or <code>"Source Project"</code>) for pull requests; <code>"Project"</code> is rejected there with HTTP 500.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.5" id="onedevr-075">onedevr 0.7.5<a class="anchor" aria-label="anchor" href="#onedevr-075"></a></h2>
 <p>Endpoints compared with the REST API description of a live OneDev instance (<code>/~api/help</code>, 2026-11-25). Eight read functions failed against the live server because they called endpoints that do not exist or do not work that way.</p>

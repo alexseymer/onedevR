@@ -1,6 +1,6 @@
 # onedevr — Plan für ein R-Paket (OneDev REST API Client)
 
-**Stand:** 2026-11-25 (Paketversion 0.7.5)  
+**Stand:** 2026-11-25 (Paketversion 0.7.6)  
 **Status:** Phasen 0–4 abgeschlossen, Paket auf GitHub veröffentlicht.
 Dieses Dokument ist die **Spezifikation** (Ziel, Konventionen, bekannte
 API-Quirks). **Maßgeblich für den Ist-Stand sind** `R/*.R`, `NAMESPACE`,
@@ -215,6 +215,7 @@ gemeint ist — nicht die Laufzeitabhängigkeit.
 | 0.7.3 | Fixes aus agy-Review: `od_add_issue_comment(issue_number, content, conn, user)` wieder in der Reihenfolge von 0.7.1; Autor mit einer statt zwei Anfragen; [`od_create_issue()`](https://alexseymer.github.io/onedevR/reference/od_create_issue.md) behält die Id, wenn das Nachladen fehlschlägt; Batch-`numbers` bleiben ausgerichtet |
 | 0.7.4 | Live verifiziert: Query-Escaping und Iterations-Body (nur Array); [`od_add_issue_iterations()`](https://alexseymer.github.io/onedevR/reference/od_add_issue_iterations.md) ohne tote Variante; Live-Tests für beides |
 | 0.7.5 | Endpunkt-Abgleich mit `/~api/help`: Dateien, Gruppen, Issue-/PR-Verknüpfung, SSH-Löschen und Boards korrigiert; nicht angebotene Endpunkte gekennzeichnet; `scripts/check-api-endpoints.R` |
+| 0.7.6 | PR-Kommentare senden den Autor (`userId`), sonst HTTP 500; Issue/PR-Verknüpfung live mit Daten geprüft; Doku zum Projektbezug der Abfragen |
 
 Zusätzlich vorhanden: Batch-Operationen, Parallel/Concurrent-Helfer,
 Streaming (Build-Logs, Query-Resultate) und optionaler Response-Cache

@@ -46,6 +46,12 @@ od_query_packages(
 
 A tibble of packages (default), or a list when `as_tibble = FALSE`.
 
+## Details
+
+Not limited to the connection project: this returns the matching
+packages of the whole instance. To scope it to one project, add
+`'"Project" is "group/name"'` to `query` (verified live).
+
 ## See also
 
 Other packages:

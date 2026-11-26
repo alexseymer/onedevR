@@ -1,11 +1,18 @@
 # Add a comment to a pull request
 
-Posts to `POST /pull-request-comments` with `requestId` + `content`.
+Posts to `POST /pull-request-comments` with `requestId`, `content` and
+`userId`. Without an author OneDev answers HTTP 500 (verified live, as
+for issue comments), so the current user is sent by default.
 
 ## Usage
 
 ``` r
-od_add_pull_request_comment(pull_request_number, content, conn = NULL)
+od_add_pull_request_comment(
+  pull_request_number,
+  content,
+  conn = NULL,
+  user = NULL
+)
 ```
 
 ## Arguments
@@ -21,6 +28,13 @@ od_add_pull_request_comment(pull_request_number, content, conn = NULL)
 - conn:
 
   list Connection list. Default: `NULL`.
+
+- user:
+
+  character\|numeric Optional author: login name or numeric user id,
+  sent as `userId`. Default: `NULL`, which uses the current user. If the
+  current user cannot be determined, no `userId` is sent. A `user` that
+  is given but cannot be resolved is an error.
 
 ## Value
 

@@ -1,6 +1,8 @@
 # Query OneDev builds
 
-Query OneDev builds
+Not limited to the connection project: this returns the matching builds
+of the whole instance. To scope it to one project, add
+`'"Project" is "group/name"'` to `query` (verified live).
 
 ## Usage
 

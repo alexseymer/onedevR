@@ -1,6 +1,10 @@
 # Query OneDev pull requests
 
-Query OneDev pull requests
+Not limited to the connection project: this returns the matching pull
+requests of the whole instance. To scope it to one project, add
+`'"Target Project" is "group/name"'` (or `"Source Project"`) to `query`.
+The field `"Project"` is rejected with HTTP 500 for pull requests
+(verified live).
 
 ## Usage
 

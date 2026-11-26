@@ -56,7 +56,7 @@ is for you.
 
 ## Status
 
-**v0.7.5** — current release. Issue/build/PR workflows, boards, jobs,
+**v0.7.6** — current release. Issue/build/PR workflows, boards, jobs,
 packages, repository helpers, tibbles by default, and Bearer + Basic
 Auth. 0.7.0 added iteration names wherever iteration ids are accepted,
 credential-safe caching, query-string escaping, masked secrets when
@@ -78,7 +78,8 @@ keeps the id when fetching a newly created issue fails, and keeps batch
 against a live instance and sends iteration ids as a plain array. 0.7.5
 fixes eight read functions (files, groups, issue and pull request links,
 boards) that called endpoints the server does not have, and marks the
-ones that OneDev does not offer. See
+ones that OneDev does not offer. 0.7.6 sends the author with pull
+request comments, which OneDev otherwise rejects. See
 [`NEWS.md`](https://alexseymer.github.io/onedevR/NEWS.md) for the full
 changelog.
 
