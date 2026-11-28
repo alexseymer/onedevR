@@ -92,7 +92,9 @@ R-universe) is the distribution path for v0.1.0.
 
 1.  GitHub org — stay under `alexseymer` (no dedicated org for now).
 2.  Function prefix — keep `od_*` (mirrors `gitlabr`’s `gl_*`).
-3.  Distribution — GitHub + pkgdown; CRAN later if demand warrants it.
+3.  Distribution — **GitHub only** (releases and the pkgdown site on
+    GitHub Pages). No CRAN submission, no R-universe and no other
+    registry or hosting for now (decision 2026-11-27).
 4.  License — **MIT**.
 5.  Auth — Bearer (token) and **Basic Auth** (`username` +
     `password`/`token`).
@@ -192,4 +194,6 @@ functions have passing live tests (`od_batch_create_issues`,
 `od_stream_query_results`, `od_chunked_foreach`, `od_enable_cache`); the
 experimental marker stays until the interfaces settle.
 
-R-universe / CRAN when demand warrants it
+Distribution decision (2026-11-27): GitHub only. CRAN, R-universe and
+other registries are not planned; a change needs an explicit decision of
+the maintainer

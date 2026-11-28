@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Project CLAUDE.md</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.6/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
     </div>
 
 <div id="project-claudemd" class="section level1">
@@ -83,6 +83,7 @@
 <li>Edit roxygen comments in <code>R/</code>, never <code>man/*.Rd</code> or <code>NAMESPACE</code> by hand.</li>
 <li>Unit tests stay offline (stub HTTP with <code>mockery</code>, env with <code>withr</code>).</li>
 <li>Unverified areas are marked experimental; promote only after a live test.</li>
+<li>Distribution is GitHub only (releases, pkgdown on GitHub Pages). Never submit to CRAN or R-universe or publish anywhere else without an explicit instruction; <code>--as-cran</code> runs are local checks only.</li>
 <li>Commits: imperative summary line, one topic per branch, merged via PR. Every user-visible change gets a <code>NEWS.md</code> entry.</li>
 </ul></div>
 <div class="section level2">

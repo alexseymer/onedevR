@@ -63,6 +63,9 @@ Comment debugging: `scripts/diagnose-comments.R`.
 - Unit tests stay offline (stub HTTP with `mockery`, env with `withr`).
 - Unverified areas are marked experimental; promote only after a live
   test.
+- Distribution is GitHub only (releases, pkgdown on GitHub Pages). Never
+  submit to CRAN or R-universe or publish anywhere else without an
+  explicit instruction; `--as-cran` runs are local checks only.
 - Commits: imperative summary line, one topic per branch, merged via PR.
   Every user-visible change gets a `NEWS.md` entry.
 

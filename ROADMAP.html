@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Roadmap</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.6/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/ROADMAP.md" class="external-link"><code>ROADMAP.md</code></a></small>
     </div>
 
 <div id="roadmap" class="section level1">
@@ -97,7 +97,7 @@
 <h2 id="settled-questions-plan-17">Settled questions (plan §17)<a class="anchor" aria-label="anchor" href="#settled-questions-plan-17"></a></h2>
 <ol style="list-style-type: decimal"><li>GitHub org — stay under <code>alexseymer</code> (no dedicated org for now).</li>
 <li>Function prefix — keep <code>od_*</code> (mirrors <code>gitlabr</code>’s <code>gl_*</code>).</li>
-<li>Distribution — GitHub + pkgdown; CRAN later if demand warrants it.</li>
+<li>Distribution — <strong>GitHub only</strong> (releases and the pkgdown site on GitHub Pages). No CRAN submission, no R-universe and no other registry or hosting for now (decision 2026-11-27).</li>
 <li>License — <strong>MIT</strong>.</li>
 <li>Auth — Bearer (token) and <strong>Basic Auth</strong> (<code>username</code> + <code>password</code>/<code>token</code>).</li>
 <li>Return format — list endpoints return <strong>tibbles</strong> by default (<code>options(onedevr.as_tibble = TRUE)</code> / <code>as_tibble = FALSE</code> to opt out); single-object getters and write helpers stay as lists.</li>
@@ -126,7 +126,7 @@
 <li><label><input type="checkbox" checked>Repository secrets for <code>live-tests.yaml</code> (2026-11-22): the weekly run passes</label></li>
 <li><label><input type="checkbox" checked>CRAN pre-check (2026-11-14): <code>R CMD check --as-cran</code> leaves only environment notes, “New submission” and 403 answers of github.com to automated URL checks; submission itself waits for live verification</label></li>
 <li><label><input type="checkbox" checked>Principle review (2026-11-20): batch, parallel, streaming and caching stay in core, marked experimental. No second repository for now. Four functions have passing live tests (<code>od_batch_create_issues</code>, <code>od_stream_query_results</code>, <code>od_chunked_foreach</code>, <code>od_enable_cache</code>); the experimental marker stays until the interfaces settle.</label></li>
-<li><label><input type="checkbox">R-universe / CRAN when demand warrants it</label></li>
+<li><label><input type="checkbox" checked>Distribution decision (2026-11-27): GitHub only. CRAN, R-universe and other registries are not planned; a change needs an explicit decision of the maintainer</label></li>
 </ul></div>
 </div>
 

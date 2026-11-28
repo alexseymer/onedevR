@@ -53,7 +53,7 @@ außerhalb des Pakets im Consumer-Projekt.
 
 | Aspekt | Entscheidung |
 |----|----|
-| **Paketname (CRAN)** | `onedevr` (lowercase, R-Konvention) |
+| **Paketname** | `onedevr` (lowercase, R-Konvention) |
 | **Display-Name** | onedevR |
 | **Funktionspräfix** | `od_*` |
 | **HTTP-Stack** | `httr2` + `jsonlite` |
@@ -814,15 +814,15 @@ Maintainer & Org: persönliches Repo unter `alexseymer`
 |----|----|
 | GitHub Release | Tag `v<Version>` = `DESCRIPTION`-Version; Release-Notes aus dem `NEWS.md`-Abschnitt; `RELEASE.md` abgearbeitet |
 | pkgdown-Site | Workflow `pkgdown` grün; [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html) ohne Befund; Seite unter <https://alexseymer.github.io/onedevR/> erreichbar |
-| CRAN oder R-universe (optional) | `R CMD check --as-cran` ohne ERROR und WARNING; Namens-Check bestanden |
+| Keine Veröffentlichung außerhalb von GitHub | Entscheidung 2026-11-27: kein CRAN, kein R-universe, keine weitere Registry |
 
 GitHub Release v0.1.0 (weitere Releases bis v0.7.0, veröffentlicht
 2026-11-06)
 
 pkgdown-Site: <https://alexseymer.github.io/onedevR/>
 
-CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: `onedevr`
-verfügbar, Stand 2026-08-02)
+Entscheidung 2026-11-27: Distribution nur über GitHub (Releases, pkgdown
+auf GitHub Pages); kein CRAN, kein R-universe
 
 ### Seit Phase 4 (Querschnittsbereiche)
 
@@ -862,11 +862,8 @@ Dafür fehlen die Repository-Secrets für `live-tests` (Issue \#26).
 
 ``` r
 
-# GitHub (bis CRAN)
+# GitHub (einziger Verteilweg)
 remotes::install_github("alexseymer/onedevR")
-
-# Später (nur falls CRAN-Submission erfolgt)
-install.packages("onedevr")
 ```
 
 ### Minimales Setup
@@ -1124,7 +1121,6 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 | OneDev API ändert Payload-Formate zwischen Versionen | `.od_request_with_variants()`; Versionshinweis in README |
 | Custom Fields installationsabhängig | Kein festes Schema; `fields` als named list |
 | Bearer vs Basic Auth | Beide unterstützen; Bearer als Default, Basic als Option |
-| Paketname `onedevr` auf CRAN verfügbar? | Stand 2026-08-02 verfügbar; vor Submission erneut prüfen; Alternative: `onedevapi` |
 | Dokumentierte Payload-Formen weichen von echten Installationen ab (z. B. Kommentar-HTTP-500) | Live-Tests gated, Probe gegen Ziel-Instanz, Befunde in §10 |
 | Doku/Spec driftet vom Code | Code ist maßgeblich; Spec bei jedem Minor-Release gegen `NAMESPACE`/`NEWS.md` abgleichen |
 | Kleine Community | Gute Doku, pkgdown, klare Vignetten |
@@ -1135,8 +1131,8 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 1.  **GitHub-Org:** persönliches Repo unter `alexseymer` (keine eigene
     Org).
 2.  **Funktionspräfix:** `od_*` (analog `gl_*` in gitlabr).
-3.  **Distribution:** GitHub + pkgdown; CRAN/R-universe später bei
-    Bedarf.
+3.  **Distribution:** nur GitHub + pkgdown auf GitHub Pages; kein CRAN,
+    kein R-universe, keine weitere Registry (Entscheidung 2026-11-27).
 4.  **Lizenz:** MIT.
 5.  **Basic Auth:** unterstützt (seit 0.3.0).
 6.  **Rückgabeformat:** Listen-Endpunkte liefern Tibbles
@@ -1145,7 +1141,6 @@ Vollständige Liste: `https://<ONEDEV_HOST>/~help/api`
 
 ### Offene Punkte
 
-- CRAN/R-universe-Submission (siehe `ROADMAP.md`).
 - Verifikation der Iterations- und Kommentar-Bodies gegen weitere
   OneDev-Versionen (bisher nur eine Ziel-Instanz).
 - Repository-Secrets für den Workflow `live-tests` fehlen; die
@@ -1174,4 +1169,4 @@ Packages, Hardening)
 0.7.0: Review-Folgearbeit, Sicherheits-Härtung und Monitoring (PR \#17,
 \#18, \#27, diese Version)
 
-CRAN / R-universe (bei Bedarf)
+Distribution nur über GitHub (2026-11-27); kein CRAN, kein R-universe

@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>onedevr — Plan für ein R-Paket (OneDev REST API Client)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/v0.7.6/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alexseymer/onedevR/blob/main/project_plan.md" class="external-link"><code>project_plan.md</code></a></small>
     </div>
 
 <div id="onedevr--plan-für-ein-r-paket-onedev-rest-api-client" class="section level1">
@@ -79,7 +79,7 @@
 <p><strong>Ziel (präzisiert 2026-11-12):</strong> Öffentliches Allzweck-Paket für die OneDev-REST-API. Maßstab ist nachgewiesene Funktion: Der Kern (Issues, Kommentare, Iterationen, Boards, PRs, Projekte, Verbindung) ist im täglichen Einsatz gegen eine echte Instanz; Batch, Parallel, Streaming, Cache, Webhooks und SSH-Keys sind als <strong>experimentell</strong> markiert, bis sie live verifiziert sind. Der CLI-Wrapper <code>onedevr.cmd</code> bleibt außerhalb des Pakets im Consumer-Projekt.</p>
 <table class="table"><colgroup><col width="36%"><col width="63%"></colgroup><thead><tr><th>Aspekt</th>
 <th>Entscheidung</th>
-</tr></thead><tbody><tr><td><strong>Paketname (CRAN)</strong></td>
+</tr></thead><tbody><tr><td><strong>Paketname</strong></td>
 <td>
 <code>onedevr</code> (lowercase, R-Konvention)</td>
 </tr><tr><td><strong>Display-Name</strong></td>
@@ -940,12 +940,11 @@
 <td>Tag <code>v&lt;Version&gt;</code> = <code>DESCRIPTION</code>-Version; Release-Notes aus dem <code>NEWS.md</code>-Abschnitt; <code>RELEASE.md</code> abgearbeitet</td>
 </tr><tr><td>pkgdown-Site</td>
 <td>Workflow <code>pkgdown</code> grün; <code><a href="https://pkgdown.r-lib.org/reference/check_pkgdown.html" class="external-link">pkgdown::check_pkgdown()</a></code> ohne Befund; Seite unter <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a> erreichbar</td>
-</tr><tr><td>CRAN oder R-universe (optional)</td>
-<td>
-<code>R CMD check --as-cran</code> ohne ERROR und WARNING; Namens-Check bestanden</td>
+</tr><tr><td>Keine Veröffentlichung außerhalb von GitHub</td>
+<td>Entscheidung 2026-11-27: kein CRAN, kein R-universe, keine weitere Registry</td>
 </tr></tbody></table><ul class="task-list"><li><label><input type="checkbox" checked>GitHub Release v0.1.0 (weitere Releases bis v0.7.0, veröffentlicht 2026-11-06)</label></li>
 <li><label><input type="checkbox" checked>pkgdown-Site: <a href="https://alexseymer.github.io/onedevR/" class="uri">https://alexseymer.github.io/onedevR/</a></label></li>
-<li><label><input type="checkbox">CRAN-Submission oder R-universe (zurückgestellt; Namens-Check: <code>onedevr</code> verfügbar, Stand 2026-08-02)</label></li>
+<li><label><input type="checkbox" checked>Entscheidung 2026-11-27: Distribution nur über GitHub (Releases, pkgdown auf GitHub Pages); kein CRAN, kein R-universe</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="seit-phase-4-querschnittsbereiche">Seit Phase 4 (Querschnittsbereiche)<a class="anchor" aria-label="anchor" href="#seit-phase-4-querschnittsbereiche"></a></h3>
@@ -1006,11 +1005,8 @@
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a></h3>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># GitHub (bis CRAN)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Später (nur falls CRAN-Submission erfolgt)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"onedevr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># GitHub (einziger Verteilweg)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexseymer/onedevR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="minimales-setup">Minimales Setup<a class="anchor" aria-label="anchor" href="#minimales-setup"></a></h3>
@@ -1318,9 +1314,6 @@
 <td>Kein festes Schema; <code>fields</code> als named list</td>
 </tr><tr><td>Bearer vs Basic Auth</td>
 <td>Beide unterstützen; Bearer als Default, Basic als Option</td>
-</tr><tr><td>Paketname <code>onedevr</code> auf CRAN verfügbar?</td>
-<td>Stand 2026-08-02 verfügbar; vor Submission erneut prüfen; Alternative: <code>onedevapi</code>
-</td>
 </tr><tr><td>Dokumentierte Payload-Formen weichen von echten Installationen ab (z. B. Kommentar-HTTP-500)</td>
 <td>Live-Tests gated, Probe gegen Ziel-Instanz, Befunde in §10</td>
 </tr><tr><td>Doku/Spec driftet vom Code</td>
@@ -1337,7 +1330,7 @@
 <li>
 <strong>Funktionspräfix:</strong> <code>od_*</code> (analog <code>gl_*</code> in gitlabr).</li>
 <li>
-<strong>Distribution:</strong> GitHub + pkgdown; CRAN/R-universe später bei Bedarf.</li>
+<strong>Distribution:</strong> nur GitHub + pkgdown auf GitHub Pages; kein CRAN, kein R-universe, keine weitere Registry (Entscheidung 2026-11-27).</li>
 <li>
 <strong>Lizenz:</strong> MIT.</li>
 <li>
@@ -1347,8 +1340,7 @@
 </ol></div>
 <div class="section level3">
 <h3 id="offene-punkte">Offene Punkte<a class="anchor" aria-label="anchor" href="#offene-punkte"></a></h3>
-<ul><li>CRAN/R-universe-Submission (siehe <code>ROADMAP.md</code>).</li>
-<li>Verifikation der Iterations- und Kommentar-Bodies gegen weitere OneDev-Versionen (bisher nur eine Ziel-Instanz).</li>
+<ul><li>Verifikation der Iterations- und Kommentar-Bodies gegen weitere OneDev-Versionen (bisher nur eine Ziel-Instanz).</li>
 <li>Repository-Secrets für den Workflow <code>live-tests</code> fehlen; die wöchentlichen Läufe brechen deshalb ab.</li>
 </ul><hr></div>
 </div>
@@ -1362,7 +1354,7 @@
 <li><label><input type="checkbox" checked>Phase 4: GitHub Release, pkgdown</label></li>
 <li><label><input type="checkbox" checked>Ergänzungen 0.3.0–0.5.2 (Tibbles, Basic Auth, Projects/Users, Jobs, Packages, Hardening)</label></li>
 <li><label><input type="checkbox" checked>0.7.0: Review-Folgearbeit, Sicherheits-Härtung und Monitoring (PR #17, #18, #27, diese Version)</label></li>
-<li><label><input type="checkbox">CRAN / R-universe (bei Bedarf)</label></li>
+<li><label><input type="checkbox" checked>Distribution nur über GitHub (2026-11-27); kein CRAN, kein R-universe</label></li>
 </ul></div>
 </div>
 
