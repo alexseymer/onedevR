@@ -37,5 +37,6 @@ gh release create v0.7.1 --title "onedevr 0.7.1" --notes-file NEWS.md
 6. In GitHub repo **Settings → Pages**, set source to the `gh-pages` branch
    (first deploy creates it) if not already configured.
 
-CRAN submission remains optional; the package name `onedevr` was available on
-CRAN as of the Phase 4 check (2026-08-02).
+Distribution is GitHub only: the GitHub Release and the pkgdown site on GitHub
+Pages. Do not submit to CRAN or R-universe and do not publish anywhere else
+(decision 2026-11-27).
